@@ -37,7 +37,6 @@ Future<String> signInWithGoogle() async {
     name = name.substring(0, name.indexOf(" "));
   }
   
-
   assert(user.uid == currentUser.uid);
 
   return 'SignInWithGoogle succeeded: $user';
