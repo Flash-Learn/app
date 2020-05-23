@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1043161304726",
+    "firebase_url": "https://microlearning-11737.firebaseio.com",
+    "project_id": "microlearning-11737",
+    "storage_bucket": "microlearning-11737.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1043161304726:android:7c4486154ed0ccd4cd7cb7",
+        "android_client_info": {
+          "package_name": "com.example.microlearning"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1043161304726-646geb6stdetsostqkdcrs3ptctgo3dv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.microlearning",
+            "certificate_hash": "2a18af7ffd3b6084a16cb25b00933d019674dd29"
+          }
+        },
+        {
+          "client_id": "1043161304726-9flc1cqo6es9jm0tdunjp9aurna4qqld.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB550ZBBWZK0l9lmFpc6c0Cd2TfzQ09suk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1043161304726-9flc1cqo6es9jm0tdunjp9aurna4qqld.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1043161304726-o2k3i82ah4h88fgbrelicdosu52slr4s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.microlearning"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
