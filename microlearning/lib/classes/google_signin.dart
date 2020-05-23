@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 String name;
@@ -8,8 +9,9 @@ String imageUrl;
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
-Future<String> signInWithGoogle() async {
-  final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+Future<String> signInWithGoogle(BuildContext context) async {
+  final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn().catchError((onError){Navigator.of(context).popAndPushNamed('/');},);
+
   final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
   
   final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -39,7 +41,7 @@ Future<String> signInWithGoogle() async {
   
   assert(user.uid == currentUser.uid);
 
-  return 'SignInWithGoogle succeeded: $user';
+  return '$user';
 } 
 void signOutGoogle() async {
   await googleSignIn.signOut();
