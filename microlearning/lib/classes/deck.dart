@@ -10,14 +10,11 @@ class Deck{
   String deckName;
 
   Deck({this.deckName,
-        this.tagsList,
+        this.tagsList ,
         this.isPublic,
-        this.flashCardList})
-  {
-    // TODO: add to database
+  });
 
-    // TODO: create a copy of each flashcard in flashCard list and and save them i database
-  }
+  // TODO: constructor to copy deck from other user
 
   // TODO: deletion of deck
 }
