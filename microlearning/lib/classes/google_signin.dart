@@ -12,14 +12,26 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 Future<String> signInWithGoogle(BuildContext context) async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn().catchError((onError){Navigator.of(context).popAndPushNamed('/');},);
 
+  if (googleSignInAccount == null){
+    return null;
+  }
+
   final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
   
+  if (googleSignInAuthentication == null){
+    return null;
+  }
+
   final AuthCredential credential = GoogleAuthProvider.getCredential(
     idToken: googleSignInAuthentication.idToken, 
     accessToken: googleSignInAuthentication.accessToken
   );
 
   final AuthResult authResult = await _auth.signInWithCredential(credential);
+
+  if(authResult == null){
+    return null;
+  }
   final FirebaseUser user = authResult.user;
 
   assert(!user.isAnonymous);
