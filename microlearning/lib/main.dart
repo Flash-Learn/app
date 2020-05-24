@@ -2,23 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/authentication/register.dart';
 import 'package:microlearning/screens/mydecks.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance(); 
+  var email = prefs.getString('email'); 
+  var name = prefs.getString('name');
+  runApp(MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/': (context) => LoginUser(),
+        '/': (context) => email == null || name == null ? LoginUser() : MyDecks(),
         '/home': (context) => MyDecks(),
         '/register': (context) => RegisterUser(),
       },
-    );
-  }
+    )
+  );
 }

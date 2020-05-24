@@ -36,7 +36,7 @@ googleSigninButton(BuildContext context) {
           },
         ),
       );
-    }else{
+    }else {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) {

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String name;
 String email;
@@ -53,9 +54,18 @@ Future<String> signInWithGoogle(BuildContext context) async {
   
   assert(user.uid == currentUser.uid);
 
+  if(user!=null){
+    SharedPreferences prefs = await SharedPreferences.getInstance(); 
+    prefs.setString('email', email);
+    prefs.setString('name', name);
+  }
+
   return '$user';
 } 
 void signOutGoogle() async {
   await googleSignIn.signOut();
+  SharedPreferences prefs = await SharedPreferences.getInstance(); 
+  prefs.remove('name');
+  prefs.remove('email');
   print('User signed out');
 }
