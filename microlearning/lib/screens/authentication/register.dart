@@ -26,8 +26,17 @@ class RegisterUser extends StatelessWidget {
 googleSigninButton(BuildContext context) {
   return OutlineButton(
     splashColor: Colors.grey,
-    onPressed: () {
-    signInWithGoogle().whenComplete(() {
+    onPressed: () async {
+    String test = await signInWithGoogle(context);
+    if(test == null){
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) {
+            return RegisterUser();
+          },
+        ),
+      );
+    }else{
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) {
@@ -35,7 +44,16 @@ googleSigninButton(BuildContext context) {
           },
         ),
       );
-    });
+    }
+    // signInWithGoogle().whenComplete(() {
+    //   Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(
+    //       builder: (context) {
+    //         return MyDecks();
+    //       },
+    //     ),
+    //   );
+    // });
     },
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
     borderSide: BorderSide(color: Colors.grey),
