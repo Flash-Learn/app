@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/classes/deck.dart';
 import 'package:microlearning/helperWidgets/deckInfoCard.dart';
 import 'package:microlearning/screens/accountsettings.dart';
+import 'package:microlearning/screens/viewDeck.dart';
 
 class MyDecks extends StatelessWidget {
 
@@ -42,7 +43,18 @@ class MyDecks extends StatelessWidget {
         child: Center(
           child: ListView.builder(
             itemCount: userDeckIDs.length,
-            itemBuilder: (BuildContext ctxt, int index) => buildDeckInfo(ctxt, index),
+            itemBuilder: (BuildContext ctxt, int index) => InkWell(
+              onTap: (){
+                print(userDeckIDs[index]);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewDeck(deckID: userDeckIDs[index],),
+                  ));
+
+              },
+              child: buildDeckInfo(ctxt, index)
+            ),
           ),
         ),
       ),

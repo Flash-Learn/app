@@ -3,7 +3,7 @@ import 'package:microlearning/classes/userclass.dart';
 
 class Deck{
   String deckID;
-  List<String> flashCardList; // stores a list of flashcards using their ID
+  List<String> flashCardList=[]; // stores a list of flashcards using their ID
   String tagsList;
   User author;
   bool isPublic;
@@ -13,6 +13,12 @@ class Deck{
         this.tagsList ,
         this.isPublic,
   });
+
+  void addFlashcardByID(String flashID){
+    flashCardList.insert(flashCardList.length, flashID);
+
+    //TODO: and save to database
+  }
 
   // TODO: constructor to copy deck from other user
 
