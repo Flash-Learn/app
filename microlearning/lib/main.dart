@@ -8,13 +8,12 @@ Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance(); 
   var email = prefs.getString('email'); 
-  var name = prefs.getString('name');
   runApp(MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/': (context) => email == null || name == null ? LoginUser() : MyDecks(),
+        '/': (context) => email == null ? LoginUser() : MyDecks(),
         '/home': (context) => MyDecks(),
         '/register': (context) => RegisterUser(),
       },

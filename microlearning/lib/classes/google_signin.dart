@@ -64,8 +64,9 @@ Future<String> signInWithGoogle(BuildContext context) async {
 } 
 void signOutGoogle() async {
   await googleSignIn.signOut();
-  SharedPreferences prefs = await SharedPreferences.getInstance(); 
-  prefs.remove('name');
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if(prefs.getString('name')!=null)
+    prefs.remove('name');
   prefs.remove('email');
   print('User signed out');
 }
