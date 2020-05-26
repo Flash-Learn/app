@@ -17,7 +17,6 @@ class _LoginUserState extends State<LoginUser> {
   String email = '';
   String password = '';
   String error = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
