@@ -36,4 +36,14 @@ class UserNameSignIn {
       return null;
     }
   }
+
+  Future resetPassword(String email) async{
+    try{
+      await _auth.sendPasswordResetEmail(email: email);
+      return 'email is right';
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
 }

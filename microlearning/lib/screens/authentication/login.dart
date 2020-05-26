@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/classes/google_signin.dart';
 import 'package:microlearning/classes/username_signin.dart';
 import 'package:microlearning/screens/authentication/register.dart';
+import 'package:microlearning/screens/authentication/resetpassword.dart';
 import 'package:microlearning/screens/mydecks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,7 +33,6 @@ class _LoginUserState extends State<LoginUser> {
                   key: _formkey,
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 20,),
                       TextFormField(
                         decoration: InputDecoration(
                           hintText: 'Email',
@@ -57,6 +57,7 @@ class _LoginUserState extends State<LoginUser> {
                       ),
                       SizedBox(height: 20,),
                       TextFormField(
+                        obscureText: true,
                         decoration: InputDecoration(
                           hintText: 'Password',
                           fillColor: Colors.white,
@@ -87,7 +88,7 @@ class _LoginUserState extends State<LoginUser> {
                             dynamic result = await _auth.signinWithEmail(email, password);
                             if(result == null){
                               setState(() {
-                                error = 'Username and Password do not Match';
+                                error = 'Wrong Credentials';
                               });
                             }else{
                               SharedPreferences prefs = await SharedPreferences.getInstance(); 
@@ -113,6 +114,13 @@ class _LoginUserState extends State<LoginUser> {
                         child: Text('NewUser? Register'),
                         onPressed: () {
                           return Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {return RegisterUser();}));
+                        },
+                      ),
+                      SizedBox(height: 20,),
+                      FlatButton(
+                        child: Text('Forgot Password'),
+                        onPressed: () {
+                          return Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {return ResetPassword();}));
                         },
                       )
                     ],
