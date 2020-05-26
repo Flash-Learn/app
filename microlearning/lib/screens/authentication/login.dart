@@ -120,7 +120,7 @@ class _LoginUserState extends State<LoginUser> {
                       FlatButton(
                         child: Text('Forgot Password'),
                         onPressed: () {
-                          return Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {return ResetPassword();}));
+                          return Navigator.of(context).push(MaterialPageRoute(builder: (context) {return ResetPassword();}));
                         },
                       )
                     ],
