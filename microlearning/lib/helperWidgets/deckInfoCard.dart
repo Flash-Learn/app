@@ -6,7 +6,7 @@ import 'package:microlearning/helperFunctions/getDeckFromID.dart';
 Widget deckInfoCard(String deckID){
 
   // TODO: get deck from deckID
-  Deck deck = getDeckFromID(deckID);
+  Deck deck = getDeckFromID();
 
   return Center(
     child: Padding(

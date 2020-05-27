@@ -6,8 +6,7 @@ class ViewDeck extends StatelessWidget {
 
   final String deckID;
   ViewDeck({Key key, @required this.deckID}) : super(key: key);
-
-  Deck deck = getDeckFromID(deckID);
+  Deck deck = getDeckFromID();
 
   @override
   Widget build(BuildContext context) {
