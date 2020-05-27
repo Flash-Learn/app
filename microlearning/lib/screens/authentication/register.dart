@@ -68,6 +68,7 @@ class _RegisterUserState extends State<RegisterUser> {
                           password = val;
                         });
                       },
+                      obscureText: true,
                       decoration: InputDecoration(
                         hintText: 'Password',
                         fillColor: Colors.white,
