@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+// Need this for the search to work.
 class Post {
   final String title;
   final String description;
