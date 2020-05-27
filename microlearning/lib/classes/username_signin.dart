@@ -3,7 +3,7 @@ import 'package:microlearning/classes/userclass.dart';
 
 class UserNameSignIn {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  bool flag;
 
   User _userFromFirebaseUser(FirebaseUser user) {
     return user != null ? User(uid: user.uid) : null;
@@ -19,6 +19,11 @@ class UserNameSignIn {
     try{
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
+      await user.sendEmailVerification();
+      FirebaseUser tempuser = await _auth.currentUser();
+      await tempuser.reload();
+      tempuser = await _auth.currentUser();
+      flag = tempuser.isEmailVerified;
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());
@@ -30,7 +35,12 @@ class UserNameSignIn {
     try{
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user);
+      if(!user.isEmailVerified){
+        print('finally');
+        return null;
+      }else{
+        return _userFromFirebaseUser(user);
+      }
     }catch(e){
       print(e.toString());
       return null;
