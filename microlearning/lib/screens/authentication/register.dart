@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/classes/google_signin.dart';
 import 'package:microlearning/classes/username_signin.dart';
+import 'package:microlearning/screens/authentication/loadingscreen.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/mydecks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -94,15 +95,13 @@ class _RegisterUserState extends State<RegisterUser> {
                           dynamic result = await _auth.registerWithEmail(email,password);
                           if(result == null){
                             setState(() {
-                              error = 'Please supply valid Email';
+                              error = 'Email not valid or already in use';
                             });
                           }else{
-                            SharedPreferences prefs = await SharedPreferences.getInstance(); 
-                            prefs.setString('email', email);
                             Navigator.of(context).pushReplacement(
                                MaterialPageRoute(
                                  builder: (context) {
-                                 return MyDecks();
+                                 return EmailVerification(email: email,);
                                 },
                               ),
                             );
@@ -174,7 +173,7 @@ googleRegisterinButton(BuildContext context) {
           Padding(
             padding: EdgeInsets.only(left:10),
             child: Text('Register With Google',
-              style: TextStyle(fontSize: 20, color: Colors.grey),
+              style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
           )
         ],

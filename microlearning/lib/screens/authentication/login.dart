@@ -88,7 +88,7 @@ class _LoginUserState extends State<LoginUser> {
                             dynamic result = await _auth.signinWithEmail(email, password);
                             if(result == null){
                               setState(() {
-                                error = 'Wrong Credentials';
+                                error = 'Wrong Credentials or Email not verified';
                               });
                             }else{
                               SharedPreferences prefs = await SharedPreferences.getInstance(); 
@@ -177,8 +177,8 @@ googleRegisterinButton(BuildContext context) {
           Image(image: AssetImage("assets/google_logo.png"),height: 35.0,),
           Padding(
             padding: EdgeInsets.only(left:10),
-            child: Text('SignIn With Google',
-              style: TextStyle(fontSize: 20, color: Colors.grey),
+            child: Text('Sign In with Google',
+              style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
           )
         ],
