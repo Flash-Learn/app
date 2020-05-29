@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:microlearning/screens/authentication/get_user_info.dart';
 import 'package:microlearning/screens/authentication/register.dart';
 import 'package:microlearning/screens/mydecks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,7 +35,7 @@ class _EmailVerificationState extends State<EmailVerification> {
               isUserEmailVerified = user.isEmailVerified;
               SharedPreferences prefs = await SharedPreferences.getInstance(); 
               prefs.setString('email', user.email);
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return MyDecks();}));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return GetUserInfo();}));
               timer.cancel();
             }
         });
