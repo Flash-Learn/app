@@ -16,7 +16,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
   int _grade;
 
   List<String> genders = ["Male", "Female", "Others"];
-  List<String> grades = ["1", "2"];
+  List<String> grades = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +29,11 @@ class _GetUserInfoState extends State<GetUserInfo> {
         backgroundColor: Colors.red,
       ),
       body: Container(
-        padding: EdgeInsets.fromLTRB(30, 50, 30, 0),
+        padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
                 validator: (val) {
@@ -57,35 +58,85 @@ class _GetUserInfoState extends State<GetUserInfo> {
                 ),
               ),
               SizedBox(height: 20.0,),
-              DropdownButtonFormField(
-                value: _gender ?? "Others",
-                items: genders.map((gender) {
-                  return DropdownMenuItem(
-                    value: gender,
-                    child: Text(gender),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  setState(() {
-                    _gender = val;
-                  });
-                },
+
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Text(  
+                      "Gender",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+
+                  // SizedBox(width: 20,),
+                  
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      width: 100,
+                      child: DropdownButtonFormField(
+                        value: _gender ?? "Others",
+                        items: genders.map((gender) {
+                          return DropdownMenuItem(
+                            value: gender,
+                            child: Text(gender),
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            _gender = val;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
+
               SizedBox(height: 20.0,),
-              DropdownButtonFormField(
-                value: _grade ?? "1",
-                items: grades.map((grade) {
-                  return DropdownMenuItem(
-                    value: grade,
-                    child: Text(grade),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  setState(() {
-                    _grade = val;
-                  });
-                },
+
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "Class",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+
+                  // SizedBox(width: 20,),
+
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      width: 100,
+                      child: DropdownButtonFormField(
+                        value: _grade ?? "1",
+                        items: grades.map((grade) {
+                          return DropdownMenuItem(
+                            value: grade,
+                            child: Text(grade),
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            _grade = val;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
+
+              SizedBox(height: 20.0,),
+          
               RaisedButton(
                 color: Colors.red,
                 child: Center(
@@ -101,7 +152,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
 
                     //TODO : UPLOAD ALL THIS DATA TO THE DATABASE
 
-                    return MyDecks();
+                    return Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return MyDecks();}));
                   }
                 },
               ),
