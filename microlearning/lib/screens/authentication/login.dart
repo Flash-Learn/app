@@ -6,9 +6,6 @@ import 'package:microlearning/screens/authentication/resetpassword.dart';
 import 'package:microlearning/screens/mydecks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-<<<<<<< HEAD
-class LoginUser extends StatelessWidget {
-=======
 class LoginUser extends StatefulWidget {
   @override
   _LoginUserState createState() => _LoginUserState();
@@ -21,7 +18,6 @@ class _LoginUserState extends State<LoginUser> {
   String email = '';
   String password = '';
   String error = '';
->>>>>>> upstream/develop
   @override
   Widget build(BuildContext context) {
     return Scaffold(

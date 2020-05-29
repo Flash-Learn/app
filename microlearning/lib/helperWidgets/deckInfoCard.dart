@@ -4,17 +4,9 @@ import 'package:microlearning/classes/flashCard.dart';
 import 'package:microlearning/helperFunctions/getDeckFromID.dart';
 
 Widget deckInfoCard(String deckID){
-<<<<<<< HEAD
-  Deck deck = Deck(
-    deckName: "deck name",
-    tagsList: ["tag1", "tag2", "tag3"],
-    isPublic: true,
-  );
-=======
 
   // TODO: get deck from deckID
   Deck deck = getDeckFromID(deckID);
->>>>>>> upstream/develop
 
   return Center(
     child: Padding(
@@ -39,8 +31,8 @@ Widget deckInfoCard(String deckID){
                   ),
                 ),
               ),
-              for(var item in deck.tagsList) Text(
-                item,
+              Text(
+                deck.tagsList,
                 style: TextStyle(
                   color: Colors.black38,
                 ),
