@@ -4,7 +4,7 @@ import 'package:microlearning/classes/deck.dart';
 Widget deckInfoCard(String deckID){
   Deck deck = Deck(
     deckName: "deck name",
-    tagsList: "tag1 tag2 tag3",
+    tagsList: ["tag1", "tag2", "tag3"],
     isPublic: true,
   );
 
@@ -31,8 +31,8 @@ Widget deckInfoCard(String deckID){
                   ),
                 ),
               ),
-              Text(
-                deck.tagsList,
+              for(var item in deck.tagsList) Text(
+                item,
                 style: TextStyle(
                   color: Colors.black38,
                 ),
