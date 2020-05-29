@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/screens/authentication/register.dart';
 
 class LoginUser extends StatelessWidget {
-  LoginUser() {
-    print("Login user page");
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
