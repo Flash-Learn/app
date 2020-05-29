@@ -31,11 +31,16 @@ Widget deckInfoCard(String deckID){
                   ),
                 ),
               ),
-              Text(
-                deck.tagsList,
-                style: TextStyle(
-                  color: Colors.black38,
-                ),
+              Row(
+                children: <Widget>[
+                  for (var tag in deck.tagsList) 
+                    Text(
+                      tag + " ",
+                      style: TextStyle(
+                        color: Colors.black38,
+                      ),
+                    ),
+                ],
               )
             ],
           ),
