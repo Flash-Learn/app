@@ -16,7 +16,7 @@ Widget deckInfoCard(String deckID){
         width: 700,
         color: Colors.amber,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -31,16 +31,14 @@ Widget deckInfoCard(String deckID){
                   ),
                 ),
               ),
-              Row(
-                children: <Widget>[
-                  for (var tag in deck.tagsList) 
-                    Text(
-                      tag + " ",
-                      style: TextStyle(
-                        color: Colors.black38,
-                      ),
-                    ),
-                ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Text(
+                  deck.tagsList.join(" "),
+                  style: TextStyle(
+                    color: Colors.black38,
+                  ),
+                ),
               )
             ],
           ),
