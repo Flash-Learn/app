@@ -19,9 +19,9 @@ class MyDecks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[200],
+      backgroundColor: Colors.grey[700],
       appBar: AppBar(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.black,
           centerTitle: true,
           title: Text('FlashLearn'),
           leading: IconButton(
