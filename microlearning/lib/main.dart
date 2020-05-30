@@ -1,3 +1,4 @@
+import 'package:microlearning/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/authentication/register.dart';
@@ -14,6 +15,7 @@ Future<void> main() async{
       ),
       routes: {
         '/': (context) => email == null ? LoginUser() : MyDecks(),
+        // '/': (context) => Home(),
         '/home': (context) => MyDecks(),
         '/register': (context) => RegisterUser(),
       },

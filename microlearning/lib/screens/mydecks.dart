@@ -9,7 +9,7 @@ import 'package:microlearning/helperFunctions/post.dart';
 class MyDecks extends StatelessWidget {
   // TODO: "provide" User class object using provider
 
-  final List<String> userDeckIDs = ["test string", "this wil be a deck id"];
+  final List<String> userDeckIDs = ["test string", "this wil be a deck id", "Hello","Helaskda","asdasd","asd","asdasd"];
   // TODO: make method to get list of deck ID of user
 
   Widget buildDeckInfo(BuildContext ctxt, int index) {
@@ -39,25 +39,82 @@ class MyDecks extends StatelessWidget {
               );
             },
           )),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 40),
-        child: Center(
-          child: ListView.builder(
-            itemCount: userDeckIDs.length,
-            itemBuilder: (BuildContext ctxt, int index) => InkWell(
-                onTap: () {
-                  print(userDeckIDs[index]);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewDeck(
-                          deckID: userDeckIDs[index],
-                        ),
-                      ));
+      // body: Column(
+      //   children: <Widget>[
+      //     Padding(
+      //       padding: const EdgeInsets.symmetric(horizontal: 20),
+      //       // child: SearchBar<Post>(
+      //       //   onSearch: search,
+      //       //   onItemFound: (Post post, int index) {
+      //       //     return SizedBox(
+      //       //       height: 200,
+      //       //       child: ListTile(
+      //       //         title: Text(post.title),
+      //       //         subtitle: Text(post.description),
+      //       //       ),
+      //       //     );
+      //       //   },
+      //       // ),
+      //     ),
+      // Padding(
+      //   padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 40),
+      //   child: SizedBox(
+      //     height: 200,
+      //     child: ListView.builder(
+      //       itemCount: userDeckIDs.length,
+      //       itemBuilder: (BuildContext ctxt, int index) => InkWell(
+      //           onTap: () {
+      //             print(userDeckIDs[index]);
+      //             Navigator.push(
+      //                 context,
+      //                 MaterialPageRoute(
+      //                   builder: (context) => ViewDeck(
+      //                     deckID: userDeckIDs[index],
+      //                   ),
+      //                 ));
+      //           },
+      //           child: buildDeckInfo(ctxt, index)),
+      body: Column(
+        children: <Widget>[
+          Container(
+            height: 100,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SearchBar<Post>(
+                onSearch: search,
+                onItemFound: (Post post, int index) {
+                  return ListTile(
+                    title: Text(post.title),
+                    subtitle: Text(post.description),
+                  );
                 },
-                child: buildDeckInfo(ctxt, index)),
+              ),
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 70),
+            child: Container(
+              height: 550,
+              child: Expanded(
+                child: ListView.builder(
+                  itemCount: userDeckIDs.length,
+                  itemBuilder: (BuildContext ctxt, int index) => InkWell(
+                      onTap: () {
+                        print(userDeckIDs[index]);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViewDeck(
+                                deckID: userDeckIDs[index],
+                              ),
+                            ));
+                      },
+                      child: buildDeckInfo(ctxt, index)),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
