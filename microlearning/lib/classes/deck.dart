@@ -1,5 +1,5 @@
-import 'flashCard.dart';
-import 'userclass.dart';
+import 'package:microlearning/classes/flashCard.dart';
+import 'package:microlearning/classes/userclass.dart';
 
 class Deck{
   String deckID;
