@@ -84,6 +84,8 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
               scrollDirection: Axis.horizontal,
               itemCount: deck.flashCardList.length,
               itemBuilder: (context, int currentIndex) {
+                print(currentPage);
+                print(currentIndex);
                 return FlashCardView(
 //                  side: side,
                   color: Colors.accents[currentIndex],
