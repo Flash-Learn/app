@@ -70,11 +70,6 @@ class _FlashCardViewState extends State<FlashCardView> {
                         side=2;
                       else
                         side=1;
-                      print(side);
-                      if(side==1)
-                        display=term;
-                      else
-                        display=definition;
                     });
                   },
                   child: Container(
@@ -85,7 +80,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          display,
+                          side == 1 ? term : definition,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
