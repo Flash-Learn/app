@@ -56,4 +56,9 @@ class UserNameSignIn {
       return null;
     }
   }
+
+  Future addUserData(String name, String gender, int grade) async {
+
+  }
+
 }
