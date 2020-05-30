@@ -5,7 +5,7 @@ class Deck{
   String deckID;
   List<String> flashCardList=[]; // stores a list of flashcards using their ID
   List<String> tagsList=[];
-  User author;
+//  User author;
   bool isPublic;
   String deckName;
 

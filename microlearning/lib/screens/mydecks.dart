@@ -9,7 +9,7 @@ import 'package:microlearning/helperFunctions/post.dart';
 class MyDecks extends StatelessWidget {
   // TODO: "provide" User class object using provider
 
-  final List<String> userDeckIDs = ["test string", "this will be a deck id"];
+  final List<String> userDeckIDs = ["test string", "this will be a deck id", "tester", "test string", "this will be a deck id", "tester"];
   // TODO: make method to get list of deck ID of user
 
   Widget buildDeckInfo(BuildContext ctxt, int index) {
