@@ -9,7 +9,15 @@ import 'package:microlearning/helperFunctions/post.dart';
 class MyDecks extends StatelessWidget {
   // TODO: "provide" User class object using provider
 
-  final List<String> userDeckIDs = ["test string", "this wil be a deck id", "Hello","Helaskda","asdasd","asd","asdasd"];
+  final List<String> userDeckIDs = [
+    "test string",
+    "this wil be a deck id",
+    "Hello",
+    "Helaskda",
+    "asdasd",
+    "asd",
+    "asdasd"
+  ];
   // TODO: make method to get list of deck ID of user
 
   Widget buildDeckInfo(BuildContext ctxt, int index) {
@@ -76,41 +84,43 @@ class MyDecks extends StatelessWidget {
       //           child: buildDeckInfo(ctxt, index)),
       body: Column(
         children: <Widget>[
-          Container(
-            height: 100,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SearchBar<Post>(
-                onSearch: search,
-                onItemFound: (Post post, int index) {
-                  return ListTile(
-                    title: Text(post.title),
-                    subtitle: Text(post.description),
-                  );
-                },
-              ),
-            ),
+          // Container(
+          //   height: 100,
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 20),
+          //     child: SearchBar<Post>(
+          //       onSearch: search,
+          //       onItemFound: (Post post, int index) {
+          //         return ListTile(
+          //           title: Text(post.title),
+          //           subtitle: Text(post.description),
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // ),
+          SizedBox(
+            height: 10,
           ),
+          Text("HELLOOO"),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 70),
             child: Container(
-              height: 550,
-              child: Expanded(
-                child: ListView.builder(
-                  itemCount: userDeckIDs.length,
-                  itemBuilder: (BuildContext ctxt, int index) => InkWell(
-                      onTap: () {
-                        print(userDeckIDs[index]);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ViewDeck(
-                                deckID: userDeckIDs[index],
-                              ),
-                            ));
-                      },
-                      child: buildDeckInfo(ctxt, index)),
-                ),
+              height: 650,
+              child: ListView.builder(
+                itemCount: userDeckIDs.length,
+                itemBuilder: (BuildContext ctxt, int index) => InkWell(
+                    onTap: () {
+                      print(userDeckIDs[index]);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ViewDeck(
+                              deckID: userDeckIDs[index],
+                            ),
+                          ));
+                    },
+                    child: buildDeckInfo(ctxt, index)),
               ),
             ),
           ),
