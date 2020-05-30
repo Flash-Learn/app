@@ -23,7 +23,7 @@ class FlashCardView extends StatefulWidget {
 class _FlashCardViewState extends State<FlashCardView> {
   int side=1;
   String term = "this is term";
-  String definition = "this is definition";
+  String definition = "this is definition, intentionally made long to make sure the text doesn't overflow in the flashcard";
   String display;
 
   @override
@@ -37,13 +37,19 @@ class _FlashCardViewState extends State<FlashCardView> {
   @override
   Widget build(BuildContext context) {
     double relativePosition = widget.currentIndex - widget.currentPage;
-
+    if((widget.currentIndex-widget.currentPage).abs()
+    >=0.9){
+      setState(() {
+        side=1;
+      });
+    }
       return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 250),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return ScaleTransition(child: child, scale: animation);
         },
         child: Padding(
+          key: ValueKey<int>(side),
           padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 8),
           child: Container(
 //          width: 200,
@@ -60,8 +66,11 @@ class _FlashCardViewState extends State<FlashCardView> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      print("sf");
-                      side = (side+1)%2 + 1;
+                      if(side==1)
+                        side=2;
+                      else
+                        side=1;
+                      print(side);
                       if(side==1)
                         display=term;
                       else
@@ -71,11 +80,21 @@ class _FlashCardViewState extends State<FlashCardView> {
                   child: Container(
                     color: side == 1
                         ? widget.color
-                        : Colors.black45,
+                        : Colors.black87,
                     child: Center(
-                      child: Text(
-                        display,
-//                  textAlign: TextAlign.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          display,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: side == 1
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                          ),
+                        ),
                       ),
                     ),
               ),
