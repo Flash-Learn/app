@@ -14,7 +14,7 @@ Widget deckInfoCard(String deckID){
       child: Container(
         height: 80,
         width: 700,
-        color: Colors.grey[100],
+        color: Colors.amber,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: Column(
