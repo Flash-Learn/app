@@ -93,6 +93,7 @@ class _LoginUserState extends State<LoginUser> {
                             }else{
                               SharedPreferences prefs = await SharedPreferences.getInstance(); 
                               prefs.setString('email', email);
+                              prefs.setString('uid', result.uid);
                               Navigator.of(context).pushReplacement(
                                  MaterialPageRoute(
                                    builder: (context) {

@@ -37,7 +37,7 @@ class _EmailVerificationState extends State<EmailVerification> {
               isUserEmailVerified = user.isEmailVerified;
               SharedPreferences prefs = await SharedPreferences.getInstance(); 
               prefs.setString('email', user.email);
-              prefs.setString('uid', uid);
+              prefs.setString('uid', user.uid);
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return GetUserInfo();}));
               timer.cancel();
             }
