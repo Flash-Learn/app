@@ -1,34 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/helperFunctions/database.dart';
-import 'package:microlearning/screens/mydecks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class GetUserInfo extends StatefulWidget {
+class EditInfo extends StatefulWidget {
   @override
-  _GetUserInfoState createState() => _GetUserInfoState();
+  _EditInfoState createState() => _EditInfoState();
 }
 
-class _GetUserInfoState extends State<GetUserInfo> {
+class _EditInfoState extends State<EditInfo> {
 
   final _formKey = GlobalKey<FormState>();
+  String _uid;
   String _name;
-  String _gender;
   String _grade;
+  String _gender;
 
   List<String> genders = ["Male", "Female", "Others"];
   List<String> grades = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 
   @override
+  void initState(){
+    super.initState();
+    Future(() async{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      _uid = prefs.getString('uid');
+      print(_uid);
+      DataBaseServices here = DataBaseServices(uid: _uid);
+      List<String> defaults = await here.getData();
+      //TODO: fix default values of this form
+
+      _name = defaults[0];
+      _grade = defaults[1];
+      _gender = defaults[2];
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Enter details",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.red,
+        title: Text("Edit Information"),
       ),
+      backgroundColor: Colors.blue[200],
       body: Container(
         padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
         child: Form(
@@ -37,6 +50,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
+                initialValue: _name,
                 validator: (val) {
                   return val.isEmpty ? "Enter name" : null;
                 },
@@ -79,7 +93,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
                     child: Container(
                       width: 100,
                       child: DropdownButtonFormField(
-                        value: _gender ?? "Others",
+                        value: _gender,
                         items: genders.map((gender) {
                           return DropdownMenuItem(
                             value: gender,
@@ -118,7 +132,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
                     child: Container(
                       width: 100,
                       child: DropdownButtonFormField(
-                        value: _grade ?? "1",
+                        value: _grade,
                         items: grades.map((grade) {
                           return DropdownMenuItem(
                             value: grade,
@@ -148,17 +162,9 @@ class _GetUserInfoState extends State<GetUserInfo> {
                 ),
                 onPressed: () async{
                   if(_formKey.currentState.validate()) {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    String user = prefs.getString('email');
-                    String uid = prefs.getString('uid');
-
-                    //TODO : UPLOAD ALL THIS DATA TO THE DATABASE
-                    
-                    DataBaseServices here = DataBaseServices(uid: uid);
-                    here.uploadData(_name, _grade, _gender);
-
-
-                    return Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return MyDecks();}));
+                    DataBaseServices here = DataBaseServices(uid: _uid);
+                    here.updateData(_name, _grade, _gender);
+                    Navigator.pop(context);
                   }
                 },
               ),
