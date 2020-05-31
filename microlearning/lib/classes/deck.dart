@@ -1,10 +1,10 @@
-import 'flashCard.dart';
-import 'userclass.dart';
+import 'package:microlearning/classes/flashCard.dart';
+import 'package:microlearning/classes/userclass.dart';
 
 class Deck{
   String deckID;
   List<String> flashCardList=[]; // stores a list of flashcards using their ID
-  List<String> tagsList = [];
+  List<String> tagsList=[];
   User author;
   bool isPublic;
   String deckName;
