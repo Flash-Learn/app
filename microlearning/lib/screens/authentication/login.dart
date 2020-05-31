@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/classes/google_signin.dart';
 import 'package:microlearning/classes/username_signin.dart';
+import 'package:microlearning/helperFunctions/database.dart';
+import 'package:microlearning/screens/authentication/get_user_info.dart';
 import 'package:microlearning/screens/authentication/register.dart';
 import 'package:microlearning/screens/authentication/resetpassword.dart';
 import 'package:microlearning/screens/mydecks.dart';
@@ -140,7 +142,20 @@ googleRegisterinButton(BuildContext context) {
     splashColor: Colors.grey,
     onPressed: () async {
     String test = await signInWithGoogle(context);
-    if(test == null){
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString('uid');
+    DataBaseServices here = DataBaseServices(uid: uid);
+    List<String> defaults = await here.getData();
+    if(here==null || defaults.length == 1 ){
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) {
+            return GetUserInfo();
+          },
+        ),
+      );
+    }
+    else if(test == null){
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) {

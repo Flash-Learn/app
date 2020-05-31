@@ -70,8 +70,10 @@ void signOutGoogle() async {
   } else{
     await googleSignIn.signOut();
   }
-  if(prefs.getString('name')!=null)
+  if(prefs.getString('name')!=null){
     prefs.remove('name');
+    prefs.remove('uid');
+  }
   prefs.remove('email');
   print('User signed out');
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/classes/deck.dart';
 import 'package:microlearning/helperFunctions/getDeckFromID.dart';
 import 'package:microlearning/helperWidgets/flashCardView.dart';
+import 'package:microlearning/screens/editdeck.dart';
 
 class ViewDeck extends StatefulWidget {
   final String deckID;
@@ -24,6 +25,20 @@ class _ViewDeckState extends State<ViewDeck> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context){return EditDecks(deck: deck);}));
+              },
+              child: Icon(
+                Icons.edit,
+                size: 26.0,
+              ),
+            )
+          ),
+        ],
         centerTitle: true,
         title: Text(
           deck.deckName,
