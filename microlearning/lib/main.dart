@@ -11,7 +11,7 @@ Future<void> main() async{
   var email = prefs.getString('email'); 
   runApp(MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.blue,
       ),
       routes: {
         '/': (context) => email == null ? LoginUser() : MyDecks(),
