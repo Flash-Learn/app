@@ -178,12 +178,15 @@ class _EditInfoState extends State<EditInfo> {
   _getdatafromdatabase() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _uid = prefs.getString('uid');
-    DataBaseServices here = DataBaseServices(uid: _uid);
+    DataBaseServices here;
+    here = DataBaseServices(uid: _uid);
     List<String> defaults = await here.getData();
     //TODO: fix default values of this form
-    _name = defaults[0];
-    _grade = defaults[1];
-    _gender = defaults[2];
+    if(defaults.length>1 || here!=null){
+      _name = defaults[0];
+      _grade = defaults[1];
+      _gender = defaults[2];
+    }
     return defaults.toString();
   }
 }
