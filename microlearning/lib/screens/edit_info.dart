@@ -27,11 +27,11 @@ class _EditInfoState extends State<EditInfo> {
       print(_uid);
       DataBaseServices here = DataBaseServices(uid: _uid);
       List<String> defaults = await here.getData();
-      // print(defaults[0] + " " + defaults[1] + " " + defaults[2]);
+      //TODO: fix default values of this form
+
       _name = defaults[0];
       _grade = defaults[1];
       _gender = defaults[2];
-      // print(_name + " " + _grade + " " + _gender);
     });
   }
 
