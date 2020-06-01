@@ -38,6 +38,7 @@ class _EmailVerificationState extends State<EmailVerification> {
               SharedPreferences prefs = await SharedPreferences.getInstance(); 
               prefs.setString('email', user.email);
               prefs.setString('uid', user.uid);
+              prefs.setBool('googlesignin', false);
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return GetUserInfo();}));
               timer.cancel();
             }

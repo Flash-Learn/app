@@ -58,22 +58,21 @@ Future<String> signInWithGoogle(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance(); 
     prefs.setString('email', email);
     prefs.setString('uid', user.uid);
+    prefs.setBool('googlesignin', true);
   }
 
   return '$user';
 } 
 void signOutGoogle() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  if(prefs.getString('email')!=null && prefs.getString('name')==null){
+  if(prefs.getBool('googlesignin')!=true){
     final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.signOut();
   } else{
     await googleSignIn.signOut();
   }
-  if(prefs.getString('name')!=null){
-    prefs.remove('name');
-    prefs.remove('uid');
-  }
+  prefs.remove('googlesignin');
+  prefs.remove('uid');
   prefs.remove('email');
   print('User signed out');
 }

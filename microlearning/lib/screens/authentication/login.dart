@@ -96,6 +96,7 @@ class _LoginUserState extends State<LoginUser> {
                               SharedPreferences prefs = await SharedPreferences.getInstance(); 
                               prefs.setString('email', email);
                               prefs.setString('uid', result.uid);
+                              prefs.setBool('googlesignin', false);
                               Navigator.of(context).pushReplacement(
                                  MaterialPageRoute(
                                    builder: (context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/classes/google_signin.dart';
 import 'package:microlearning/classes/username_signin.dart';
+import 'package:microlearning/screens/authentication/get_user_info.dart';
 import 'package:microlearning/screens/authentication/loadingscreen.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/mydecks.dart';
@@ -147,7 +148,7 @@ googleRegisterinButton(BuildContext context) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) {
-            return MyDecks();
+            return GetUserInfo();
           },
         ),
       );
