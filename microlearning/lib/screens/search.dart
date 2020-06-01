@@ -24,11 +24,11 @@ class _SearchState extends State<Search> {
     });
   }
 
-  bool isSwitched = false;
+  bool isSwitched = false; //Variable for the state of switch
 
   @override
   Widget build(BuildContext context) {
-    String state = isSwitched ? "Online Results" : "Offline Results";
+    String state = isSwitched ? "Online Results" : "Offline Results"; //for user to see offline/online results
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
@@ -53,24 +53,18 @@ class _SearchState extends State<Search> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SearchBar<Post>(
-                  hintText: 'Search',
-                  onSearch: search,
-                  onItemFound: (Post post, int index) {
-                    return ListTile(
-                      title: Text(post.title),
-                      subtitle: Text(post.description),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SearchBar<Post>(
+            hintText: 'Search',
+            onSearch: search,
+            onItemFound: (Post post, int index) {
+              return ListTile(
+                title: Text(post.title),
+                subtitle: Text(post.description),
+              );
+            },
+          ),
         ),
       ),
     );

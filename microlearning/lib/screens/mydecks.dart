@@ -55,64 +55,13 @@ class MyDecks extends StatelessWidget {
               );
             },
           )),
-      // body: Column(
-      //   children: <Widget>[
-      //     Padding(
-      //       padding: const EdgeInsets.symmetric(horizontal: 20),
-      //       // child: SearchBar<Post>(
-      //       //   onSearch: search,
-      //       //   onItemFound: (Post post, int index) {
-      //       //     return SizedBox(
-      //       //       height: 200,
-      //       //       child: ListTile(
-      //       //         title: Text(post.title),
-      //       //         subtitle: Text(post.description),
-      //       //       ),
-      //       //     );
-      //       //   },
-      //       // ),
-      //     ),
-      // Padding(
-      //   padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 40),
-      //   child: SizedBox(
-      //     height: 200,
-      //     child: ListView.builder(
-      //       itemCount: userDeckIDs.length,
-      //       itemBuilder: (BuildContext ctxt, int index) => InkWell(
-      //           onTap: () {
-      //             print(userDeckIDs[index]);
-      //             Navigator.push(
-      //                 context,
-      //                 MaterialPageRoute(
-      //                   builder: (context) => ViewDeck(
-      //                     deckID: userDeckIDs[index],
-      //                   ),
-      //                 ));
-      //           },
-      //           child: buildDeckInfo(ctxt, index)),
       body: Column(
         children: <Widget>[
-          // Container(
-          //   height: 100,
-          //   child: Padding(
-          //     padding: const EdgeInsets.symmetric(horizontal: 20),
-          //     child: SearchBar<Post>(
-          //       onSearch: search,
-          //       onItemFound: (Post post, int index) {
-          //         return ListTile(
-          //           title: Text(post.title),
-          //           subtitle: Text(post.description),
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ),
           SizedBox(
             height: 10,
           ),
-          Text("HELLOOO"),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 70),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Container(
               height: 650,
               child: ListView.builder(
