@@ -1,5 +1,6 @@
 import 'package:microlearning/screens/search.dart';
 import 'package:flutter/material.dart';
+import 'package:microlearning/screens/authentication/get_user_info.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/authentication/register.dart';
 import 'package:microlearning/screens/mydecks.dart';
