@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/classes/deck.dart';
+import 'package:microlearning/helperWidgets/getflashcards.dart';
 
 class EditFlashCard extends StatefulWidget {
   final Deck deck;
@@ -43,6 +44,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
           )
         ],
       ),
+      body: GetFlashCardEdit(),
     );
   }
 }

@@ -12,7 +12,6 @@ class EditDecks extends StatefulWidget {
 
 class _EditDecksState extends State<EditDecks> {
   final Deck deck;
-  List<TextEditingController> _controllers = new List();
   _EditDecksState({@required this.deck});
 
   @override
@@ -100,11 +99,5 @@ class _EditDecksState extends State<EditDecks> {
         ),
       ),
     );
-  }
-  void dispose(){
-    for( TextEditingController i in _controllers){
-      i.dispose();
-    }
-    super.dispose();
   }
 }
