@@ -1,3 +1,5 @@
+// import 'dart:js';
+
 import 'package:microlearning/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/screens/authentication/get_user_info.dart';
@@ -19,6 +21,7 @@ Future<void> main() async{
         // '/': (context) => Home(),
         '/home': (context) => MyDecks(),
         '/register': (context) => RegisterUser(),
+        '/search': (context) => Search(),
       },
     )
   );

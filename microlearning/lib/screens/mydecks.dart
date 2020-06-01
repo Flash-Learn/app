@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/classes/deck.dart';
@@ -24,6 +26,20 @@ class MyDecks extends StatelessWidget {
           backgroundColor: Colors.red,
           centerTitle: true,
           title: Text('FlashLearn'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/search',
+                );
+              },
+            ),
+          ],
           leading: IconButton(
             icon: Icon(
               Icons.account_circle,
