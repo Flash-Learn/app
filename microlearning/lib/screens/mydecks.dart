@@ -7,15 +7,27 @@ import 'package:microlearning/helperWidgets/deckInfoCard.dart';
 import 'package:microlearning/screens/accountsettings.dart';
 import 'package:microlearning/screens/viewDeck.dart';
 import 'package:microlearning/helperFunctions/post.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyDecks extends StatelessWidget {
   // TODO: "provide" User class object using provider
+  String userID;
+//  @override
+  initState() {
+//    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      userID = prefs.getString('uid');
+    });
+  }
 
-  final List<String> userDeckIDs = ["test string", "this will be a deck id", "tester", "test string", "this will be a deck id", "tester"];
+//  final String userID = "nYpP671cwaWw5sL04gx9GrXDU6i1";
+
+
   // TODO: make method to get list of deck ID of user
 
-  Widget buildDeckInfo(BuildContext ctxt, int index) {
-    return deckInfoCard(userDeckIDs[index]);
+  Widget buildDeckInfo(BuildContext ctxt, String deckID) {
+    return deckInfoCard(deckID);
   }
 
   @override
@@ -55,12 +67,14 @@ class MyDecks extends StatelessWidget {
               );
             },
           )),
-      body: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
+      body: StreamBuilder(
+        stream: Firestore.instance.collection('user_data').document(userID).snapshots(),
+        builder: (context, snapshot){
+          if(!snapshot.hasData)
+            return Text("loading");
+          print(snapshot.data["decks"]);
+          final List<dynamic> userDeckIDs = snapshot.data["decks"];
+          return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Container(
               height: 650,
@@ -77,11 +91,12 @@ class MyDecks extends StatelessWidget {
                             ),
                           ));
                     },
-                    child: buildDeckInfo(ctxt, index)),
+                    child: buildDeckInfo(ctxt, userDeckIDs[index])),
               ),
             ),
-          ),
-        ],
+          );
+
+        }
       ),
     );
   }

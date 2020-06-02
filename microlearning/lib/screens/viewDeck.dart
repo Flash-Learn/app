@@ -3,6 +3,7 @@ import 'package:microlearning/classes/deck.dart';
 import 'package:microlearning/helperFunctions/getDeckFromID.dart';
 import 'package:microlearning/helperWidgets/flashCardView.dart';
 import 'package:microlearning/screens/editdeck.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ViewDeck extends StatefulWidget {
   final String deckID;
@@ -23,30 +24,43 @@ class _ViewDeckState extends State<ViewDeck> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context){return EditDecks(deck: deck);}));
-              },
-              child: Icon(
-                Icons.edit,
-                size: 26.0,
+    return StreamBuilder(
+      stream: Firestore.instance.collection("decks").document(deckID).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Text("loading...");
+        deck = Deck(
+          deckName: snapshot.data["deckName"],
+          tagsList: snapshot.data["tagsList"],
+          isPublic: snapshot.data["isPublic"],
+        );
+        deck.flashCardList = snapshot.data["flashcardList"];
+        return Scaffold(
+          appBar: AppBar(
+            actions: <Widget>[
+              Padding(
+                  padding: EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context){return EditDecks(deck: deck);}));
+                    },
+                    child: Icon(
+                      Icons.edit,
+                      size: 26.0,
+                    ),
+                  )
               ),
-            )
+            ],
+            centerTitle: true,
+            title: Text(
+              deck.deckName,
+            ),
           ),
-        ],
-        centerTitle: true,
-        title: Text(
-          deck.deckName,
-        ),
-      ),
-      body: FlashCardSwipeView(
-        deck: deck,
-      ),
+          body: FlashCardSwipeView(
+            deck: deck,
+          ),
+        );
+      },
     );
   }
   Deck _getThingsOnStartup(){
@@ -99,8 +113,9 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
               scrollDirection: Axis.horizontal,
               itemCount: deck.flashCardList.length,
               itemBuilder: (context, int currentIndex) {
-                print(currentPage);
-                print(currentIndex);
+//                print(currentPage);
+//                print(currentIndex);
+//                print(deck.flashCardList[currentIndex]);
                 return FlashCardView(
 //                  side: side,
                   color: Colors.accents[currentIndex],
