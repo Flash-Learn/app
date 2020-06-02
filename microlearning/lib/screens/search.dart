@@ -21,7 +21,7 @@ class _SearchState extends State<Search> {
     }
     var capitalizedValue =
         value.substring(0, 1).toUpperCase() + value.substring(1);
-
+// Try accessing the IDs from here. 
     if (queryResultSet.length == 0 && value.length == 1) {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
         for (int i = 0; i < docs.documents.length; ++i) {
@@ -117,7 +117,8 @@ class _SearchState extends State<Search> {
     );
   }
 }
-
+// Try changing the widget that is being returned.
+// Implementing the offline/online search is still left.
 Widget buildResultCard(data) {
   return Card(
     shape: RoundedRectangleBorder(
