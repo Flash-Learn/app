@@ -110,11 +110,25 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     );
 
     // build the ListView
-    return ListView(
+    return ReorderableListView(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
-      shrinkWrap: true,
       children: children,
+      onReorder: _onReorder,
     );
+  }
+
+  void _onReorder(int oldIndex, int newIndex){
+    setState(() {
+      if (newIndex > oldIndex) {
+          newIndex -= 1;
+        }
+        final List<String> item = flashCardData.removeAt(oldIndex);
+        final List<TextEditingController> control = controllers.removeAt(oldIndex);
+        final String flashkey = deck.flashCardList.removeAt(oldIndex);
+        controllers.insert(newIndex, control);
+        flashCardData.insert(newIndex, item);
+        deck.flashCardList.insert(newIndex, flashkey);
+    });
   }
 
   void initState(){

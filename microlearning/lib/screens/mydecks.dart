@@ -26,6 +26,12 @@ class MyDecks extends StatelessWidget {
 //    if(userID==null)
 //      return Container();
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add,),
+        onPressed: (){
+          
+        },
+      ),
       backgroundColor: Colors.blue[200],
       appBar: AppBar(
           backgroundColor: Colors.red,
