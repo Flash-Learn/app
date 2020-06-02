@@ -145,6 +145,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
         controllers.insert(newIndex, control);
         flashCardData.insert(newIndex, item);
     });
+
   }
 
   void initState(){
