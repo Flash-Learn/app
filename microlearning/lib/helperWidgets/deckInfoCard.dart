@@ -41,7 +41,7 @@ Widget deckInfoCard(String deckID){
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Text(
-                      deck["deckTags"].join(" "),
+                      deck["tagsList"].join(" "),
                       style: TextStyle(
                         color: Colors.black38,
                       ),
