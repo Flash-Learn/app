@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/classes/deck.dart';
+import 'package:microlearning/helperFunctions/updateFlashcardList.dart';
 import 'package:microlearning/helperWidgets/getflashcards.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:microlearning/screens/viewDeck.dart';
 
 class EditFlashCard extends StatefulWidget {
   final Deck deck;
@@ -10,9 +13,20 @@ class EditFlashCard extends StatefulWidget {
 }
 
 class _EditFlashCardState extends State<EditFlashCard> {
-  List<List<String>> flashCardData = [<String>[]];
+//  List<List<String>> flashCardDatatemp = [<String>[]];
+  static List<List<String>> flashCardData;
   Deck deck;
   _EditFlashCardState({@required this.deck});
+  static Deck newDeck;
+
+  @override
+  initState(){
+    super.initState();
+    newDeck = deck;
+    flashCardData = [<String>[]];
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,10 +34,13 @@ class _EditFlashCardState extends State<EditFlashCard> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black87,
-        child: Icon(Icons.keyboard_arrow_left),
+        child: Icon(Icons.check),
         onPressed: (){
           // TODO: save the changes made by the user in the flash cards of the deck.
           // popping the current screen and taking the user back to the deck card info page.
+          updateFlashcardList(deck, flashCardData);
+
+
           Navigator.pop(context);
         },
       ),
@@ -75,10 +92,19 @@ class _EditFlashCardState extends State<EditFlashCard> {
   }
 
   Stream<dynamic> getCardfromDataBase = (() async* {
-    await Future<void>.delayed(Duration(seconds: 1));
-    yield 1;
+//    await Future<void>.delayed(Duration(seconds: 1));
+//    yield 1;
     // add the function to get the flashcards from database and save it in flashCardData, while retriving data from 
     // the database make sure to initialise flashCardData as List<List<String>> flashCardData = [<String>[]], 
     // this will make flashCardData[0] as null but it is the only way it is working and I made my code work according to this.
+    final CollectionReference flashcardReference = Firestore.instance.collection("flashcards");
+
+    for(var i=0; i<newDeck.flashCardList.length; i++){
+      flashcardReference.document(newDeck.flashCardList[i]).get().then((ref){
+        flashCardData.add([ref.data["term"], ref.data["definition"]]);
+      });
+    }
+
+    yield 1;
   })();
 }

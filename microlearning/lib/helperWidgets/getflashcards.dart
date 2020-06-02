@@ -148,10 +148,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
   }
 
   void initState(){
-    // remove these lines
-    flashCardData.add(['Mitochondria', 'It is powerhouse of the cell']);
-    flashCardData.add(['Mitochondria', 'It is powerhouse of the cell']);
-    flashCardData.add(['Mitochondria', 'It is powerhouse of the cell']);
     fieldCount = flashCardData.length;
     super.initState();
   }
