@@ -44,56 +44,116 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
             padding: EdgeInsets.zero,
           );
       }else{
-        return Padding(
+        return Dismissible(
           key: ValueKey(k),
-          padding: const EdgeInsets.all(20.0),
-          child: Container(
-            color: Colors.grey[800],
-            child: Form(
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    textAlign: TextAlign.center,
-                    controller: controller[0],
-                    onChanged: (val){
-                      flashCardData[controllers.indexOf(controller)][0] = val;
-                    },
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: 'Term',
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      contentPadding:
-                          EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                    )
-                  ),
-                  Divider(height: 20, color: Colors.white, indent: 10, endIndent: 10,),
-                  TextFormField(
-                    maxLines: null,
-                    textAlign: TextAlign.center,
-                    controller: controller[1],
-                    style: TextStyle(color: Colors.white),
-                    onChanged: (val){
-                      flashCardData[controllers.indexOf(controller)][1] = val;
-                    },
-                    keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(
-                      hintText: 'Definition',
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      contentPadding:
-                          EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+          onDismissed: (direction){
+            setState(() {
+              flashCardData.removeAt(controllers.indexOf(controller));
+              controllers.remove(controller);
+              fieldCount--;
+            });
+          },
+          background: Container(color: Colors.red,),
+          child: Stack(
+            children: <Widget>[
+              Padding(
+                key: ValueKey(k),
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  color: Colors.grey[800],
+                  child: Form(
+                    child: Column(
+                      children: <Widget>[
+                        TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: controller[0],
+                          onChanged: (val){
+                            flashCardData[controllers.indexOf(controller)][0] = val;
+                          },
+                          style: TextStyle(color: Colors.white),                   
+                          decoration: InputDecoration(
+                            // suffix: IconButton(
+                            //   icon: Icon(Icons.delete_outline),
+                            //   onPressed: (){
+                            //     setState(() {
+                            //       flashCardData.removeAt(controllers.indexOf(controller));
+                            //       controllers.remove(controller);
+                            //       fieldCount--;
+                            //     });
+                            //   },
+                            // ),
+                            hintText: 'Term',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding:
+                              EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                          )
+                        ),
+                        Divider(color: Colors.white, endIndent: 20, indent: 20,),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.end,
+                        //   children: <Widget>[
+                        //     Text('---------------------------------'),
+                        //     IconButton(
+                        //       icon: Icon(Icons.delete_outline),
+                        //       onPressed: (){
+                        //         setState(() {
+                        //           flashCardData.removeAt(controllers.indexOf(controller));
+                        //           controllers.remove(controller);
+                        //           fieldCount--;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ],
+                        // ),
+                        TextFormField(
+                          maxLines: null,
+                          textAlign: TextAlign.center,
+                          controller: controller[1],
+                          style: TextStyle(color: Colors.white),
+                          onChanged: (val){
+                            flashCardData[controllers.indexOf(controller)][1] = val;
+                          },
+                          keyboardType: TextInputType.multiline,
+                          decoration: InputDecoration(
+                            hintText: 'Definition',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding:
+                                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                          ),
+                        ),
+                      ],
                     ),
                   )
-                ],
+                ),
               ),
-            )
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                            icon: Icon(Icons.delete_outline),
+                            onPressed: (){
+                              setState(() {
+                                flashCardData.removeAt(controllers.indexOf(controller));
+                                controllers.remove(controller);
+                                fieldCount--;
+                              });
+                            },
+                          ),
+                  ],
+                ),
+              )
+            ],
           ),
         );}
     },).toList();
