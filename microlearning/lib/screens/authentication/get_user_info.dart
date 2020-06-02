@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/helperFunctions/database.dart';
 import 'package:microlearning/screens/mydecks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +14,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
   final _formKey = GlobalKey<FormState>();
   String _name;
   String _gender;
-  int _grade;
+  String _grade;
 
   List<String> genders = ["Male", "Female", "Others"];
   List<String> grades = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
@@ -149,8 +150,13 @@ class _GetUserInfoState extends State<GetUserInfo> {
                   if(_formKey.currentState.validate()) {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     String user = prefs.getString('email');
+                    String uid = prefs.getString('uid');
 
                     //TODO : UPLOAD ALL THIS DATA TO THE DATABASE
+                    
+                    DataBaseServices here = DataBaseServices(uid: uid);
+                    here.uploadData(_name, _grade, _gender);
+
 
                     return Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return MyDecks();}));
                   }
