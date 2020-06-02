@@ -1,6 +1,3 @@
-// import 'dart:html';
-
-import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/classes/deck.dart';
 import 'package:microlearning/helperWidgets/deckInfoCard.dart';
