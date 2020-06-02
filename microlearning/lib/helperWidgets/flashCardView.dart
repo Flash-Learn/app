@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 class FlashCardView extends StatefulWidget {
 
   final Color color;
@@ -43,17 +43,25 @@ class _FlashCardViewState extends State<FlashCardView> {
         side=1;
       });
     }
-      return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 250),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return ScaleTransition(child: child, scale: animation);
-        },
-        child: Padding(
-          key: ValueKey<int>(side),
-          padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 8),
-          child: Container(
+    
+    return StreamBuilder(
+      stream: Firestore.instance.collection("flashcards").document(widget.flashCardID).snapshots(),
+      builder: (context, snapshot) {
+        if(!snapshot.hasData)
+          return Text("Loading");
+        term = snapshot.data["term"];
+        definition = snapshot.data["definition"];
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return ScaleTransition(child: child, scale: animation);
+          },
+          child: Padding(
+            key: ValueKey<int>(side),
+            padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 8),
+            child: Container(
 //          width: 200,
-            child: Transform(
+              child: Transform(
                 transform: Matrix4.identity()
                   ..setEntry(3, 2, 0.003)
                   ..scale((1-relativePosition.abs()).clamp(0.2, 0.6)+0.4)
@@ -86,17 +94,20 @@ class _FlashCardViewState extends State<FlashCardView> {
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: side == 1
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                       ),
                     ),
-              ),
+                  ),
                 ),
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
+    );
+
     }
 }
