@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/classes/deck.dart';
 import 'package:microlearning/helperWidgets/getlisttags.dart';
 import 'package:microlearning/screens/editflashcards.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EditDecks extends StatefulWidget {
   final Deck deck;
@@ -20,7 +21,13 @@ class _EditDecksState extends State<EditDecks> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context){
+
+          Firestore.instance.collection('decks').document(deck.deckID).updateData({
+            "deckName": deck.deckName,
+            "tagsList": deck.tagsList,
+          });
+
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
             // TODO: save the changes made by the user in the deckInfo
             // the changes made are stored in variable 'deck' which this page recieved when this page was made, so passing this variable only to the next page of editing the flashcards.
             return EditFlashCard(deck: deck);
