@@ -12,15 +12,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyDecks extends StatelessWidget {
   // TODO: "provide" User class object using provider
-  String userID;
-//  @override
-  initState() {
-//    super.initState();
-    SharedPreferences.getInstance().then((prefs) {
-      userID = prefs.getString('uid');
-    });
-  }
-
 //  final String userID = "nYpP671cwaWw5sL04gx9GrXDU6i1";
 
 
@@ -32,6 +23,8 @@ class MyDecks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+//    if(userID==null)
+//      return Container();
     return Scaffold(
       backgroundColor: Colors.blue[200],
       appBar: AppBar(
@@ -67,37 +60,50 @@ class MyDecks extends StatelessWidget {
               );
             },
           )),
-      body: StreamBuilder(
-        stream: Firestore.instance.collection('user_data').document(userID).snapshots(),
-        builder: (context, snapshot){
+      body: FutureBuilder(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
           if(!snapshot.hasData)
             return Text("loading");
-          print(snapshot.data["decks"]);
-          final List<dynamic> userDeckIDs = snapshot.data["decks"];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
-            child: Container(
-              height: 650,
-              child: ListView.builder(
-                itemCount: userDeckIDs.length,
-                itemBuilder: (BuildContext ctxt, int index) => InkWell(
-                    onTap: () {
-                      print(userDeckIDs[index]);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ViewDeck(
-                              deckID: userDeckIDs[index],
-                            ),
-                          ));
-                    },
-                    child: buildDeckInfo(ctxt, userDeckIDs[index])),
-              ),
-            ),
-          );
+          print("user id is ${snapshot.data.getString('uid')}");
+          final String userID = snapshot.data.getString('uid');
 
+          return StreamBuilder(
+              stream: Firestore.instance.collection('user_data').document(userID).snapshots(),
+              builder: (context, snapshot){
+                print(userID);
+                if(!snapshot.hasData)
+                  return Text("loading");
+                if(snapshot.data==null)
+                  return Container();
+                final List<dynamic> userDeckIDs = snapshot.data["decks"];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  child: ListView.builder(
+                    itemCount: userDeckIDs.length,
+                    itemBuilder: (BuildContext ctxt, int index) => InkWell(
+                        onTap: () {
+                          print(userDeckIDs[index]);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ViewDeck(
+                                  deckID: userDeckIDs[index],
+                                ),
+                              ));
+                        },
+                        child: buildDeckInfo(ctxt, userDeckIDs[index])),
+                  ),
+                );
+
+              }
+          );
         }
       ),
+
+
+
+
     );
   }
 }
