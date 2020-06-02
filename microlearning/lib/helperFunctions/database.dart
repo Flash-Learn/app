@@ -15,7 +15,7 @@ class DataBaseServices {
       'name': name,
       'grade': grade,
       'gender': gender,
-      'decks': {},
+      'decks': [],
       'uid': uid,
     });
   }
