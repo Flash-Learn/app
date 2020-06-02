@@ -15,9 +15,10 @@ class _EditFlashCardState extends State<EditFlashCard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[200],
+      backgroundColor: Colors.white,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black87,
         child: Icon(Icons.keyboard_arrow_left),
         onPressed: (){
           // TODO: save the changes made by the user in the flash cards of the deck.
@@ -26,7 +27,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
         },
       ),
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.black,
         title: Text('Edit Deck'),
         centerTitle: true,
         actions: <Widget>[
@@ -44,7 +45,11 @@ class _EditFlashCardState extends State<EditFlashCard> {
           )
         ],
       ),
-      body: GetFlashCardEdit(),
+      body: Container(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+        height: 600,
+        child: GetFlashCardEdit(deck: deck),
+      ),
     );
   }
 }
