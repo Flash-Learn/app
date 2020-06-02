@@ -31,7 +31,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+//      floatingActionButtonLocation: FloatingActionButtonLocation.rightFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black87,
         child: Icon(Icons.check),
@@ -39,7 +39,6 @@ class _EditFlashCardState extends State<EditFlashCard> {
           // TODO: save the changes made by the user in the flash cards of the deck.
           // popping the current screen and taking the user back to the deck card info page.
           updateFlashcardList(deck, flashCardData);
-
 
           Navigator.pop(context);
         },
