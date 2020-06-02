@@ -110,10 +110,11 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     );
 
     // build the ListView
-    return ListView(
+    return ReorderableListView(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
-      shrinkWrap: true,
+//      shrinkWrap: true,
       children: children,
+      onReorder: (a, b){},
     );
   }
 
