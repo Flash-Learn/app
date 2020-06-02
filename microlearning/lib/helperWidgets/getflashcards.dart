@@ -121,7 +121,10 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
         ),
         IconButton(
         key: ValueKey('issue is resolved now'),
-        icon: Icon(Icons.add),
+        icon: Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
         onPressed: (){
           setState(() {
             fieldCount++;
@@ -145,14 +148,9 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
         controllers.insert(newIndex, control);
         flashCardData.insert(newIndex, item);
     });
-
   }
 
   void initState(){
-    // remove these lines
-    flashCardData.add(['Mitochondria', 'It is powerhouse of the cell']);
-    flashCardData.add(['Mitochondria', 'It is powerhouse of the cell']);
-    flashCardData.add(['Mitochondria', 'It is powerhouse of the cell']);
     fieldCount = flashCardData.length;
     super.initState();
   }

@@ -27,7 +27,7 @@ class _EditDecksState extends State<EditDecks> {
             "tagsList": deck.tagsList,
           });
 
-          Navigator.of(context).push(MaterialPageRoute(builder: (context){
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
             // TODO: save the changes made by the user in the deckInfo
             // the changes made are stored in variable 'deck' which this page recieved when this page was made, so passing this variable only to the next page of editing the flashcards.
             return EditFlashCard(deck: deck);
