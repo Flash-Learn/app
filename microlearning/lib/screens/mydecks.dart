@@ -52,6 +52,7 @@ class MyDecks extends StatelessWidget {
               "tagsList": [],
               "flashcardList": [],
               "isPublic": true,
+              "deckNameLowerCase": ""
             });
 
             newDeck.deckID = deckRef.documentID;
