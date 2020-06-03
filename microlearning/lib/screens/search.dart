@@ -21,7 +21,9 @@ class _SearchState extends State<Search> {
       });
     }
     var capitalizedValue =
-        value.substring(0, 1).toUpperCase() + value.substring(1);
+        value.substring(0, 1).toLowerCase() + value.substring(1).toLowerCase();
+        print(capitalizedValue);
+        // print("hello");
 // Try accessing the IDs from here. 
     if (queryResultSet.length == 0 && value.length == 1) {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
@@ -31,6 +33,7 @@ class _SearchState extends State<Search> {
             "tagsList": docs.documents[i].data["tagsList"],
             "flashcardList": docs.documents[i].data["flashcardList"],
             "isPublic": docs.documents[i].data["isPublic"],
+            "deckNameLowerCase": docs.documents[i].data["deckNameLowerCase"],
             "searchKey": docs.documents[i].data["searchKey"],
             "deckID": docs.documents[i].documentID
           };
@@ -44,7 +47,7 @@ class _SearchState extends State<Search> {
     } else {
       tempSearchStore = [];
       queryResultSet.forEach((element) {
-        if (element['deckName'].startsWith(capitalizedValue)) {
+        if (element['deckNameLowerCase'].startsWith(capitalizedValue)) {
           setState(() {
             tempSearchStore.add(element);
           });
