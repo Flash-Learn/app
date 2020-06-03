@@ -20,11 +20,9 @@ class _SearchState extends State<Search> {
         tempSearchStore = [];
       });
     }
-    var capitalizedValue =
-        value.substring(0, 1).toLowerCase() + value.substring(1).toLowerCase();
-        print(capitalizedValue);
-        // print("hello");
-// Try accessing the IDs from here. 
+    var capitalizedValue = value.toLowerCase();
+
+// Try accessing the IDs from here.
     if (queryResultSet.length == 0 && value.length == 1) {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
         for (int i = 0; i < docs.documents.length; ++i) {
@@ -38,10 +36,9 @@ class _SearchState extends State<Search> {
             "deckID": docs.documents[i].documentID
           };
           //docs.documents[i].data;
-//          element['deckID']= docs.documents[i].documentID;
-          print(element);
+          //element['deckID']= docs.documents[i].documentID;
+          // print(element);
           queryResultSet.add(element);
-          // print(docs.documents[i].documentID);
         }
       });
     } else {
@@ -52,10 +49,8 @@ class _SearchState extends State<Search> {
             tempSearchStore.add(element);
           });
         }
-
         // print(QuerySnapshot docs.documents[element].documentID);
-      }
-      );
+      });
     }
   }
 
@@ -68,20 +63,13 @@ class _SearchState extends State<Search> {
       appBar: AppBar(
         backgroundColor: Colors.red,
         centerTitle: true,
-        title: Text(
-          state,
-          style: TextStyle(
-              // color: Colors.grey[900],
-              // fontSize: 14,
-              ),
-        ),
+        title: Text('Search'),
         actions: <Widget>[
           Switch(
               activeColor: Colors.white,
               inactiveTrackColor: Colors.grey,
               value: isSwitched,
               onChanged: (value) {
-
                 setState(() {
                   isSwitched = value;
                   print(isSwitched);
@@ -101,9 +89,7 @@ class _SearchState extends State<Search> {
               decoration: InputDecoration(
                 prefixIcon: IconButton(
                   color: Colors.black,
-                  icon: Icon(
-                    Icons.search,
-                  ),
+                  icon: Icon(Icons.search),
                   iconSize: 20,
                   onPressed: () {},
                 ),
@@ -134,6 +120,7 @@ class _SearchState extends State<Search> {
     );
   }
 }
+
 // Try changing the widget that is being returned.
 // Implementing the offline/online search is still left.
 Widget buildResultCard(context, data) {
