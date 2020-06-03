@@ -65,6 +65,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
+                          maxLength: 20,
                           textAlign: TextAlign.center,
                           controller: controller[0],
                           onChanged: (val){
@@ -72,6 +73,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                           },
                           style: TextStyle(color: Colors.white),                   
                           decoration: InputDecoration(
+                            counterText: '',
                             // suffix: IconButton(
                             //   icon: Icon(Icons.delete_outline),
                             //   onPressed: (){

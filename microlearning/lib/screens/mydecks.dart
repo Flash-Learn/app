@@ -50,6 +50,7 @@ class MyDecks extends StatelessWidget {
             DocumentReference deckRef = await Firestore.instance.collection("decks").add({
               "deckName": "",
               "tagsList": [],
+              "flashcardList": [],
               "isPublic": true,
             });
 

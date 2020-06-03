@@ -11,7 +11,13 @@ Widget deckInfoCard(String deckID){
     builder: (context, snapshot) {
       print(deckID);
       if(!snapshot.hasData || snapshot.data == null)
-        return Text("loading");
+        return Center(
+              child: SizedBox(
+                child: CircularProgressIndicator(),
+                width: 60,
+                height: 60,
+              ),
+            );
 
       dynamic deck = snapshot.data;
       print(snapshot);
