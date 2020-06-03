@@ -9,7 +9,7 @@ class SearchService {
     return Firestore.instance
     .collection('decks')
     .where('searchKey',
-    isEqualTo: searchField.substring(0, 1).toUpperCase())
+    isEqualTo: searchField.substring(0, 1).toLowerCase())
     .getDocuments();
 
   }
