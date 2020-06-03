@@ -20,7 +20,7 @@ class _SearchState extends State<Search> {
         tempSearchStore = [];
       });
     }
-    var capitalizedValue = value.toLowerCase();
+    var lowercasedValue = value.toLowerCase();
 
 // Try accessing the IDs from here.
     if (queryResultSet.length == 0 && value.length == 1) {
@@ -44,7 +44,7 @@ class _SearchState extends State<Search> {
     } else {
       tempSearchStore = [];
       queryResultSet.forEach((element) {
-        if (element['deckNameLowerCase'].startsWith(capitalizedValue)) {
+        if (element['deckNameLowerCase'].startsWith(lowercasedValue)) {
           setState(() {
             tempSearchStore.add(element);
           });
