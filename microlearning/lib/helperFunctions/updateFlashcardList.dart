@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/classes/deck.dart';
 
-void updateFlashcardList(Deck deck, List<List<String>> flashCardData) async {
+Future<void> updateFlashcardList(Deck deck, List<List<String>> flashCardData) async {
   int initialLength = deck.flashCardList.length, newLength = flashCardData.length-1;
 
+  print("$initialLength $newLength");
 
   final CollectionReference deckReference = Firestore.instance.collection("decks");
   final CollectionReference flashcardReference = Firestore.instance.collection("flashcards");
@@ -25,7 +26,7 @@ void updateFlashcardList(Deck deck, List<List<String>> flashCardData) async {
         'definition': flashCardData[j][1],
       });
 
-      deckReference.document(deck.deckID).updateData({
+      await deckReference.document(deck.deckID).updateData({
         'flashcardList': FieldValue.arrayUnion([flashRef.documentID]),
       });
     }
@@ -34,16 +35,17 @@ void updateFlashcardList(Deck deck, List<List<String>> flashCardData) async {
   else{
     for(var i=0; i<newLength; i++){
       var j=i+1;
-      flashcardReference.document(deck.flashCardList[i]).updateData({
+      await flashcardReference.document(deck.flashCardList[i]).updateData({
         'term': flashCardData[j][0],
         'definition': flashCardData[j][1],
       });
     }
 
     for(var i=newLength; i<initialLength; i++){
+      print("deleting elements");
 
-      deckReference.document(deck.deckID).updateData({
-        "flashcardList": FieldValue.arrayRemove(deck.flashCardList[i]),
+      await deckReference.document(deck.deckID).updateData({
+        "flashcardList": FieldValue.arrayRemove([deck.flashCardList[i]]),
       });
 
       flashcardReference.document(deck.flashCardList[i]).delete();
