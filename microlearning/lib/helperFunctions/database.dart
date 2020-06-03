@@ -35,7 +35,6 @@ class DataBaseServices {
   }
 
   Future updateData(String name, String grade, String gender) async {
-    print('$name haha');
     QuerySnapshot qs = await db.where('uid', isEqualTo: uid).getDocuments();
     return await db.document(uid).setData({
       'name': name,
