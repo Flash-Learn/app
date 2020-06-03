@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/helperFunctions/searchservice.dart';
+import 'package:microlearning/screens/viewDeck.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -25,7 +26,18 @@ class _SearchState extends State<Search> {
     if (queryResultSet.length == 0 && value.length == 1) {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
         for (int i = 0; i < docs.documents.length; ++i) {
-          queryResultSet.add(docs.documents[i].data);
+          final Map<dynamic, dynamic> element = {
+            "deckName": docs.documents[i].data["deckName"],
+            "tagsList": docs.documents[i].data["tagsList"],
+            "flashcardList": docs.documents[i].data["flashcardList"],
+            "isPublic": docs.documents[i].data["isPublic"],
+            "searchKey": docs.documents[i].data["searchKey"],
+            "deckID": docs.documents[i].documentID
+          };
+          //docs.documents[i].data;
+//          element['deckID']= docs.documents[i].documentID;
+          print(element);
+          queryResultSet.add(element);
           // print(docs.documents[i].documentID);
         }
       });
@@ -66,6 +78,7 @@ class _SearchState extends State<Search> {
               inactiveTrackColor: Colors.grey,
               value: isSwitched,
               onChanged: (value) {
+
                 setState(() {
                   isSwitched = value;
                   print(isSwitched);
@@ -79,6 +92,7 @@ class _SearchState extends State<Search> {
             padding: const EdgeInsets.all(10),
             child: TextField(
               onChanged: (val) {
+                print(val);
                 initiateSearch(val);
               },
               decoration: InputDecoration(
@@ -109,7 +123,7 @@ class _SearchState extends State<Search> {
             primary: false,
             shrinkWrap: true,
             children: tempSearchStore
-                .map((element) => buildResultCard(element))
+                .map((element) => buildResultCard(context, element))
                 .toList(),
           ),
         ],
@@ -119,20 +133,33 @@ class _SearchState extends State<Search> {
 }
 // Try changing the widget that is being returned.
 // Implementing the offline/online search is still left.
-Widget buildResultCard(data) {
-  return Card(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
-    elevation: 2,
-    child: Container(
-      child: Center(
-        child: Text(
-          data['deckName'],
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
+Widget buildResultCard(context, data) {
+//  print(data);
+  return InkWell(
+    onTap: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ViewDeck(
+              deckID: data['deckID'],
+              editAccess: false,
+            ),
+          ));
+    },
+    child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 2,
+      child: Container(
+        child: Center(
+          child: Text(
+            data['deckName'],
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+            ),
           ),
         ),
       ),

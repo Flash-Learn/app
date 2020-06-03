@@ -11,7 +11,13 @@ Widget deckInfoCard(String deckID){
     builder: (context, snapshot) {
       print(deckID);
       if(!snapshot.hasData || snapshot.data == null)
-        return Text("loading");
+        return Center(
+              child: SizedBox(
+                child: CircularProgressIndicator(),
+                width: 60,
+                height: 60,
+              ),
+            );
 
       dynamic deck = snapshot.data;
       print(snapshot);
@@ -19,11 +25,11 @@ Widget deckInfoCard(String deckID){
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
           child: Container(
-            height: 80,
+            height: 100,
             width: 700,
-            color: Colors.amber,
+            color: Color.fromRGBO(197, 123, 87, 1),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +39,7 @@ Widget deckInfoCard(String deckID){
                     child: Text(
                       deck["deckName"],
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 25,
                       ),
                     ),
@@ -43,7 +49,7 @@ Widget deckInfoCard(String deckID){
                     child: Text(
                       deck["tagsList"].join(" "),
                       style: TextStyle(
-                        color: Colors.black38,
+                        color: Colors.white70,
                       ),
                     ),
                   )
