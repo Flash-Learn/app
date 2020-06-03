@@ -62,30 +62,32 @@ class _EditFlashCardState extends State<EditFlashCard> {
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          StreamBuilder<Object>(
-            stream: getCardfromDataBase, // TODO: add the stream here for the getting the 2d array of the things
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if(snapshot.hasData){  
-                return Container(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  height: 600,
-                  child: GetFlashCardEdit(deck: deck, flashCardData: flashCardData),
-                );
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            StreamBuilder<Object>(
+              stream: getCardfromDataBase, // TODO: add the stream here for the getting the 2d array of the things
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if(snapshot.hasData){
+                  return Container(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    height: 600,
+                    child: GetFlashCardEdit(deck: deck, flashCardData: flashCardData),
+                  );
+                }
+                else{
+                  return Center(
+                    child: SizedBox(
+                      child: CircularProgressIndicator(),
+                      width: 60,
+                      height: 60,
+                    ),
+                  );
+                }
               }
-              else{
-                return Center(
-                  child: SizedBox(
-                    child: CircularProgressIndicator(),
-                    width: 60,
-                    height: 60,
-                  ),
-                );
-              }
-            }
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
