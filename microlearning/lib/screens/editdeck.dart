@@ -59,50 +59,52 @@ class _EditDecksState extends State<EditDecks> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text('Deck Name:', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
-              ],
-            ),
-            SizedBox(height: 10,),
-            TextFormField(
-              onChanged: (val){
-                deck.deckName = val;
-              },
-              initialValue: deck.deckName,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-              decoration: InputDecoration(
-                hintText: "Deck Name",
-                fillColor: Colors.white,
-                filled: true,
-                contentPadding: EdgeInsets.all(12.0),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 2.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pink, width: 2.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text('Deck Name:', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+                ],
+              ),
+              SizedBox(height: 10,),
+              TextFormField(
+                onChanged: (val){
+                  deck.deckName = val;
+                },
+                initialValue: deck.deckName,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                decoration: InputDecoration(
+                  hintText: "Deck Name",
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: EdgeInsets.all(12.0),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white, width: 2.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.pink, width: 2.0),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 20,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text('Tags:', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
-              ],
-            ),
-            SizedBox(height: 10,),
-            Container(
-              height: 300,
-              child: ListofTags(deck: deck),
-            ),
-          ],
+              SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text('Tags:', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+                ],
+              ),
+              SizedBox(height: 10,),
+              Container(
+                height: 300,
+                child: ListofTags(deck: deck),
+              ),
+            ],
+          ),
         ),
       ),
     );

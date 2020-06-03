@@ -147,6 +147,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                             onPressed: (){
                               setState(() {
                                 flashCardData.removeAt(controllers.indexOf(controller));
+                                print(flashCardData.length);
                                 controllers.remove(controller);
                                 fieldCount--;
                               });
@@ -212,7 +213,10 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     });
   }
 
+  @override
   void initState(){
+    super.initState();
+    print("length recieved ${flashCardData.length}");
     fieldCount = flashCardData.length;
     super.initState();
   }
