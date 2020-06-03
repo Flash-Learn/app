@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/helperFunctions/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:async/async.dart';
+
 
 class EditInfo extends StatefulWidget {
   @override
@@ -14,9 +16,16 @@ class _EditInfoState extends State<EditInfo> {
   String _name;
   String _grade;
   String _gender;
+  bool bool1;
 
   List<String> genders = ["Male", "Female", "Others"];
   List<String> grades = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+
+  @override
+  void initState(){
+    bool1 = false;
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context){
@@ -148,9 +157,11 @@ class _EditInfoState extends State<EditInfo> {
                         ),
                       ),
                       onPressed: () async{
+                        print(_name);
+                        bool1 = false;
                         if(_formKey.currentState.validate()) {
                           DataBaseServices here = DataBaseServices(uid: _uid);
-                          here.updateData(_name, _grade, _gender);
+                          await here.updateData(_name, _grade, _gender);
                           Navigator.pop(context);
                         }
                       },
@@ -176,17 +187,24 @@ class _EditInfoState extends State<EditInfo> {
     );
   }
   _getdatafromdatabase() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _uid = prefs.getString('uid');
-    DataBaseServices here;
-    here = DataBaseServices(uid: _uid);
-    List<String> defaults = await here.getData();
-    //TODO: fix default values of this form
-    if(defaults.length>1 || here!=null){
-      _name = defaults[0];
-      _grade = defaults[1];
-      _gender = defaults[2];
+    print(bool1);
+    if(bool1 == false){
+      bool1 = true;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      _uid = prefs.getString('uid');
+      DataBaseServices here;
+      here = DataBaseServices(uid: _uid);
+      List<String> defaults = await here.getData();
+      //TODO: fix default values of this form
+      if(defaults.length>1 || here!=null){
+        _name = defaults[0];
+        _grade = defaults[1];
+        _gender = defaults[2];
+      }
+      return defaults.toString();
     }
-    return defaults.toString();
+    else{
+      return 'this is good';
+    }
   }
 }
