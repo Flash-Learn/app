@@ -3,9 +3,9 @@ import 'package:microlearning/classes/userclass.dart';
 
 class Deck{
   String deckID;
-  List<String> flashCardList=[]; // stores a list of flashcards using their ID
-  List<String> tagsList=[];
-  User author;
+  List<dynamic> flashCardList=[]; // stores a list of flashcards using their ID
+  List<dynamic> tagsList=[];
+//  User author;
   bool isPublic;
   String deckName;
 
@@ -23,4 +23,5 @@ class Deck{
   // TODO: constructor to copy deck from other user
 
   // TODO: deletion of deck
+
 }

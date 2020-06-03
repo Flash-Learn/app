@@ -26,6 +26,7 @@ class _ListofTagsState extends State<ListofTags> {
         controllers[i].text = deck.tagsList[i];
       }
     }
+    // print('${controllers.length} haha 1');
     i = 0;
     return controllers.map<Widget>((TextEditingController controller){
       i++;

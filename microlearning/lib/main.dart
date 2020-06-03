@@ -6,6 +6,7 @@ import 'package:microlearning/screens/authentication/get_user_info.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/authentication/register.dart';
 import 'package:microlearning/screens/mydecks.dart';
+import 'package:microlearning/screens/viewDeck.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async{
@@ -23,6 +24,7 @@ Future<void> main() async{
         '/home': (context) => MyDecks(),
         '/register': (context) => RegisterUser(),
         '/search': (context) => Search(),
+//        '/view': (context) => ViewDeck(),
       },
     )
   );
