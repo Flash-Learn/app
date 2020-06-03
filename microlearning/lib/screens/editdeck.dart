@@ -25,6 +25,8 @@ class _EditDecksState extends State<EditDecks> {
           Firestore.instance.collection('decks').document(deck.deckID).updateData({
             "deckName": deck.deckName,
             "tagsList": deck.tagsList,
+            "deckNameLowerCase": deck.deckName.toLowerCase(),
+            "searchKey": deck.deckName[0].toLowerCase()
           });
 
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
