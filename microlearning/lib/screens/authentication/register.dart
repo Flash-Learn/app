@@ -44,7 +44,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       child: Text(
                         "Register New User",
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 28,
                           fontFamily: 'Montserrat',
                         ),
                       ),

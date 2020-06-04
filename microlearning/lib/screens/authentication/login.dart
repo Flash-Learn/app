@@ -44,7 +44,7 @@ class _LoginUserState extends State<LoginUser> {
                       child: Text(
                         "Flash Learn",
                         style: TextStyle(
-                          fontSize: 50,
+                          fontSize: 45,
                           fontFamily: 'Montserrat',
                         ),
                       ),
