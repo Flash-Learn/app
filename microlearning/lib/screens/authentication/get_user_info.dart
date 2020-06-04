@@ -27,7 +27,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
           "Enter details",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.black,
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
@@ -54,7 +54,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
                     borderSide: BorderSide(color: Colors.white, width: 2.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.pink, width: 2.0),
+                    borderSide: BorderSide(color: Colors.black, width: 2.0),
                   ),
                 ),
               ),
@@ -139,7 +139,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
               SizedBox(height: 20.0,),
           
               RaisedButton(
-                color: Colors.red,
+                color: Colors.black,
                 child: Center(
                   child: Text(
                     "Enter",
