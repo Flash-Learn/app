@@ -43,6 +43,7 @@ class _ViewDeckState extends State<ViewDeck> {
         deck.flashCardList = snapshot.data["flashcardList"];
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.black,
             leading: widget.backAvailable ? null : IconButton(
               icon: Icon(Icons.arrow_back),
               color: Colors.white,

@@ -19,7 +19,7 @@ class _EditDecksState extends State<EditDecks> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
 
           Firestore.instance.collection('decks').document(deck.deckID).updateData({
@@ -35,11 +35,13 @@ class _EditDecksState extends State<EditDecks> {
             return EditFlashCard(deck: deck);
           }));
         },
-        child: Icon(
+        backgroundColor: Colors.black,
+        icon: Icon(
           Icons.keyboard_arrow_right,
         ),
+        label: Text('Add or Edit Flashcards'),
       ),
-      backgroundColor: Colors.blue[200],
+      backgroundColor: Colors.white,
       appBar: AppBar(
         actions: <Widget>[
           Padding(
@@ -55,7 +57,7 @@ class _EditDecksState extends State<EditDecks> {
             )
           ),
         ],
-        backgroundColor: Colors.red, 
+        backgroundColor: Colors.black, 
         title: Text('Edit Deck'),
         centerTitle: true,
       ),
@@ -69,7 +71,7 @@ class _EditDecksState extends State<EditDecks> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text('Deck Name:', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+                  Text('Deck Name :', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20), textAlign: TextAlign.left,),
                 ],
               ),
               SizedBox(height: 10,),
@@ -86,10 +88,10 @@ class _EditDecksState extends State<EditDecks> {
                   filled: true,
                   contentPadding: EdgeInsets.all(12.0),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2.0),
+                    borderSide: BorderSide(color: Colors.black, width: 1.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.pink, width: 2.0),
+                    borderSide: BorderSide(color: Colors.black, width: 2.0),
                   ),
                 ),
               ),
@@ -97,7 +99,7 @@ class _EditDecksState extends State<EditDecks> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text('Tags:', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+                  Text('Tags :', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15), textAlign: TextAlign.left,),
                 ],
               ),
               SizedBox(height: 10,),

@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   flappy_search_bar: 1.4.1
+  flip_card: ^0.4.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,7 +38,7 @@ dev_dependencies:
   firebase_core: ^0.4.4+3
   firebase_analytics: ^5.0.11
   cloud_firestore: ^0.13.5
-
+    
   rxdart: ^0.24.1
 
   shared_preferences: ^0.5.7+3
