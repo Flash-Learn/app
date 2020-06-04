@@ -25,129 +25,119 @@ class MyDecks extends StatelessWidget {
   Widget build(BuildContext context) {
 //    if(userID==null)
 //      return Container();
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Color.fromRGBO(237, 184, 139,1),
-//            Color.fromRGBO(129,4,203,1),
-            Color.fromRGBO(250, 216, 214,1),
-          ],
-        ),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.black,
+        label: Text('Create Deck', style: TextStyle(fontSize: 10),),
+         icon: Icon(Icons.add),
+        onPressed: () async{
+          Deck newDeck = Deck(
+            deckName: "",
+            tagsList: [],
+            isPublic: true,
+          );
+          
+          DocumentReference deckRef = await Firestore.instance.collection("decks").add({
+            "deckName": "",
+            "tagsList": [],
+            "flashcardList": [],
+            "isPublic": true,
+            "deckNameLowerCase": ""
+          });
+
+          newDeck.deckID = deckRef.documentID;
+
+          await Firestore.instance.collection("decks").document(newDeck.deckID).updateData({
+            "deckID": newDeck.deckID,
+          });
+
+          await Firestore.instance.collection("user_data").document(uid).updateData({
+            "decks": FieldValue.arrayUnion([newDeck.deckID]),
+          });
+
+          Navigator.of(context).push(MaterialPageRoute(builder: (context){return EditDecks(deck: newDeck);}));
+        },
       ),
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add,),
-          onPressed: () async{
-            Deck newDeck = Deck(
-              deckName: "",
-              tagsList: [],
-              isPublic: true,
-            );
-            
-            DocumentReference deckRef = await Firestore.instance.collection("decks").add({
-              "deckName": "",
-              "tagsList": [],
-              "flashcardList": [],
-              "isPublic": true,
-              "deckNameLowerCase": ""
-            });
-
-            newDeck.deckID = deckRef.documentID;
-
-            await Firestore.instance.collection("decks").document(newDeck.deckID).updateData({
-              "deckID": newDeck.deckID,
-            });
-
-            await Firestore.instance.collection("user_data").document(uid).updateData({
-              "decks": FieldValue.arrayUnion([newDeck.deckID]),
-            });
-
-            Navigator.of(context).push(MaterialPageRoute(builder: (context){return EditDecks(deck: newDeck);}));
-          },
-        ),
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Color.fromRGBO(23, 190, 187, 1),
-            centerTitle: true,
-            title: Text('FlashLearn'),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/search',
-                  );
-                },
-              ),
-            ],
-            leading: IconButton(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+          elevation: 1,
+          backgroundColor: Colors.black,
+          centerTitle: true,
+          title: Text('My Decks'),
+          actions: <Widget>[
+            IconButton(
               icon: Icon(
-                Icons.account_circle,
+                Icons.search,
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AccountSettings();
-                    },
-                  ),
+                Navigator.pushNamed(
+                  context,
+                  '/search',
                 );
               },
-            )),
-        body: FutureBuilder(
-          future: SharedPreferences.getInstance(),
-          builder: (context, snapshot) {
-            if(!snapshot.hasData)
-              return Text("loading");
-            print("user id is ${snapshot.data.getString('uid')}");
-            final String userID = snapshot.data.getString('uid');
-            uid = userID;
-            return StreamBuilder(
-                stream: Firestore.instance.collection('user_data').document(userID).snapshots(),
-                builder: (context, snapshot){
-                  print(userID);
-                  if(!snapshot.hasData)
-                    return Text("loading");
-                  if(snapshot.data==null)
-                    return Container();
-                  final List<dynamic> userDeckIDs = snapshot.data["decks"];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: ListView.builder(
-                      itemCount: userDeckIDs.length,
-                      itemBuilder: (BuildContext ctxt, int index) => InkWell(
-                          onTap: () {
-                            print(userDeckIDs[index]);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ViewDeck(
-                                    deckID: userDeckIDs[index],
-                                  ),
-                                ));
-                          },
-                          child: buildDeckInfo(ctxt, userDeckIDs[index])),
-                    ),
-                  );
+            ),
+          ],
+          leading: IconButton(
+            icon: Icon(
+              Icons.account_circle,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return AccountSettings();
+                  },
+                ),
+              );
+            },
+          )),
+      body: FutureBuilder(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
+          if(!snapshot.hasData)
+            return Text("loading");
+          print("user id is ${snapshot.data.getString('uid')}");
+          final String userID = snapshot.data.getString('uid');
+          uid = userID;
+          return StreamBuilder(
+              stream: Firestore.instance.collection('user_data').document(userID).snapshots(),
+              builder: (context, snapshot){
+                print(userID);
+                if(!snapshot.hasData)
+                  return Text("loading");
+                if(snapshot.data==null)
+                  return Container();
+                final List<dynamic> userDeckIDs = snapshot.data["decks"];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  child: ListView.builder(
+                    itemCount: userDeckIDs.length,
+                    itemBuilder: (BuildContext ctxt, int index) => InkWell(
+                        onTap: () {
+                          print(userDeckIDs[index]);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ViewDeck(
+                                  deckID: userDeckIDs[index],
+                                ),
+                              ));
+                        },
 
-                }
-            );
-          }
-        ),
+                        child: buildDeckInfo(ctxt, userDeckIDs[index])),
+                  ),
+                );
 
-
-
-
+              }
+          );
+        }
       ),
+
+
+
+
     );
   }
 }

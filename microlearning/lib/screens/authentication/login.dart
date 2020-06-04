@@ -44,7 +44,7 @@ class _LoginUserState extends State<LoginUser> {
                       child: Text(
                         "Flash Learn",
                         style: TextStyle(
-                          fontSize: 50,
+                          fontSize: 45,
                           fontFamily: 'Montserrat',
                         ),
                       ),
@@ -135,41 +135,46 @@ class _LoginUserState extends State<LoginUser> {
                       SizedBox(
                         height: 20,
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                          if (_formkey.currentState.validate()) {
-                            dynamic result =
-                                await _auth.signinWithEmail(email, password);
-                            if (result == null) {
-                              setState(() {
-                                error =
-                                    'Wrong Credentials or Email not verified';
-                              });
-                            } else {
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.setString('email', email);
-                              prefs.setString('uid', result.uid);
-                              prefs.setBool('googlesignin', false);
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return MyDecks();
-                                  },
-                                ),
-                              );
+                      Material(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.black,
+                        child: InkWell(
+                          splashColor: Colors.grey,
+                          onTap: () async {
+                            if (_formkey.currentState.validate()) {
+                              dynamic result =
+                                  await _auth.signinWithEmail(email, password);
+                              if (result == null) {
+                                setState(() {
+                                  error =
+                                      'Wrong Credentials or Email not verified';
+                                });
+                              } else {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                prefs.setString('email', email);
+                                prefs.setString('uid', result.uid);
+                                prefs.setBool('googlesignin', false);
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return MyDecks();
+                                    },
+                                  ),
+                                );
+                              }
                             }
-                          }
-                        },
-                        child: Container(
-                          height: 40,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.black,
-                            child: Center(
-                              child: Text('Log In',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.white)),
+                          },
+                          child: Container(
+                            height: 40,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.transparent,
+                              child: Center(
+                                child: Text('Log In',
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white)),
+                              ),
                             ),
                           ),
                         ),
@@ -182,61 +187,68 @@ class _LoginUserState extends State<LoginUser> {
                       Row(
                         children: <Widget>[
                           Expanded(
-                            child: GestureDetector(
-                              onTap: () async {
-                                String test = await signInWithGoogle(context);
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                String uid = prefs.getString('uid');
-                                DataBaseServices here =
-                                    DataBaseServices(uid: uid);
-                                List<String> defaults = await here.getData();
-                                if (here == null || defaults.length == 1) {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return GetUserInfo();
-                                      },
-                                    ),
-                                  );
-                                } else if (test == null) {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return LoginUser();
-                                      },
-                                    ),
-                                  );
-                                } else {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return MyDecks();
-                                      },
-                                    ),
-                                  );
-                                }
-                                // signInWithGoogle().whenComplete(() {
-                                //   Navigator.of(context).pushReplacement(
-                                //     MaterialPageRoute(
-                                //       builder: (context) {
-                                //         return MyDecks();
-                                //       },
-                                //     ),
-                                //   );
-                                // });
-                              },
-                              child: Container(
-                                padding: EdgeInsets.only(right: 5),
-                                height: 60,
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.black,
-                                  child: Center(
-                                    child: Image(
-                                      image:
-                                          AssetImage("assets/google_logo.png"),
-                                      height: 35.0,
+                            child: Container(
+                              height: 60,
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Material(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.black,
+                                child: InkWell(
+                                  splashColor: Colors.grey,
+                                  onTap: () async {
+                                    String test =
+                                        await signInWithGoogle(context);
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    String uid = prefs.getString('uid');
+                                    DataBaseServices here =
+                                        DataBaseServices(uid: uid);
+                                    List<String> defaults =
+                                        await here.getData();
+                                    if (here == null || defaults.length == 1) {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return GetUserInfo();
+                                          },
+                                        ),
+                                      );
+                                    } else if (test == null) {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return LoginUser();
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return MyDecks();
+                                          },
+                                        ),
+                                      );
+                                    }
+                                    // signInWithGoogle().whenComplete(() {
+                                    //   Navigator.of(context).pushReplacement(
+                                    //     MaterialPageRoute(
+                                    //       builder: (context) {
+                                    //         return MyDecks();
+                                    //       },
+                                    //     ),
+                                    //   );
+                                    // });
+                                  },
+                                  child: Material(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.transparent,
+                                    child: Center(
+                                      child: Image(
+                                        image: AssetImage(
+                                            "assets/google_logo.png"),
+                                        height: 35.0,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -244,19 +256,24 @@ class _LoginUserState extends State<LoginUser> {
                             ),
                           ),
                           Expanded(
-                            child: GestureDetector(
-                              onTap: () async {},
-                              child: Container(
-                                padding: EdgeInsets.only(left: 5),
-                                height: 60,
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.black,
-                                  child: Center(
-                                    child: Image(
-                                      image: AssetImage(
-                                          "assets/facebook_logo_white.png"),
-                                      height: 35.0,
+                            child: Container(
+                              height: 60,
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Material(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.black,
+                                child: InkWell(
+                                  splashColor: Colors.grey,
+                                  onTap: () async {},
+                                  child: Material(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.transparent,
+                                    child: Center(
+                                      child: Image(
+                                        image: AssetImage(
+                                            "assets/facebook_logo_white.png"),
+                                        height: 35.0,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -269,22 +286,26 @@ class _LoginUserState extends State<LoginUser> {
                         height: 20,
                       ),
 
-                      GestureDetector(
-                        onTap: () {
-                          return Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) {
-                            return RegisterUser();
-                          }));
-                        },
-                        child: Container(
-                          height: 40,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.black,
-                            child: Center(
-                              child: Text('Sign Up',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.white)),
+                      Material(
+                        color: Colors.black,
+                        child: InkWell(
+                          splashColor: Colors.grey,
+                          onTap: () {
+                            return Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) {
+                              return RegisterUser();
+                            }));
+                          },
+                          child: Container(
+                            height: 40,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.transparent,
+                              child: Center(
+                                child: Text('Sign Up',
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white)),
+                              ),
                             ),
                           ),
                         ),

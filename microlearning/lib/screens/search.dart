@@ -20,9 +20,9 @@ class _SearchState extends State<Search> {
         tempSearchStore = [];
       });
     }
-    var smallValue = value.toLowerCase();
-        // print("hello");
-// Try accessing the IDs from here. 
+    var lowercasedValue = value.toLowerCase();
+
+// Try accessing the IDs from here.
     if (queryResultSet.length == 0 && value.length == 1) {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
         for (int i = 0; i < docs.documents.length; ++i) {
@@ -36,24 +36,21 @@ class _SearchState extends State<Search> {
             "deckID": docs.documents[i].documentID
           };
           //docs.documents[i].data;
-//          element['deckID']= docs.documents[i].documentID;
-          print(element);
+          //element['deckID']= docs.documents[i].documentID;
+          // print(element);
           queryResultSet.add(element);
-          // print(docs.documents[i].documentID);
         }
       });
     } else {
       tempSearchStore = [];
       queryResultSet.forEach((element) {
-        if (element['deckNameLowerCase'].startsWith(smallValue)) {
+        if (element['deckNameLowerCase'].startsWith(lowercasedValue)) {
           setState(() {
             tempSearchStore.add(element);
           });
         }
-
         // print(QuerySnapshot docs.documents[element].documentID);
-      }
-      );
+      });
     }
   }
 
@@ -63,23 +60,17 @@ class _SearchState extends State<Search> {
         ? "Online Results"
         : "Offline Results"; //for user to see offline/online results
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.black,
         centerTitle: true,
-        title: Text(
-          state,
-          style: TextStyle(
-              // color: Colors.grey[900],
-              // fontSize: 14,
-              ),
-        ),
+        title: Text('Search'),
         actions: <Widget>[
-          Switch(
+          Switch( 
               activeColor: Colors.white,
-              inactiveTrackColor: Colors.grey,
+              inactiveTrackColor: Colors.white30,
               value: isSwitched,
               onChanged: (value) {
-
                 setState(() {
                   isSwitched = value;
                   print(isSwitched);
@@ -99,17 +90,18 @@ class _SearchState extends State<Search> {
               decoration: InputDecoration(
                 prefixIcon: IconButton(
                   color: Colors.black,
-                  icon: Icon(
-                    Icons.search,
-                  ),
+                  icon: Icon(Icons.search),
                   iconSize: 20,
                   onPressed: () {},
                 ),
                 contentPadding: EdgeInsets.only(left: 25),
                 hintText: "Search",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 1.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 2.0),
+                  ),
               ),
             ),
           ),
@@ -132,6 +124,7 @@ class _SearchState extends State<Search> {
     );
   }
 }
+
 // Try changing the widget that is being returned.
 // Implementing the offline/online search is still left.
 Widget buildResultCard(context, data) {
@@ -153,6 +146,10 @@ Widget buildResultCard(context, data) {
       ),
       elevation: 2,
       child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.black)
+        ),
         child: Center(
           child: Text(
             data['deckName'],

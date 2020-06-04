@@ -56,30 +56,48 @@ class _EmailVerificationState extends State<EmailVerification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[200],
+      backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SpinKitFoldingCube(
-              itemBuilder: (BuildContext context, int index) {
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: index.isEven ? Colors.red : Colors.green,
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SpinKitFoldingCube(
+                itemBuilder: (BuildContext context, int index) {
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: index.isEven ? Colors.black : Colors.white,
+                      border: Border.all(color: Colors.black)
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 20,),
+              Text('An email verification link has been sent to $email \n Please verify.', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold,),),
+              SizedBox(height: 20,),
+              Material(
+                color: Colors.black,
+                              child: InkWell(
+                                splashColor: Colors.grey,
+                  onTap: () {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {return RegisterUser();}));;
+                  },
+                  child: Container(
+                    height: 40,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.transparent,
+                      child: Center(
+                        child: Text('Email not right? Change',
+                            style: TextStyle(fontSize: 14, color: Colors.white)),
+                      ),
+                    ),
                   ),
-                );
-              },
-            ),
-            SizedBox(height: 20,),
-            Text('An email verification link has been sent to $email \n Please verify.', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold,),),
-            SizedBox(height: 20,),
-            OutlineButton(
-              child: Text('Email not right? Change'),
-              onPressed: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {return RegisterUser();}));
-              },
-            )
-          ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

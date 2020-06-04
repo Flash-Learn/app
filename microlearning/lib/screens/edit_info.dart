@@ -36,8 +36,9 @@ class _EditInfoState extends State<EditInfo> {
           return Scaffold(
             appBar: AppBar(
               title: Text("Edit Information"),
+              backgroundColor: Colors.black,
             ),
-            backgroundColor: Colors.blue[200],
+            backgroundColor: Colors.white,
             body: Container(
               padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
               child: Form(
@@ -61,10 +62,10 @@ class _EditInfoState extends State<EditInfo> {
                         filled: true,
                         contentPadding: EdgeInsets.all(12.0),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                          borderSide: BorderSide(color: Colors.black, width: 1.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.pink, width: 2.0),
+                          borderSide: BorderSide(color: Colors.black, width: 2.0),
                         ),
                       ),
                     ),
@@ -149,7 +150,7 @@ class _EditInfoState extends State<EditInfo> {
                     SizedBox(height: 20.0,),
                 
                     RaisedButton(
-                      color: Colors.red,
+                      color: Colors.black,
                       child: Center(
                         child: Text(
                           "Enter",
@@ -157,8 +158,6 @@ class _EditInfoState extends State<EditInfo> {
                         ),
                       ),
                       onPressed: () async{
-                        print(_name);
-                        bool1 = false;
                         if(_formKey.currentState.validate()) {
                           DataBaseServices here = DataBaseServices(uid: _uid);
                           await here.updateData(_name, _grade, _gender);
@@ -187,7 +186,6 @@ class _EditInfoState extends State<EditInfo> {
     );
   }
   _getdatafromdatabase() async{
-    print(bool1);
     if(bool1 == false){
       bool1 = true;
       SharedPreferences prefs = await SharedPreferences.getInstance();
