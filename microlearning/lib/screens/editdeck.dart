@@ -3,6 +3,8 @@ import 'package:microlearning/classes/deck.dart';
 import 'package:microlearning/helperWidgets/getlisttags.dart';
 import 'package:microlearning/screens/editflashcards.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:microlearning/screens/mydecks.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditDecks extends StatefulWidget {
   final Deck deck;
@@ -103,10 +105,34 @@ class _EditDecksState extends State<EditDecks> {
                 ],
               ),
               SizedBox(height: 10,),
-              Container(
-                height: 300,
-                child: ListofTags(deck: deck),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: 300,
+                ),
+                child: Container(
+//                  maxHei: 300,
+                  child: ListofTags(deck: deck),
+                ),
               ),
+              SizedBox(
+                height:20,
+              ),
+              RaisedButton(
+                onPressed: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  String uid = prefs.getString('uid');
+                  await Firestore.instance.collection("deck").document(deck.deckID).delete();
+                  await Firestore.instance.collection("user_data").document(uid).updateData({
+                    "decks": FieldValue.arrayRemove([deck.deckID]),
+                  });
+
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                    builder: (context) => MyDecks(),
+                  ), (Route<dynamic> route) => false);
+
+                },
+                child: Text("Delete Deck"),
+              )
             ],
           ),
         ),
