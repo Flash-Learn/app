@@ -17,34 +17,41 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reset Password', textAlign: TextAlign.center,),
-        backgroundColor: Colors.red,
+        centerTitle: true,
+        title: Text('Reset Password'),
+        backgroundColor: Colors.black,
       ),
-      backgroundColor: Colors.blue[200],
+      backgroundColor: Colors.white,
       body: Builder(
         builder: (context) {
-        return Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30,vertical: 30,),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Form(
-                  key: _formkey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        decoration: InputDecoration(
-                            hintText: 'Email',
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 30,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Form(
+                    key: _formkey,
+                    child: Column(
+                      children: <Widget>[
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            labelStyle: TextStyle(color: Colors.grey),
                             fillColor: Colors.white,
                             filled: true,
-                            contentPadding: EdgeInsets.all(12.0),
+                            contentPadding: EdgeInsets.all(20.0),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white, width: 2.0),
-                              ),
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                            ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.pink, width: 2.0),
-                              ),
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 2.0),
+                            ),
                           ),
                           validator: (val) {
                             return val.isEmpty ? 'Enter an Email' : null;
@@ -54,42 +61,67 @@ class _ResetPasswordState extends State<ResetPassword> {
                               email = val;
                             });
                           },
-                      ),
-                      Text(error, style: TextStyle(color: Colors.red, fontSize: 14.0),),
-                      SizedBox(height: 20,),
-                      OutlineButton(
-                        onPressed: () async{
-                          if(_formkey.currentState.validate()){
-                            dynamic result = await _auth.resetPassword(email);
-                            if(result == null){
-                              setState(() {
-                                error = 'Email not registered';
-                              });
-                            }else{
-                              SnackBar snackBar = SnackBar(content: Text('Reset password link sent to your mail',textAlign: TextAlign.center,),);
-                              Scaffold.of(context).showSnackBar(snackBar);
-                              await Future.delayed(Duration(seconds: 4));
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                    return LoginUser();
-                                  },
+                        ),
+                        Text(
+                          error,
+                          style: TextStyle(color: Colors.red, fontSize: 14.0),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Material(
+                          color: Colors.black,
+                          child: InkWell(
+                            splashColor: Colors.grey,
+                            onTap: () async {
+                              if (_formkey.currentState.validate()) {
+                                dynamic result =
+                                    await _auth.resetPassword(email);
+                                if (result == null) {
+                                  setState(() {
+                                    error = 'Email not registered';
+                                  });
+                                } else {
+                                  SnackBar snackBar = SnackBar(
+                                    content: Text(
+                                      'Reset password link sent to your mail',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  );
+                                  Scaffold.of(context).showSnackBar(snackBar);
+                                  await Future.delayed(Duration(seconds: 4));
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return LoginUser();
+                                      },
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            child: Container(
+                              height: 40,
+                              child: Material(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.transparent,
+                                child: Center(
+                                  child: Text('Enter',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.white)),
                                 ),
-                              );
-                            }
-                          }
-                        },
-                        child: Text('Sign In'),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );},
+          );
+        },
       ),
     );
   }

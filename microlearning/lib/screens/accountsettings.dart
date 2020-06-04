@@ -3,64 +3,75 @@ import 'package:microlearning/classes/google_signin.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/edit_info.dart';
 
-
 class AccountSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Account Settings'),
-        backgroundColor: Colors.red,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        icon: Icon(Icons.arrow_back),
-        ),
+        backgroundColor: Colors.black,
       ),
-      backgroundColor: Colors.blue[200],
+      backgroundColor: Colors.white,
       body: Center(
+          child: Padding(
+        padding: const EdgeInsets.all(30.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            OutlineButton(
-              child:Text(
-                'Update Info',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                )
+            Material(
+              color: Colors.black,
+              child: InkWell(
+                splashColor: Colors.grey,
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => EditInfo()));
+                },
+                child: Container(
+                  height: 40,
+                  child: Material(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Text('Update Info',
+                          style: TextStyle(fontSize: 14, color: Colors.white)),
+                    ),
+                  ),
+                ),
               ),
-              splashColor: Colors.teal,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-              borderSide: BorderSide(color: Colors.grey),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EditInfo()));
-              },
             ),
-            SizedBox(height: 10.0,),
-            OutlineButton(
-              child: Text('Logout',
-              style: TextStyle(
-                color: Colors.grey,
-                fontWeight: FontWeight.bold,
-              ),),
-              splashColor: Colors.teal,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-              borderSide: BorderSide(color: Colors.grey),
-              onPressed: () {
-                signOutGoogle();
-                return Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context){
-                    return LoginUser();
-                  }),
-                  ModalRoute.withName('/login'),
-                );
-              },
+            SizedBox(
+              height: 10,
+            ),
+            Material(
+              color: Colors.black,
+                          child: InkWell(
+                            splashColor: Colors.grey,
+                onTap: () {
+                  signOutGoogle();
+                  return Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) {
+                      return LoginUser();
+                    }),
+                    ModalRoute.withName('/login'),
+                  );
+                },
+                child: Container(
+                  height: 40,
+                  child: Material(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Text('Log Out',
+                          style: TextStyle(fontSize: 14, color: Colors.white)),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
-        )
-      ),
+        ),
+      )),
     );
   }
 }

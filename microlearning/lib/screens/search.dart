@@ -60,14 +60,15 @@ class _SearchState extends State<Search> {
         ? "Online Results"
         : "Offline Results"; //for user to see offline/online results
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.black,
         centerTitle: true,
         title: Text('Search'),
         actions: <Widget>[
-          Switch(
+          Switch( 
               activeColor: Colors.white,
-              inactiveTrackColor: Colors.grey,
+              inactiveTrackColor: Colors.white30,
               value: isSwitched,
               onChanged: (value) {
                 setState(() {
@@ -95,9 +96,12 @@ class _SearchState extends State<Search> {
                 ),
                 contentPadding: EdgeInsets.only(left: 25),
                 hintText: "Search",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 1.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 2.0),
+                  ),
               ),
             ),
           ),
@@ -142,6 +146,10 @@ Widget buildResultCard(context, data) {
       ),
       elevation: 2,
       child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.black)
+        ),
         child: Center(
           child: Text(
             data['deckName'],

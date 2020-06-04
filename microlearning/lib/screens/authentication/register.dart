@@ -122,36 +122,40 @@ class _RegisterUserState extends State<RegisterUser> {
                       SizedBox(
                         height: 20,
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                          if (_formkey.currentState.validate()) {
-                            dynamic result =
-                                await _auth.registerWithEmail(email, password);
-                            if (result == null) {
-                              setState(() {
-                                error = 'Email not valid or already in use';
-                              });
-                            } else {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return EmailVerification(
-                                        email: email, uid: result.uid);
-                                  },
-                                ),
-                              );
+                      Material(
+                        color: Colors.black,
+                        child: InkWell(
+                          splashColor: Colors.grey,
+                          onTap: () async {
+                            if (_formkey.currentState.validate()) {
+                              dynamic result = await _auth.registerWithEmail(
+                                  email, password);
+                              if (result == null) {
+                                setState(() {
+                                  error = 'Email not valid or already in use';
+                                });
+                              } else {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return EmailVerification(
+                                          email: email, uid: result.uid);
+                                    },
+                                  ),
+                                );
+                              }
                             }
-                          }
-                        },
-                        child: Container(
-                          height: 40,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.black,
-                            child: Center(
-                              child: Text('Register',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.white)),
+                          },
+                          child: Container(
+                            height: 40,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.transparent,
+                              child: Center(
+                                child: Text('Register',
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white)),
+                              ),
                             ),
                           ),
                         ),
@@ -209,22 +213,26 @@ class _RegisterUserState extends State<RegisterUser> {
                       //     ),
                       //   ],
                       // ),
-                      GestureDetector(
-                        onTap: () {
-                          return Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) {
-                            return LoginUser();
-                          }));
-                        },
-                        child: Container(
-                          height: 40,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.black,
-                            child: Center(
-                              child: Text('Log In',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.white)),
+                      Material(
+                        color: Colors.black,
+                        child: InkWell(
+                          splashColor: Colors.grey,
+                          onTap: () {
+                            return Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) {
+                              return LoginUser();
+                            }));
+                          },
+                          child: Container(
+                            height: 40,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.transparent,
+                              child: Center(
+                                child: Text('Log In',
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white)),
+                              ),
                             ),
                           ),
                         ),
