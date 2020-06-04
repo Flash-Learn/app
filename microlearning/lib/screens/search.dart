@@ -39,9 +39,14 @@ class _SearchState extends State<Search> {
           //element['deckID']= docs.documents[i].documentID;
           // print(element);
           queryResultSet.add(element);
+          setState(() {
+            tempSearchStore.add(element);
+            // print(queryResultSet[i]['Name']);
+          });
         }
       });
-    } else {
+    } 
+    else {
       tempSearchStore = [];
       queryResultSet.forEach((element) {
         if (element['deckNameLowerCase'].startsWith(lowercasedValue)) {
@@ -51,6 +56,10 @@ class _SearchState extends State<Search> {
         }
         // print(QuerySnapshot docs.documents[element].documentID);
       });
+
+      if (tempSearchStore.length == 0 && value.length > 1) {
+        setState(() {});
+      }
     }
   }
 
@@ -66,7 +75,7 @@ class _SearchState extends State<Search> {
         centerTitle: true,
         title: Text('Search'),
         actions: <Widget>[
-          Switch( 
+          Switch(
               activeColor: Colors.white,
               inactiveTrackColor: Colors.white30,
               value: isSwitched,
@@ -97,11 +106,11 @@ class _SearchState extends State<Search> {
                 contentPadding: EdgeInsets.only(left: 25),
                 hintText: "Search",
                 enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 1.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2.0),
-                  ),
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 2.0),
+                ),
               ),
             ),
           ),
@@ -147,9 +156,8 @@ Widget buildResultCard(context, data) {
       elevation: 2,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black)
-        ),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.black)),
         child: Center(
           child: Text(
             data['deckName'],
