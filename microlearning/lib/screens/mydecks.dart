@@ -125,6 +125,7 @@ class MyDecks extends StatelessWidget {
                                 ),
                               ));
                         },
+
                         child: buildDeckInfo(ctxt, userDeckIDs[index])),
                   ),
                 );

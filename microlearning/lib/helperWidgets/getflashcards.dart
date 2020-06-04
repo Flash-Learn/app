@@ -189,24 +189,27 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
 
     // build the ListView
     return Column(
+//      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SizedBox(
-          height: 500,
-          child: Scrollbar(
-            child: ReorderableListView(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
-              children: children,
-              key: Key(deck.deckName),
-              onReorder: _onReorder,
-            ),
-          ),
-        ), 
-        IconButton(
+        MaterialButton(
           key: ValueKey('issue is resolved now'),
-          icon: Icon(
-            Icons.add,
-            size: 40,
-            color: Colors.black,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.add,
+                size: 40,
+                color: Colors.black,
+              ),
+              Text(
+                "Add flash card",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
           ),
           onPressed: () {
             setState(() {
@@ -215,6 +218,19 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
               //TODO: generate a id for flash card....But I don't think we will need this
             });
           },
+        ), 
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: 500,
+          ),
+          child: Scrollbar(
+            child: ReorderableListView(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
+              children: children,
+              key: Key(deck.deckName),
+              onReorder: _onReorder,
+            ),
+          ),
         ),
       ],
     );
