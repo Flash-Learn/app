@@ -53,9 +53,10 @@ class _EditFlashCardState extends State<EditFlashCard> {
     return Scaffold(
       backgroundColor: Colors.white,
 //      floatingActionButtonLocation: FloatingActionButtonLocation.rightFloat,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black87,
-        child: Icon(Icons.check),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.black,
+        icon: Icon(Icons.check),
+        label: Text('Save Deck', style: TextStyle(fontSize: 15),),
         onPressed: ()async{
           // TODO: save the changes made by the user in the flash cards of the deck.
           // popping the current screen and taking the user back to the deck card info page.

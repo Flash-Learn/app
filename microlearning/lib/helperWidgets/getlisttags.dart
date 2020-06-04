@@ -47,10 +47,10 @@ class _ListofTagsState extends State<ListofTags> {
             filled: true,
             contentPadding: EdgeInsets.symmetric(horizontal:3, vertical: 8),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white, width: 1.0),
+              borderSide: BorderSide(color: Colors.black, width: 1.0),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.pink, width: 1.0),
+              borderSide: BorderSide(color: Colors.black, width: 2.0),
             ),
             suffixIcon: IconButton(
             icon: Icon(Icons.clear),
@@ -61,6 +61,7 @@ class _ListofTagsState extends State<ListofTags> {
                 deck.tagsList.remove(controller.text); // removing the tag from the taglist
               });
             },
+            color: Colors.black,
           ),
         ),
     ),
