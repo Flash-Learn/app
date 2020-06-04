@@ -45,8 +45,8 @@ class AccountSettings extends StatelessWidget {
             ),
             Material(
               color: Colors.black,
-                          child: InkWell(
-                            splashColor: Colors.grey,
+              child: InkWell(
+                splashColor: Colors.grey,
                 onTap: () {
                   signOutGoogle();
                   return Navigator.of(context).pushAndRemoveUntil(
