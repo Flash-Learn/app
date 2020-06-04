@@ -78,20 +78,20 @@ class _EditFlashCardState extends State<EditFlashCard> {
         backgroundColor: Colors.black,
         title: Text('Edit Deck'),
         centerTitle: true,
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: (){
-                //TODO: submit the changes made by the user on the local storage as well as database and return to mydecks.
-              },
-              child: Icon(
-                Icons.done,
-                size: 26,
-              ),
-            ),
-          )
-        ],
+//        actions: <Widget>[
+//          Padding(
+//            padding: EdgeInsets.only(right: 20.0),
+//            child: GestureDetector(
+//              onTap: (){
+//                //TODO: submit the changes made by the user on the local storage as well as database and return to mydecks.
+//              },
+//              child: Icon(
+//                Icons.done,
+//                size: 26,
+//              ),
+//            ),
+//          )
+//        ],
       ),
       body: SingleChildScrollView(
         child: Column(

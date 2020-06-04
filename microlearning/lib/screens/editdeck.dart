@@ -22,9 +22,8 @@ class _EditDecksState extends State<EditDecks> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-
-          Firestore.instance.collection('decks').document(deck.deckID).updateData({
+        onPressed: () async {
+          await Firestore.instance.collection('decks').document(deck.deckID).updateData({
             "deckName": deck.deckName,
             "tagsList": deck.tagsList,
             "deckNameLowerCase": deck.deckName.toLowerCase(),
@@ -45,20 +44,20 @@ class _EditDecksState extends State<EditDecks> {
       ),
       backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                //TODO: submit the changes made by the user on the local storage as well as database
-              },
-              child: Icon(
-                Icons.done,
-                size: 26.0,
-              ),
-            )
-          ),
-        ],
+//        actions: <Widget>[
+//          Padding(
+//            padding: EdgeInsets.only(right: 20.0),
+//            child: GestureDetector(
+//              onTap: () {
+//                //TODO: submit the changes made by the user on the local storage as well as database
+//              },
+//              child: Icon(
+//                Icons.done,
+//                size: 26.0,
+//              ),
+//            )
+//          ),
+//        ],
         backgroundColor: Colors.black, 
         title: Text('Edit Deck'),
         centerTitle: true,
