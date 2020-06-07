@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/classes/deck.dart';
 
 class GetFlashCardEdit extends StatefulWidget {
-  List<List<String>> flashCardData;
+  final List<List<String>> flashCardData;
   final Deck deck;
 
   GetFlashCardEdit({Key key, @required this.deck, @required this.flashCardData})
