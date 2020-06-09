@@ -39,7 +39,7 @@ class _ViewDeckState extends State<ViewDeck> {
 
     setState(() {
       _enabled = true;
-      _center = _index == 0 ? Offset(target.center.dx, target.center.dy -300) : Offset(target.center.dx, target.center.dy);
+      _center = _index == 0 ? Offset(target.center.dx, target.topCenter.dy + target.height/6) : Offset(target.center.dx, target.center.dy);
       _radius = _index == 0 ? 100 :Spotlight.calcRadius(target);
       _description = Scaffold(
         backgroundColor: Colors.transparent,

@@ -37,7 +37,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
 
     setState(() {
       _enabled = true;
-      _center = _index == 0 ? Offset(target.center.dx, target.center.dy -150) : Offset(target.center.dx, target.center.dy);
+      _center = _index == 0 ? Offset(target.topCenter.dx, target.topCenter.dy + (target.height/6)) : Offset(target.center.dx, target.center.dy);
       _radius = _index == 0 ? 100 :Spotlight.calcRadius(target);
       _description = Scaffold(
         backgroundColor: Colors.transparent,
