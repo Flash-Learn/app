@@ -1,13 +1,31 @@
+// import 'dart:js';
+
+import 'package:microlearning/screens/search.dart';
 import 'package:flutter/material.dart';
+import 'package:microlearning/screens/authentication/get_user_info.dart';
 import 'package:microlearning/screens/authentication/login.dart';
+import 'package:microlearning/screens/authentication/register.dart';
+import 'package:microlearning/screens/mydecks.dart';
+import 'package:microlearning/screens/viewDeck.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return LoginUser();
-  }
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance(); 
+  var email = prefs.getString('email'); 
+  runApp(MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: 'Montserrat'
+      ),
+      routes: {
+        '/': (context) => email == null ? LoginUser() : MyDecks(),
+        // '/': (context) => Home(),
+        '/home': (context) => MyDecks(),
+        '/register': (context) => RegisterUser(),
+        '/search': (context) => Search(),
+//        '/view': (context) => ViewDeck(),
+      },
+    )
+  );
 }
