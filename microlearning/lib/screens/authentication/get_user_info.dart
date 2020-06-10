@@ -158,7 +158,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
                     here.uploadData(_name, _grade, _gender);
 
 
-                    return Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return MyDecks();}));
+                    return Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return MyDecks(isdemo: true,);}));
                   }
                 },
               ),
