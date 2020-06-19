@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Utilities/Widgets/standard_button.dart';
 import 'package:microlearning/Utilities/Widgets/standard_input_field.dart';
+import 'package:microlearning/services/auth.dart';
 
-class Login extends StatelessWidget
-{
+class Login extends StatefulWidget {
+  final Function toggleView;
+  Login({this.toggleView});
+
   @override
-  Widget build(BuildContext context)
-  {
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+
+  //text field state
+  String email = '';
+  String password = '';
+  String error = '';
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -15,15 +29,67 @@ class Login extends StatelessWidget
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Form(
+              key: _formKey,
               child: Column(
                 children: <Widget>[
-                  StandardInputField('Email'),
+                  TextFormField(
+                    decoration: textInputDecoration.copyWith(hintText: 'Email'),
+                    validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                    onChanged: (val) {
+                      setState(() {
+                        email = val;
+                      });
+                    },
+                  ),
+                  Text(
+                    error,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 10,
+                    ),
+                  ),
                   SizedBox(height: 20),
-                  StandardInputField('Password'),
+                  TextFormField(
+                    decoration:
+                        textInputDecoration.copyWith(hintText: 'Password'),
+                    obscureText: true,
+                    validator: (val) =>
+                        val.length < 6 ? 'Enter Password 6+ chars long' : null,
+                    onChanged: (val) {
+                      setState(() {
+                        password = val;
+                      });
+                    },
+                  ),
                   SizedBox(height: 20),
-                  StandardButton(Text('Log In', style: TextStyle(color: Colors.white),)),
+                  RaisedButton(
+                      child: Text(
+                        'Login',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: Colors.black,
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() {});
+                          dynamic result =
+                              await _auth.signinWithEmail(email, password);
+                          if (result == null) {
+                            setState(() {
+                              error = 'Invalid Credentials';
+                            });
+                          }
+                        }
+                      }),
                   SizedBox(height: 20),
-                  StandardButton(Text('Register', style: TextStyle(color: Colors.white),))
+                  RaisedButton(
+                      onPressed: () {
+                        widget.toggleView();
+                      },
+                      color: Colors.black,
+                      child: Text(
+                        'Register',
+                        style: TextStyle(color: Colors.white),
+                      )),
                 ],
               ),
             )

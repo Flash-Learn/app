@@ -1,16 +1,22 @@
-// import 'dart:js';
+import 'package:microlearning/models/user.dart';
+import 'package:microlearning/screens/authentication/wrapper.dart';
+import 'package:microlearning/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:microlearning/screens/authentication/login.dart';
-Future<void> main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Montserrat'
+import 'package:provider/provider.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return StreamProvider<User>.value(
+      value: AuthService().user,
+      child: MaterialApp(
+        home: Wrapper(), 
       ),
-      routes: {
-        '/': (context) => Login()
-      },
-    )
-  );
+    );
+  }
 }
