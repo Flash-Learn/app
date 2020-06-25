@@ -207,7 +207,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     // TODO: implement initState
     super.initState();
 //    refreshIndicatorKey.currentState.show();
-    print("init");
+
     _pageCtrl.addListener(() {
 //      print("sdfaf");
       setState(() {
