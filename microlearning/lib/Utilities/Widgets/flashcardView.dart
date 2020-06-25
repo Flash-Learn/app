@@ -2,6 +2,7 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class FlashCardView extends StatefulWidget {
   final Color color;
@@ -82,7 +83,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                             Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  border: Border.all(color: Colors.black, width: 3),
+                                  border: Border.all(color: MyColorScheme.accent(), width: 3),
                                   borderRadius: BorderRadius.circular(20)),
                               child: Center(
                                 child: Padding(
@@ -131,7 +132,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(0,10,20,0),
-                                    child: Icon(Icons.more_horiz, color: Colors.black,),
+                                    child: Icon(Icons.more_horiz, color: MyColorScheme.accent(),),
                                   ),
                                 )
                               ],
@@ -142,8 +143,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                           children:<Widget>[
                               Container(
                               decoration: BoxDecoration(
-                                  color: Colors.grey[900],
-                                  border: Border.all(color: Colors.black, width: 3),
+                                  color: MyColorScheme.accentLight(),
+                                  border: Border.all(color: MyColorScheme.accent(), width: 3),
                                   borderRadius: BorderRadius.circular(20)),
                               child: Center(
                                 child: Padding(
@@ -191,7 +192,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(0,10,20,0),
-                                    child: Icon(Icons.more_horiz, color: Colors.white,),
+                                    child: Icon(Icons.more_horiz, color: MyColorScheme.uno(),),
                                   ),
                                 )
                               ],
@@ -268,35 +269,50 @@ class _FlashCardViewState extends State<FlashCardView> {
     return playListNames.map<Widget>((String playlistID){
       i++;
       k = '$i';
-      return ListTile(
-        onTap: (){
-          // TODO: add the flashcard to the playlist
-          // Def: a playlist will be a deck of different flashcards
-        },
-        title: Text(playlistID),
-        );
+      return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Card(
+          color: MyColorScheme.accentLight(),
+          child: ListTile(
+            trailing: Icon(Icons.playlist_add),
+            contentPadding: EdgeInsets.all(10),
+            onTap: (){
+              // TODO: add the flashcard to the playlist
+              // Def: a playlist will be a deck of different flashcards
+            },
+            title: Text(playlistID),
+            ),
+        ),
+      );
     }).toList();
   }
   void _showbottomsheet(context){
     List<Widget> children = _buildlist();
-    children.add(
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          IconButton(icon: Icon(Icons.add),onPressed: (){
-            Navigator.pop(context);
-            createAlertDialog(context);
-          },)
-        ],
-      )
-    );
     showModalBottomSheet(context: context, builder: (BuildContext buildcon){
-      return Container(
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: children,
-        ),
+      return Column(
+        children: <Widget>[
+           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              IconButton(icon: Icon(Icons.add),onPressed: (){
+                Navigator.pop(context);
+                createAlertDialog(context);
+              },)
+            ],
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal:20, vertical:10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: children,
+                ),
+              ),
+            ),
+          ),
+        ],
       );
     });
   }
