@@ -163,7 +163,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                             image: imageProvider,
-                                            fit: BoxFit.cover,
+//                                            fit: BoxFit.cover,
                                           ),
                                         ),
                                       ),
