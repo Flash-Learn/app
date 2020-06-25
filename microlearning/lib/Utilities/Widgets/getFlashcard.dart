@@ -250,84 +250,87 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
       absorbing: _disableTouch,
       child: Column(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Material(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.red[300],
-                child: MaterialButton(
-                  //color: Colors.blue,
-                  key: ValueKey('issue is resolved now'),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.text_fields,
-                        color: Colors.black,
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Text(
-                        "Add text card",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Material(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.red[300],
+                  child: MaterialButton(
+                    //color: Colors.blue,
+                    key: ValueKey('issue is resolved now'),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.text_fields,
+                          color: Colors.black,
                         ),
-                      )
-                    ],
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      fieldCount++;
-                      flashCardData.add(['', '', 'false']);
-                      //TODO: generate a id for flash card....But I don't think we will need this
-                    });
-                  },
-                ),
-              ),
-              Material(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.red[300],
-                child: MaterialButton(
-                  key: ValueKey('photo card'),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.photo,
-                        color: Colors.black,
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Text(
-                        "Add photo card",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                        SizedBox(
+                          width: 3,
                         ),
-                      )
-                    ],
+                        Text(
+                          "Add text card",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        fieldCount++;
+                        flashCardData.add(['', '', 'false']);
+                        //TODO: generate a id for flash card....But I don't think we will need this
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-                      fieldCount++;
-                      try {
-                        flashCardData.add(['', 'null', 'true']);
-                      } catch (e) {
-                        print('here is the error');
-                        print(e);
-                      }
-                      //TODO: generate a id for flash card....But I don't think we will need this
-                    });
-                  },
                 ),
-              ),
-            ],
+                Material(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.red[300],
+                  child: MaterialButton(
+                    key: ValueKey('photo card'),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.photo,
+                          color: Colors.black,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          "Add photo card",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        fieldCount++;
+                        try {
+                          flashCardData.add(['', 'null', 'true']);
+                        } catch (e) {
+                          print('here is the error');
+                          print(e);
+                        }
+                        //TODO: generate a id for flash card....But I don't think we will need this
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
           ConstrainedBox(
             constraints: BoxConstraints(

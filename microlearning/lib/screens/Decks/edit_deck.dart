@@ -231,7 +231,7 @@ class _EditDecksState extends State<EditDecks> {
                     initialValue: deck.deckName,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    decoration: inputTextDecorations('Deck name'),
+                    decoration: inputTextDecorations(''),
                   ),
                   SizedBox(
                     height: 20,
