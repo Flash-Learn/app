@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 class FlashCardView extends StatefulWidget {
   final Color color;
   final int currentIndex;

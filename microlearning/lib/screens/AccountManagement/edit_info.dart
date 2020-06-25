@@ -161,11 +161,7 @@ class _EditInfoState extends State<EditInfo> {
                             '_gender': _gender,
                             '_grade': _grade,
                           });
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(builder: (context) {
-                            return MyDecks( );
-                          }
-                          ));
+                          
                         }
                       },
                     ),
