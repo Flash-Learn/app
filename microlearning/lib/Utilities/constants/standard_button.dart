@@ -16,9 +16,6 @@ class StandardButton extends StatelessWidget
       color: Colors.black,
       child: InkWell(
         splashColor: Colors.grey,
-        // onTap: () async {
-        //   this.onTapFunc();
-        // },
         child: Container(
           height: 40,
           child: Material(

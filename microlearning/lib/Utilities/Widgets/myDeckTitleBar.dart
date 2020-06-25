@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 
-class myDeckTitleBar extends StatelessWidget {
+class MyDeckTitleBar extends StatelessWidget {
 
   final keySearch;
-  myDeckTitleBar({this.keySearch});
+  MyDeckTitleBar({this.keySearch});
 
   @override
   Widget build(BuildContext context) {

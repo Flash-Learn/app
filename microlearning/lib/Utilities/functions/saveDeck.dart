@@ -17,24 +17,18 @@ void saveDeck(context, Deck deck) async{
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String userID = prefs.getString('uid');
-//  print(userID);
   final CollectionReference decksReference = Firestore.instance.collection("decks");
   final CollectionReference flashcardsReference = Firestore.instance.collection("flashcards");
   final CollectionReference userReference = Firestore.instance.collection("user_data");
-//  print("got references");
-//  print(deck.flashCardList.length);
   for(var i=0; i<deck.flashCardList.length; i++){
-//    print(i);
     dynamic tempCard;
     await flashcardsReference.document(deck.flashCardList[i]).get().then((doc) {
       tempCard = doc.data;
     });
-//    print(tempCard);
     final flashRef = await flashcardsReference.add({
       'term': tempCard["term"],
       'definition': tempCard["definition"]
     });
-//    print("test");
     print(flashRef.documentID);
     toSave.flashCardList.add(flashRef.documentID);
   }

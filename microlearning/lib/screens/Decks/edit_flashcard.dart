@@ -18,7 +18,6 @@ class EditFlashCard extends StatefulWidget {
 }
 
 class _EditFlashCardState extends State<EditFlashCard> {
-//  List<List<String>> flashCardDatatemp = [<String>[]];
   bool isdemo;
   Stream<dynamic> getCardfromDataBase;
   List<List<String>> flashCardData;
@@ -42,7 +41,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
   int _index = 0;
 
   bool _disableTouch =
-      false; // variable used by widgets to show loading and disable touch
+      false;
 
   spotlight(Key key) {
     Rect target = Spotlight.getRectFromKey(key);
@@ -122,14 +121,11 @@ class _EditFlashCardState extends State<EditFlashCard> {
     flashCardData = [<String>[]];
 
     getCardfromDataBase = (() async* {
-//    await Future<void>.delayed(Duration(seconds: 1));
-//    yield 1;
       // add the function to get the flashcards from database and save it in flashCardData, while retriving data from
       // the database make sure to initialise flashCardData as List<List<String>> flashCardData = [<String>[]],
       // this will make flashCardData[0] as null but it is the only way it is working and I made my code work according to this.
       final CollectionReference flashcardReference =
           Firestore.instance.collection("flashcards");
-//    print(newDeck.deckID);
       for (var i = 0; i < newDeck.flashCardList.length; i++) {
         print("flash card id: ${newDeck.flashCardList[i]}");
         await flashcardReference
@@ -189,7 +185,6 @@ class _EditFlashCardState extends State<EditFlashCard> {
                   ),
                   (Route<dynamic> route) => false);
 
-//          Navigator.pop(context);
             },
           ),
           appBar: AppBar(
