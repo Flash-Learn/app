@@ -163,7 +163,7 @@ class _EditInfoState extends State<EditInfo> {
                           });
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(builder: (context) {
-                            return MyDecks();
+                            return MyDecks( );
                           }
                           ));
                         }
