@@ -132,7 +132,10 @@ class _EditDecksState extends State<EditDecks> {
             key: _keyEditFlash,
             onPressed: () async {
               setState(() {
-                _disableTouch = true;
+                if (deck.deckName != "") {
+                  print(deck.deckName);
+                  _disableTouch = true;
+                }
               });
               await Firestore.instance
                   .collection('decks')

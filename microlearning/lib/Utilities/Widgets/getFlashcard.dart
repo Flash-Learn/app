@@ -27,18 +27,17 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
   int nextIndex = 0;
   final _picker = ImagePicker();
 
+  // function for getting the image from the source (camera or gallery)
   getImage(ImageSource source, BuildContext context, int index) async {
     final image = await _picker.getImage(
-        source: source,
-        maxHeight: 250,
-        maxWidth: 250); // take the image from the source
+        source: source); // take the image from the source
     if (image != null) {
       // if the image is not null then take it to the cropping window
       final cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
         compressQuality: 100,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        maxWidth: (MediaQuery.of(context).size.width * 0.8).toInt(),
+        // aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        // maxWidth: (MediaQuery.of(context).size.width * 0.8).toInt(),
       );
       if (cropped != null) {
         // if the image received from the cropper is not null then upload it to the database
