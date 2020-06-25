@@ -121,6 +121,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           value: "add to playlist",
                                           child: GestureDetector(
                                             onTap: () async{
+                                              Navigator.pop(context, "add to playlist");
                                               await _showbottomsheet(context);
                                             },
                                             child: Text("Add to playlists")
@@ -181,6 +182,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           value: "add to playlist",
                                           child: GestureDetector(
                                             onTap: ()async{
+                                              Navigator.pop(context, "add to playlist");
                                               await _showbottomsheet(context); // function that makes the bottom sheet
                                             },
                                             child: Text("Add to playlists")
