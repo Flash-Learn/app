@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class EditFlashCard extends StatefulWidget {
   final Deck deck;
@@ -18,7 +19,6 @@ class EditFlashCard extends StatefulWidget {
 }
 
 class _EditFlashCardState extends State<EditFlashCard> {
-//  List<List<String>> flashCardDatatemp = [<String>[]];
   bool isdemo;
   Stream<dynamic> getCardfromDataBase;
   List<List<String>> flashCardData;
@@ -41,8 +41,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
   ];
   int _index = 0;
 
-  bool _disableTouch =
-      false; // variable used by widgets to show loading and disable touch
+  bool _disableTouch = false;
 
   spotlight(Key key) {
     Rect target = Spotlight.getRectFromKey(key);
@@ -122,14 +121,11 @@ class _EditFlashCardState extends State<EditFlashCard> {
     flashCardData = [<String>[]];
 
     getCardfromDataBase = (() async* {
-//    await Future<void>.delayed(Duration(seconds: 1));
-//    yield 1;
       // add the function to get the flashcards from database and save it in flashCardData, while retriving data from
       // the database make sure to initialise flashCardData as List<List<String>> flashCardData = [<String>[]],
       // this will make flashCardData[0] as null but it is the only way it is working and I made my code work according to this.
       final CollectionReference flashcardReference =
           Firestore.instance.collection("flashcards");
-//    print(newDeck.deckID);
       for (var i = 0; i < newDeck.flashCardList.length; i++) {
         print("flash card id: ${newDeck.flashCardList[i]}");
         await flashcardReference
@@ -165,7 +161,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
           backgroundColor: Colors.white,
           floatingActionButton: FloatingActionButton.extended(
             key: _keySave,
-            backgroundColor: Colors.black,
+            backgroundColor: MyColorScheme.accent(),
             icon: _disableTouch ? null : Icon(Icons.check),
             label: _disableTouch
                 ? Loading(size: 20)
@@ -188,14 +184,24 @@ class _EditFlashCardState extends State<EditFlashCard> {
                     ),
                   ),
                   (Route<dynamic> route) => false);
-
-//          Navigator.pop(context);
             },
           ),
           appBar: AppBar(
-            backgroundColor: Colors.black,
-            title: Text('Edit Deck'),
+            elevation: 2,
+            backgroundColor: MyColorScheme.uno(),
+            title: Text(
+              'Edit Deck',
+              style: TextStyle(
+                  color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+            ),
             centerTitle: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: MyColorScheme.accent(),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
           body: SingleChildScrollView(
             child: Column(

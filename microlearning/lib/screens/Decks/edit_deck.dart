@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/Widgets/getListTags.dart';
+import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
@@ -131,7 +132,10 @@ class _EditDecksState extends State<EditDecks> {
             key: _keyEditFlash,
             onPressed: () async {
               setState(() {
-                _disableTouch = true;
+                if (deck.deckName != "") {
+                  print(deck.deckName);
+                  _disableTouch = true;
+                }
               });
               await Firestore.instance
                   .collection('decks')
@@ -175,7 +179,13 @@ class _EditDecksState extends State<EditDecks> {
                       }));
                     },
                   )
-                : null,
+                : IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    color: MyColorScheme.accent(),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
             backgroundColor: MyColorScheme.uno(),
             title: Text(
               'Edit Deck',
@@ -221,18 +231,7 @@ class _EditDecksState extends State<EditDecks> {
                     initialValue: deck.deckName,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    decoration: InputDecoration(
-                      hintText: 'Deck Name',
-                      fillColor: Colors.white,
-                      filled: true,
-                      contentPadding: EdgeInsets.all(20.0),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2.0),
-                      ),
-                    ),
+                    decoration: inputTextDecorations('Deck name'),
                   ),
                   SizedBox(
                     height: 20,
@@ -264,29 +263,12 @@ class _EditDecksState extends State<EditDecks> {
                       maxHeight: 300,
                     ),
                     child: Container(
-//                  maxHei: 300,
                       child: ListofTags(deck: deck),
                     ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-//                RaisedButton(
-//                  onPressed: () async {
-//                    SharedPreferences prefs = await SharedPreferences.getInstance();
-//                    String uid = prefs.getString('uid');
-//                    await Firestore.instance.collection("deck").document(deck.deckID).delete();
-//                    await Firestore.instance.collection("user_data").document(uid).updateData({
-//                      "decks": FieldValue.arrayRemove([deck.deckID]),
-//                    });
-//
-//                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-//                      builder: (context) => MyDecks(),
-//                    ), (Route<dynamic> route) => false);
-//
-//                  },
-//                  child: Text("Delete Deck"),
-//                )
                 ],
               ),
             ),

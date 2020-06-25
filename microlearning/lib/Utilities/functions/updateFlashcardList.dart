@@ -5,8 +5,6 @@ Future<void> updateFlashcardList(Deck deck, List<List<String>> flashCardData) as
 
   // NOTE: flashCardData is 1 indexed and flashCardList is 0 indexed.
 
-//  bool res = flashCardData.remove(flashCardData[1]);
-
   int initialLength = deck.flashCardList.length, newLength = flashCardData.length-1;
 
   print("$initialLength $newLength");

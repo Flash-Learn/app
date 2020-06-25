@@ -27,47 +27,55 @@ class _ListofTagsState extends State<ListofTags> {
         controllers[i].text = deck.tagsList[i];
       }
     }
-    // print('${controllers.length} haha 1');
     i = 0;
     return controllers.map<Widget>(
       (TextEditingController controller) {
         i++;
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-          child: TextField(
-            maxLength: 20,
-            controller: controller,
-            textAlign: TextAlign.center,
-            onChanged: (val) {
-              deck.tagsList[controllers.indexOf(controller)] =
-                  val; // changing the value of the tag as indexed
-            },
-            decoration: InputDecoration(
-              counterText: "",
-              isDense: true,
-              hintText: "Deck Tag",
-              fillColor: Colors.white,
-              filled: true,
-              contentPadding: EdgeInsets.symmetric(horizontal: 3, vertical: 8),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black, width: 1.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black, width: 2.0),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () {
-                  setState(() {
-                    fieldCount--; // decrementing the controller number
-                    controllers.remove(controller); // removing the controller
-                    deck.tagsList.remove(
-                        controller.text); // removing the tag from the taglist
-                  });
+          child: Stack(
+            children:<Widget>[
+              TextField(
+                maxLength: 20,
+                controller: controller,
+                textAlign: TextAlign.center,
+                onChanged: (val) {
+                  deck.tagsList[controllers.indexOf(controller)] =
+                      val; // changing the value of the tag as indexed
                 },
-                color: Colors.black,
+                decoration: InputDecoration(
+                  counterText: "",
+                  isDense: true,
+                  hintText: "Deck Tag",
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 3, vertical: 12),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 1.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 2.0),
+                  ),
+                ),
               ),
-            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () {
+                      setState(() {
+                        fieldCount--; // decrementing the controller number
+                        controllers.remove(controller); // removing the controller
+                        deck.tagsList.remove(
+                            controller.text); // removing the tag from the taglist
+                      });
+                    },
+                    color: Colors.black,
+                  ),
+                ],
+              )
+            ],
           ),
         );
       },
@@ -82,7 +90,7 @@ class _ListofTagsState extends State<ListofTags> {
     // append an 'add player' button to the end of the list
     children.add(
       Container(
-        margin: EdgeInsets.only(right: 250),
+        margin: EdgeInsets.symmetric(vertical:0, horizontal: MediaQuery.of(context).size.width * 0.3),
         child: Material(
           borderRadius: BorderRadius.circular(5),
           color: MyColorScheme.accent(),
@@ -98,20 +106,21 @@ class _ListofTagsState extends State<ListofTags> {
               height: 40,
               child: Material(
                   borderRadius: BorderRadius.circular(5),
-                  color: Colors.transparent,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.add,
-                        color: MyColorScheme.uno(),
-                      ),
-                      Text(
-                        'Add Tag',
-                        style: TextStyle(color: MyColorScheme.uno()),
-                      )
-                    ],
-                  )),
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.add,
+                      color: MyColorScheme.uno(),
+                    ),
+                    Text(
+                      'Add Tag',
+                      style: TextStyle(color: MyColorScheme.uno()),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         ),
