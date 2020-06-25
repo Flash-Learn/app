@@ -161,7 +161,7 @@ class _EditInfoState extends State<EditInfo> {
                             '_gender': _gender,
                             '_grade': _grade,
                           });
-                          
+
                         }
                       },
                     ),
