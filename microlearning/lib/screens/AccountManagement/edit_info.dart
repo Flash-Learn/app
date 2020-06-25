@@ -154,12 +154,13 @@ class _EditInfoState extends State<EditInfo> {
                       ),
                       onPressed: () async{
                         if(_formKey.currentState.validate()) {
-                          updateInfo(context, {
+                          updateInfo({
                             '_uid': _uid,
                             '_name': _name,
                             '_gender': _gender,
                             '_grade': _grade,
                           });
+                          Navigator.pop(context);
                         }
                       },
                     ),
