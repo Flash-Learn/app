@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 class FlashCardView extends StatefulWidget {
   final Color color;
   final int currentIndex;
@@ -156,10 +157,19 @@ class _FlashCardViewState extends State<FlashCardView> {
                             child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: isPic
-                                  ? Image.network(
-                                      definition,
-                                      width: 700,
-                                      height: 900,
+                                  ? CachedNetworkImage(
+                                      imageUrl: definition,
+                                      imageBuilder: (context, imageProvider) => Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) => const Icon(Icons.error),
                                     )
                                   : Text(
                                       definition,
