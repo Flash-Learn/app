@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class GetFlashCardEdit extends StatefulWidget {
   final List<dynamic> flashCardData;
@@ -27,23 +27,30 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
   int nextIndex = 0;
   final _picker = ImagePicker();
 
-  getImage(ImageSource source, BuildContext context, int index) async{
-    final image = await _picker.getImage(source: source, maxHeight: 250, maxWidth: 250);
-    if(image!=null){
+  getImage(ImageSource source, BuildContext context, int index) async {
+    final image = await _picker.getImage(
+        source: source,
+        maxHeight: 250,
+        maxWidth: 250); // take the image from the source
+    if (image != null) {
+      // if the image is not null then take it to the cropping window
       final cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
         compressQuality: 100,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
         maxWidth: (MediaQuery.of(context).size.width * 0.8).toInt(),
       );
-      if(cropped!=null)  {
+      if (cropped != null) {
+        // if the image received from the cropper is not null then upload it to the database
         String filename = basename(cropped.path);
-        StorageReference firebaseStorageref = FirebaseStorage.instance.ref().child('images/$filename');
+        StorageReference firebaseStorageref =
+            FirebaseStorage.instance.ref().child('images/$filename');
         StorageUploadTask uploadTask = firebaseStorageref.putFile(cropped);
         StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
         String url = (await taskSnapshot.ref.getDownloadURL()).toString();
         setState(() {
-          flashCardData[index][1] = url;
+          flashCardData[index][1] =
+              url; // saving the url into the list of flashcards
         });
       }
     }
@@ -84,8 +91,9 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                   padding: const EdgeInsets.all(5.0),
                   child: Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.grey[900]),
+                        borderRadius: BorderRadius.circular(10),
+                        color: MyColorScheme.accent(),
+                      ),
                       child: Form(
                         child: Column(
                           children: <Widget>[
@@ -98,11 +106,11 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                       [0] = val;
                                 },
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
+                                    color: MyColorScheme.uno(), fontSize: 20),
                                 decoration: InputDecoration(
                                   counterText: '',
                                   hintText: 'Term',
-                                  hintStyle: (TextStyle(color: Colors.grey)),
+                                  hintStyle: (TextStyle(color: Colors.white24)),
                                   border: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   enabledBorder: InputBorder.none,
@@ -110,75 +118,93 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                   disabledBorder: InputBorder.none,
                                   contentPadding: EdgeInsets.only(
                                       left: 15, bottom: 0, top: 11, right: 15),
-                                )
-                            ),
+                                )),
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Divider(
-                                color: Colors.white,
+                                color: Colors.grey[800],
                                 endIndent: 20,
                                 indent: 20,
                               ),
                             ),
-                            if(data[2] == 'false')...[
-                            TextFormField(
-                              maxLines: null,
-                              textAlign: TextAlign.center,
-                              initialValue: data[1],
-                              style: TextStyle(color: Colors.white),
-                              onChanged: (val) {
-                                flashCardData[flashCardData.indexOf(data)]
-                                    [1] = val;
-                              },
-                              keyboardType: TextInputType.multiline,
-                              decoration: InputDecoration(
-                                hintText: 'Definition',
-                                hintStyle: (TextStyle(color: Colors.grey)),
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.only(
-                                    left: 15, bottom: 11, top: 0, right: 15),
+                            if (data[2] == 'false') ...[
+                              TextFormField(
+                                maxLines: null,
+                                textAlign: TextAlign.center,
+                                initialValue: data[1],
+                                style: TextStyle(color: MyColorScheme.uno()),
+                                onChanged: (val) {
+                                  flashCardData[flashCardData.indexOf(data)]
+                                      [1] = val;
+                                },
+                                keyboardType: TextInputType.multiline,
+                                decoration: InputDecoration(
+                                  hintText: 'Definition',
+                                  hintStyle: (TextStyle(color: Colors.white24)),
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(
+                                      left: 15, bottom: 11, top: 0, right: 15),
+                                ),
                               ),
-                            ),
-                            ]else...[
-                              if(data[1]=='null')...[
+                            ] else ...[
+                              if (data[1] == 'null') ...[
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: <Widget>[
                                       IconButton(
                                         icon: Icon(Icons.camera),
                                         color: Colors.white,
-                                        onPressed: (){
-                                          getImage(ImageSource.camera, context, flashCardData.indexOf(data));
+                                        onPressed: () {
+                                          getImage(ImageSource.camera, context,
+                                              flashCardData.indexOf(data));
                                         },
                                       ),
                                       IconButton(
                                         icon: Icon(Icons.photo),
                                         color: Colors.white,
-                                        onPressed: (){
-                                          getImage(ImageSource.gallery, context, flashCardData.indexOf(data));
+                                        onPressed: () {
+                                          getImage(ImageSource.gallery, context,
+                                              flashCardData.indexOf(data));
                                         },
                                       )
                                     ],
                                   ),
                                 ),
-                              ]else...[
+                              ] else ...[
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                                   child: Image.network(
                                     data[1],
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes
+                                              : null,
+                                        ),
+                                      );
+                                    },
                                     height: 250,
                                     width: 250,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ]
-                                //add the widget to add the photo added by the user
                             ]
                           ],
                         ),
@@ -195,8 +221,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                         color: Colors.white,
                         onPressed: () {
                           setState(() {
-                            flashCardData
-                                .remove(data);
+                            flashCardData.remove(data);
                             print(flashCardData.length);
                             fieldCount--;
                           });
@@ -210,10 +235,10 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
           );
         }
       },
-    ).toList();
+    ).toList(); // building the list of flashcards in their edit mode
   }
 
-  bool _disableTouch=false;
+  bool _disableTouch = false;
 
   @override
   Widget build(BuildContext context) {
@@ -225,65 +250,86 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     return AbsorbPointer(
       absorbing: _disableTouch,
       child: Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            MaterialButton(
-              color: Colors.blue,
-              key: ValueKey('issue is resolved now'),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Add text card",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Material(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.red[300],
+                child: MaterialButton(
+                  //color: Colors.blue,
+                  key: ValueKey('issue is resolved now'),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.text_fields,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                        "Add text card",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      fieldCount++;
+                      flashCardData.add(['', '', 'false']);
+                      //TODO: generate a id for flash card....But I don't think we will need this
+                    });
+                  },
+                ),
               ),
-              onPressed: () {
-                setState(() {
-                  fieldCount++;
-                  flashCardData.add(['', '','false']);
-                  //TODO: generate a id for flash card....But I don't think we will need this
-                });
-              },
-            ),
-            MaterialButton(
-              color: Colors.red,
-              key: ValueKey('photo card'),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Add photo card",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
+              Material(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.red[300],
+                child: MaterialButton(
+                  key: ValueKey('photo card'),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.photo,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                        "Add photo card",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      fieldCount++;
+                      try {
+                        flashCardData.add(['', 'null', 'true']);
+                      } catch (e) {
+                        print('here is the error');
+                        print(e);
+                      }
+                      //TODO: generate a id for flash card....But I don't think we will need this
+                    });
+                  },
+                ),
               ),
-              onPressed: () {
-                setState(() {
-                  fieldCount++;
-                  try{
-                    flashCardData.add(['', 'null', 'true']);
-                  }catch(e){
-                    print('here is the error');
-                    print(e);
-                  }
-                  //TODO: generate a id for flash card....But I don't think we will need this
-                });
-              },
-            ),
-          ],
-        ), 
+            ],
+          ),
           ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: 500,

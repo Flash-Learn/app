@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:microlearning/Utilities/Widgets/inputTextDecorations.dart';
+import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/services/username_signIn.dart';
 import 'package:microlearning/screens/authentication/redirect.dart';
 import 'package:microlearning/screens/authentication/login.dart';
