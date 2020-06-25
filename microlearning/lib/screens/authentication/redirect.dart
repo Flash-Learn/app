@@ -29,9 +29,6 @@ class _EmailVerificationState extends State<EmailVerification> {
         timer = Timer.periodic(Duration(seconds: 5), (timer) async {
             await FirebaseAuth.instance.currentUser()..reload();
             var user = await FirebaseAuth.instance.currentUser();
-            // setState(() {
-            //   email = user.email;
-            // });
             if (user.isEmailVerified) {  
               isUserEmailVerified = user.isEmailVerified;
               SharedPreferences prefs = await SharedPreferences.getInstance(); 
@@ -80,7 +77,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                               child: InkWell(
                                 splashColor: Colors.grey,
                   onTap: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {return RegisterUser();}));;
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {return RegisterUser();}));
                   },
                   child: Container(
                     height: 40,

@@ -206,10 +206,8 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     // TODO: implement initState
     // TODO: implement initState
     super.initState();
-//    refreshIndicatorKey.currentState.show();
     print("init");
     _pageCtrl.addListener(() {
-//      print("sdfaf");
       setState(() {
         currentPage = _pageCtrl.page;
       });
@@ -219,21 +217,14 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   @override
   Widget build(BuildContext context) {
 
-    int prevIndex=1;
-    int side=1;
     return Container(
-//            height: 500,
       color: Colors.white,
       child: PageView.builder(
         controller: _pageCtrl,
         scrollDirection: Axis.horizontal,
         itemCount: deck.flashCardList.length,
         itemBuilder: (context, int currentIndex) {
-//                print(currentPage);
-//                print(currentIndex);
-//                print(deck.flashCardList[currentIndex]);
           return FlashCardView(
-//                  side: side,
             color: Colors.accents[currentIndex],
             currentIndex: currentIndex,
             currentPage: currentPage,

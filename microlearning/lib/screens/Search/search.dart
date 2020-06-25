@@ -35,13 +35,9 @@ class _SearchState extends State<Search> {
             "searchKey": docs.documents[i].data["searchKey"],
             "deckID": docs.documents[i].documentID
           };
-          //docs.documents[i].data;
-          //element['deckID']= docs.documents[i].documentID;
-          // print(element);
           queryResultSet.add(element);
           setState(() {
             tempSearchStore.add(element);
-            // print(queryResultSet[i]['Name']);
           });
         }
       });
@@ -54,7 +50,6 @@ class _SearchState extends State<Search> {
             tempSearchStore.add(element);
           });
         }
-        // print(QuerySnapshot docs.documents[element].documentID);
       });
 
       if (tempSearchStore.length == 0 && value.length > 1) {
@@ -137,7 +132,6 @@ class _SearchState extends State<Search> {
 // Try changing the widget that is being returned.
 // Implementing the offline/online search is still left.
 Widget buildResultCard(context, data) {
-//  print(data);
   return InkWell(
     onTap: () {
       Navigator.push(

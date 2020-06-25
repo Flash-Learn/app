@@ -10,7 +10,6 @@ class FlashCardView extends StatefulWidget {
   final String flashCardID;
 
   FlashCardView({
-//    this.side,
     this.color,
     this.currentIndex,
     this.currentPage,
@@ -63,7 +62,6 @@ class _FlashCardViewState extends State<FlashCardView> {
               key: ValueKey<int>(side),
               padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 8),
               child: Container(
-//          width: 200,
                 child: Transform(
                   transform: Matrix4.identity()
                     ..setEntry(1, 2, 0)
@@ -120,7 +118,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                         PopupMenuItem(
                                           value: "add to playlist",
                                           child: GestureDetector(
-                                            onTap: () async{
+                                            onTap: () async {
                                               Navigator.pop(context, "add to playlist");
                                               await _showbottomsheet(context);
                                             },
@@ -264,9 +262,8 @@ class _FlashCardViewState extends State<FlashCardView> {
     // TODO: load data of playlist names in the playListNames list
     // I think we will require the playlist id's along with the playlist names
     // NOTE: Load the data for playlist here only
-    int i;
+    int i = 0;
     String k;
-    i = 0;
     return playListNames.map<Widget>((String playlistID){
       i++;
       k = '$i';

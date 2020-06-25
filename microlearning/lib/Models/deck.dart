@@ -34,27 +34,10 @@ Future<void> deleteDeck(String deckID) async{
   String uid = prefs.get("uid");
   DocumentReference deckDocument =  Firestore.instance.collection("deck").document(deckID);
 
-//  List<String> flashcardList;
-
   dynamic deckData = await deckDocument.get();
 
   print(deckData.documentID);
 
-//  deckDocument.get().then((documentSnapshot) async {
-//    print("deleting flashcards");
-//
-//    if(documentSnapshot.exists){
-//      List<String> flashcards = await documentSnapshot.data["flashcardList"];
-//      flashcards.forEach((flashcardID) async {
-//        await deleteFlashcard(flashcardID);
-//      });
-//    }
-//
-//    else {
-//      print("erororororor");
-//    }
-//
-//  });
   await deckDocument.delete();
 
   await Firestore.instance.collection("user_data").document(uid).updateData({
