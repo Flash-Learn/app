@@ -35,7 +35,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
       // if the image is not null then take it to the cropping window
       final cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
-        compressQuality: 100,
+        compressQuality: 50,
         // aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
         // maxWidth: (MediaQuery.of(context).size.width * 0.8).toInt(),
       );

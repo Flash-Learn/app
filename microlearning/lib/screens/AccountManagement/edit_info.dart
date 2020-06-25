@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Utilities/functions/Infos.dart';
+import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/services/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -154,12 +155,13 @@ class _EditInfoState extends State<EditInfo> {
                       ),
                       onPressed: () async{
                         if(_formKey.currentState.validate()) {
-                          updateInfo(context, {
+                          updateInfo({
                             '_uid': _uid,
                             '_name': _name,
                             '_gender': _gender,
                             '_grade': _grade,
                           });
+                          Navigator.pop(context);
                         }
                       },
                     ),

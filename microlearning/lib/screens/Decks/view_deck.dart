@@ -151,11 +151,12 @@ class _ViewDeckState extends State<ViewDeck> {
                 icon: Icon(Icons.arrow_back),
                 color: MyColorScheme.accent(),
                 onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
+                  widget.editAccess ? Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                         builder: (context) => MyDecks(),
                       ),
-                      (Route<dynamic> route) => false);
+                      (Route<dynamic> route) => false)
+                                    : Navigator.of(context).pop();
                 },
               ),
               actions: <Widget>[
@@ -233,7 +234,6 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     // TODO: implement initState
     // TODO: implement initState
     super.initState();
-    print("init");
     _pageCtrl.addListener(() {
       setState(() {
         currentPage = _pageCtrl.page;
