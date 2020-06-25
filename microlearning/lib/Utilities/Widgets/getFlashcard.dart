@@ -26,7 +26,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
   int fieldCount = 0;
   int nextIndex = 0;
   final _picker = ImagePicker();
-  //List<List<TextEditingController>> controllers = [<TextEditingController>[]];
 
   getImage(ImageSource source, BuildContext context, int index) async{
     final image = await _picker.getImage(source: source, maxHeight: 250, maxWidth: 250);
@@ -55,15 +54,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     int i;
     String k;
     // fill in keys if the list is not long enough (in case one key is added)
-    // if (controllers.length < fieldCount) {
-    //   for (i = controllers.length; i < fieldCount; i++) {
-    //     controllers.add([TextEditingController(), TextEditingController()]);
-    //     // print(controllers.length);
-    //     controllers[i][0].text = flashCardData[i][0];
-    //     if(flashCardData[i][1] is String)
-    //       controllers[i][1].text = flashCardData[i][1];
-    //   }
-    // }
     i = 0;
     return flashCardData.map<Widget>(
       (dynamic data) {
@@ -111,16 +101,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                     color: Colors.white, fontSize: 20),
                                 decoration: InputDecoration(
                                   counterText: '',
-                                  // suffix: IconButton(
-                                  //   icon: Icon(Icons.delete_outline),
-                                  //   onPressed: (){
-                                  //     setState(() {
-                                  //       flashCardData.removeAt(controllers.indexOf(controller));
-                                  //       controllers.remove(controller);
-                                  //       fieldCount--;
-                                  //     });
-                                  //   },
-                                  // ),
                                   hintText: 'Term',
                                   hintStyle: (TextStyle(color: Colors.grey)),
                                   border: InputBorder.none,
@@ -140,22 +120,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                 indent: 20,
                               ),
                             ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.end,
-                            //   children: <Widget>[
-                            //     Text('---------------------------------'),
-                            //     IconButton(
-                            //       icon: Icon(Icons.delete_outline),
-                            //       onPressed: (){
-                            //         setState(() {
-                            //           flashCardData.removeAt(controllers.indexOf(controller));
-                            //           controllers.remove(controller);
-                            //           fieldCount--;
-                            //         });
-                            //       },
-                            //     ),
-                            //   ],
-                            // ),
                             if(data[2] == 'false')...[
                             TextFormField(
                               maxLines: null,
@@ -261,7 +225,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     return AbsorbPointer(
       absorbing: _disableTouch,
       child: Column(
-//      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -273,11 +236,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-//                  Icon(
-//                    Icons.add,
-//                    size: 40,
-//                    color: Colors.black,
-//                  ),
                   Text(
                     "Add text card",
                     style: TextStyle(
@@ -302,11 +260,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-//                  Icon(
-//                    Icons.add,
-//                    size: 40,
-//                    color: Colors.black,
-//                  ),
                   Text(
                     "Add photo card",
                     style: TextStyle(
@@ -355,10 +308,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
         newIndex -= 1;
       }
       final dynamic item = flashCardData.removeAt(oldIndex);
-      // final List<TextEditingController> control =
-      //     controllers.removeAt(oldIndex);
-      //final String flashkey = deck.flashCardList.removeAt(oldIndex);
-      // controllers.insert(newIndex, control);
       flashCardData.insert(newIndex, item);
     });
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/Utilities/Widgets/inputTextDecorations.dart';
 import 'package:microlearning/services/username_signIn.dart';
 import 'package:microlearning/screens/authentication/redirect.dart';
 import 'package:microlearning/screens/authentication/login.dart';
@@ -53,21 +54,7 @@ class _RegisterUserState extends State<RegisterUser> {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          fillColor: Colors.white,
-                          filled: true,
-                          contentPadding: EdgeInsets.all(20.0),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2.0),
-                          ),
-                        ),
+                        decoration: inputTextDecorations('Email'),
                         validator: (val) {
                           return val.isEmpty ? 'Enter an Email' : null;
                         },
@@ -82,21 +69,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       ),
                       TextFormField(
                         obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          fillColor: Colors.white,
-                          filled: true,
-                          contentPadding: EdgeInsets.all(20.0),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2.0),
-                          ),
-                        ),
+                        decoration: inputTextDecorations('Password'),
                         validator: (val) {
                           return val.length < 6
                               ? 'Length of password should be atleast 6 characters'
@@ -162,54 +135,6 @@ class _RegisterUserState extends State<RegisterUser> {
                         height: 20,
                       ),
 
-                      // Row(
-                      //   children: <Widget>[
-                      //     Expanded(
-                      //       child: GestureDetector(
-                      //         onTap: () async {
-                      //           // Register With Google Code
-                      //         },
-                      //         child: Container(
-                      //           padding: EdgeInsets.only(right: 5),
-                      //           height: 60,
-                      //           child: Material(
-                      //             borderRadius: BorderRadius.circular(5),
-                      //             color: Colors.black,
-                      //             child: Center(
-                      //               child: Image(
-                      //                 image:
-                      //                     AssetImage("assets/google_logo.png"),
-                      //                 height: 35.0,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     Expanded(
-                      //       child: GestureDetector(
-                      //         onTap: () async {
-                      //           // Register With Facebook Code
-                      //         },
-                      //         child: Container(
-                      //           padding: EdgeInsets.only(left: 5),
-                      //           height: 60,
-                      //           child: Material(
-                      //             borderRadius: BorderRadius.circular(5),
-                      //             color: Colors.black,
-                      //             child: Center(
-                      //               child: Image(
-                      //                 image: AssetImage(
-                      //                     "assets/facebook_logo_white.png"),
-                      //                 height: 35.0,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       Material(
                         color: Colors.black,
                         child: InkWell(
@@ -235,24 +160,6 @@ class _RegisterUserState extends State<RegisterUser> {
                         ),
                       ),
 
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: <Widget>[
-                      //     Text(
-                      //       'New User ?'
-                      //     ),
-                      //     SizedBox(width: 5,),
-                      //     InkWell(
-                      //   onTap: (){
-                      //     return Navigator.of(context).pushReplacement(
-                      //     MaterialPageRoute(builder: (context) {
-                      //   return RegisterUser();
-                      // }));
-                      //   },
-                      //       child: Text('Register'),
-                      //     )
-                      //   ],
-                      // ),
                     ],
                   ),
                 ),
@@ -264,60 +171,3 @@ class _RegisterUserState extends State<RegisterUser> {
     );
   }
 }
-
-// googleRegisterinButton(BuildContext context) {
-//   return OutlineButton(
-//     splashColor: Colors.grey,
-//     onPressed: () async {
-//       String test = await signInWithGoogle(context);
-//       if (test == null) {
-//         Navigator.of(context).pushReplacement(
-//           MaterialPageRoute(
-//             builder: (context) {
-//               return RegisterUser();
-//             },
-//           ),
-//         );
-//       } else {
-//         Navigator.of(context).pushReplacement(
-//           MaterialPageRoute(
-//             builder: (context) {
-//               return GetUserInfo();
-//             },
-//           ),
-//         );
-//       }
-//       // signInWithGoogle().whenComplete(() {
-//       //   Navigator.of(context).pushReplacement(
-//       //     MaterialPageRoute(
-//       //       builder: (context) {
-//       //         return MyDecks();
-//       //       },
-//       //     ),
-//       //   );
-//       // });
-//     },
-//     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-//     borderSide: BorderSide(color: Colors.grey),
-//     child: Padding(
-//       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         mainAxisSize: MainAxisSize.min,
-//         children: <Widget>[
-//           Image(
-//             image: AssetImage("assets/google_logo.png"),
-//             height: 35.0,
-//           ),
-//           Padding(
-//             padding: EdgeInsets.only(left: 10),
-//             child: Text(
-//               'Register With Google',
-//               style: TextStyle(fontSize: 18, color: Colors.grey),
-//             ),
-//           )
-//         ],
-//       ),
-//     ),
-//   );
-// }

@@ -10,7 +10,6 @@ class StandardInputField extends StatelessWidget
   Widget build(BuildContext context)
   {
     return TextField(
-      // onChanged: this.onChanged,
       decoration: InputDecoration(
         labelText: this.labelText,
         labelStyle: TextStyle(color: Colors.grey),
