@@ -249,7 +249,7 @@ class _MyDecksState extends State<MyDecks> {
                                           setState(() {
                                             _disableTouch= true;
                                           });
-                                          await deleteDeck(userDeckIDs[index]);
+                                          createAlertDialog(ctxt, userDeckIDs[index]);
                                           setState(() {
                                             _disableTouch=false;
                                           });
@@ -295,13 +295,12 @@ class _MyDecksState extends State<MyDecks> {
                                         PopupMenuItem(
                                           value: "delete button",
                                           child: GestureDetector(
-
                                             onTap: () async{
                                               Navigator.pop(context, "delete button");
                                               setState(() {
                                                 _disableTouch= true;
                                               });
-                                              await deleteDeck(userDeckIDs[index]);
+                                              createAlertDialog(ctxt, userDeckIDs[index]);
                                               setState(() {
                                                 _disableTouch=false;
                                               });
@@ -316,7 +315,7 @@ class _MyDecksState extends State<MyDecks> {
 
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(0,20,10,0),
-                                    child: Icon(Icons.more_horiz, color: Colors.white,),
+                                    child: Icon(Icons.more_horiz, color: MyColorScheme.accent(),),
                                   ),
                                 )
                               ],
@@ -332,5 +331,47 @@ class _MyDecksState extends State<MyDecks> {
         ),
       ),
     );
+  }
+  createAlertDialog(BuildContext ctxt, String deckid){
+    return showDialog(context: ctxt, builder: (ctxt){
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius:
+            BorderRadius.circular(20.0)),
+        child: Container(
+          height: MediaQuery.of(ctxt).size.height * 0.2,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text('Do you want to delete the deck?',),
+              SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: (){
+                      Navigator.pop(ctxt);
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Delete', style: TextStyle(color: Colors.red),),
+                    onPressed: () async{
+                      await deleteDeck(deckid);
+                      setState((){
+                        _disableTouch=false;
+                      });
+                      Navigator.pop(ctxt);
+                    },
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+    });
   }
 }
