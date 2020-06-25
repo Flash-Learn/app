@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Models/searchService.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -41,8 +42,7 @@ class _SearchState extends State<Search> {
           });
         }
       });
-    } 
-    else {
+    } else {
       tempSearchStore = [];
       queryResultSet.forEach((element) {
         if (element['deckNameLowerCase'].startsWith(lowercasedValue)) {
@@ -66,13 +66,22 @@ class _SearchState extends State<Search> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: MyColorScheme.uno(),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: MyColorScheme.accent(),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         centerTitle: true,
-        title: Text('Search'),
+        title: Text('Search',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: MyColorScheme.cinco())),
         actions: <Widget>[
           Switch(
-              activeColor: Colors.white,
-              inactiveTrackColor: Colors.white30,
+              activeColor: MyColorScheme.accent(),
+              inactiveTrackColor: MyColorScheme.accentLight(),
               value: isSwitched,
               onChanged: (value) {
                 setState(() {
@@ -101,10 +110,12 @@ class _SearchState extends State<Search> {
                 contentPadding: EdgeInsets.only(left: 25),
                 hintText: "Search",
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                  borderSide:
+                      BorderSide(color: MyColorScheme.accent(), width: 1.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 2.0),
+                  borderSide: BorderSide(
+                      color: MyColorScheme.accentLight(), width: 2.0),
                 ),
               ),
             ),
@@ -151,13 +162,13 @@ Widget buildResultCard(context, data) {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.black)),
+            border: Border.all(color: MyColorScheme.accent())),
         child: Center(
           child: Text(
             data['deckName'],
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.black,
+              color: MyColorScheme.accent(),
               fontSize: 20,
             ),
           ),

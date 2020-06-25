@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class EditFlashCard extends StatefulWidget {
   final Deck deck;
@@ -40,8 +41,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
   ];
   int _index = 0;
 
-  bool _disableTouch =
-      false;
+  bool _disableTouch = false;
 
   spotlight(Key key) {
     Rect target = Spotlight.getRectFromKey(key);
@@ -161,7 +161,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
           backgroundColor: Colors.white,
           floatingActionButton: FloatingActionButton.extended(
             key: _keySave,
-            backgroundColor: Colors.black,
+            backgroundColor: MyColorScheme.accent(),
             icon: _disableTouch ? null : Icon(Icons.check),
             label: _disableTouch
                 ? Loading(size: 20)
@@ -184,13 +184,24 @@ class _EditFlashCardState extends State<EditFlashCard> {
                     ),
                   ),
                   (Route<dynamic> route) => false);
-
             },
           ),
           appBar: AppBar(
-            backgroundColor: Colors.black,
-            title: Text('Edit Deck'),
+            elevation: 2,
+            backgroundColor: MyColorScheme.uno(),
+            title: Text(
+              'Edit Deck',
+              style: TextStyle(
+                  color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+            ),
             centerTitle: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: MyColorScheme.accent(),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
           body: SingleChildScrollView(
             child: Column(

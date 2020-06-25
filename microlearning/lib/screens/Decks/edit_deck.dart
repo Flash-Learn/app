@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/Widgets/getListTags.dart';
-import 'package:microlearning/Utilities/Widgets/inputTextDecorations.dart';
+import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
@@ -132,7 +132,10 @@ class _EditDecksState extends State<EditDecks> {
             key: _keyEditFlash,
             onPressed: () async {
               setState(() {
-                _disableTouch = true;
+                if (deck.deckName != "") {
+                  print(deck.deckName);
+                  _disableTouch = true;
+                }
               });
               await Firestore.instance
                   .collection('decks')
@@ -176,7 +179,13 @@ class _EditDecksState extends State<EditDecks> {
                       }));
                     },
                   )
-                : null,
+                : IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    color: MyColorScheme.accent(),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
             backgroundColor: MyColorScheme.uno(),
             title: Text(
               'Edit Deck',
