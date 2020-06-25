@@ -27,7 +27,8 @@ void saveDeck(context, Deck deck) async{
     });
     final flashRef = await flashcardsReference.add({
       'term': tempCard["term"],
-      'definition': tempCard["definition"]
+      'definition': tempCard["definition"],
+      'isimage': tempCard["isimage"],
     });
     print(flashRef.documentID);
     toSave.flashCardList.add(flashRef.documentID);
