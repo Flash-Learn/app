@@ -3,7 +3,7 @@ import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/services/username_signIn.dart';
 import 'package:microlearning/screens/authentication/redirect.dart';
 import 'package:microlearning/screens/authentication/login.dart';
-
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class RegisterUser extends StatefulWidget {
   @override
@@ -17,6 +17,12 @@ class _RegisterUserState extends State<RegisterUser> {
   String email = '';
   String password = '';
   String error = '';
+  bool passwordVisible;
+
+  @override
+  void initState() {
+    passwordVisible = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +74,24 @@ class _RegisterUserState extends State<RegisterUser> {
                         height: 20,
                       ),
                       TextFormField(
-                        obscureText: true,
-                        decoration: inputTextDecorations('Password'),
+                        obscureText: passwordVisible,
+                        decoration: inputTextDecorations('Password').copyWith(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: MyColorScheme.cinco(),
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
+                          ),
+                        ),
                         validator: (val) {
                           return val.length < 6
                               ? 'Length of password should be atleast 6 characters'
@@ -81,13 +103,34 @@ class _RegisterUserState extends State<RegisterUser> {
                           });
                         },
                       ),
-
-                      SizedBox(
-                        height: 10,
-                      ),
                       Text(
                         error,
                         style: TextStyle(color: Colors.red, fontSize: 14.0),
+                      ),
+                      TextFormField(
+                        obscureText: passwordVisible,
+                        decoration: inputTextDecorations('Re-Enter Password').copyWith(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: MyColorScheme.cinco(),
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
+                          ),
+                        ),
+                        validator: (val) {
+                          if (val != password)  
+                              return 'Passwords do not match';
+                          return null;
+                        },
                       ),
                       SizedBox(
                         height: 20,

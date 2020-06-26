@@ -244,6 +244,7 @@ class _EditDecksState extends State<EditDecks> {
                       Icon(
                         Icons.bookmark,
                         color: MyColorScheme.accent(),
+                        size: 35,
                       ),
                       SizedBox(
                         width: 4,
@@ -251,7 +252,7 @@ class _EditDecksState extends State<EditDecks> {
                       Text(
                         'Tags :',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
+                            fontWeight: FontWeight.bold, fontSize: 20),
                         textAlign: TextAlign.left,
                         key: _keyTags,
                       ),
@@ -260,6 +261,7 @@ class _EditDecksState extends State<EditDecks> {
                   SizedBox(
                     height: 10,
                   ),
+                  // Text("Check2"),
                   ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: 300,
@@ -268,9 +270,11 @@ class _EditDecksState extends State<EditDecks> {
                       child: ListofTags(deck: deck),
                     ),
                   ),
+                  // Text("Check 1"),
                   SizedBox(
                     height: 20,
                   ),
+                  // Text("Check"),
                 ],
               ),
             ),
