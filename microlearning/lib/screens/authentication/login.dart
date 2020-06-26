@@ -20,6 +20,13 @@ class _LoginUserState extends State<LoginUser> {
   String email = '';
   String password = '';
   String error = '';
+  bool passwordVisible;
+
+  @override
+  void initState() {
+    passwordVisible = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,8 +77,24 @@ class _LoginUserState extends State<LoginUser> {
                         height: 20,
                       ),
                       TextFormField(
-                        obscureText: true,
-                        decoration: inputTextDecorations('Password'),
+                        obscureText: passwordVisible,
+                        decoration: inputTextDecorations('Password').copyWith(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: MyColorScheme.cinco(),
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
+                          ),
+                        ),
                         validator: (val) {
                           return val.length < 6
                               ? 'Length of password should be atleast 6 characters'
@@ -83,7 +106,6 @@ class _LoginUserState extends State<LoginUser> {
                           });
                         },
                       ),
-
                       Container(
                           alignment: Alignment(1, 0),
                           padding: EdgeInsets.only(top: 15, left: 20),
@@ -96,7 +118,6 @@ class _LoginUserState extends State<LoginUser> {
                               }));
                             },
                           )),
-
                       SizedBox(
                         height: 10,
                       ),
@@ -151,11 +172,9 @@ class _LoginUserState extends State<LoginUser> {
                           ),
                         ),
                       ),
-
                       SizedBox(
                         height: 20,
                       ),
-
                       Row(
                         children: <Widget>[
                           Expanded(
@@ -216,7 +235,6 @@ class _LoginUserState extends State<LoginUser> {
                       SizedBox(
                         height: 20,
                       ),
-
                       Material(
                         color: Colors.black,
                         child: InkWell(
