@@ -35,8 +35,10 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
       // if the image is not null then take it to the cropping window
       final cropped = await ImageCropper.cropImage(
         sourcePath: image.path,
-        compressQuality: 50,
+        // compressQuality: 50,
         // aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        maxHeight: 500,
+        maxWidth: 500,
         // maxWidth: (MediaQuery.of(context).size.width * 0.8).toInt(),
       );
       if (cropped != null) {
@@ -198,8 +200,9 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                         ),
                                       );
                                     },
-                                    height: 250,
-                                    width: 250,
+                                    // height: 250,
+                                    height: MediaQuery.of(context).size.width * 0.5,
+                                    width: MediaQuery.of(context).size.width * 0.5,
                                     fit: BoxFit.cover,
                                   ),
                                 ),

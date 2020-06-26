@@ -354,7 +354,7 @@ class _MyDecksState extends State<MyDecks> {
             BorderRadius.circular(20.0)),
         child: Container(
           height: MediaQuery.of(ctxt).size.height * 0.2,
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
