@@ -34,7 +34,7 @@ class _ListofTagsState extends State<ListofTags> {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
           child: Stack(
-            children:<Widget>[
+            children: <Widget>[
               TextField(
                 maxLength: 20,
                 controller: controller,
@@ -49,7 +49,8 @@ class _ListofTagsState extends State<ListofTags> {
                   hintText: "Deck Tag",
                   fillColor: Colors.white,
                   filled: true,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 3, vertical: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 3, vertical: 12),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black, width: 1.0),
                   ),
@@ -58,7 +59,7 @@ class _ListofTagsState extends State<ListofTags> {
                   ),
                 ),
               ),
-            Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   IconButton(
@@ -66,9 +67,10 @@ class _ListofTagsState extends State<ListofTags> {
                     onPressed: () {
                       setState(() {
                         fieldCount--; // decrementing the controller number
-                        controllers.remove(controller); // removing the controller
-                        deck.tagsList.remove(
-                            controller.text); // removing the tag from the taglist
+                        controllers
+                            .remove(controller); // removing the controller
+                        deck.tagsList.remove(controller
+                            .text); // removing the tag from the taglist
                       });
                     },
                     color: Colors.black,
@@ -90,7 +92,8 @@ class _ListofTagsState extends State<ListofTags> {
     // append an 'add player' button to the end of the list
     children.add(
       Container(
-        margin: EdgeInsets.symmetric(vertical:0, horizontal: MediaQuery.of(context).size.width * 0.3),
+        margin: EdgeInsets.symmetric(
+            vertical: 0, horizontal: MediaQuery.of(context).size.width * 0.3),
         child: Material(
           borderRadius: BorderRadius.circular(5),
           color: MyColorScheme.accent(),
@@ -105,7 +108,7 @@ class _ListofTagsState extends State<ListofTags> {
             child: Container(
               height: 40,
               child: Material(
-                  borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(5),
                 color: Colors.transparent,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -114,9 +117,11 @@ class _ListofTagsState extends State<ListofTags> {
                       Icons.add,
                       color: MyColorScheme.uno(),
                     ),
+                    SizedBox(width: 5),
                     Text(
                       'Add Tag',
-                      style: TextStyle(color: MyColorScheme.uno()),
+                      style: TextStyle(
+                          color: MyColorScheme.uno(), letterSpacing: 2),
                     )
                   ],
                 ),
