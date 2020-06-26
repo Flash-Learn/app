@@ -337,7 +337,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
           ),
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: 500,
+              maxHeight: MediaQuery.of(context).size.height *0.7,
             ),
             child: Scrollbar(
               child: ReorderableListView(

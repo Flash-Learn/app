@@ -52,22 +52,24 @@ class _EditDecksState extends State<EditDecks> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              text[_index],
-              style: ThemeData.light()
-                  .textTheme
-                  .caption
-                  .copyWith(color: Colors.white, fontSize: 35),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 20,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  text[_index],
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.clip,
+                  maxLines: 2,
+                ),
+              ],
             ),
             SizedBox(
               height: 20,
             ),
             Material(
-              borderRadius: BorderRadius.circular(5),
+              color: MyColorScheme.accent(),
+              borderRadius: BorderRadius.circular(10),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: InkWell(
@@ -79,11 +81,11 @@ class _EditDecksState extends State<EditDecks> {
                   },
                   child: Text(
                     'SKIP demo!',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: MyColorScheme.uno()),
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );
@@ -108,7 +110,7 @@ class _EditDecksState extends State<EditDecks> {
     super.initState();
     if (isdemo == true) {
       print('haha');
-      Future.delayed(Duration(seconds: 2)).then((value) {
+      Future.delayed(Duration(seconds: 1)).then((value) {
         spotlight(_keyDeckName);
       });
     }
