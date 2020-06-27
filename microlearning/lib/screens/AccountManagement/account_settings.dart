@@ -32,6 +32,14 @@ class _AccountSettingsState extends State<AccountSettings> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            CircleAvatar(
+              backgroundImage: AssetImage('assets/userprofile.png'),
+              radius: 40,
+              backgroundColor: Colors.white,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: MediaQuery.of(context).size.width * 0.2),
               child: Material(
