@@ -7,11 +7,5 @@ Deck getDeckFromID(String deckID){
     isPublic: true,
   );
 
-  // all this is temporary
-  deck.addFlashcardByID("sdfasdf");
-  deck.addFlashcardByID("flash card 2");
-  deck.addFlashcardByID("fasf");
-  deck.addFlashcardByID("fasf safa asd f");
-
   return deck;
 }
