@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:microlearning/classes/username_signin.dart';
+import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
+import 'package:microlearning/services/username_signIn.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -38,21 +39,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            labelStyle: TextStyle(color: Colors.grey),
-                            fillColor: Colors.white,
-                            filled: true,
-                            contentPadding: EdgeInsets.all(20.0),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 2.0),
-                            ),
-                          ),
+                          decoration: inputTextDecorations('Email'),
                           validator: (val) {
                             return val.isEmpty ? 'Enter an Email' : null;
                           },

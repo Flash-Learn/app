@@ -2,9 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:microlearning/screens/authentication/get_user_info.dart';
+import 'package:microlearning/screens/authentication/init_info.dart';
 import 'package:microlearning/screens/authentication/register.dart';
-import 'package:microlearning/screens/mydecks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EmailVerification extends StatefulWidget {
@@ -30,9 +29,6 @@ class _EmailVerificationState extends State<EmailVerification> {
         timer = Timer.periodic(Duration(seconds: 5), (timer) async {
             await FirebaseAuth.instance.currentUser()..reload();
             var user = await FirebaseAuth.instance.currentUser();
-            // setState(() {
-            //   email = user.email;
-            // });
             if (user.isEmailVerified) {  
               isUserEmailVerified = user.isEmailVerified;
               SharedPreferences prefs = await SharedPreferences.getInstance(); 
@@ -81,7 +77,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                               child: InkWell(
                                 splashColor: Colors.grey,
                   onTap: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {return RegisterUser();}));;
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {return RegisterUser();}));
                   },
                   child: Container(
                     height: 40,

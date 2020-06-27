@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:microlearning/classes/userclass.dart';
+import 'package:microlearning/Models/user.dart';
 
 class UserNameSignIn {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -11,7 +11,6 @@ class UserNameSignIn {
   // auth change user stream
   Stream<User> get user {
     return _auth.onAuthStateChanged
-      //.map((FirebaseUser user) => _userFromFirebaseUser(user));
       .map(_userFromFirebaseUser);
   }
 

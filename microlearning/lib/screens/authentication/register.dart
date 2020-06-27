@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:microlearning/classes/google_signin.dart';
-import 'package:microlearning/classes/username_signin.dart';
-import 'package:microlearning/screens/authentication/get_user_info.dart';
-import 'package:microlearning/screens/authentication/loadingscreen.dart';
+import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
+import 'package:microlearning/services/username_signIn.dart';
+import 'package:microlearning/screens/authentication/redirect.dart';
 import 'package:microlearning/screens/authentication/login.dart';
-import 'package:microlearning/screens/mydecks.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class RegisterUser extends StatefulWidget {
   @override
@@ -19,6 +17,12 @@ class _RegisterUserState extends State<RegisterUser> {
   String email = '';
   String password = '';
   String error = '';
+  bool passwordVisible;
+
+  @override
+  void initState() {
+    passwordVisible = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,21 +60,7 @@ class _RegisterUserState extends State<RegisterUser> {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          fillColor: Colors.white,
-                          filled: true,
-                          contentPadding: EdgeInsets.all(20.0),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2.0),
-                          ),
-                        ),
+                        decoration: inputTextDecorations('Email'),
                         validator: (val) {
                           return val.isEmpty ? 'Enter an Email' : null;
                         },
@@ -84,20 +74,22 @@ class _RegisterUserState extends State<RegisterUser> {
                         height: 20,
                       ),
                       TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          fillColor: Colors.white,
-                          filled: true,
-                          contentPadding: EdgeInsets.all(20.0),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2.0),
+                        obscureText: passwordVisible,
+                        decoration: inputTextDecorations('Password').copyWith(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: MyColorScheme.cinco(),
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
                           ),
                         ),
                         validator: (val) {
@@ -111,13 +103,34 @@ class _RegisterUserState extends State<RegisterUser> {
                           });
                         },
                       ),
-
-                      SizedBox(
-                        height: 10,
-                      ),
                       Text(
                         error,
                         style: TextStyle(color: Colors.red, fontSize: 14.0),
+                      ),
+                      TextFormField(
+                        obscureText: passwordVisible,
+                        decoration: inputTextDecorations('Re-Enter Password').copyWith(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: MyColorScheme.cinco(),
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
+                          ),
+                        ),
+                        validator: (val) {
+                          if (val != password)  
+                              return 'Passwords do not match';
+                          return null;
+                        },
                       ),
                       SizedBox(
                         height: 20,
@@ -165,54 +178,6 @@ class _RegisterUserState extends State<RegisterUser> {
                         height: 20,
                       ),
 
-                      // Row(
-                      //   children: <Widget>[
-                      //     Expanded(
-                      //       child: GestureDetector(
-                      //         onTap: () async {
-                      //           // Register With Google Code
-                      //         },
-                      //         child: Container(
-                      //           padding: EdgeInsets.only(right: 5),
-                      //           height: 60,
-                      //           child: Material(
-                      //             borderRadius: BorderRadius.circular(5),
-                      //             color: Colors.black,
-                      //             child: Center(
-                      //               child: Image(
-                      //                 image:
-                      //                     AssetImage("assets/google_logo.png"),
-                      //                 height: 35.0,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     Expanded(
-                      //       child: GestureDetector(
-                      //         onTap: () async {
-                      //           // Register With Facebook Code
-                      //         },
-                      //         child: Container(
-                      //           padding: EdgeInsets.only(left: 5),
-                      //           height: 60,
-                      //           child: Material(
-                      //             borderRadius: BorderRadius.circular(5),
-                      //             color: Colors.black,
-                      //             child: Center(
-                      //               child: Image(
-                      //                 image: AssetImage(
-                      //                     "assets/facebook_logo_white.png"),
-                      //                 height: 35.0,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       Material(
                         color: Colors.black,
                         child: InkWell(
@@ -238,24 +203,6 @@ class _RegisterUserState extends State<RegisterUser> {
                         ),
                       ),
 
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: <Widget>[
-                      //     Text(
-                      //       'New User ?'
-                      //     ),
-                      //     SizedBox(width: 5,),
-                      //     InkWell(
-                      //   onTap: (){
-                      //     return Navigator.of(context).pushReplacement(
-                      //     MaterialPageRoute(builder: (context) {
-                      //   return RegisterUser();
-                      // }));
-                      //   },
-                      //       child: Text('Register'),
-                      //     )
-                      //   ],
-                      // ),
                     ],
                   ),
                 ),
@@ -267,60 +214,3 @@ class _RegisterUserState extends State<RegisterUser> {
     );
   }
 }
-
-// googleRegisterinButton(BuildContext context) {
-//   return OutlineButton(
-//     splashColor: Colors.grey,
-//     onPressed: () async {
-//       String test = await signInWithGoogle(context);
-//       if (test == null) {
-//         Navigator.of(context).pushReplacement(
-//           MaterialPageRoute(
-//             builder: (context) {
-//               return RegisterUser();
-//             },
-//           ),
-//         );
-//       } else {
-//         Navigator.of(context).pushReplacement(
-//           MaterialPageRoute(
-//             builder: (context) {
-//               return GetUserInfo();
-//             },
-//           ),
-//         );
-//       }
-//       // signInWithGoogle().whenComplete(() {
-//       //   Navigator.of(context).pushReplacement(
-//       //     MaterialPageRoute(
-//       //       builder: (context) {
-//       //         return MyDecks();
-//       //       },
-//       //     ),
-//       //   );
-//       // });
-//     },
-//     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-//     borderSide: BorderSide(color: Colors.grey),
-//     child: Padding(
-//       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         mainAxisSize: MainAxisSize.min,
-//         children: <Widget>[
-//           Image(
-//             image: AssetImage("assets/google_logo.png"),
-//             height: 35.0,
-//           ),
-//           Padding(
-//             padding: EdgeInsets.only(left: 10),
-//             child: Text(
-//               'Register With Google',
-//               style: TextStyle(fontSize: 18, color: Colors.grey),
-//             ),
-//           )
-//         ],
-//       ),
-//     ),
-//   );
-// }

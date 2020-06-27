@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:microlearning/classes/deck.dart';
+import 'package:microlearning/Models/deck.dart';
 
 Future<void> updateFlashcardList(Deck deck, List<List<String>> flashCardData) async {
+
+  // NOTE: flashCardData is 1 indexed and flashCardList is 0 indexed.
+
   int initialLength = deck.flashCardList.length, newLength = flashCardData.length-1;
 
   print("$initialLength $newLength");
@@ -16,6 +18,7 @@ Future<void> updateFlashcardList(Deck deck, List<List<String>> flashCardData) as
       flashcardReference.document(deck.flashCardList[i]).updateData({
         'term': flashCardData[j][0],
         'definition': flashCardData[j][1],
+        'isimage': flashCardData[j][2],
       });
     }
 
@@ -24,6 +27,7 @@ Future<void> updateFlashcardList(Deck deck, List<List<String>> flashCardData) as
       dynamic flashRef = await flashcardReference.add({
         'term': flashCardData[j][0],
         'definition': flashCardData[j][1],
+        'isimage': flashCardData[j][2],
       });
 
       await deckReference.document(deck.deckID).updateData({
@@ -38,6 +42,7 @@ Future<void> updateFlashcardList(Deck deck, List<List<String>> flashCardData) as
       await flashcardReference.document(deck.flashCardList[i]).updateData({
         'term': flashCardData[j][0],
         'definition': flashCardData[j][1],
+        'isimage': flashCardData[j][2]
       });
     }
 

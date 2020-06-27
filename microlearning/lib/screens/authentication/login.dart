@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:microlearning/classes/google_signin.dart';
-import 'package:microlearning/classes/username_signin.dart';
-import 'package:microlearning/helperFunctions/database.dart';
-import 'package:microlearning/screens/authentication/get_user_info.dart';
+import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
+import 'package:microlearning/Utilities/functions/loginButtonPress.dart';
+import 'package:microlearning/services/username_signIn.dart';
 import 'package:microlearning/screens/authentication/register.dart';
-import 'package:microlearning/screens/authentication/resetpassword.dart';
-import 'package:microlearning/screens/mydecks.dart';
+import 'package:microlearning/screens/authentication/reset_password.dart';
+import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class LoginUser extends StatefulWidget {
   @override
@@ -20,10 +20,17 @@ class _LoginUserState extends State<LoginUser> {
   String email = '';
   String password = '';
   String error = '';
+  bool passwordVisible;
+
+  @override
+  void initState() {
+    passwordVisible = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyColorScheme.uno(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
         child: Center(
@@ -56,21 +63,7 @@ class _LoginUserState extends State<LoginUser> {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          fillColor: Colors.white,
-                          filled: true,
-                          contentPadding: EdgeInsets.all(20.0),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2.0),
-                          ),
-                        ),
+                        decoration: inputTextDecorations('Email'),
                         validator: (val) {
                           return val.isEmpty ? 'Enter an Email' : null;
                         },
@@ -84,20 +77,22 @@ class _LoginUserState extends State<LoginUser> {
                         height: 20,
                       ),
                       TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          fillColor: Colors.white,
-                          filled: true,
-                          contentPadding: EdgeInsets.all(20.0),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2.0),
+                        obscureText: passwordVisible,
+                        decoration: inputTextDecorations('Password').copyWith(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: MyColorScheme.cinco(),
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
                           ),
                         ),
                         validator: (val) {
@@ -111,7 +106,6 @@ class _LoginUserState extends State<LoginUser> {
                           });
                         },
                       ),
-
                       Container(
                           alignment: Alignment(1, 0),
                           padding: EdgeInsets.only(top: 15, left: 20),
@@ -124,7 +118,6 @@ class _LoginUserState extends State<LoginUser> {
                               }));
                             },
                           )),
-
                       SizedBox(
                         height: 10,
                       ),
@@ -179,11 +172,9 @@ class _LoginUserState extends State<LoginUser> {
                           ),
                         ),
                       ),
-
                       SizedBox(
                         height: 20,
                       ),
-
                       Row(
                         children: <Widget>[
                           Expanded(
@@ -196,49 +187,7 @@ class _LoginUserState extends State<LoginUser> {
                                 child: InkWell(
                                   splashColor: Colors.grey,
                                   onTap: () async {
-                                    String test =
-                                        await signInWithGoogle(context);
-                                    SharedPreferences prefs =
-                                        await SharedPreferences.getInstance();
-                                    String uid = prefs.getString('uid');
-                                    DataBaseServices here =
-                                        DataBaseServices(uid: uid);
-                                    List<String> defaults =
-                                        await here.getData();
-                                    if (here == null || defaults.length == 1) {
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return GetUserInfo();
-                                          },
-                                        ),
-                                      );
-                                    } else if (test == null) {
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return LoginUser();
-                                          },
-                                        ),
-                                      );
-                                    } else {
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return MyDecks();
-                                          },
-                                        ),
-                                      );
-                                    }
-                                    // signInWithGoogle().whenComplete(() {
-                                    //   Navigator.of(context).pushReplacement(
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) {
-                                    //         return MyDecks();
-                                    //       },
-                                    //     ),
-                                    //   );
-                                    // });
+                                    googleLoginButtonPress(context);
                                   },
                                   child: Material(
                                     borderRadius: BorderRadius.circular(5),
@@ -264,6 +213,7 @@ class _LoginUserState extends State<LoginUser> {
                                 color: Colors.black,
                                 child: InkWell(
                                   splashColor: Colors.grey,
+                                  //TODO: add facebook login
                                   onTap: () async {},
                                   child: Material(
                                     borderRadius: BorderRadius.circular(5),
@@ -285,7 +235,6 @@ class _LoginUserState extends State<LoginUser> {
                       SizedBox(
                         height: 20,
                       ),
-
                       Material(
                         color: Colors.black,
                         child: InkWell(
@@ -310,25 +259,6 @@ class _LoginUserState extends State<LoginUser> {
                           ),
                         ),
                       ),
-
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: <Widget>[
-                      //     Text(
-                      //       'New User ?'
-                      //     ),
-                      //     SizedBox(width: 5,),
-                      //     InkWell(
-                      //   onTap: (){
-                      //     return Navigator.of(context).pushReplacement(
-                      //     MaterialPageRoute(builder: (context) {
-                      //   return RegisterUser();
-                      // }));
-                      //   },
-                      //       child: Text('Register'),
-                      //     )
-                      //   ],
-                      // ),
                     ],
                   ),
                 ),
@@ -340,74 +270,3 @@ class _LoginUserState extends State<LoginUser> {
     );
   }
 }
-
-// The below function is not needed. The onPressed method is in the onTap method of the above Gesture Detector
-
-// googleRegisterinButton(BuildContext context) {
-//   return OutlineButton(
-//     splashColor: Colors.grey,
-//     onPressed: () async {
-//       String test = await signInWithGoogle(context);
-//       SharedPreferences prefs = await SharedPreferences.getInstance();
-//       String uid = prefs.getString('uid');
-//       DataBaseServices here = DataBaseServices(uid: uid);
-//       List<String> defaults = await here.getData();
-//       if (here == null || defaults.length == 1) {
-//         Navigator.of(context).pushReplacement(
-//           MaterialPageRoute(
-//             builder: (context) {
-//               return GetUserInfo();
-//             },
-//           ),
-//         );
-//       } else if (test == null) {
-//         Navigator.of(context).pushReplacement(
-//           MaterialPageRoute(
-//             builder: (context) {
-//               return LoginUser();
-//             },
-//           ),
-//         );
-//       } else {
-//         Navigator.of(context).pushReplacement(
-//           MaterialPageRoute(
-//             builder: (context) {
-//               return MyDecks();
-//             },
-//           ),
-//         );
-//       }
-//       // signInWithGoogle().whenComplete(() {
-//       //   Navigator.of(context).pushReplacement(
-//       //     MaterialPageRoute(
-//       //       builder: (context) {
-//       //         return MyDecks();
-//       //       },
-//       //     ),
-//       //   );
-//       // });
-//     },
-//     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-//     borderSide: BorderSide(color: Colors.grey),
-//     child: Padding(
-//       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         mainAxisSize: MainAxisSize.min,
-//         children: <Widget>[
-//           Image(
-//             image: AssetImage("assets/google_logo.png"),
-//             height: 35.0,
-//           ),
-//           Padding(
-//             padding: EdgeInsets.only(left: 10),
-//             child: Text(
-//               'Sign In with Google',
-//               style: TextStyle(fontSize: 18, color: Colors.grey),
-//             ),
-//           )
-//         ],
-//       ),
-//     ),
-//   );
-// }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:microlearning/helperFunctions/database.dart';
-import 'package:microlearning/screens/mydecks.dart';
+import 'package:microlearning/Utilities/functions/Infos.dart';
+import 'package:microlearning/services/database.dart';
+import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class GetUserInfo extends StatefulWidget {
   @override
@@ -72,8 +72,6 @@ class _GetUserInfoState extends State<GetUserInfo> {
                     ),
                   ),
 
-                  // SizedBox(width: 20,),
-                  
                   Expanded(
                     flex: 2,
                     child: Container(
@@ -110,9 +108,6 @@ class _GetUserInfoState extends State<GetUserInfo> {
                       ),
                     ),
                   ),
-
-                  // SizedBox(width: 20,),
-
                   Expanded(
                     flex: 2,
                     child: Container(
@@ -148,17 +143,11 @@ class _GetUserInfoState extends State<GetUserInfo> {
                 ),
                 onPressed: () async{
                   if(_formKey.currentState.validate()) {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    String user = prefs.getString('email');
-                    String uid = prefs.getString('uid');
-
-                    //TODO : UPLOAD ALL THIS DATA TO THE DATABASE
-                    
-                    DataBaseServices here = DataBaseServices(uid: uid);
-                    here.uploadData(_name, _grade, _gender);
-
-
-                    return Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return MyDecks();}));
+                    enterInfo(context, {
+                      '_name': _name,
+                      '_grade': _grade,
+                      '_gender': _gender,
+                    });
                   }
                 },
               ),

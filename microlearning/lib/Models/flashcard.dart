@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class FlashCard {
   String flashCardID;
   String term;
@@ -19,4 +21,8 @@ Future<FlashCard> getFlashCardByID(String flashCardID) async{
   FlashCard ret = FlashCard(term: "term", definition: "definition"); // change with actual database call and use await
 
   return ret;
+}
+
+Future<void> deleteFlashcard(String flashCardID) async{
+  await Firestore.instance.collection("deck").document(flashCardID).delete();
 }

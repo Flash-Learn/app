@@ -1,10 +1,6 @@
-import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:microlearning/classes/userclass.dart';
 
 class DataBaseServices {
-  
   final String uid;
   DataBaseServices({this.uid});
 
@@ -45,16 +41,23 @@ class DataBaseServices {
     });
   }
 
-  Future <List<String>> getData() async {
+  Future<List<String>> getData() async {
     QuerySnapshot qs;
-    try{qs = await db.where('uid', isEqualTo: uid).getDocuments();}catch(e){print(e);return null;}
+    try {
+      qs = await db.where('uid', isEqualTo: uid).getDocuments();
+    } catch (e) {
+      print(e);
+      return null;
+    }
     print(qs.toString());
-    if(qs.documents.length == 0){
+    if (qs.documents.length == 0) {
       return ['data not present'];
-    } else{
-    return [qs.documents[0].data['name'].toString(), qs.documents[0].data['grade'].toString(), qs.documents[0].data['gender'].toString()];
+    } else {
+      return [
+        qs.documents[0].data['name'].toString(),
+        qs.documents[0].data['grade'].toString(),
+        qs.documents[0].data['gender'].toString()
+      ];
     }
   }
-
-
 }

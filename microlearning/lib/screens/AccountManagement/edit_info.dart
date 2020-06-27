@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:microlearning/helperFunctions/database.dart';
+import 'package:microlearning/Utilities/functions/Infos.dart';
+import 'package:microlearning/screens/Decks/my_decks.dart';
+import 'package:microlearning/services/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:async/async.dart';
-
 
 class EditInfo extends StatefulWidget {
   @override
@@ -82,8 +82,6 @@ class _EditInfoState extends State<EditInfo> {
                             ),
                           ),
                         ),
-
-                        // SizedBox(width: 20,),
                         
                         Expanded(
                           flex: 2,
@@ -122,8 +120,6 @@ class _EditInfoState extends State<EditInfo> {
                           ),
                         ),
 
-                        // SizedBox(width: 20,),
-
                         Expanded(
                           flex: 2,
                           child: Container(
@@ -159,8 +155,12 @@ class _EditInfoState extends State<EditInfo> {
                       ),
                       onPressed: () async{
                         if(_formKey.currentState.validate()) {
-                          DataBaseServices here = DataBaseServices(uid: _uid);
-                          await here.updateData(_name, _grade, _gender);
+                          updateInfo({
+                            '_uid': _uid,
+                            '_name': _name,
+                            '_gender': _gender,
+                            '_grade': _grade,
+                          });
                           Navigator.pop(context);
                         }
                       },
@@ -185,7 +185,7 @@ class _EditInfoState extends State<EditInfo> {
       },
     );
   }
-  _getdatafromdatabase() async{
+  Future<String> _getdatafromdatabase() async{
     if(bool1 == false){
       bool1 = true;
       SharedPreferences prefs = await SharedPreferences.getInstance();
