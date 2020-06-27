@@ -36,7 +36,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
   bool _enabled = false;
   Widget _description;
   List<String> text = [
-    'Make changes to you flash card here',
+    'Make changes to you \n flash card here',
     'Click here to save your deck'
   ];
   int _index = 0;
@@ -57,24 +57,26 @@ class _EditFlashCardState extends State<EditFlashCard> {
         backgroundColor: Colors.transparent,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Text(
-              text[_index],
-              style: ThemeData.light()
-                  .textTheme
-                  .caption
-                  .copyWith(color: Colors.white, fontSize: 35),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 20,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  text[_index],
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.clip,
+                  maxLines: 2,
+                ),
+              ],
             ),
             SizedBox(
               height: 20,
             ),
             Material(
-              borderRadius: BorderRadius.circular(5),
+              color: MyColorScheme.accent(),
+              borderRadius: BorderRadius.circular(10),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: InkWell(
@@ -86,11 +88,14 @@ class _EditFlashCardState extends State<EditFlashCard> {
                   },
                   child: Text(
                     'SKIP demo!',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: MyColorScheme.uno()),
                   ),
                 ),
               ),
-            )
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height*0.2,
+            ),
           ],
         ),
       );

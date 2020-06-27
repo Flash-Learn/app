@@ -35,13 +35,14 @@ class _MyDecksState extends State<MyDecks> {
   bool _enabled = false;
   Widget _description;
   List<String> text = [
-    'Click on this button to make a new deck',
+    'Click on this button \n to make a new deck',
     'Click here to search for decks',
     'Click here to browse playlists',
   ];
   int _index = 0;
 
   spotlight(Key key) {
+    _index++;
     Rect target = Spotlight.getRectFromKey(key);
 
     setState(() {
@@ -52,24 +53,26 @@ class _MyDecksState extends State<MyDecks> {
         backgroundColor: Colors.transparent,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Text(
-              text[_index],
-              style: ThemeData.light()
-                  .textTheme
-                  .caption
-                  .copyWith(color: Colors.white, fontSize: 35),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 20,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  text[_index-1],
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.clip,
+                  maxLines: 2,
+                ),
+              ],
             ),
             SizedBox(
               height: 20,
             ),
             Material(
-              borderRadius: BorderRadius.circular(5),
+              color: MyColorScheme.accent(),
+              borderRadius: BorderRadius.circular(10),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: InkWell(
@@ -81,11 +84,14 @@ class _MyDecksState extends State<MyDecks> {
                   },
                   child: Text(
                     'SKIP demo!',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: MyColorScheme.uno()),
                   ),
                 ),
               ),
-            )
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height*0.2,
+            ),
           ],
         ),
       );
@@ -93,7 +99,6 @@ class _MyDecksState extends State<MyDecks> {
   }
 
   _ontap() {
-    _index++;
     if (_index == 1) {
       spotlight(_keySearch);
     } else if(_index == 2){
@@ -110,12 +115,6 @@ class _MyDecksState extends State<MyDecks> {
   @override
   void initState() {
     super.initState();
-
-    if(isdemo == true){
-      Future.delayed(Duration(seconds: 1)).then((value) {
-        spotlight(_keyNewDeck);
-      });
-    }
   }
 
   Widget buildDeckInfo(BuildContext ctxt, String deckID) {
@@ -124,6 +123,11 @@ class _MyDecksState extends State<MyDecks> {
 
   @override
   Widget build(BuildContext context) {
+    if(isdemo == true && _index == 0){
+      Future.delayed(Duration(seconds: 1)).then((value) {
+        spotlight(_keyNewDeck);
+      });
+    }
     // Widget for app demo
     return Spotlight(
       enabled: _enabled,
@@ -354,7 +358,7 @@ class _MyDecksState extends State<MyDecks> {
             BorderRadius.circular(20.0)),
         child: Container(
           height: MediaQuery.of(ctxt).size.height * 0.2,
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
