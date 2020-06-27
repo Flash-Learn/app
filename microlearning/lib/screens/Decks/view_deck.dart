@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
-
 class ViewDeck extends StatefulWidget {
   final bool isdemo;
   final String deckID;
@@ -37,6 +36,8 @@ class _ViewDeckState extends State<ViewDeck> {
       GlobalKey<_FlashCardSwipeViewState>();
   GlobalKey<_FlashCardSwipeViewState> _keyEdit =
       GlobalKey<_FlashCardSwipeViewState>();
+  GlobalKey<_FlashCardSwipeViewState> _keyshuffle =
+      GlobalKey<_FlashCardSwipeViewState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
@@ -44,6 +45,7 @@ class _ViewDeckState extends State<ViewDeck> {
   List<String> text = [
     'Click here to edit the deck',
     'Tap on the flash card to \n flip and view the other side',
+    'Click here to shuffle the \n deck of flashcards',
   ];
   int _index = 0;
 
@@ -109,7 +111,10 @@ class _ViewDeckState extends State<ViewDeck> {
     _index++;
     if (_index == 1) {
       spotlight(_keyFlashcard);
-    } else {
+    } else if( _index == 2){
+      spotlight(_keyshuffle);
+    }
+    else {
       setState(() {
         _enabled = false;
       });
@@ -168,6 +173,22 @@ class _ViewDeckState extends State<ViewDeck> {
               ),
               actions: <Widget>[
                 Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: IconButton(
+                    key: _keyshuffle,
+                    icon: Icon(
+                      Icons.shuffle,
+                      size: 26.0,
+                      color: MyColorScheme.accent(),
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        deck.flashCardList.shuffle();
+                      });
+                    },
+                  ),
+                ),
+                Padding(
                     padding: EdgeInsets.only(right: 20.0),
                     child: GestureDetector(
                       key: _keyEdit,
@@ -190,7 +211,8 @@ class _ViewDeckState extends State<ViewDeck> {
                         size: 26.0,
                         color: MyColorScheme.accent(),
                       ),
-                    )),
+                    ),
+                  ),
               ],
               centerTitle: true,
               title: Text(
@@ -210,7 +232,6 @@ class _ViewDeckState extends State<ViewDeck> {
       },
     );
   }
-
   Deck _getThingsOnStartup() {
     Deck deck = getDeckFromID(deckID);
     return deck;
