@@ -5,7 +5,6 @@ class Deck{
   String deckID;
   List<dynamic> flashCardList=[]; // stores a list of flashcards using their ID
   List<dynamic> tagsList=[];
-//  User author;
   bool isPublic;
   String deckName;
   bool isimage;
@@ -57,6 +56,7 @@ Future<Deck> createNewBlankDeck(String userID, {deckName: ""}) async {
     deckName: deckName,
     tagsList: [],
     isPublic: true,
+    flashCardList: [],
   );
 
   // add a new blank deck to the database

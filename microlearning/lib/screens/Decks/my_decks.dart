@@ -170,6 +170,10 @@ class _MyDecksState extends State<MyDecks> {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return EditDecks(deck: newDeck, isdemo: isdemo, creating: true);
               }));
+
+              setState(() {
+                _disableTouch = false;
+              });
             },
           ),
           backgroundColor: MyColorScheme.dos(),
