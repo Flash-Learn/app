@@ -167,7 +167,7 @@ class _MyDecksState extends State<MyDecks> {
               }));
 
               setState(() {
-                _disableTouch=false;
+                _disableTouch = false;
               });
             },
           ),

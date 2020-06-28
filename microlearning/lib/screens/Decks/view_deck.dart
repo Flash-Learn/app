@@ -184,6 +184,7 @@ class _ViewDeckState extends State<ViewDeck> {
                     onPressed: (){
                       setState(() {
                         deck.flashCardList.shuffle();
+
                       });
                     },
                   ),
