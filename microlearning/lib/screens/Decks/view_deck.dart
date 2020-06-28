@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
-
 class ViewDeck extends StatefulWidget {
   final bool isdemo;
   final String deckID;
@@ -37,13 +36,16 @@ class _ViewDeckState extends State<ViewDeck> {
       GlobalKey<_FlashCardSwipeViewState>();
   GlobalKey<_FlashCardSwipeViewState> _keyEdit =
       GlobalKey<_FlashCardSwipeViewState>();
+  GlobalKey<_FlashCardSwipeViewState> _keyshuffle =
+      GlobalKey<_FlashCardSwipeViewState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
   Widget _description;
   List<String> text = [
-    'Tap on the flash card to view the definition',
-    'Click here to edit the deck'
+    'Click here to edit the deck',
+    'Tap on the flash card to \n flip and view the other side',
+    'Click here to shuffle the \n deck of flashcards',
   ];
   int _index = 0;
 
@@ -52,32 +54,34 @@ class _ViewDeckState extends State<ViewDeck> {
 
     setState(() {
       _enabled = true;
-      _center = _index == 0
-          ? Offset(target.center.dx, target.topCenter.dy + target.height / 6)
+      _center = _index == 1
+          ? Offset(target.center.dx, target.center.dy)
           : Offset(target.center.dx, target.center.dy);
-      _radius = _index == 0 ? 100 : Spotlight.calcRadius(target);
+      _radius = _index == 1 ? Spotlight.calcRadius(target)*0.1 : Spotlight.calcRadius(target);
       _description = Scaffold(
         backgroundColor: Colors.transparent,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Text(
-              text[_index],
-              style: ThemeData.light()
-                  .textTheme
-                  .caption
-                  .copyWith(color: Colors.white, fontSize: 35),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 20,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  text[_index],
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.clip,
+                  maxLines: 2,
+                ),
+              ],
             ),
             SizedBox(
               height: 20,
             ),
             Material(
-              borderRadius: BorderRadius.circular(5),
+              color: MyColorScheme.accent(),
+              borderRadius: BorderRadius.circular(10),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: InkWell(
@@ -89,10 +93,13 @@ class _ViewDeckState extends State<ViewDeck> {
                   },
                   child: Text(
                     'SKIP demo!',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: MyColorScheme.uno()),
                   ),
                 ),
               ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.15,
             )
           ],
         ),
@@ -100,11 +107,14 @@ class _ViewDeckState extends State<ViewDeck> {
     });
   }
 
-  _ontap() {
+  _ontap() async{
     _index++;
     if (_index == 1) {
-      spotlight(_keyEdit);
-    } else {
+      spotlight(_keyFlashcard);
+    } else if( _index == 2){
+      spotlight(_keyshuffle);
+    }
+    else {
       setState(() {
         _enabled = false;
       });
@@ -117,22 +127,17 @@ class _ViewDeckState extends State<ViewDeck> {
     super.initState();
     if (isdemo == true) {
       print('haha');
-      Future.delayed(Duration(seconds: 2)).then((value) {
-        spotlight(_keyFlashcard);
+    }
+    if(isdemo == true && _index == 0){
+      Future.delayed(Duration(seconds: 1)).then((value) {
+        spotlight(_keyEdit);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Spotlight(
-      enabled: _enabled,
-      radius: _radius,
-      description: _description,
-      center: _center,
-      onTap: () => _ontap(),
-      animation: true,
-      child: StreamBuilder(
+    return StreamBuilder(
         stream:
             Firestore.instance.collection("decks").document(deckID).snapshots(),
         builder: (context, snapshot) {
@@ -144,7 +149,14 @@ class _ViewDeckState extends State<ViewDeck> {
           );
           deck.deckID = deckID;
           deck.flashCardList = snapshot.data["flashcardList"];
-          return Scaffold(
+          return Spotlight(
+            enabled: _enabled,
+            radius: _radius,
+            description: _description,
+            center: _center,
+            onTap: () => _ontap(),
+            animation: true,
+            child: Scaffold(
             appBar: AppBar(
               backgroundColor: MyColorScheme.uno(),
               leading: IconButton(
@@ -160,6 +172,22 @@ class _ViewDeckState extends State<ViewDeck> {
                 },
               ),
               actions: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: IconButton(
+                    key: _keyshuffle,
+                    icon: Icon(
+                      Icons.shuffle,
+                      size: 26.0,
+                      color: MyColorScheme.accent(),
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        deck.flashCardList.shuffle();
+                      });
+                    },
+                  ),
+                ),
                 Padding(
                     padding: EdgeInsets.only(right: 20.0),
                     child: GestureDetector(
@@ -183,7 +211,8 @@ class _ViewDeckState extends State<ViewDeck> {
                         size: 26.0,
                         color: MyColorScheme.accent(),
                       ),
-                    )),
+                    ),
+                  ),
               ],
               centerTitle: true,
               title: Text(
@@ -198,12 +227,11 @@ class _ViewDeckState extends State<ViewDeck> {
                 deck: deck,
               ),
             ),
-          );
-        },
-      ),
+          )
+        );
+      },
     );
   }
-
   Deck _getThingsOnStartup() {
     Deck deck = getDeckFromID(deckID);
     return deck;
