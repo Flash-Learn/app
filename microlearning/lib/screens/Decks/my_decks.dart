@@ -165,9 +165,9 @@ class _MyDecksState extends State<MyDecks> {
                   .push(MaterialPageRoute(builder: (context) {
                 return EditDecks(deck: newDeck, isdemo: isdemo, creating: true);
               }));
-              
+
               setState(() {
-                _disableTouch = true;
+                _disableTouch = false;
               });
             },
           ),
