@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/functions/getDeckFromID.dart';
@@ -30,6 +32,8 @@ class _ViewDeckState extends State<ViewDeck> {
   String deckID;
   Deck deck;
   _ViewDeckState({this.deckID, this.isdemo});
+  bool _disableTouch = false;
+  var _tapPosition;
 
   // error here @samay
   GlobalKey<_FlashCardSwipeViewState> _keyFlashcard =
@@ -174,45 +178,102 @@ class _ViewDeckState extends State<ViewDeck> {
               actions: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(right: 20),
-                  child: IconButton(
-                    key: _keyshuffle,
-                    icon: Icon(
-                      Icons.shuffle,
-                      size: 26.0,
-                      color: MyColorScheme.accent(),
-                    ),
-                    onPressed: (){
-                      setState(() {
-                        deck.flashCardList.shuffle();
-                      });
+                  child: GestureDetector(
+                    onTapDown: (details) {
+                      _tapPosition = details.globalPosition;
                     },
+                    onTap: () async {
+                      final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+                      await showMenu(
+                        context: context,
+                        // found way to show delete button on the location of long press
+                        // not sure how it works
+                        position: RelativeRect.fromRect(
+                            _tapPosition & Size(40, 40), // smaller rect, the touch area
+                            Offset.zero & overlay.size // Bigger rect, the entire screen
+                        ),
+                        items: [
+                          PopupMenuItem(
+                            value: "edit button",
+                            child: GestureDetector(
+                              onTap: () async{
+                                Navigator.pop(context, "edit button");
+                                setState(() {
+                                  _disableTouch= true;
+                                });
+                                if (widget.editAccess)
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(builder: (context) {
+                                    return EditDecks(deck: deck);
+                                  }));
+                                else {
+                                  print(deck.flashCardList.length);
+                                  saveDeck(context, deck);
+                                }
+                                setState(() {
+                                  _disableTouch=false;
+                                });
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.edit, color: MyColorScheme.accent(),),
+                                  SizedBox(width: 10,),
+                                  Text("Edit Deck"),
+                                ],
+                              )
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: "shuffle button",
+                            child: GestureDetector(
+                              onTap: () async{
+                                Navigator.pop(context, "shuffle button");
+                                setState(() {
+                                  _disableTouch= true;
+                                  deck.flashCardList.shuffle();
+                                });
+                                setState(() {
+                                  _disableTouch=false;
+                                });
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.shuffle, color: MyColorScheme.accent(),),
+                                  SizedBox(width: 10,),
+                                  Text("Shuffle Deck"),
+                                ],
+                              )
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: "filter button",
+                            child: GestureDetector(
+                              onTap: () async{
+                                Navigator.pop(context, "filter button");
+                                setState(() {
+                                  _disableTouch= true;
+                                });
+                                createAlertDialog(context);
+                                setState(() {
+                                  _disableTouch=false;
+                                });
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.filter_list, color: MyColorScheme.accent(),),
+                                  SizedBox(width: 10,),
+                                  Text("Filter Deck"),
+                                ],
+                              )
+                            ),
+                          ),
+                        ],
+                        elevation: 8.0,
+                      );
+                    },
+                    child: Icon(Icons.more_horiz, color: MyColorScheme.accent(),),
                   ),
                 ),
-                Padding(
-                    padding: EdgeInsets.only(right: 20.0),
-                    child: GestureDetector(
-                      key: _keyEdit,
-                      onTap: () {
-                        if (widget.editAccess)
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return EditDecks(deck: deck);
-                          }));
-                        else {
-                          print(deck.flashCardList.length);
-                          saveDeck(context, deck);
-                        }
-                        setState(() {
-                          print("called");
-                        });
-                      },
-                      child: Icon(
-                        widget.editAccess ? Icons.edit : Icons.file_download,
-                        size: 26.0,
-                        color: MyColorScheme.accent(),
-                      ),
-                    ),
-                  ),
               ],
               centerTitle: true,
               title: Text(
@@ -235,6 +296,38 @@ class _ViewDeckState extends State<ViewDeck> {
   Deck _getThingsOnStartup() {
     Deck deck = getDeckFromID(deckID);
     return deck;
+  }
+  createAlertDialog(BuildContext ctxt,){
+    return showDialog(context: ctxt, builder: (ctxt){
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius:
+            BorderRadius.circular(20.0)),
+        child: Container(
+          height: MediaQuery.of(ctxt).size.height * 0.2,
+          padding: EdgeInsets.all(15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              
+              SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text('Done'),
+                    onPressed: (){
+                      Navigator.pop(ctxt);
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+    });
   }
 }
 
