@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
+import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/Utilities/functions/getDeckFromID.dart';
 import 'package:microlearning/Utilities/functions/saveDeck.dart';
 import 'package:microlearning/Utilities/Widgets/flashcardView.dart';
@@ -26,6 +27,7 @@ class ViewDeck extends StatefulWidget {
 }
 
 class _ViewDeckState extends State<ViewDeck> {
+  bool showAllcards = true;
   bool isdemo;
   String deckID;
   Deck deck;
@@ -123,7 +125,7 @@ class _ViewDeckState extends State<ViewDeck> {
 
   @override
   void initState() {
-    deck = _getThingsOnStartup();
+//    deck = _getThingsOnStartup();
     super.initState();
     if (isdemo == true) {
       print('haha');
@@ -173,6 +175,21 @@ class _ViewDeckState extends State<ViewDeck> {
               ),
               actions: <Widget>[
                 Padding(
+                  padding: const EdgeInsets.only(right: 0),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.filter_list,
+                      size: 26.0,
+                      color: MyColorScheme.accent(),
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        showAllcards = !showAllcards;
+                      });
+                    },
+                  ),
+                ),
+                Padding(
                   padding: const EdgeInsets.only(right: 20),
                   child: IconButton(
                     key: _keyshuffle,
@@ -184,7 +201,6 @@ class _ViewDeckState extends State<ViewDeck> {
                     onPressed: (){
                       setState(() {
                         deck.flashCardList.shuffle();
-
                       });
                     },
                   ),
@@ -226,6 +242,7 @@ class _ViewDeckState extends State<ViewDeck> {
               key: _keyFlashcard,
               child: FlashCardSwipeView(
                 deck: deck,
+                showAllCards: showAllcards,
               ),
             ),
           )
@@ -233,18 +250,16 @@ class _ViewDeckState extends State<ViewDeck> {
       },
     );
   }
-  Deck _getThingsOnStartup() {
-    Deck deck = getDeckFromID(deckID);
-    return deck;
-  }
 }
 
 class FlashCardSwipeView extends StatefulWidget {
   @override
   FlashCardSwipeView({
     this.deck,
+    this.showAllCards,
   });
   final Deck deck;
+  final bool showAllCards;
   _FlashCardSwipeViewState createState() =>
       _FlashCardSwipeViewState(deck: deck);
 }
@@ -253,10 +268,25 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   _FlashCardSwipeViewState({
     this.deck,
   });
+
   final Deck deck;
-  final PageController _pageCtrl = PageController(viewportFraction: 0.8);
+  PageController _pageCtrl = PageController(viewportFraction: 0.9);
 
   double currentPage = 0.0;
+
+  Future<List<dynamic>> getNotRememberedCards() async {
+      List<dynamic> ret = [];
+      for (var cardID in deck.flashCardList){
+        var document = Firestore.instance.collection('flashcards').document(cardID);
+        await document.get().then((document) {
+          dynamic tmp = document["userRemembers"];
+          if(tmp == null || tmp == false)
+            ret.add(cardID);
+        });
+      }
+
+      return ret;
+  }
 
   @override
   void initState() {
@@ -272,20 +302,61 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: PageView.builder(
-          controller: _pageCtrl,
-          scrollDirection: Axis.horizontal,
-          itemCount: deck.flashCardList.length,
-          itemBuilder: (context, int currentIndex) {
-            return FlashCardView(
-              color: Colors.accents[currentIndex],
-              currentIndex: currentIndex,
-              currentPage: currentPage,
-              flashCardID: deck.flashCardList[currentIndex],
-            );
-          }),
+
+    if(widget.showAllCards) {
+      return Container(
+        color: Colors.white,
+        child: PageView.builder(
+            controller: _pageCtrl,
+            scrollDirection: Axis.horizontal,
+            itemCount: deck.flashCardList.length,
+            itemBuilder: (context, int currentIndex) {
+              return FlashCardView(
+                color: Colors.accents[currentIndex],
+                currentIndex: currentIndex,
+                currentPage: currentPage,
+                flashCardID: deck.flashCardList[currentIndex],
+              );
+            }),
+      );
+    }
+
+    return FutureBuilder(
+      future: getNotRememberedCards(),
+
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot){
+
+        if(!snapshot.hasData){
+          return Loading(size: 50,);
+        }
+
+        List<dynamic> cardsNotRemembered = snapshot.data;
+        return Container(
+          color: Colors.white,
+          child: PageView.builder(
+              controller: _pageCtrl,
+              scrollDirection: Axis.horizontal,
+              itemCount: cardsNotRemembered.length,
+              itemBuilder: (context, int currentIndex) {
+//                print("${_pageCtrl.page}, $currentPage, $currentIndex");
+//                if(currentIndex >= cardsNotRemembered.length){
+//                  _pageCtrl.jumpToPage(0);
+//                }
+                try{
+                  return FlashCardView(
+                    color: Colors.accents[currentIndex],
+                    currentIndex: currentIndex,
+                    currentPage: currentPage,
+                    flashCardID: cardsNotRemembered[currentIndex],
+                  );
+                } catch(e){
+                  _pageCtrl.jumpToPage(0);
+                }
+                return Container();
+              }),
+        );
+      }
     );
+
   }
 }
