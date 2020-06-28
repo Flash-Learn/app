@@ -362,7 +362,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         var document = Firestore.instance.collection('flashcards').document(cardID);
         await document.get().then((document) {
           dynamic tmp = document["userRemembers"];
-          if(tmp == null || tmp == false)
+          if(tmp != true)
             ret.add(cardID);
         });
       }
