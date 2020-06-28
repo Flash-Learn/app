@@ -162,7 +162,7 @@ class _MyDecksState extends State<MyDecks> {
               Deck newDeck = await createNewBlankDeck(uid);
 
               Navigator.of(context)
-                  .pushReplacement(MaterialPageRoute(builder: (context) {
+                  .push(MaterialPageRoute(builder: (context) {
                 return EditDecks(deck: newDeck, isdemo: isdemo, creating: true);
               }));
             },
