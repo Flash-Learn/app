@@ -8,17 +8,21 @@ class Deck{
 //  User author;
   bool isPublic;
   String deckName;
+  bool isimage;
 
   Deck({this.deckName,
         this.tagsList ,
         this.isPublic,
+        this.flashCardList,
+        this.deckID,
+        this.isimage,
   });
 
-  void addFlashcardByID(String flashID){
-    flashCardList.insert(flashCardList.length, flashID);
-
-    //TODO: and save to database
-  }
+//  void addFlashcardByID(String flashID){
+//    flashCardList.insert(flashCardList.length, flashID);
+//
+//    //TODO: and save to database
+//  }
 
   // TODO: constructor to copy deck from other user
 
@@ -46,18 +50,18 @@ Future<void> deleteDeck(String deckID) async{
 }
 
 
-Future<Deck> createNewBlankDeck(String userID) async {
+Future<Deck> createNewBlankDeck(String userID, {deckName: ""}) async {
 
   // newDeck is the deck which will be returned
   Deck newDeck = Deck(
-    deckName: "",
+    deckName: deckName,
     tagsList: [],
     isPublic: true,
   );
 
   // add a new blank deck to the database
   DocumentReference deckRef = await Firestore.instance.collection("decks").add({
-    "deckName": "",
+    "deckName": deckName,
     "tagsList": [],
     "flashcardList": [],
     "isPublic": true,

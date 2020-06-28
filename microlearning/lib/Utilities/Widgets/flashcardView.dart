@@ -1,9 +1,13 @@
+import 'dart:ffi';
+
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FlashCardView extends StatefulWidget {
   final Color color;
@@ -24,12 +28,22 @@ class FlashCardView extends StatefulWidget {
 
 class _FlashCardViewState extends State<FlashCardView> {
   List<String> playListNames = <String>[];
+  List<dynamic> userDecks = [];
+  String uid;
+  final CollectionReference deckReference = Firestore.instance.collection("decks");
+  final CollectionReference flashcardReference = Firestore.instance.collection("flashcards");
+
   var _tapPosition;
   int side = 1;
-  String term = "this is term";
-  String definition =
-      "this is definition, intentionally made long to make sure the text doesn't overflow in the flashcard";
+  bool isPic = false;
+  String term = "";
+  String definition = "";
   String display;
+
+  void getUId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid');
+  }
 
   @override
   void initState() {
@@ -37,6 +51,7 @@ class _FlashCardViewState extends State<FlashCardView> {
     super.initState();
     display = term;
     side = 1;
+    getUId();
   }
 
   @override
@@ -53,7 +68,7 @@ class _FlashCardViewState extends State<FlashCardView> {
           if (!snapshot.hasData) return Text("Loading");
           term = snapshot.data["term"];
           definition = snapshot.data["definition"];
-          bool isPic = (snapshot.data["isimage"] == 'true');
+          isPic = (snapshot.data["isimage"] == 'true');
           print(definition);
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
@@ -249,7 +264,7 @@ class _FlashCardViewState extends State<FlashCardView> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             child: Container(
-              height: MediaQuery.of(ctxt).size.height * 0.2,
+              height: MediaQuery.of(ctxt).size.height * 0.3,
               padding: EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -277,12 +292,12 @@ class _FlashCardViewState extends State<FlashCardView> {
                       ),
                       FlatButton(
                         child: Text('Done'),
-                        onPressed: () {
-                          setState(() {
-                            playListNames.add(playlistname);
-                            // TODO: make a new playlist with name as playlistname variable
-                          });
+                        onPressed: () async {
                           Navigator.pop(ctxt);
+                          setState(() async {
+                            Deck newDeck = await createNewBlankDeck(uid, deckName: playlistname);
+                          });
+
                           _showbottomsheet(context);
                         },
                       )
@@ -295,66 +310,96 @@ class _FlashCardViewState extends State<FlashCardView> {
         });
   }
 
-  List<Widget> _buildlist() {
-    // TODO: load data of playlist names in the playListNames list
-    // I think we will require the playlist id's along with the playlist names
-    // NOTE: Load the data for playlist here only
+  List<Widget> _buildlist(BuildContext context) {
     int i = 0;
     String k;
-    return playListNames.map<Widget>((String playlistID) {
+    return userDecks.map<Widget>((dynamic deckID) {
       i++;
       k = '$i';
-      return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Card(
-          color: MyColorScheme.accentLight(),
-          child: ListTile(
-            trailing: Icon(Icons.playlist_add),
-            contentPadding: EdgeInsets.all(10),
-            onTap: () {
-              // TODO: add the flashcard to the playlist
-              // Def: a playlist will be a deck of different flashcards
-            },
-            title: Text(playlistID),
-          ),
-        ),
+      return StreamBuilder(
+        stream: Firestore.instance.collection('decks').document(deckID).snapshots(),
+        builder: (context, snapshot) {
+
+          if(!snapshot.hasData) {
+            return Text("loading");
+          }
+
+          Deck deck = Deck(deckName: snapshot.data["deckName"],
+                            deckID: deckID);
+
+          return Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Card(
+              color: MyColorScheme.accentLight(),
+              child: ListTile(
+                trailing: Icon(Icons.playlist_add),
+                contentPadding: EdgeInsets.all(10),
+                onTap: () async {
+                  Navigator.pop(context);
+                  dynamic flashRef = await flashcardReference.add({
+                    'term': term,
+                    'definition': definition,
+                    'isimage': isPic ? 'true' : 'false',
+                  });
+
+                  await deckReference.document(deckID).updateData({
+                    'flashcardList': FieldValue.arrayUnion([flashRef.documentID]),
+                  });
+                },
+                title: Text(deck.deckName),
+              ),
+            ),
+          );
+        }
       );
     }).toList();
   }
 
+  Widget bottomData(BuildContext context){
+    List<Widget> children = _buildlist(context);
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+//                Navigator.pop(context);
+                createAlertDialog(context);
+              },
+            )
+          ],
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height * 0.4,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: children,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   void _showbottomsheet(context) {
-    List<Widget> children = _buildlist();
     showModalBottomSheet(
         context: context,
-        builder: (BuildContext buildcon) {
-          return Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      createAlertDialog(context);
-                    },
-                  )
-                ],
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.4,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: children,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+        builder: (BuildContext buildContext) {
+          return StreamBuilder(
+            stream: Firestore.instance.collection('user_data').document(uid).snapshots(),
+            builder: (context, snapshot) {
+              if(!snapshot.hasData)
+                return Text("loading");
+              userDecks = snapshot.data["decks"];
+              return bottomData(context);
+            },
           );
         });
   }
