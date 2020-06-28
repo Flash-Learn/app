@@ -285,6 +285,7 @@ class _ViewDeckState extends State<ViewDeck> {
               child: FlashCardSwipeView(
                 deck: deck,
                 showAllCards: showAllcards,
+                editAccess: widget.editAccess,
               ),
             ),
           )
@@ -336,8 +337,10 @@ class FlashCardSwipeView extends StatefulWidget {
   FlashCardSwipeView({
     this.deck,
     this.showAllCards,
+    this.editAccess,
   });
   final Deck deck;
+  final bool editAccess;
   final bool showAllCards;
   _FlashCardSwipeViewState createState() =>
       _FlashCardSwipeViewState(deck: deck);
@@ -395,6 +398,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
                 currentIndex: currentIndex,
                 currentPage: currentPage,
                 flashCardID: deck.flashCardList[currentIndex],
+                editAccess: widget.editAccess,
               );
             }),
       );

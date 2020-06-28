@@ -14,12 +14,14 @@ class FlashCardView extends StatefulWidget {
   final int currentIndex;
   final double currentPage;
   final String flashCardID;
+  final bool editAccess;
 
   FlashCardView({
     this.color,
     this.currentIndex,
     this.currentPage,
     this.flashCardID,
+    this.editAccess,
   });
 
   @override
@@ -124,7 +126,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Spacer(),
-                                    Row(
+                                    widget.editAccess ? Row(
                                       children: <Widget>[
                                         RawMaterialButton(
                                           onPressed: () {
@@ -165,7 +167,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           shape: CircleBorder(),
                                         )
                                       ],
-                                    ),
+                                    ) : SizedBox(),
                                   ]
                                 ),
                               ),
