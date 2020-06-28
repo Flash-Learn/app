@@ -6,22 +6,18 @@ import 'package:microlearning/screens/authentication/register.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance(); 
-  var email = prefs.getString('email'); 
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var email = prefs.getString('email');
   runApp(MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Montserrat'
-      ),
-      routes: {
-        '/': (context) => email == null ? LoginUser() : MyDecks(),
-        '/home': (context) => MyDecks(),
-        '/register': (context) => RegisterUser(),
-        '/search': (context) => Search(),
-        '/playlistmanage': (context) => PlayListManage(),
-      },
-    )
-  );
+    theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Montserrat'),
+    routes: {
+      '/': (context) => email == null ? LoginUser() : MyDecks(),
+      '/home': (context) => MyDecks(),
+      '/register': (context) => RegisterUser(),
+      '/search': (context) => Search(),
+      '/playlistmanage': (context) => PlayListManage(),
+    },
+  ));
 }
