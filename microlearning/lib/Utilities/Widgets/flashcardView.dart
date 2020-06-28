@@ -14,12 +14,14 @@ class FlashCardView extends StatefulWidget {
   final int currentIndex;
   final double currentPage;
   final String flashCardID;
+  final bool editAccess;
 
   FlashCardView({
     this.color,
     this.currentIndex,
     this.currentPage,
     this.flashCardID,
+    this.editAccess,
   });
 
   @override
@@ -69,7 +71,17 @@ class _FlashCardViewState extends State<FlashCardView> {
           term = snapshot.data["term"];
           definition = snapshot.data["definition"];
           isPic = (snapshot.data["isimage"] == 'true');
-          print(definition);
+
+          bool userRemembers;
+
+          dynamic tmp = snapshot.data['userRemembers'];
+          if(tmp == null || tmp == false)
+            userRemembers=false;
+          else{
+            userRemembers=true;
+          }
+
+
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
             transitionBuilder: (Widget child, Animation<double> animation) {
@@ -101,13 +113,62 @@ class _FlashCardViewState extends State<FlashCardView> {
                             child: Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
-                                child: Text(
-                                  term,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Spacer(),
+                                    Text(
+                                      term,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Spacer(),
+                                    widget.editAccess ? Row(
+                                      children: <Widget>[
+                                        RawMaterialButton(
+                                          onPressed: () {
+                                            Firestore.instance
+                                                .collection('flashcards')
+                                                .document(widget.flashCardID)
+                                                .updateData({
+                                                  'userRemembers': false,
+                                                });
+                                          },
+                                          elevation: 2.0,
+                                          fillColor: Colors.red,
+                                          child: Icon(
+                                            Icons.close,
+                                            size: 35.0,
+                                          ),
+                                          padding: EdgeInsets.all(15.0),
+                                          shape: CircleBorder(),
+                                        ),
+                                        Spacer(),
+                                        RawMaterialButton(
+                                          onPressed: () {
+                                            print(widget.flashCardID);
+                                            Firestore.instance
+                                                .collection('flashcards')
+                                                .document(widget.flashCardID)
+                                                .updateData({
+                                              'userRemembers': true,
+                                            });
+                                          },
+                                          elevation: 2.0,
+                                          fillColor: Colors.green,
+                                          child: Icon(
+                                            Icons.check,
+                                            size: 35.0,
+                                          ),
+                                          padding: EdgeInsets.all(15.0),
+                                          shape: CircleBorder(),
+                                        )
+                                      ],
+                                    ) : SizedBox(),
+                                  ]
                                 ),
                               ),
                             ),
@@ -156,7 +217,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                     color: MyColorScheme.accent(),
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ],
