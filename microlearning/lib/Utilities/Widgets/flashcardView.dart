@@ -21,7 +21,7 @@ class FlashCardView extends StatefulWidget {
     this.currentIndex,
     this.currentPage,
     this.flashCardID,
-    this.editAccess,
+    this.editAccess = true,
   });
 
   @override
@@ -72,7 +72,7 @@ class _FlashCardViewState extends State<FlashCardView> {
           definition = snapshot.data["definition"];
           isPic = (snapshot.data["isimage"] == 'true');
 
-          bool userRemembers;
+          bool userRemembers = true;
 
           dynamic tmp = snapshot.data['userRemembers'];
           if(tmp == null || tmp == false)
