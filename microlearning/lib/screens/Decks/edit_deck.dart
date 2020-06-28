@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
+import 'package:microlearning/screens/Decks/view_deck.dart';
 
 class EditDecks extends StatefulWidget {
   final Deck deck;
@@ -185,7 +186,10 @@ class _EditDecksState extends State<EditDecks> {
                     icon: Icon(Icons.arrow_back),
                     color: MyColorScheme.accent(),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ViewDeck(deckID: deck.deckID,);
+                      }));
                     },
                   ),
             backgroundColor: MyColorScheme.uno(),
