@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/Utilities/functions/getDeckFromID.dart';
@@ -11,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
+
 class ViewDeck extends StatefulWidget {
   final bool isdemo;
   final String deckID;
@@ -63,7 +63,9 @@ class _ViewDeckState extends State<ViewDeck> {
       _center = _index == 1
           ? Offset(target.center.dx, target.center.dy)
           : Offset(target.center.dx, target.center.dy);
-      _radius = _index == 1 ? Spotlight.calcRadius(target)*0.1 : Spotlight.calcRadius(target);
+      _radius = _index == 1
+          ? Spotlight.calcRadius(target) * 0.1
+          : Spotlight.calcRadius(target);
       _description = Scaffold(
         backgroundColor: Colors.transparent,
         body: Column(
@@ -75,7 +77,10 @@ class _ViewDeckState extends State<ViewDeck> {
               children: <Widget>[
                 Text(
                   text[_index],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: MyColorScheme.uno()),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,
                   maxLines: 2,
@@ -113,14 +118,13 @@ class _ViewDeckState extends State<ViewDeck> {
     });
   }
 
-  _ontap() async{
+  _ontap() async {
     _index++;
     if (_index == 1) {
       spotlight(_keyFlashcard);
-    } else if( _index == 2){
+    } else if (_index == 2) {
       spotlight(_keyshuffle);
-    }
-    else {
+    } else {
       setState(() {
         _enabled = false;
       });
@@ -134,7 +138,7 @@ class _ViewDeckState extends State<ViewDeck> {
     if (isdemo == true) {
       print('haha');
     }
-    if(isdemo == true && _index == 0){
+    if (isdemo == true && _index == 0) {
       Future.delayed(Duration(seconds: 1)).then((value) {
         spotlight(_keyEdit);
       });
@@ -144,18 +148,18 @@ class _ViewDeckState extends State<ViewDeck> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream:
-            Firestore.instance.collection("decks").document(deckID).snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return Text("loading...");
-          deck = Deck(
-            deckName: snapshot.data["deckName"],
-            tagsList: snapshot.data["tagsList"],
-            isPublic: snapshot.data["isPublic"],
-          );
-          deck.deckID = deckID;
-          deck.flashCardList = snapshot.data["flashcardList"];
-          return Spotlight(
+      stream:
+          Firestore.instance.collection("decks").document(deckID).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return Text("loading...");
+        deck = Deck(
+          deckName: snapshot.data["deckName"],
+          tagsList: snapshot.data["tagsList"],
+          isPublic: snapshot.data["isPublic"],
+        );
+        deck.deckID = deckID;
+        deck.flashCardList = snapshot.data["flashcardList"];
+        return Spotlight(
             enabled: _enabled,
             radius: _radius,
             description: _description,
@@ -163,133 +167,182 @@ class _ViewDeckState extends State<ViewDeck> {
             onTap: () => _ontap(),
             animation: true,
             child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: MyColorScheme.uno(),
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                color: MyColorScheme.accent(),
-                onPressed: () {
-                  widget.editAccess ? Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => MyDecks(),
-                      ),
-                      (Route<dynamic> route) => false)
-                                    : Navigator.of(context).pop();
-                },
-              ),
-              actions: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: GestureDetector(
-                    onTapDown: (details) {
-                      _tapPosition = details.globalPosition;
-                    },
-                    onTap: () async {
-                      final RenderBox overlay = Overlay.of(context).context.findRenderObject();
-                      await showMenu(
-                        context: context,
-                        // found way to show delete button on the location of long press
-                        // not sure how it works
-                        position: RelativeRect.fromRect(
-                            _tapPosition & Size(40, 40), // smaller rect, the touch area
-                            Offset.zero & overlay.size // Bigger rect, the entire screen
-                        ),
-                        items: [
-                          PopupMenuItem(
-                            value: "edit button",
-                            child: GestureDetector(
-                              onTap: () async{
-                                Navigator.pop(context, "edit button");
-                                setState(() {
-                                  _disableTouch= true;
-                                });
-                                if (widget.editAccess)
-                                  Navigator.of(context)
-                                      .push(MaterialPageRoute(builder: (context) {
-                                    return EditDecks(deck: deck);
-                                  }));
-                                else {
-                                  print(deck.flashCardList.length);
-                                  saveDeck(context, deck);
-                                }
-                                setState(() {
-                                  _disableTouch=false;
-                                });
-                              },
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.edit, color: MyColorScheme.accent(),),
-                                  SizedBox(width: 10,),
-                                  Text("Edit Deck"),
-                                ],
-                              )
+              appBar: AppBar(
+                backgroundColor: MyColorScheme.uno(),
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  color: MyColorScheme.accent(),
+                  onPressed: () {
+                    widget.editAccess
+                        ? Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => MyDecks(),
                             ),
-                          ),
-                          PopupMenuItem(
-                            value: "shuffle button",
-                            child: GestureDetector(
-                              onTap: () async{
-                                Navigator.pop(context, "shuffle button");
-                                setState(() {
-                                  _disableTouch= true;
-                                  deck.flashCardList.shuffle();
-                                });
-                                setState(() {
-                                  _disableTouch=false;
-                                });
-                              },
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.shuffle, color: MyColorScheme.accent(),),
-                                  SizedBox(width: 10,),
-                                  Text("Shuffle Deck"),
-                                ],
-                              )
-                            ),
-                          ),
-                          PopupMenuItem(
-                            value: "filter button",
-                            child: GestureDetector(
-                              onTap: () async{
-                                Navigator.pop(context, "filter button");
-                                setState(() {
-                                  showAllcards = !showAllcards;
-                                });
-                              },
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.filter_list, color: MyColorScheme.accent(),),
-                                  SizedBox(width: 10,),
-                                  showAllcards ? Text("Not memorized cards") : Text("Show all cards"),
-                                ],
-                              )
-                            ),
-                          ),
-                        ],
-                        elevation: 8.0,
-                      );
-                    },
-                    child: Icon(Icons.more_horiz, color: MyColorScheme.accent(),),
-                  ),
+                            (Route<dynamic> route) => false)
+                        : Navigator.of(context).pop();
+                  },
                 ),
-              ],
-              centerTitle: true,
-              title: Text(
-                deck.deckName,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, color: MyColorScheme.cinco()),
+                actions: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: GestureDetector(
+                      onTapDown: (details) {
+                        _tapPosition = details.globalPosition;
+                      },
+                      onTap: () async {
+                        final RenderBox overlay =
+                            Overlay.of(context).context.findRenderObject();
+                        await showMenu(
+                          context: context,
+                          // found way to show delete button on the location of long press
+                          // not sure how it works
+                          position: RelativeRect.fromRect(
+                              _tapPosition &
+                                  Size(40, 40), // smaller rect, the touch area
+                              Offset.zero &
+                                  overlay.size // Bigger rect, the entire screen
+                              ),
+                          items: [
+                            PopupMenuItem(
+                              value: "edit button",
+                              child: GestureDetector(
+                                  onTap: () async {
+                                    Navigator.pop(context, "edit button");
+                                    setState(() {
+                                      _disableTouch = true;
+                                    });
+                                    if (widget.editAccess)
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                        return EditDecks(deck: deck);
+                                      }));
+                                    else {
+                                      print(deck.flashCardList.length);
+                                      saveDeck(context, deck);
+                                    }
+                                    setState(() {
+                                      _disableTouch = false;
+                                    });
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.edit,
+                                        color: MyColorScheme.accent(),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text("Edit Deck"),
+                                    ],
+                                  )),
+                            ),
+                            PopupMenuItem(
+                              value: "shuffle button",
+                              child: GestureDetector(
+                                  onTap: () async {
+                                    Navigator.pop(context, "shuffle button");
+                                    setState(() {
+                                      _disableTouch = true;
+                                      deck.flashCardList.shuffle();
+                                    });
+                                    setState(() {
+                                      _disableTouch = false;
+                                    });
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.shuffle,
+                                        color: MyColorScheme.accent(),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text("Shuffle Deck"),
+                                    ],
+                                  )),
+                            ),
+                            PopupMenuItem(
+                              value: "filter button",
+                              child: GestureDetector(
+                                  onTap: () async {
+                                    Navigator.pop(context, "filter button");
+                                    setState(() {
+                                      showAllcards = !showAllcards;
+                                    });
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.filter_list,
+                                        color: MyColorScheme.accent(),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      showAllcards
+                                          ? Text("Not memorized cards")
+                                          : Text("Show all cards"),
+                                    ],
+                                  )),
+                            ),
+                          ],
+                          elevation: 8.0,
+                        );
+                      },
+                      child: Icon(
+                        Icons.more_horiz,
+                        color: MyColorScheme.accent(),
+                      ),
+                    ),
+                  ),
+                ],
+                centerTitle: true,
+                title: Text(
+                  deck.deckName,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: MyColorScheme.cinco()),
+                ),
               ),
-            ),
-            body: Container(
-              key: _keyFlashcard,
-              child: FlashCardSwipeView(
-                deck: deck,
-                showAllCards: showAllcards,
-                editAccess: widget.editAccess,
+              body: Material(
+                color: Colors.blueAccent[100],
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        key: _keyFlashcard,
+                        child: FlashCardSwipeView(
+                          deck: deck,
+                          showAllCards: showAllcards,
+                          editAccess: widget.editAccess,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 10,
+                        ),
+                        LinearPercentIndicator(
+                          percent: 0.6,
+                          backgroundColor: Colors.grey,
+                          width: MediaQuery.of(context).size.width - 20,
+                          // // animation: true,
+                          linearStrokeCap: LinearStrokeCap.roundAll,
+                          progressColor: Colors.amber[300],
+                          lineHeight: 20,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        );
+            ));
       },
     );
   }
@@ -298,37 +351,42 @@ class _ViewDeckState extends State<ViewDeck> {
     Deck deck = getDeckFromID(deckID);
     return deck;
   }
-  createAlertDialog(BuildContext ctxt,){
-    return showDialog(context: ctxt, builder: (ctxt){
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius:
-            BorderRadius.circular(20.0)),
-        child: Container(
-          height: MediaQuery.of(ctxt).size.height * 0.2,
-          padding: EdgeInsets.all(15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              
-              SizedBox(height: 20,),
-              Row(
+
+  createAlertDialog(
+    BuildContext ctxt,
+  ) {
+    return showDialog(
+        context: ctxt,
+        builder: (ctxt) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            child: Container(
+              height: MediaQuery.of(ctxt).size.height * 0.2,
+              padding: EdgeInsets.all(15),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  FlatButton(
-                    child: Text('Done'),
-                    onPressed: (){
-                      Navigator.pop(ctxt);
-                    },
+                  SizedBox(
+                    height: 20,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text('Done'),
+                        onPressed: () {
+                          Navigator.pop(ctxt);
+                        },
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
-        ),
-      );
-    });
+              ),
+            ),
+          );
+        });
   }
 }
 
@@ -357,17 +415,17 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   double currentPage = 0.0;
 
   Future<List<dynamic>> getNotRememberedCards() async {
-      List<dynamic> ret = [];
-      for (var cardID in deck.flashCardList){
-        var document = Firestore.instance.collection('flashcards').document(cardID);
-        await document.get().then((document) {
-          dynamic tmp = document["userRemembers"];
-          if(tmp != true)
-            ret.add(cardID);
-        });
-      }
+    List<dynamic> ret = [];
+    for (var cardID in deck.flashCardList) {
+      var document =
+          Firestore.instance.collection('flashcards').document(cardID);
+      await document.get().then((document) {
+        dynamic tmp = document["userRemembers"];
+        if (tmp != true) ret.add(cardID);
+      });
+    }
 
-      return ret;
+    return ret;
   }
 
   @override
@@ -384,10 +442,9 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
   @override
   Widget build(BuildContext context) {
-
-    if(widget.showAllCards) {
+    if (widget.showAllCards) {
       return Container(
-        color: Colors.white,
+        color: Colors.blueAccent[100],
         child: PageView.builder(
             controller: _pageCtrl,
             scrollDirection: Axis.horizontal,
@@ -405,41 +462,39 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     }
 
     return FutureBuilder(
-      future: getNotRememberedCards(),
+        future: getNotRememberedCards(),
+        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+          if (!snapshot.hasData) {
+            return Loading(
+              size: 50,
+            );
+          }
 
-      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot){
-
-        if(!snapshot.hasData){
-          return Loading(size: 50,);
-        }
-
-        List<dynamic> cardsNotRemembered = snapshot.data;
-        return Container(
-          color: Colors.white,
-          child: PageView.builder(
-              controller: _pageCtrl,
-              scrollDirection: Axis.horizontal,
-              itemCount: cardsNotRemembered.length,
-              itemBuilder: (context, int currentIndex) {
+          List<dynamic> cardsNotRemembered = snapshot.data;
+          return Container(
+            color: Colors.white,
+            child: PageView.builder(
+                controller: _pageCtrl,
+                scrollDirection: Axis.horizontal,
+                itemCount: cardsNotRemembered.length,
+                itemBuilder: (context, int currentIndex) {
 //                print("${_pageCtrl.page}, $currentPage, $currentIndex");
 //                if(currentIndex >= cardsNotRemembered.length){
 //                  _pageCtrl.jumpToPage(0);
 //                }
-                try{
-                  return FlashCardView(
-                    color: Colors.accents[currentIndex],
-                    currentIndex: currentIndex,
-                    currentPage: currentPage,
-                    flashCardID: cardsNotRemembered[currentIndex],
-                  );
-                } catch(e){
-                  _pageCtrl.jumpToPage(0);
-                }
-                return Container();
-              }),
-        );
-      }
-    );
-
+                  try {
+                    return FlashCardView(
+                      color: Colors.accents[currentIndex],
+                      currentIndex: currentIndex,
+                      currentPage: currentPage,
+                      flashCardID: cardsNotRemembered[currentIndex],
+                    );
+                  } catch (e) {
+                    _pageCtrl.jumpToPage(0);
+                  }
+                  return Container();
+                }),
+          );
+        });
   }
 }

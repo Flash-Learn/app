@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +87,8 @@ class _FlashCardViewState extends State<FlashCardView> {
             },
             child: Padding(
               key: ValueKey<int>(side),
-              padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 8),
+              // padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 8),
+              padding: const EdgeInsets.fromLTRB(8, 35, 8, 35),
               child: Container(
                 child: Transform(
                   transform: Matrix4.identity()
@@ -167,7 +166,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           shape: CircleBorder(),
                                         )
                                       ],
-                                    ) : SizedBox(),
+                                    ) : 
+                                    SizedBox(),
                                   ]
                                 ),
                               ),
