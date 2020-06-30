@@ -32,6 +32,7 @@ class _ViewDeckState extends State<ViewDeck> {
   bool showAllcards = true;
   bool isdemo;
   String deckID;
+  double completedPercentage=0;
   Deck deck;
   _ViewDeckState({this.deckID, this.isdemo});
   bool _disableTouch = false;
@@ -143,6 +144,13 @@ class _ViewDeckState extends State<ViewDeck> {
         spotlight(_keyEdit);
       });
     }
+  }
+
+  void changePercentage(double percentage){
+    setState(() {
+      completedPercentage = percentage;
+    });
+
   }
 
   @override
@@ -317,6 +325,7 @@ class _ViewDeckState extends State<ViewDeck> {
                           deck: deck,
                           showAllCards: showAllcards,
                           editAccess: widget.editAccess,
+                          changePercentage: changePercentage,
                         ),
                       ),
                     ),
@@ -326,7 +335,7 @@ class _ViewDeckState extends State<ViewDeck> {
                           width: 10,
                         ),
                         LinearPercentIndicator(
-                          percent: 0.6,
+                          percent: completedPercentage,
                           backgroundColor: Colors.grey,
                           width: MediaQuery.of(context).size.width - 20,
                           // // animation: true,
@@ -396,7 +405,9 @@ class FlashCardSwipeView extends StatefulWidget {
     this.deck,
     this.showAllCards,
     this.editAccess,
+    this.changePercentage,
   });
+  final dynamic changePercentage;
   final Deck deck;
   final bool editAccess;
   final bool showAllCards;
@@ -412,6 +423,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   final Deck deck;
   PageController _pageCtrl = PageController(viewportFraction: 0.9);
 
+  double numberOfCards = 1;
   double currentPage = 0.0;
 
   Future<List<dynamic>> getNotRememberedCards() async {
@@ -435,6 +447,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     super.initState();
     _pageCtrl.addListener(() {
       setState(() {
+        widget.changePercentage((_pageCtrl.page+1)/numberOfCards);
         currentPage = _pageCtrl.page;
       });
     });
@@ -443,6 +456,9 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   @override
   Widget build(BuildContext context) {
     if (widget.showAllCards) {
+      setState(() {
+        numberOfCards = deck.flashCardList.length.toDouble();
+      });
       return Container(
         color: Colors.blueAccent[100],
         child: PageView.builder(
@@ -461,6 +477,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
       );
     }
 
+
     return FutureBuilder(
         future: getNotRememberedCards(),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
@@ -471,6 +488,10 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
           }
 
           List<dynamic> cardsNotRemembered = snapshot.data;
+
+          setState(() {
+            numberOfCards = cardsNotRemembered.length.toDouble();
+          });
           return Container(
             color: Colors.white,
             child: PageView.builder(
