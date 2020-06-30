@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/Utilities/functions/getDeckFromID.dart';
@@ -339,12 +338,40 @@ class _ViewDeckState extends State<ViewDeck> {
                       color: MyColorScheme.cinco()),
                 ),
               ),
-              body: Container(
-                key: _keyFlashcard,
-                child: FlashCardSwipeView(
-                  deck: deck,
-                  showAllCards: showAllcards,
-                  editAccess: widget.editAccess,
+              body: Material(
+                color: Colors.blueAccent[100],
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        key: _keyFlashcard,
+                        child: FlashCardSwipeView(
+                          deck: deck,
+                          showAllCards: showAllcards,
+                          editAccess: widget.editAccess,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 10,
+                        ),
+                        LinearPercentIndicator(
+                          percent: 0.6,
+                          backgroundColor: Colors.grey,
+                          width: MediaQuery.of(context).size.width - 20,
+                          // // animation: true,
+                          linearStrokeCap: LinearStrokeCap.roundAll,
+                          progressColor: Colors.amber[300],
+                          lineHeight: 20,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    )
+                  ],
                 ),
               ),
             ));
@@ -449,7 +476,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   Widget build(BuildContext context) {
     if (widget.showAllCards) {
       return Container(
-        color: Colors.white,
+        color: Colors.blueAccent[100],
         child: PageView.builder(
             controller: _pageCtrl,
             scrollDirection: Axis.horizontal,
