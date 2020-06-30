@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
+import 'package:microlearning/services/notification_plugin.dart';
 
 class ViewDeck extends StatefulWidget {
   final bool isdemo;
@@ -36,6 +37,8 @@ class _ViewDeckState extends State<ViewDeck> {
   Deck deck;
   _ViewDeckState({this.deckID, this.isdemo});
   bool _disableTouch = false;
+  final notification = Notifications();
+
   var _tapPosition;
 
   // error here @samay
@@ -144,6 +147,7 @@ class _ViewDeckState extends State<ViewDeck> {
         spotlight(_keyEdit);
       });
     }
+    notification.initializeNotifications();
   }
 
   void changePercentage(double percentage){
@@ -292,6 +296,34 @@ class _ViewDeckState extends State<ViewDeck> {
                                       showAllcards
                                           ? Text("Not memorized cards")
                                           : Text("Show all cards"),
+                                    ],
+                                  )),
+                            ),
+                            PopupMenuItem(
+                              value: "notification button",
+                              child: GestureDetector(
+                                  onTap: () async {
+                                    DateTime now = DateTime.now().toUtc().add(
+                                          Duration(seconds: 5),
+                                        );
+                                    await notification.singleNotification(
+                                      now,
+                                      "Reminder",
+                                      "Revise your Deck",
+                                      98123871,
+                                    );
+                                    // print("haha");
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.notifications,
+                                        color: MyColorScheme.accent(),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text('Remind me in 10 mins')
                                     ],
                                   )),
                             ),
