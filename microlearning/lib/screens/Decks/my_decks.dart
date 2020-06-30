@@ -143,180 +143,134 @@ class _MyDecksState extends State<MyDecks> {
       // Widget to block taps during loading
       child: AbsorbPointer(
         absorbing: _disableTouch,
-        child: Scaffold(
-          floatingActionButton: FloatingActionButton.extended(
-            key: _keyNewDeck,
-            backgroundColor: MyColorScheme.accent(),
-            label: _disableTouch
-                ? Loading(size: 20)
-                : Text(
-                    'Create Deck',
-                    style: TextStyle(fontSize: 10),
-                  ), // show loading if touch is disabled, otherwise show text
-            icon: _disableTouch
-                ? null
-                : Icon(Icons.add), // if touch is disabled remove the add Icon
-            onPressed: () async {
-              setState(() {
-                _disableTouch = true;
-              });
+        child: Container(
+          // only for gradient
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color.fromRGBO(84, 205, 255, 1), Color.fromRGBO(84, 205, 255, 1), Color.fromRGBO(27, 116, 210, 1)])),
 
-              // newDeck is a bank new deck, which is being passed into the edit deck screen
-              Deck newDeck = await createNewBlankDeck(uid);
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            floatingActionButton: FloatingActionButton.extended(
+              key: _keyNewDeck,
+              backgroundColor: Color.fromRGBO(50, 217, 157, 1),
+              label: _disableTouch
+                  ? Loading(size: 20)
+                  : Text(
+                      'Create Deck',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                      ),
+                    ), // show loading if touch is disabled, otherwise show text
+              icon: _disableTouch
+                  ? null
+                  : Icon(Icons.add), // if touch is disabled remove the add Icon
+              onPressed: () async {
+                setState(() {
+                  _disableTouch = true;
+                });
 
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return EditDecks(deck: newDeck, isdemo: isdemo, creating: true);
-              }));
+                // newDeck is a bank new deck, which is being passed into the edit deck screen
+                Deck newDeck = await createNewBlankDeck(uid);
 
-              setState(() {
-                _disableTouch = false;
-              });
-            },
-          ),
-          backgroundColor: MyColorScheme.dos(),
-          appBar: AppBar(
-              elevation: 2,
-              backgroundColor: MyColorScheme.uno(),
-              centerTitle: true,
-              title: Text(
-                'My Decks',
-                style: TextStyle(
-                    color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
-              ),
-              actions: <Widget>[
-                IconButton(
-                  key: _keyplaylist,
-                  icon: Icon(Icons.featured_play_list),
-                  color: MyColorScheme.accent(),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/playlistmanage');
-                  },
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                  return EditDecks(deck: newDeck, isdemo: isdemo, creating: true);
+                }));
+
+                setState(() {
+                  _disableTouch = false;
+                });
+              },
+            ),
+            appBar: AppBar(
+                elevation: 2,
+                backgroundColor: MyColorScheme.uno(),
+                centerTitle: true,
+                title: Text(
+                  'My Decks',
+                  style: TextStyle(
+                      color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
                 ),
-                IconButton(
-                  key: _keySearch,
+                actions: <Widget>[
+                  IconButton(
+                    key: _keyplaylist,
+                    icon: Icon(Icons.featured_play_list),
+                    color: MyColorScheme.accent(),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/playlistmanage');
+                    },
+                  ),
+                  IconButton(
+                    key: _keySearch,
+                    icon: Icon(
+                      Icons.search,
+                      color: MyColorScheme.accent(),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/search',
+                      );
+                    },
+                  ),
+                ],
+                leading: IconButton(
                   icon: Icon(
-                    Icons.search,
+                    Icons.account_circle,
                     color: MyColorScheme.accent(),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/search',
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return AccountSettings();
+                        },
+                      ),
                     );
                   },
-                ),
-              ],
-              leading: IconButton(
-                icon: Icon(
-                  Icons.account_circle,
-                  color: MyColorScheme.accent(),
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return AccountSettings();
-                      },
-                    ),
-                  );
-                },
-              )),
-          body: FutureBuilder(
-              future: SharedPreferences.getInstance(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return Text("loading");
-                print("user id is ${snapshot.data.getString('uid')}");
-                final String userID = snapshot.data.getString('uid');
-                uid = userID;
-                return StreamBuilder(
-                    stream: Firestore.instance
-                        .collection('user_data')
-                        .document(userID)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      print(userID);
-                      if (!snapshot.hasData) return Text("loading");
-                      if (snapshot.data == null) return Container();
-                      List<dynamic> userDeckIDs;
-                      try {
-                        userDeckIDs = snapshot.data["decks"];
-                      } catch (e) {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) {
-                          return GetUserInfo();
-                        }));
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 50),
-                        child: ListView.builder(
-                          itemCount: userDeckIDs.length,
-                          itemBuilder: (BuildContext ctxt, int index) =>
-                              Stack(children: <Widget>[
-                            GestureDetector(
-                                onTapDown: (details) {
-                                  _tapPosition = details.globalPosition;
-                                },
-                                onLongPress: () async {
-                                  final RenderBox overlay = Overlay.of(context)
-                                      .context
-                                      .findRenderObject();
-                                  await showMenu(
-                                    context: context,
-                                    // found way to show delete button on the location of long press
-                                    // not sure how it works
-                                    position: RelativeRect.fromRect(
-                                        _tapPosition &
-                                            Size(40,
-                                                40), // smaller rect, the touch area
-                                        Offset.zero &
-                                            overlay
-                                                .size // Bigger rect, the entire screen
-                                        ),
-                                    items: [
-                                      PopupMenuItem(
-                                        value: "delete button",
-                                        child: GestureDetector(
-                                            onTap: () async {
-                                              Navigator.pop(
-                                                  context, "delete button");
-                                              setState(() {
-                                                _disableTouch = true;
-                                              });
-                                              createAlertDialog(
-                                                  ctxt, userDeckIDs[index]);
-                                              setState(() {
-                                                _disableTouch = false;
-                                              });
-                                            },
-                                            child: Text("Delete")),
-                                      ),
-                                    ],
-                                    elevation: 8.0,
-                                  );
-                                },
-                                onTap: () {
-                                  print(userDeckIDs[index]);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ViewDeck(
-                                          deckID: userDeckIDs[index],
-                                        ),
-                                      ));
-                                },
-                                child: buildDeckInfo(ctxt, userDeckIDs[index])),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                GestureDetector(
+                )),
+            body: FutureBuilder(
+                future: SharedPreferences.getInstance(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return Text("loading");
+                  print("user id is ${snapshot.data.getString('uid')}");
+                  final String userID = snapshot.data.getString('uid');
+                  uid = userID;
+                  return StreamBuilder(
+                      stream: Firestore.instance
+                          .collection('user_data')
+                          .document(userID)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        print(userID);
+                        if (!snapshot.hasData) return Text("loading");
+                        if (snapshot.data == null) return Container();
+                        List<dynamic> userDeckIDs;
+                        try {
+                          userDeckIDs = snapshot.data["decks"];
+                        } catch (e) {
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return GetUserInfo();
+                          }));
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          child: ListView.builder(
+                            itemCount: userDeckIDs.length,
+                            itemBuilder: (BuildContext ctxt, int index) =>
+                                Stack(children: <Widget>[
+                              GestureDetector(
                                   onTapDown: (details) {
                                     _tapPosition = details.globalPosition;
                                   },
-                                  onTap: () async {
-                                    final RenderBox overlay =
-                                        Overlay.of(context)
-                                            .context
-                                            .findRenderObject();
+                                  onLongPress: () async {
+                                    final RenderBox overlay = Overlay.of(context)
+                                        .context
+                                        .findRenderObject();
                                     await showMenu(
                                       context: context,
                                       // found way to show delete button on the location of long press
@@ -351,22 +305,80 @@ class _MyDecksState extends State<MyDecks> {
                                       elevation: 8.0,
                                     );
                                   },
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 20, 10, 0),
-                                    child: Icon(
-                                      Icons.more_horiz,
-                                      color: MyColorScheme.accent(),
+                                  onTap: () {
+                                    print(userDeckIDs[index]);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ViewDeck(
+                                            deckID: userDeckIDs[index],
+                                          ),
+                                        ));
+                                  },
+                                  child: buildDeckInfo(ctxt, userDeckIDs[index])),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTapDown: (details) {
+                                      _tapPosition = details.globalPosition;
+                                    },
+                                    onTap: () async {
+                                      final RenderBox overlay =
+                                          Overlay.of(context)
+                                              .context
+                                              .findRenderObject();
+                                      await showMenu(
+                                        context: context,
+                                        // found way to show delete button on the location of long press
+                                        // not sure how it works
+                                        position: RelativeRect.fromRect(
+                                            _tapPosition &
+                                                Size(40,
+                                                    40), // smaller rect, the touch area
+                                            Offset.zero &
+                                                overlay
+                                                    .size // Bigger rect, the entire screen
+                                            ),
+                                        items: [
+                                          PopupMenuItem(
+                                            value: "delete button",
+                                            child: GestureDetector(
+                                                onTap: () async {
+                                                  Navigator.pop(
+                                                      context, "delete button");
+                                                  setState(() {
+                                                    _disableTouch = true;
+                                                  });
+                                                  createAlertDialog(
+                                                      ctxt, userDeckIDs[index]);
+                                                  setState(() {
+                                                    _disableTouch = false;
+                                                  });
+                                                },
+                                                child: Text("Delete")),
+                                          ),
+                                        ],
+                                        elevation: 8.0,
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                                      child: Icon(
+                                        Icons.more_horiz,
+                                        color: MyColorScheme.accent(),
+                                      ),
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ]),
-                        ),
-                      );
-                    });
-              }),
+                                  )
+                                ],
+                              ),
+                            ]),
+                          ),
+                        );
+                      });
+                }),
+          ),
         ),
       ),
     );

@@ -107,7 +107,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
-                                    color: MyColorScheme.accent(), width: 3),
+                                    color: MyColorScheme.flashcardColor(), width: 3),
                                 borderRadius: BorderRadius.circular(20)),
                             child: Center(
                               child: Padding(
@@ -137,9 +137,10 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                 });
                                           },
                                           elevation: 2.0,
-                                          fillColor: Colors.red,
+                                          fillColor: Colors.redAccent[700],
                                           child: Icon(
                                             Icons.close,
+                                            color: Colors.white,
                                             size: 35.0,
                                           ),
                                           padding: EdgeInsets.all(15.0),
@@ -157,9 +158,10 @@ class _FlashCardViewState extends State<FlashCardView> {
                                             });
                                           },
                                           elevation: 2.0,
-                                          fillColor: Colors.green,
+                                          fillColor: Colors.greenAccent[400],
                                           child: Icon(
                                             Icons.check,
+                                            color: Colors.white,
                                             size: 35.0,
                                           ),
                                           padding: EdgeInsets.all(15.0),
@@ -225,9 +227,9 @@ class _FlashCardViewState extends State<FlashCardView> {
                       back: Stack(children: <Widget>[
                         Container(
                           decoration: BoxDecoration(
-                              color: MyColorScheme.accentLight(),
+                              color: MyColorScheme.flashcardColor(),
                               border: Border.all(
-                                  color: MyColorScheme.accent(), width: 3),
+                                  color: MyColorScheme.flashcardColor(), width: 3),
                               borderRadius: BorderRadius.circular(20)),
                           child: Center(
                             child: Padding(
@@ -251,7 +253,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                       definition,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           fontSize: 20,
                                           fontWeight: FontWeight.normal),
                                     ),

@@ -356,8 +356,8 @@ class _ViewDeckState extends State<ViewDeck> {
                       color: MyColorScheme.cinco()),
                 ),
               ),
-              body: Material(
-                color: Colors.blueAccent[100],
+              body: Container(
+                color: Color.fromRGBO(27, 116, 240, 1),
                 child: Column(
                   children: <Widget>[
                     Expanded(
@@ -374,15 +374,15 @@ class _ViewDeckState extends State<ViewDeck> {
                     Row(
                       children: <Widget>[
                         SizedBox(
-                          width: 10,
+                          width: 30,
                         ),
                         LinearPercentIndicator(
                           percent: completedPercentage,
-                          backgroundColor: Colors.grey,
-                          width: MediaQuery.of(context).size.width - 20,
+                          backgroundColor: Colors.blueGrey[400],
+                          width: MediaQuery.of(context).size.width - 60,
                           // // animation: true,
                           linearStrokeCap: LinearStrokeCap.roundAll,
-                          progressColor: Colors.amber[300],
+                          progressColor: Colors.white,
                           lineHeight: 20,
                         ),
                       ],
@@ -502,7 +502,15 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         numberOfCards = deck.flashCardList.length.toDouble();
       });
       return Container(
-        color: Colors.blueAccent[100],
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Color.fromRGBO(84, 205, 255, 1),
+              Color.fromRGBO(84, 205, 255, 1),
+              Color.fromRGBO(27, 116, 210, 1)
+            ])),
         child: PageView.builder(
             controller: _pageCtrl,
             scrollDirection: Axis.horizontal,
@@ -546,7 +554,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 //                }
                   try {
                     return FlashCardView(
-                      color: Colors.accents[currentIndex],
+                      color: Colors.accents[currentIndex + 1],
                       currentIndex: currentIndex,
                       currentPage: currentPage,
                       flashCardID: cardsNotRemembered[currentIndex],
