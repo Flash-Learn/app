@@ -33,7 +33,8 @@ export const sendCollectionToAlgolia = functions.https.onRequest(async (req, res
         // display, filtering, or relevance. Otherwise, you can leave it out.
         const record = {
             objectID: doc.id,
-            deckName: document.deckName
+            deckName: document.deckName,
+            tagsList : document.tagsList
             };
 
         algoliaRecords.push(record);
@@ -45,3 +46,6 @@ export const sendCollectionToAlgolia = functions.https.onRequest(async (req, res
     });
 	
 })
+
+
+

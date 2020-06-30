@@ -27,6 +27,7 @@ dependencies:
   flip_card: ^0.4.4
 #  flutter_cache_manager: ^0.3.2
   cached_network_image: ^2.2.0+1
+  flutter_duration_picker: ^1.0.4
   percent_indicator: "^2.1.5"
   algolia: ^0.1.6+1
 
