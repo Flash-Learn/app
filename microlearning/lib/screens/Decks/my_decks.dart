@@ -41,7 +41,6 @@ class _MyDecksState extends State<MyDecks> {
     'Click here to browse playlists',
   ];
   int _index = 0;
-  final notification = Notifications();
 
   spotlight(Key key) {
     _index++;
@@ -120,7 +119,6 @@ class _MyDecksState extends State<MyDecks> {
   @override
   void initState() {
     super.initState();
-    notification.initializeNotifications();
   }
 
   Widget buildDeckInfo(BuildContext ctxt, String deckID) {
@@ -187,22 +185,6 @@ class _MyDecksState extends State<MyDecks> {
                     color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
               ),
               actions: <Widget>[
-                IconButton(
-                  color: MyColorScheme.accent(),
-                  icon: Icon(Icons.notifications),
-                  onPressed: () async {
-                    DateTime now = DateTime.now().toUtc().add(
-                          Duration(seconds: 20),
-                        );
-                    await notification.singleNotification(
-                      now,
-                      "Notification",
-                      "This is a notification",
-                      98123871,
-                    );
-                    print("haha");
-                  },
-                ),
                 IconButton(
                   key: _keyplaylist,
                   icon: Icon(Icons.featured_play_list),
