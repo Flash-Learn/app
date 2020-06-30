@@ -17,4 +17,5 @@ class MyColorScheme
 
   static Color accent() => Colors.blue[700];
   static Color accentLight() => Colors.blue[400];
+  static Color flashcardColor() => Colors.white;
 }
