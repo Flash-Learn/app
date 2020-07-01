@@ -62,7 +62,7 @@ Widget deckInfoCard(String deckID) {
               color: MyColorScheme.uno(),
               shadowColor: Colors.black,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                padding: const EdgeInsets.fromLTRB(15, 15, 35, 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,

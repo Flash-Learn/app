@@ -303,16 +303,16 @@ class _ViewDeckState extends State<ViewDeck> {
                               value: "notification button",
                               child: GestureDetector(
                                   onTap: () async {
-                                    Navigator.pop(
+                                    try{Navigator.pop(
                                         context, "notification button");
                                     Duration resultingDuration =
                                         await showDurationPicker(
                                             context: context,
                                             initialTime: Duration(
                                                 hours: 0, minutes: 10));
-                                    print(resultingDuration.inHours);
-                                    print(resultingDuration.inMinutes);
-                                    DateTime now = DateTime.now().toUtc().add(
+                                    // print(resultingDuration.inHours);
+                                    // print(resultingDuration.inMinutes);
+                                    if(resultingDuration!=null){DateTime now = DateTime.now().toUtc().add(
                                           Duration(
                                               hours: resultingDuration.inHours,
                                               minutes:
@@ -322,7 +322,9 @@ class _ViewDeckState extends State<ViewDeck> {
                                       now,
                                       "Reminder",
                                       "Revise your deck '${deck.deckName}'",
-                                    );
+                                    );}}catch(e){
+                                      print(e);
+                                    }
                                   },
                                   child: Row(
                                     children: <Widget>[
