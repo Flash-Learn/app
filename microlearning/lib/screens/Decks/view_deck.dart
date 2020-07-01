@@ -538,9 +538,13 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
           List<dynamic> cardsNotRemembered = snapshot.data;
 
-          setState(() {
-            numberOfCards = cardsNotRemembered.length.toDouble();
+          WidgetsBinding.instance.addPostFrameCallback((_){
+            // Add Your Code here.
+            setState(() {
+              numberOfCards = cardsNotRemembered.length.toDouble();
+            });
           });
+
           return Container(
             color: Colors.white,
             child: PageView.builder(
