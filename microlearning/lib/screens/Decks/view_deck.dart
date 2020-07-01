@@ -499,14 +499,17 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   @override
   Widget build(BuildContext context) {
     if (widget.showAllCards) {
-      setState(() {
-        numberOfCards = deck.flashCardList.length.toDouble();
-//        _pageCtrl.jumpToPage(0);
-        if(currentView==2) {
-          currentView=1;
-          _pageCtrl.jumpToPage(0);
-          currentPage=_pageCtrl.page;
-        }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          numberOfCards = deck.flashCardList.length.toDouble();
+          //        _pageCtrl.jumpToPage(0);
+          if (currentView == 2) {
+            currentView = 1;
+            _pageCtrl.jumpToPage(0);
+            currentPage = _pageCtrl.page;
+            widget.changePercentage((_pageCtrl.page + 1) / numberOfCards);
+          }
+        });
       });
       return Container(
         decoration: BoxDecoration(
@@ -553,6 +556,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
                 currentView=2;
                 _pageCtrl.jumpToPage(0);
                 currentPage=0;
+                widget.changePercentage((_pageCtrl.page + 1) / numberOfCards);
               }
             });
           });
