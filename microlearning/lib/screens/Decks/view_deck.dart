@@ -469,6 +469,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
   double numberOfCards = 1;
   double currentPage = 0.0;
+  int currentView=1;
 
   Future<List<dynamic>> getNotRememberedCards() async {
     List<dynamic> ret = [];
@@ -502,6 +503,12 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     if (widget.showAllCards) {
       setState(() {
         numberOfCards = deck.flashCardList.length.toDouble();
+//        _pageCtrl.jumpToPage(0);
+        if(currentView==2) {
+          currentView=1;
+          _pageCtrl.jumpToPage(0);
+          currentPage=_pageCtrl.page;
+        }
       });
       return Container(
         decoration: BoxDecoration(
@@ -544,6 +551,11 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
             // Add Your Code here.
             setState(() {
               numberOfCards = cardsNotRemembered.length.toDouble();
+              if(currentView==1) {
+                currentView=2;
+                _pageCtrl.jumpToPage(0);
+                currentPage=0;
+              }
             });
           });
 
