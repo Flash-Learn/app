@@ -10,7 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
-import 'package:microlearning/services/notification_plugin.dart';
+import 'package:microlearning/Models/notification_plugin.dart';
+import 'package:flutter_duration_picker/flutter_duration_picker.dart';
 
 class ViewDeck extends StatefulWidget {
   final bool isdemo;
@@ -302,16 +303,26 @@ class _ViewDeckState extends State<ViewDeck> {
                               value: "notification button",
                               child: GestureDetector(
                                   onTap: () async {
+                                    Navigator.pop(
+                                        context, "notification button");
+                                    Duration resultingDuration =
+                                        await showDurationPicker(
+                                            context: context,
+                                            initialTime: Duration(
+                                                hours: 0, minutes: 10));
+                                    print(resultingDuration.inHours);
+                                    print(resultingDuration.inMinutes);
                                     DateTime now = DateTime.now().toUtc().add(
-                                          Duration(seconds: 5),
+                                          Duration(
+                                              hours: resultingDuration.inHours,
+                                              minutes:
+                                                  resultingDuration.inMinutes),
                                         );
                                     await notification.singleNotification(
                                       now,
                                       "Reminder",
-                                      "Revise your Deck",
-                                      98123871,
+                                      "Revise your deck '${deck.deckName}'",
                                     );
-                                    // print("haha");
                                   },
                                   child: Row(
                                     children: <Widget>[
@@ -322,7 +333,7 @@ class _ViewDeckState extends State<ViewDeck> {
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      Text('Remind me in 10 mins')
+                                      Text('Remind me later')
                                     ],
                                   )),
                             ),

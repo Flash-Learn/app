@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
-import 'package:microlearning/services/notification_plugin.dart';
 
 class MyDecks extends StatefulWidget {
   bool isdemo;
