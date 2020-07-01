@@ -236,17 +236,20 @@ class _ViewDeckState extends State<ViewDeck> {
                                       _disableTouch = false;
                                     });
                                   },
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.edit,
-                                        color: MyColorScheme.accent(),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text("Edit Deck"),
-                                    ],
+                                  child: Card(
+                                    elevation: 0,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.edit,
+                                          color: MyColorScheme.accent(),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text("Edit Deck"),
+                                      ],
+                                    ),
                                   )),
                             ),
                             PopupMenuItem(
@@ -262,17 +265,20 @@ class _ViewDeckState extends State<ViewDeck> {
                                       _disableTouch = false;
                                     });
                                   },
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.shuffle,
-                                        color: MyColorScheme.accent(),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text("Shuffle Deck"),
-                                    ],
+                                  child: Card(
+                                    elevation: 0,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.shuffle,
+                                          color: MyColorScheme.accent(),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text("Shuffle Deck"),
+                                      ],
+                                    ),
                                   )),
                             ),
                             PopupMenuItem(
@@ -284,19 +290,22 @@ class _ViewDeckState extends State<ViewDeck> {
                                       showAllcards = !showAllcards;
                                     });
                                   },
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.filter_list,
-                                        color: MyColorScheme.accent(),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      showAllcards
-                                          ? Text("Not memorized cards")
-                                          : Text("Show all cards"),
-                                    ],
+                                  child: Card(
+                                    elevation: 0,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.filter_list,
+                                          color: MyColorScheme.accent(),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        showAllcards
+                                            ? Text("Not memorized cards")
+                                            : Text("Show all cards"),
+                                      ],
+                                    ),
                                   )),
                             ),
                             PopupMenuItem(
@@ -326,17 +335,20 @@ class _ViewDeckState extends State<ViewDeck> {
                                       print(e);
                                     }
                                   },
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.notifications,
-                                        color: MyColorScheme.accent(),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text('Remind me later')
-                                    ],
+                                  child: Card(
+                                    elevation: 0,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.notifications,
+                                          color: MyColorScheme.accent(),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text('Remind me later')
+                                      ],
+                                    ),
                                   )),
                             ),
                           ],
