@@ -469,7 +469,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
   double numberOfCards = 1;
   double currentPage = 0.0;
-  int currentView=1;
+  int currentView=2;
 
   Future<List<dynamic>> getNotRememberedCards() async {
     List<dynamic> ret = [];
