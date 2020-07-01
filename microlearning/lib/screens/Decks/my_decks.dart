@@ -299,7 +299,15 @@ class _MyDecksState extends State<MyDecks> {
                                                   _disableTouch = false;
                                                 });
                                               },
-                                              child: Text("Delete")),
+                                              child: Card(
+                                                elevation: 0,
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Icon(Icons.delete, color: MyColorScheme.accent(),),
+                                                    Text("Delete"),
+                                                  ],
+                                                ),
+                                              )),
                                         ),
                                       ],
                                       elevation: 8.0,
@@ -356,7 +364,16 @@ class _MyDecksState extends State<MyDecks> {
                                                     _disableTouch = false;
                                                   });
                                                 },
-                                                child: Text("Delete")),
+                                               child:Card(
+                                                  elevation: 0,
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      Icon(Icons.delete, color: MyColorScheme.accent(),),
+                                                      Text("Delete"),
+                                                    ],
+                                                  ),
+                                              ),
+                                               ),
                                           ),
                                         ],
                                         elevation: 8.0,
