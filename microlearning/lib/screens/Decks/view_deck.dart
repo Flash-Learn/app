@@ -546,7 +546,16 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
           });
 
           return Container(
-            color: Colors.white,
+//            color: Colors.white,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color.fromRGBO(84, 205, 255, 1),
+                      Color.fromRGBO(84, 205, 255, 1),
+                      Color.fromRGBO(27, 116, 210, 1)
+                    ])),
             child: PageView.builder(
                 controller: _pageCtrl,
                 scrollDirection: Axis.horizontal,
