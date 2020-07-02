@@ -1,3 +1,4 @@
+import 'package:microlearning/screens/Decks/notifications_inapp.dart';
 import 'package:microlearning/screens/Decks/playlist_manage.dart';
 import 'package:microlearning/screens/Search/search.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ Future<void> main() async {
       '/home': (context) => MyDecks(),
       '/register': (context) => RegisterUser(),
       '/search': (context) => Search(),
-      '/playlistmanage': (context) => PlayListManage(),
+      '/notificationinapp': (context) => NotificationInapp(),
     },
   ));
 }
