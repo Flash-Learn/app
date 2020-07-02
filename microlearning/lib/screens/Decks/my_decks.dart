@@ -29,7 +29,6 @@ class _MyDecksState extends State<MyDecks> {
   _MyDecksState({this.isdemo = false});
   GlobalKey<_MyDecksState> _keyNewDeck = GlobalKey<_MyDecksState>();
   GlobalKey<_MyDecksState> _keySearch = GlobalKey<_MyDecksState>();
-  GlobalKey<_MyDecksState> _keyplaylist = GlobalKey<_MyDecksState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
@@ -37,7 +36,6 @@ class _MyDecksState extends State<MyDecks> {
   List<String> text = [
     'Click on this button \n to make a new deck',
     'Click here to search for decks',
-    'Click here to browse playlists',
   ];
   int _index = 0;
 
@@ -104,10 +102,6 @@ class _MyDecksState extends State<MyDecks> {
   _ontap() {
     if (_index == 1) {
       spotlight(_keySearch);
-    } else if (_index == 2) {
-      setState(() {
-        spotlight(_keyplaylist);
-      });
     } else {
       setState(() {
         _enabled = false;
@@ -195,13 +189,32 @@ class _MyDecksState extends State<MyDecks> {
                       color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
                 ),
                 actions: <Widget>[
-                  IconButton(
-                    key: _keyplaylist,
-                    icon: Icon(Icons.featured_play_list),
-                    color: MyColorScheme.accent(),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/playlistmanage');
-                    },
+                  Stack(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.notifications),
+                        color: MyColorScheme.accent(),
+                        onPressed: (){
+                          Navigator.pushNamed(context
+                          , '/notificationinapp');
+                        },
+                      ),
+                      Positioned(
+                        top: 6,
+                        right: 6,
+                        child: Container(
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          // constraints: BoxConstraints(
+                          //   minWidth: 12,
+                          //   minHeight: 12,
+                          // ),
+                        ),
+                      )
+                    ],
                   ),
                   IconButton(
                     key: _keySearch,

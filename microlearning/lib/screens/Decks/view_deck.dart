@@ -195,6 +195,7 @@ class _ViewDeckState extends State<ViewDeck> {
                   },
                 ),
                 actions: <Widget>[
+                  if(widget.editAccess)...[
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
                     child: GestureDetector(
@@ -361,6 +362,18 @@ class _ViewDeckState extends State<ViewDeck> {
                       ),
                     ),
                   ),
+                  ]else...[
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: IconButton(
+                        icon: Icon(Icons.file_download),
+                        color: MyColorScheme.accent(),
+                        onPressed: (){
+                          saveDeck(context, deck);
+                        },
+                      ),
+                    )
+                  ]
                 ],
                 centerTitle: true,
                 title: Text(
