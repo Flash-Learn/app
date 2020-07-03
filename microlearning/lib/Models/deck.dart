@@ -1,22 +1,20 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Deck {
+class Deck{
   String deckID;
-  List<dynamic> flashCardList =
-      []; // stores a list of flashcards using their ID
-  List<dynamic> tagsList = [];
+  List<dynamic> flashCardList=[]; // stores a list of flashcards using their ID
+  List<dynamic> tagsList=[];
   bool isPublic;
   String deckName;
   bool isimage;
 
-  Deck({
-    this.deckName,
-    this.tagsList,
-    this.isPublic,
-    this.flashCardList,
-    this.deckID,
-    this.isimage,
+  Deck({this.deckName,
+        this.tagsList ,
+        this.isPublic,
+        this.flashCardList,
+        this.deckID,
+        this.isimage,
   });
 
 //  void addFlashcardByID(String flashID){
@@ -30,13 +28,14 @@ class Deck {
   // TODO: deletion of deck
 }
 
-Future<void> deleteDeck(String deckID) async {
+
+Future<void> deleteDeck(String deckID) async{
+
   print("called delete deck");
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String uid = prefs.get("uid");
-  DocumentReference deckDocument =
-      Firestore.instance.collection("deck").document(deckID);
+  DocumentReference deckDocument =  Firestore.instance.collection("deck").document(deckID);
 
   dynamic deckData = await deckDocument.get();
 
@@ -49,7 +48,9 @@ Future<void> deleteDeck(String deckID) async {
   });
 }
 
+
 Future<Deck> createNewBlankDeck(String userID, {deckName: ""}) async {
+
   // newDeck is the deck which will be returned
   Deck newDeck = Deck(
     deckName: deckName,
@@ -64,14 +65,12 @@ Future<Deck> createNewBlankDeck(String userID, {deckName: ""}) async {
     "tagsList": [],
     "flashcardList": [],
     "isPublic": true,
+    "deckNameLowerCase": ""
   });
 
   newDeck.deckID = deckRef.documentID;
 
-  await Firestore.instance
-      .collection("decks")
-      .document(newDeck.deckID)
-      .updateData({
+  await Firestore.instance.collection("decks").document(newDeck.deckID).updateData({
     "deckID": newDeck.deckID,
   });
 
