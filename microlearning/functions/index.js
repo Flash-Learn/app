@@ -12,7 +12,7 @@ exports.addToIndex = functions.firestore.document('decks/{deckId}')
         const data = snapshot.data();
         const objectID = snapshot.id;
         console.log(data);
-        return index.addObject({...data, objectID});
+        return index.saveObject({...data, objectID});
     });
 
 exports.updateIndex = functions.firestore.document('decks/{deckId}')
