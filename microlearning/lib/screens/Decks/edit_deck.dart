@@ -58,10 +58,7 @@ class _EditDecksState extends State<EditDecks> {
               children: <Widget>[
                 Text(
                   text[_index],
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: MyColorScheme.uno()),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,
                   maxLines: 2,
@@ -149,6 +146,8 @@ class _EditDecksState extends State<EditDecks> {
                   .updateData({
                 "deckName": deck.deckName,
                 "tagsList": deck.tagsList,
+                "deckNameLowerCase": deck.deckName.toLowerCase(),
+                "searchKey": deck.deckName[0].toLowerCase()
               });
 
               Navigator.of(context)
@@ -189,9 +188,7 @@ class _EditDecksState extends State<EditDecks> {
                     onPressed: () {
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) {
-                        return ViewDeck(
-                          deckID: deck.deckID,
-                        );
+                        return ViewDeck(deckID: deck.deckID,);
                       }));
                     },
                   ),
