@@ -115,7 +115,7 @@ class _SearchState extends State<Search> {
                               return _searchTerm.length > 0
                                   ? Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 4.0, horizontal: 4.0),
+                                          vertical: 10.0, horizontal: 0.0),
                                       child: buildResultCard(
                                           context, currSearchStuff[index]),
                                     )
@@ -138,52 +138,73 @@ class _SearchState extends State<Search> {
 
 Widget buildResultCard(context, result) {
   return InkWell(
-    onTap: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ViewDeck(
-              deckID: result.data['deckID'],
-              editAccess: false,
-            ),
-          ));
-    },
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(2),
-      ),
-      elevation: 2,
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2),
-            border: Border.all(color: MyColorScheme.accent())),
-        child: Container(
-          height: 70,
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  result.data["deckName"],
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: MyColorScheme.accent(),
-                    fontSize: 20,
-                  ),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ViewDeck(
+                deckID: result.data['deckID'],
+                editAccess: false,
+              ),
+            ));
+      },
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: Container(
+            height: 110,
+            width: MediaQuery.of(context).size.width,
+            child: Material(
+              elevation: 3,
+              borderRadius: BorderRadius.circular(10),
+              color: MyColorScheme.uno(),
+              shadowColor: Colors.black,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 15, 35, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              result.data["deckName"],
+                              style: TextStyle(
+                                  color: MyColorScheme.cinco(),
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w900),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Row(
+                              children: getTags(result.data["tagsList"]),
+                            )
+                          ],
+                        ))
+                  ],
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(children: getTags(result.data["tagsList"])),
-                ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
-    ),
-  );
+      ));
 }
 
 List<Widget> getTags(List<dynamic> strings) {
