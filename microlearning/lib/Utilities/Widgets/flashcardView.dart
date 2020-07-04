@@ -1,4 +1,5 @@
-import 'package:flip_card/flip_card.dart';
+//import 'package:flip_card/flip_card.dart';
+import 'flip_card.dart'; // created local copy of flip_card library
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -94,7 +95,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                   transform: Matrix4.identity()
                     ..setEntry(1, 2, 0)
                     ..scale((1 - relativePosition.abs()).clamp(0.4, 0.6) + 0.4)
-                    ..rotateY(relativePosition),
+                    ..rotateY(relativePosition*1.2),
                   alignment: relativePosition >= 0
                       ? Alignment.centerLeft
                       : Alignment.centerRight,
