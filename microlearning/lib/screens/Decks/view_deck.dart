@@ -152,6 +152,8 @@ class _ViewDeckState extends State<ViewDeck> {
   }
 
   void changePercentage(double percentage) {
+    percentage = percentage < 0.0 ? 0.0 : percentage;
+    percentage = percentage > 1.0 ? 1.0 : percentage;
     setState(() {
       completedPercentage = percentage;
     });
