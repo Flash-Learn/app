@@ -28,9 +28,9 @@ class _EditFlashCardState extends State<EditFlashCard> {
 
   Deck newDeck;
 
-  GlobalKey<_EditFlashCardState> _keyFlashcard =
+  static final GlobalKey<_EditFlashCardState> _keyFlashcard =
       GlobalKey<_EditFlashCardState>();
-  GlobalKey<_EditFlashCardState> _keySave = GlobalKey<_EditFlashCardState>();
+  static final GlobalKey<_EditFlashCardState> _keySave = GlobalKey<_EditFlashCardState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
@@ -94,7 +94,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height*0.2,
+              height: 100,
             ),
           ],
         ),
