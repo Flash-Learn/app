@@ -155,7 +155,12 @@ class _ViewDeckState extends State<ViewDeck> {
     notification.initializeNotifications();
   }
 
-  void changePercentage(double percentage) {
+  void changePercentage(double percentage, double numberOfCards) {
+
+    if(numberOfCards > 1)
+      percentage = (percentage - 1/numberOfCards) / (1 - 1/numberOfCards);
+    else
+      percentage = 1;
     percentage = percentage < 0.0 ? 0.0 : percentage;
     percentage = percentage > 1.0 ? 1.0 : percentage;
     setState(() {
@@ -394,7 +399,15 @@ class _ViewDeckState extends State<ViewDeck> {
                 ),
               ),
               body: Container(
-                color: Color.fromRGBO(27, 116, 240, 1),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color.fromRGBO(84, 205, 255, 1),
+                          Color.fromRGBO(84, 205, 255, 1),
+                          Color.fromRGBO(27, 116, 210, 1)
+                        ])),
                 child: Column(
                   children: <Widget>[
                     Expanded(
@@ -411,18 +424,35 @@ class _ViewDeckState extends State<ViewDeck> {
                       ),
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                          width: 30,
-                        ),
-                        LinearPercentIndicator(
-                          percent: completedPercentage,
-                          backgroundColor: Colors.blueGrey[400],
-                          width: MediaQuery.of(context).size.width - 60,
-                          // // animation: true,
-                          linearStrokeCap: LinearStrokeCap.roundAll,
-                          progressColor: Colors.white,
-                          lineHeight: 20,
+//                        SizedBox(
+//                          width: 30,
+//                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                              child: Text(
+                                "progress:",
+                                style: TextStyle(
+                                  letterSpacing: 3,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                            ),
+                            LinearPercentIndicator(
+                              percent: completedPercentage,
+                              backgroundColor: Colors.blueGrey[400],
+                              width: MediaQuery.of(context).size.width - 60,
+                              // // animation: true,
+                              linearStrokeCap: LinearStrokeCap.roundAll,
+                              progressColor: Colors.white,
+                              lineHeight: 20,
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -539,7 +569,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     super.initState();
     _pageCtrl.addListener(() {
       setState(() {
-        widget.changePercentage((_pageCtrl.page + 1) / numberOfCards);
+        widget.changePercentage((_pageCtrl.page + 1) / numberOfCards, numberOfCards);
         currentPage = _pageCtrl.page;
       });
     });
@@ -557,7 +587,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
             currentView = 1;
             _pageCtrl.jumpToPage(0);
             currentPage = _pageCtrl.page;
-            widget.changePercentage((_pageCtrl.page + 1) / numberOfCards);
+            widget.changePercentage((_pageCtrl.page + 1) / numberOfCards, numberOfCards);
           }
         });
       });
@@ -574,15 +604,6 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         print("unshuffle");
       }
       return Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-              Color.fromRGBO(84, 205, 255, 1),
-              Color.fromRGBO(84, 205, 255, 1),
-              Color.fromRGBO(27, 116, 210, 1)
-            ])),
         child: PageView.builder(
             controller: _pageCtrl,
             scrollDirection: Axis.horizontal,
@@ -619,22 +640,14 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
                 shuffleState=false;
                 _pageCtrl.jumpToPage(0);
                 currentPage=0;
-                widget.changePercentage((_pageCtrl.page + 1) / numberOfCards);
+                widget.changePercentage((_pageCtrl.page + 1) / numberOfCards, numberOfCards);
               }
             });
           });
 
           return Container(
 //            color: Colors.white,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color.fromRGBO(84, 205, 255, 1),
-                      Color.fromRGBO(84, 205, 255, 1),
-                      Color.fromRGBO(27, 116, 210, 1)
-                    ])),
+
             child: PageView.builder(
                 controller: _pageCtrl,
                 scrollDirection: Axis.horizontal,
