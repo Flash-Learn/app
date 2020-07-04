@@ -34,8 +34,12 @@ class _ViewDeckState extends State<ViewDeck> {
   bool showAllcards = true;
   bool isdemo;
   String deckID;
+  bool isShuffled = false;
   double completedPercentage = 0;
   Deck deck;
+  Key whenShuffled = UniqueKey();
+  Key whenNotShuffled = UniqueKey();
+
   _ViewDeckState({this.deckID, this.isdemo});
   bool _disableTouch = false;
   final notification = Notifications();
@@ -262,7 +266,9 @@ class _ViewDeckState extends State<ViewDeck> {
                                     Navigator.pop(context, "shuffle button");
                                     setState(() {
                                       _disableTouch = true;
-                                      deck.flashCardList.shuffle();
+//                                      deck.flashCardList.shuffle();
+                                      isShuffled = !isShuffled;
+                                      print(isShuffled);
                                     });
                                     setState(() {
                                       _disableTouch = false;
@@ -279,7 +285,9 @@ class _ViewDeckState extends State<ViewDeck> {
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text("Shuffle Deck"),
+                                        Text(
+                                            isShuffled ? "Un-shuffle deck" : "Shuffle Deck"
+                                        ),
                                       ],
                                     ),
                                   )),
@@ -397,6 +405,8 @@ class _ViewDeckState extends State<ViewDeck> {
                           showAllCards: showAllcards,
                           editAccess: widget.editAccess,
                           changePercentage: changePercentage,
+                          isShuffled: isShuffled,
+                          key: isShuffled ? whenShuffled : whenNotShuffled,
                         ),
                       ),
                     ),
@@ -477,26 +487,36 @@ class FlashCardSwipeView extends StatefulWidget {
     this.showAllCards,
     this.editAccess,
     this.changePercentage,
+    this.isShuffled,
+    @required this.key,
   });
+  bool isShuffled;
+  final Key key;
   final dynamic changePercentage;
   final Deck deck;
   final bool editAccess;
   final bool showAllCards;
+
   _FlashCardSwipeViewState createState() =>
-      _FlashCardSwipeViewState(deck: deck);
+//    print("===========================================");
+    _FlashCardSwipeViewState(deck: deck, isShuffled: isShuffled);
+
 }
 
 class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   _FlashCardSwipeViewState({
     this.deck,
+    this.isShuffled,
   });
 
   final Deck deck;
+  bool isShuffled;
   PageController _pageCtrl = PageController(viewportFraction: 0.9);
 
   double numberOfCards = 1;
   double currentPage = 0.0;
   int currentView=2;
+  bool shuffleState = false;
 
   Future<List<dynamic>> getNotRememberedCards() async {
     List<dynamic> ret = [];
@@ -533,6 +553,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
           numberOfCards = deck.flashCardList.length.toDouble();
           //        _pageCtrl.jumpToPage(0);
           if (currentView == 2) {
+            shuffleState=false;
             currentView = 1;
             _pageCtrl.jumpToPage(0);
             currentPage = _pageCtrl.page;
@@ -540,6 +561,18 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
           }
         });
       });
+      List<dynamic> cardsRemembered = deck.flashCardList;
+
+      if(isShuffled && !shuffleState){
+        cardsRemembered.shuffle();
+        shuffleState=true;
+        print("shuffling");
+      }
+      else if (!isShuffled && shuffleState){
+        cardsRemembered = deck.flashCardList;
+        shuffleState=false;
+        print("unshuffle");
+      }
       return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -553,13 +586,13 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         child: PageView.builder(
             controller: _pageCtrl,
             scrollDirection: Axis.horizontal,
-            itemCount: deck.flashCardList.length,
+            itemCount: cardsRemembered.length,
             itemBuilder: (context, int currentIndex) {
               return FlashCardView(
                 color: Colors.accents[currentIndex],
                 currentIndex: currentIndex,
                 currentPage: currentPage,
-                flashCardID: deck.flashCardList[currentIndex],
+                flashCardID: cardsRemembered[currentIndex],
                 editAccess: widget.editAccess,
               );
             }),
@@ -583,6 +616,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
               numberOfCards = cardsNotRemembered.length.toDouble();
               if(currentView==1) {
                 currentView=2;
+                shuffleState=false;
                 _pageCtrl.jumpToPage(0);
                 currentPage=0;
                 widget.changePercentage((_pageCtrl.page + 1) / numberOfCards);
@@ -609,6 +643,16 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 //                print("${_pageCtrl.page}, $currentPage, $currentIndex");
 //                if(currentIndex >= cardsNotRemembered.length){
 //                  _pageCtrl.jumpToPage(0);
+                  if(isShuffled && !shuffleState){
+                    cardsNotRemembered.shuffle();
+                    shuffleState=true;
+                    print("shuffling");
+                  }
+                  else if (!isShuffled && shuffleState){
+                    cardsNotRemembered = snapshot.data;
+                    shuffleState=false;
+                    print("unshuffle");
+                  }
 //                }
                   try {
                     return FlashCardView(
