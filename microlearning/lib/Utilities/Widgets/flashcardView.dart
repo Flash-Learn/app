@@ -136,10 +136,13 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                   'userRemembers': false,
                                                 });
                                             SnackBar snackBar = SnackBar(
-                                              content: Text(
-                                                'This card has been marked not-remembered.',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(color: MyColorScheme.cinco()),
+                                              content: Padding(
+                                                padding: const EdgeInsets.only(top: 8.0),
+                                                child: Text(
+                                                  'This card has been marked not-remembered.',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(color: MyColorScheme.cinco()),
+                                                ),
                                               ),
                                               backgroundColor: MyColorScheme.uno(),
                                               action: SnackBarAction(
@@ -178,10 +181,13 @@ class _FlashCardViewState extends State<FlashCardView> {
                                               'userRemembers': true,
                                             });
                                             SnackBar snackBar = SnackBar(
-                                              content: Text(
-                                                'This card has been marked remembered.',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(color: MyColorScheme.cinco()),
+                                              content: Padding(
+                                                padding: const EdgeInsets.only(top:8.0),
+                                                child: Text(
+                                                  'This card has been marked remembered.',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(color: MyColorScheme.cinco()),
+                                                ),
                                               ),
                                               backgroundColor: MyColorScheme.uno(),
                                               action: SnackBarAction(
