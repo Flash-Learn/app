@@ -189,33 +189,19 @@ class _MyDecksState extends State<MyDecks> {
                       color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
                 ),
                 actions: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.notifications),
-                        color: MyColorScheme.accent(),
-                        onPressed: (){
-                          Navigator.pushNamed(context
-                          , '/notificationinapp');
-                        },
-                      ),
-                      Positioned(
-                        top: 6,
-                        right: 6,
-                        child: Container(
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          // constraints: BoxConstraints(
-                          //   minWidth: 12,
-                          //   minHeight: 12,
-                          // ),
-                        ),
-                      )
-                    ],
-                  ),
+                  // Stack(
+                  //   children: <Widget>[
+                  //     // commenting the notification button for now, will use it when classroom feature is encorporated
+                  //     // IconButton(
+                  //     //   icon: Icon(Icons.notifications),
+                  //     //   color: MyColorScheme.accent(),
+                  //     //   onPressed: (){
+                  //     //     Navigator.pushNamed(context
+                  //     //     , '/notificationinapp');
+                  //     //   },
+                  //     // ),
+                  //   ],
+                  // ),
                   IconButton(
                     key: _keySearch,
                     icon: Icon(
