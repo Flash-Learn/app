@@ -99,7 +99,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                         child: Column(
                           children: <Widget>[
                             TextFormField(
-                                maxLength: 20,
+                                maxLength: 30,
                                 textAlign: TextAlign.center,
                                 initialValue: data[0],
                                 onChanged: (val) {
@@ -107,7 +107,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                       [0] = val;
                                 },
                                 style: TextStyle(
-                                    color: MyColorScheme.uno(), fontSize: 20),
+                                    color: MyColorScheme.uno(), fontSize: 16),
                                 decoration: InputDecoration(
                                   counterText: '',
                                   hintText: 'Term',
