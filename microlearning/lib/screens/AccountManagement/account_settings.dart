@@ -64,8 +64,7 @@ class _AccountSettingsState extends State<AccountSettings> {
               FutureBuilder(
                   future: _getdatafromdatabase(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) return Text("loading");
-                    // print('hahah $name');
+                    if (!snapshot.hasData) return Text("loading...");
                     return Text(
                       name,
                       style: TextStyle(
@@ -86,8 +85,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                   color: MyColorScheme.accent(),
                   child: InkWell(
                     splashColor: Colors.grey,
-                    onTap: () {
-                      Navigator.push(context,
+                    onTap: () async {
+                      name = await Navigator.push(context,
                           MaterialPageRoute(builder: (context) => EditInfo()));
                     },
                     child: Container(
@@ -157,7 +156,7 @@ class _AccountSettingsState extends State<AccountSettings> {
     List<String> defaults = await here.getData();
     //TODO: fix default values of this form
     if (defaults.length > 1 || here != null) {
-      name = defaults[0];
+      if (name == null) name = defaults[0];
     }
     return defaults.toString();
   }
