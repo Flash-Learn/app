@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/authentication/welcome.dart';
 import 'package:microlearning/services/database.dart';
 import 'package:microlearning/services/google_signIn.dart';
@@ -8,13 +9,16 @@ import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountSettings extends StatefulWidget {
+  String name;
+  AccountSettings({this.name});
   @override
-  _AccountSettingsState createState() => _AccountSettingsState();
+  _AccountSettingsState createState() => _AccountSettingsState(name: name);
 }
 
 class _AccountSettingsState extends State<AccountSettings> {
   String uid;
   String name;
+  _AccountSettingsState({this.name});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +34,7 @@ class _AccountSettingsState extends State<AccountSettings> {
           icon: Icon(Icons.arrow_back),
           color: MyColorScheme.uno(),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop();
           },
         ),
       ),
