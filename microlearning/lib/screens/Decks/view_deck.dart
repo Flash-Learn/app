@@ -244,7 +244,7 @@ class _ViewDeckState extends State<ViewDeck> {
                                       }));
                                     else {
                                       print(deck.flashCardList.length);
-                                      saveDeck(context, deck);
+                                      saveDeck(context, deck, deckID);
                                     }
                                     setState(() {
                                       _disableTouch = false;
@@ -386,7 +386,7 @@ class _ViewDeckState extends State<ViewDeck> {
                         icon: Icon(Icons.file_download),
                         color: MyColorScheme.accent(),
                         onPressed: (){
-                          saveDeck(context, deck);
+                          saveDeck(context, deck, deckID);
                         },
                       ),
                     )
