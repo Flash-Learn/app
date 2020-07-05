@@ -105,43 +105,43 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
               ),
               SizedBox(height: 20,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: 60,
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.black,
-                      child: InkWell(
-                        splashColor: Colors.grey,
-                        onTap: () async {
-                          googleLoginButtonPress(context);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text('Continue with Google', style: TextStyle(color: MyColorScheme.uno()),),
-                            Material(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.transparent,
-                              child: Center(
-                                child: Image(
-                                  image: AssetImage(
-                                      "assets/google_logo.png"),
-                                  height: 35.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+//              Row(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  Container(
+//                    width: MediaQuery.of(context).size.width * 0.7,
+//                    height: 60,
+//                    padding: const EdgeInsets.only(right: 0),
+//                    child: Material(
+//                      borderRadius: BorderRadius.circular(10),
+//                      color: Colors.black,
+//                      child: InkWell(
+//                        splashColor: Colors.grey,
+//                        onTap: () async {
+//                          googleLoginButtonPress(context);
+//                        },
+//                        child: Row(
+//                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                          children: <Widget>[
+//                            Text('Continue with Google', style: TextStyle(color: MyColorScheme.uno()),),
+//                            Material(
+//                              borderRadius: BorderRadius.circular(5),
+//                              color: Colors.transparent,
+//                              child: Center(
+//                                child: Image(
+//                                  image: AssetImage(
+//                                      "assets/google_logo.png"),
+//                                  height: 35.0,
+//                                ),
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                      ),
+//                    ),
+//                  ),
+//                ],
+//              ),
             ],
           ),
         ),
