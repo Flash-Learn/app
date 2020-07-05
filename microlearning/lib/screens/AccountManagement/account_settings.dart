@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/screens/Decks/my_decks.dart';
+import 'package:microlearning/screens/authentication/welcome.dart';
 import 'package:microlearning/services/database.dart';
 import 'package:microlearning/services/google_signIn.dart';
 import 'package:microlearning/screens/authentication/login.dart';
@@ -7,33 +9,36 @@ import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountSettings extends StatefulWidget {
+  String name;
+  AccountSettings({this.name});
   @override
-  _AccountSettingsState createState() => _AccountSettingsState();
+  _AccountSettingsState createState() => _AccountSettingsState(name: name);
 }
 
 class _AccountSettingsState extends State<AccountSettings> {
   String uid;
   String name;
+  _AccountSettingsState({this.name});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+      backgroundColor: Colors.blue[400],
         centerTitle: true,
         title: Text(
           'Account Settings',
           style: TextStyle(
-              color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+              color: MyColorScheme.uno(), fontWeight: FontWeight.bold),
         ),
-        backgroundColor: MyColorScheme.uno(),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          color: MyColorScheme.accent(),
+          color: MyColorScheme.uno(),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop();
           },
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.blue[600],
       body: SingleChildScrollView(
         child: Center(
             child: Padding(
@@ -52,13 +57,13 @@ class _AccountSettingsState extends State<AccountSettings> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.03,
               ),
-              Text(
-                'NAME',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  letterSpacing: 2.0,
-                ),
-              ),
+              // Text(
+              //   'NAME',
+              //   style: TextStyle(
+              //     color: Colors.white,
+              //     letterSpacing: 2.0,
+              //   ),
+              // ),
               SizedBox(height: 10),
               FutureBuilder(
                   future: _getdatafromdatabase(),
@@ -69,6 +74,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                       style: TextStyle(
                         letterSpacing: 2,
                         fontSize: 28,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     );
@@ -91,7 +97,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                       height: 40,
                       child: Material(
                         borderRadius: BorderRadius.circular(5),
-                        color: Colors.transparent,
+                        // color: Colors.transparent,
+                        color: Color.fromRGBO(50, 187, 157, 1),
                         child: Center(
                           child: Text('Update Info',
                               style:
@@ -118,16 +125,16 @@ class _AccountSettingsState extends State<AccountSettings> {
                       signOutGoogle();
                       return Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) {
-                          return LoginUser();
+                          return WelcomeScreen();
                         }),
-                        ModalRoute.withName('/login'),
+                        ModalRoute.withName('/'),
                       );
                     },
                     child: Container(
                       height: 40,
                       child: Material(
                         borderRadius: BorderRadius.circular(5),
-                        color: Colors.transparent,
+                        color: Color.fromRGBO(50, 187, 157, 1),
                         child: Center(
                           child: Text('Log Out',
                               style:

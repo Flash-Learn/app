@@ -191,10 +191,12 @@ class _ViewDeckState extends State<ViewDeck> {
             animation: true,
             child: Scaffold(
               appBar: AppBar(
-                backgroundColor: MyColorScheme.uno(),
+                // backgroundColor: MyColorScheme.uno(),
+                // backgroundColor: Color.fromRGBO(118, 174, 247, 1),
+                backgroundColor: Colors.lightBlue[200],
                 leading: IconButton(
                   icon: Icon(Icons.arrow_back),
-                  color: MyColorScheme.accent(),
+                  color: MyColorScheme.uno(),
                   onPressed: () {
                     widget.editAccess
                         ? Navigator.of(context).pushAndRemoveUntil(
@@ -242,7 +244,7 @@ class _ViewDeckState extends State<ViewDeck> {
                                       }));
                                     else {
                                       print(deck.flashCardList.length);
-                                      saveDeck(context, deck);
+                                      saveDeck(context, deck, deckID);
                                     }
                                     setState(() {
                                       _disableTouch = false;
@@ -373,7 +375,7 @@ class _ViewDeckState extends State<ViewDeck> {
                       },
                       child: Icon(
                         Icons.more_horiz,
-                        color: MyColorScheme.accent(),
+                        color: MyColorScheme.uno(),
                       ),
                     ),
                   ),
@@ -384,7 +386,7 @@ class _ViewDeckState extends State<ViewDeck> {
                         icon: Icon(Icons.file_download),
                         color: MyColorScheme.accent(),
                         onPressed: (){
-                          saveDeck(context, deck);
+                          saveDeck(context, deck, deckID);
                         },
                       ),
                     )
@@ -395,7 +397,7 @@ class _ViewDeckState extends State<ViewDeck> {
                   deck.deckName,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: MyColorScheme.cinco()),
+                      color: MyColorScheme.uno()),
                 ),
               ),
               body: Container(
@@ -435,7 +437,7 @@ class _ViewDeckState extends State<ViewDeck> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                               child: Text(
-                                "progress:",
+                                "Progress:",
                                 style: TextStyle(
                                   letterSpacing: 3,
                                   fontWeight: FontWeight.bold,

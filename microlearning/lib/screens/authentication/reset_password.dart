@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/services/username_signIn.dart';
 import 'package:microlearning/screens/authentication/login.dart';
@@ -18,9 +19,18 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 2,
         centerTitle: true,
-        title: Text('Reset Password'),
-        backgroundColor: Colors.black,
+        title: Text('Reset Password', style: TextStyle(color: MyColorScheme.cinco()),),
+        backgroundColor: MyColorScheme.uno(),
+        leading: IconButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          color: MyColorScheme.accent(),
+          icon: Icon(Icons.chevron_left),
+          iconSize: 28,
+        ),
       ),
       backgroundColor: Colors.white,
       body: Builder(
@@ -57,7 +67,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                           height: 20,
                         ),
                         Material(
-                          color: Colors.black,
+                          color: MyColorScheme.accent(),
+                          borderRadius: BorderRadius.circular(10),
                           child: InkWell(
                             splashColor: Colors.grey,
                             onTap: () async {
@@ -88,7 +99,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                               }
                             },
                             child: Container(
-                              height: 40,
+                              height: 50,
+                              width: MediaQuery.of(context).size.width * 0.4,
                               child: Material(
                                 borderRadius: BorderRadius.circular(5),
                                 color: Colors.transparent,

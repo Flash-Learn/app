@@ -181,12 +181,13 @@ class _MyDecksState extends State<MyDecks> {
             ),
             appBar: AppBar(
                 elevation: 2,
-                backgroundColor: MyColorScheme.uno(),
+                // backgroundColor: MyColorScheme.uno(),
+                backgroundColor: Color.fromRGBO(196, 208, 223, 0),
                 centerTitle: true,
                 title: Text(
                   'My Decks',
                   style: TextStyle(
-                      color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+                      color: MyColorScheme.uno(), fontWeight: FontWeight.bold),
                 ),
                 actions: <Widget>[
                   // Stack(
@@ -206,7 +207,7 @@ class _MyDecksState extends State<MyDecks> {
                     key: _keySearch,
                     icon: Icon(
                       Icons.search,
-                      color: MyColorScheme.accent(),
+                      color: MyColorScheme.uno(),
                     ),
                     onPressed: () {
                       Navigator.pushNamed(
@@ -219,7 +220,7 @@ class _MyDecksState extends State<MyDecks> {
                 leading: IconButton(
                   icon: Icon(
                     Icons.account_circle,
-                    color: MyColorScheme.accent(),
+                    color: MyColorScheme.uno(),
                   ),
                   onPressed: () {
                     Navigator.of(context).push(

@@ -4,7 +4,7 @@ import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
-void saveDeck(context, Deck deck) async{
+void saveDeck(context, Deck deck, String originalDeckID) async{
   print("in savedeck");
   Deck toSave = Deck(
     deckName: deck.deckName,
@@ -46,6 +46,15 @@ void saveDeck(context, Deck deck) async{
 
   userReference.document(userID).updateData({
     'decks': FieldValue.arrayUnion([deckRef.documentID]),
+  });
+
+  decksReference.document(deckRef.documentID).updateData({
+    'deckID': deckRef.documentID,
+  });
+
+
+  decksReference.document(originalDeckID).updateData({
+    "downloads" : FieldValue.increment(1),
   });
 
   Navigator.pushAndRemoveUntil(
