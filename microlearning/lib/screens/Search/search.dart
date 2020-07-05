@@ -4,6 +4,7 @@ import 'package:algolia/algolia.dart';
 import 'package:microlearning/Models/algolia.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
+import 'package:microlearning/Utilities/functions/getTags.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -152,7 +153,7 @@ Widget buildResultCard(context, result) {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Container(
-            height: 110,
+            height: 150,
             width: MediaQuery.of(context).size.width,
             child: Material(
               elevation: 3,
@@ -160,7 +161,7 @@ Widget buildResultCard(context, result) {
               color: MyColorScheme.uno(),
               shadowColor: Colors.black,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 35, 15),
+                padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -170,9 +171,6 @@ Widget buildResultCard(context, result) {
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                         child: Row(
                           children: <Widget>[
-                            SizedBox(
-                              width: 10,
-                            ),
                             Text(
                               result.data["deckName"],
                               style: TextStyle(
@@ -190,14 +188,26 @@ Widget buildResultCard(context, result) {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: <Widget>[
-                            SizedBox(
-                              width: 10,
-                            ),
                             Row(
                               children: getTags(result.data["tagsList"]),
                             )
                           ],
-                        ))
+                        )),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Icon(Icons.file_download),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          '${result.data["downloads"]}',
+                          style: TextStyle(fontSize: 18),
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -205,32 +215,4 @@ Widget buildResultCard(context, result) {
           ),
         ),
       ));
-}
-
-List<Widget> getTags(List<dynamic> strings) {
-  List<Widget> ret = [];
-  for (var i = 0; i < strings.length; i++) {
-    ret.add(Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-        color: (i % 2 == 0)
-            ? Color.fromRGBO(242, 201, 76, 1)
-            : Color.fromRGBO(187, 107, 217, 1),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(6.0),
-        child: Text(
-          strings[i],
-          style: TextStyle(
-            color: Color.fromRGBO(0, 0, 0, 0.5),
-            fontSize: 15,
-          ),
-        ),
-      ),
-    ));
-    ret.add(SizedBox(
-      width: 5,
-    ));
-  }
-  return ret;
 }
