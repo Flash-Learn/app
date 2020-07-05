@@ -151,6 +151,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void _showbottomsheet(context, widget) {
     showModalBottomSheet(
       isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
       context: context,
       builder: (BuildContext buildContext) {
         return Container(
