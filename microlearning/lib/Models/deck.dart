@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Deck {
   String deckID;
+  int downloads;
   List<dynamic> flashCardList =
       []; // stores a list of flashcards using their ID
   List<dynamic> tagsList = [];
@@ -15,6 +16,7 @@ class Deck {
     this.tagsList,
     this.isPublic,
     this.flashCardList,
+    this.downloads,
     this.deckID,
     this.isimage,
   });
@@ -64,6 +66,7 @@ Future<Deck> createNewBlankDeck(String userID, {deckName: ""}) async {
     "tagsList": [],
     "flashcardList": [],
     "isPublic": true,
+    "downloads": 0,
   });
 
   newDeck.deckID = deckRef.documentID;

@@ -4,23 +4,27 @@ import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
-void saveDeck(context, Deck deck, String originalDeckID) async{
+void saveDeck(context, Deck deck, String originalDeckID) async {
   print("in savedeck");
   Deck toSave = Deck(
     deckName: deck.deckName,
     tagsList: deck.tagsList,
     isPublic: false,
+    downloads: 0,
   );
   toSave.isPublic = false;
-  toSave.deckID=null;
-  toSave.flashCardList=[];
+  toSave.deckID = null;
+  toSave.flashCardList = [];
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String userID = prefs.getString('uid');
-  final CollectionReference decksReference = Firestore.instance.collection("decks");
-  final CollectionReference flashcardsReference = Firestore.instance.collection("flashcards");
-  final CollectionReference userReference = Firestore.instance.collection("user_data");
-  for(var i=0; i<deck.flashCardList.length; i++){
+  final CollectionReference decksReference =
+      Firestore.instance.collection("decks");
+  final CollectionReference flashcardsReference =
+      Firestore.instance.collection("flashcards");
+  final CollectionReference userReference =
+      Firestore.instance.collection("user_data");
+  for (var i = 0; i < deck.flashCardList.length; i++) {
     dynamic tempCard;
     await flashcardsReference.document(deck.flashCardList[i]).get().then((doc) {
       tempCard = doc.data;
@@ -39,6 +43,7 @@ void saveDeck(context, Deck deck, String originalDeckID) async{
     'tagsList': toSave.tagsList,
     'flashcardList': toSave.flashCardList,
     'isPublic': false,
+    'downloads': 0,
   });
 
   print("deck ID:");
@@ -52,15 +57,13 @@ void saveDeck(context, Deck deck, String originalDeckID) async{
     'deckID': deckRef.documentID,
   });
 
-
   decksReference.document(originalDeckID).updateData({
-    "downloads" : FieldValue.increment(1),
+    "downloads": FieldValue.increment(1),
   });
 
   Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(builder: (context) => MyDecks()),
-        (Route<dynamic> route) => false,
+    (Route<dynamic> route) => false,
   );
-
 }
