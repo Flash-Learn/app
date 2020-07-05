@@ -10,7 +10,6 @@ class EditInfo extends StatefulWidget {
 }
 
 class _EditInfoState extends State<EditInfo> {
-
   final _formKey = GlobalKey<FormState>();
   String _uid;
   String _name;
@@ -19,20 +18,33 @@ class _EditInfoState extends State<EditInfo> {
   bool bool1;
 
   List<String> genders = ["Male", "Female", "Others"];
-  List<String> grades = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+  List<String> grades = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12"
+  ];
 
   @override
-  void initState(){
+  void initState() {
     bool1 = false;
     super.initState();
   }
-  
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
       future: _getdatafromdatabase(),
-      builder: (context, AsyncSnapshot<dynamic> snapshot){
-        if(snapshot.hasData){
+      builder: (context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.hasData) {
           return Scaffold(
             appBar: AppBar(
               title: Text("Edit Information"),
@@ -62,27 +74,29 @@ class _EditInfoState extends State<EditInfo> {
                         filled: true,
                         contentPadding: EdgeInsets.all(12.0),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 2.0),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.0,),
-
+                    SizedBox(
+                      height: 20.0,
+                    ),
                     Row(
                       children: <Widget>[
                         Expanded(
                           flex: 1,
-                          child: Text(  
+                          child: Text(
                             "Gender",
                             style: TextStyle(
                               fontSize: 18.0,
                             ),
                           ),
                         ),
-                        
                         Expanded(
                           flex: 2,
                           child: Container(
@@ -105,9 +119,9 @@ class _EditInfoState extends State<EditInfo> {
                         ),
                       ],
                     ),
-
-                    SizedBox(height: 20.0,),
-
+                    SizedBox(
+                      height: 20.0,
+                    ),
                     Row(
                       children: <Widget>[
                         Expanded(
@@ -119,7 +133,6 @@ class _EditInfoState extends State<EditInfo> {
                             ),
                           ),
                         ),
-
                         Expanded(
                           flex: 2,
                           child: Container(
@@ -142,9 +155,9 @@ class _EditInfoState extends State<EditInfo> {
                         ),
                       ],
                     ),
-
-                    SizedBox(height: 20.0,),
-                
+                    SizedBox(
+                      height: 20.0,
+                    ),
                     RaisedButton(
                       color: Colors.black,
                       child: Center(
@@ -153,15 +166,15 @@ class _EditInfoState extends State<EditInfo> {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      onPressed: () async{
-                        if(_formKey.currentState.validate()) {
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
                           updateInfo({
                             '_uid': _uid,
                             '_name': _name,
                             '_gender': _gender,
                             '_grade': _grade,
                           });
-                          Navigator.pop(context);
+                          Navigator.pop(context, _name);
                         }
                       },
                     ),
@@ -170,7 +183,7 @@ class _EditInfoState extends State<EditInfo> {
               ),
             ),
           );
-        } else{
+        } else {
           return Scaffold(
             backgroundColor: Colors.grey,
             body: Center(
@@ -185,8 +198,9 @@ class _EditInfoState extends State<EditInfo> {
       },
     );
   }
-  Future<String> _getdatafromdatabase() async{
-    if(bool1 == false){
+
+  Future<String> _getdatafromdatabase() async {
+    if (bool1 == false) {
       bool1 = true;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       _uid = prefs.getString('uid');
@@ -194,14 +208,13 @@ class _EditInfoState extends State<EditInfo> {
       here = DataBaseServices(uid: _uid);
       List<String> defaults = await here.getData();
       //TODO: fix default values of this form
-      if(defaults.length>1 || here!=null){
+      if (defaults.length > 1 || here != null) {
         _name = defaults[0];
         _grade = defaults[1];
         _gender = defaults[2];
       }
       return defaults.toString();
-    }
-    else{
+    } else {
       return 'this is good';
     }
   }
