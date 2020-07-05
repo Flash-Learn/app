@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 inputTextDecorations(String labelText) => InputDecoration(
     labelText: labelText,
@@ -8,10 +9,10 @@ inputTextDecorations(String labelText) => InputDecoration(
     contentPadding: EdgeInsets.all(20.0),
     enabledBorder: OutlineInputBorder(
       borderSide:
-          BorderSide(color: Colors.black26, width: 2.0),
+          BorderSide(color: MyColorScheme.accentLight(), width: 2.0),
     ),                          
     focusedBorder: OutlineInputBorder(
       borderSide:
-          BorderSide(color: Colors.black, width: 2.0),
+          BorderSide(color: MyColorScheme.accent(), width: 2.0),
     ),
 );
