@@ -48,6 +48,10 @@ void saveDeck(context, Deck deck) async{
     'decks': FieldValue.arrayUnion([deckRef.documentID]),
   });
 
+  decksReference.document(deckRef.documentID).updateData({
+    'deckID': deckRef.documentID,
+  });
+
   Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(builder: (context) => MyDecks()),
