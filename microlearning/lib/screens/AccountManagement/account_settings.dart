@@ -18,22 +18,22 @@ class _AccountSettingsState extends State<AccountSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+      backgroundColor: Colors.blue[400],
         centerTitle: true,
         title: Text(
           'Account Settings',
           style: TextStyle(
-              color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+              color: MyColorScheme.uno(), fontWeight: FontWeight.bold),
         ),
-        backgroundColor: MyColorScheme.uno(),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          color: MyColorScheme.accent(),
+          color: MyColorScheme.uno(),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.blue[600],
       body: SingleChildScrollView(
         child: Center(
             child: Padding(
@@ -52,13 +52,13 @@ class _AccountSettingsState extends State<AccountSettings> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.03,
               ),
-              Text(
-                'NAME',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  letterSpacing: 2.0,
-                ),
-              ),
+              // Text(
+              //   'NAME',
+              //   style: TextStyle(
+              //     color: Colors.white,
+              //     letterSpacing: 2.0,
+              //   ),
+              // ),
               SizedBox(height: 10),
               FutureBuilder(
                   future: _getdatafromdatabase(),
@@ -70,6 +70,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                       style: TextStyle(
                         letterSpacing: 2,
                         fontSize: 28,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     );
@@ -92,7 +93,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                       height: 40,
                       child: Material(
                         borderRadius: BorderRadius.circular(5),
-                        color: Colors.transparent,
+                        // color: Colors.transparent,
+                        color: Color.fromRGBO(50, 187, 157, 1),
                         child: Center(
                           child: Text('Update Info',
                               style:
@@ -128,7 +130,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                       height: 40,
                       child: Material(
                         borderRadius: BorderRadius.circular(5),
-                        color: Colors.transparent,
+                        color: Color.fromRGBO(50, 187, 157, 1),
                         child: Center(
                           child: Text('Log Out',
                               style:
