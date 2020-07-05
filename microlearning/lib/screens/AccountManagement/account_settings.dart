@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/screens/authentication/welcome.dart';
 import 'package:microlearning/services/database.dart';
 import 'package:microlearning/services/google_signIn.dart';
 import 'package:microlearning/screens/authentication/login.dart';
@@ -121,9 +122,9 @@ class _AccountSettingsState extends State<AccountSettings> {
                       signOutGoogle();
                       return Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) {
-                          return LoginUser();
+                          return WelcomeScreen();
                         }),
-                        ModalRoute.withName('/login'),
+                        ModalRoute.withName('/'),
                       );
                     },
                     child: Container(
