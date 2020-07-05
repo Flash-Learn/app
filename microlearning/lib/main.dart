@@ -1,3 +1,4 @@
+import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/Decks/notifications_inapp.dart';
 import 'package:microlearning/screens/Decks/playlist_manage.dart';
 import 'package:microlearning/screens/Search/search.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterUser(),
         '/search': (context) => Search(),
         '/notificationinapp': (context) => NotificationInapp(),
+        '/accountsettings': (context) => AccountSettings(),
       },
     );
   }

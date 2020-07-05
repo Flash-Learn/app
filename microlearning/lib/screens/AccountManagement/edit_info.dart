@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Utilities/functions/Infos.dart';
+import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/services/database.dart';
+import 'package:microlearning/services/google_signIn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditInfo extends StatefulWidget {
@@ -174,7 +176,10 @@ class _EditInfoState extends State<EditInfo> {
                             '_gender': _gender,
                             '_grade': _grade,
                           });
-                          Navigator.pop(context, _name);
+                          Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) {
+                            return AccountSettings(name: _name,);
+                          }), ModalRoute.withName('/home'));
                         }
                       },
                     ),

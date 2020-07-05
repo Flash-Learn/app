@@ -187,12 +187,12 @@ class _EditDecksState extends State<EditDecks> {
                     icon: Icon(Icons.arrow_back),
                     color: MyColorScheme.accent(),
                     onPressed: () {
-                      Navigator.pushReplacement(context,
+                      Navigator.pushAndRemoveUntil(context,
                           MaterialPageRoute(builder: (context) {
                         return ViewDeck(
                           deckID: deck.deckID,
                         );
-                      }));
+                      }), ModalRoute.withName('/home'));
                     },
                   ),
             backgroundColor: MyColorScheme.uno(),
