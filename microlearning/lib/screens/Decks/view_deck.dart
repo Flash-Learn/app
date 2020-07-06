@@ -51,16 +51,13 @@ class _ViewDeckState extends State<ViewDeck> {
       GlobalKey<_FlashCardSwipeViewState>();
   GlobalKey<_FlashCardSwipeViewState> _keyEdit =
       GlobalKey<_FlashCardSwipeViewState>();
-  GlobalKey<_FlashCardSwipeViewState> _keyshuffle =
-      GlobalKey<_FlashCardSwipeViewState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
   Widget _description;
   List<String> text = [
-    'Click here to edit the deck',
+    'Click here for editing \n and more actions on deck',
     'Tap on the flash card to \n flip and view the other side',
-    'Click here to shuffle the \n deck of flashcards',
   ];
   int _index = 0;
 
@@ -69,9 +66,7 @@ class _ViewDeckState extends State<ViewDeck> {
 
     setState(() {
       _enabled = true;
-      _center = _index == 1
-          ? Offset(target.center.dx, target.center.dy)
-          : Offset(target.center.dx, target.center.dy);
+      _center = Offset(target.center.dx, target.center.dy);
       _radius = _index == 1
           ? Spotlight.calcRadius(target) * 0.1
           : Spotlight.calcRadius(target);
@@ -131,9 +126,7 @@ class _ViewDeckState extends State<ViewDeck> {
     _index++;
     if (_index == 1) {
       spotlight(_keyFlashcard);
-    } else if (_index == 2) {
-      spotlight(_keyshuffle);
-    } else {
+    }else {
       setState(() {
         _enabled = false;
       });
@@ -210,6 +203,7 @@ class _ViewDeckState extends State<ViewDeck> {
                 actions: <Widget>[
                   if(widget.editAccess)...[
                   Padding(
+                    key: _keyEdit,
                     padding: const EdgeInsets.only(right: 20),
                     child: GestureDetector(
                       onTapDown: (details) {
@@ -401,6 +395,7 @@ class _ViewDeckState extends State<ViewDeck> {
                 ),
               ),
               body: Container(
+                key: _keyFlashcard,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -414,7 +409,6 @@ class _ViewDeckState extends State<ViewDeck> {
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                        key: _keyFlashcard,
                         child: FlashCardSwipeView(
                           deck: deck,
                           showAllCards: showAllcards,
