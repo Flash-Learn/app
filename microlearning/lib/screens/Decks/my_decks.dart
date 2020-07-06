@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/Widgets/deckInfoCard.dart';
+import 'package:microlearning/Utilities/Widgets/helpDialog.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/authentication/init_info.dart';
@@ -202,6 +203,13 @@ class _MyDecksState extends State<MyDecks> {
                   //     //   },
                   //     // ),
                   //   ],
+                  // ),
+                  // IconButton(
+                  //   icon: Icon(Icons.help_outline),
+                  //   color: MyColorScheme.uno(),
+                  //   onPressed: (){
+                  //     createHelpDialog(context, 'This is the home page. Browse through the decks which are created by you or are downloaded from the collection of decks available online.');
+                  //   },
                   // ),
                   IconButton(
                     key: _keySearch,
