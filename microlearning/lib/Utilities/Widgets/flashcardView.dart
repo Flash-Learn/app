@@ -282,30 +282,129 @@ class _FlashCardViewState extends State<FlashCardView> {
                               borderRadius: BorderRadius.circular(20)),
                           child: Center(
                             child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: isPic
-                                  ? CachedNetworkImage(
-                                      imageUrl: definition,
-                                      imageBuilder: (context, imageProvider) => Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-//                                            fit: BoxFit.cover,
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Spacer(),
+                                  isPic
+                                      ? CachedNetworkImage(
+                                          imageUrl: definition,
+                                          imageBuilder: (context, imageProvider) => Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                              ),
+                                            ),
                                           ),
+                                          placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        )
+                                      : Text(
+                                          definition,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.normal),
                                         ),
-                                      ),
-                                      placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) => const Icon(Icons.error),
-                                    )
-                                  : Text(
-                                      definition,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal),
-                                    ),
+                                  Spacer(),
+                                      widget.editAccess ? Row(
+                                        children: <Widget>[
+                                          RawMaterialButton(
+                                            onPressed: () async{
+                                              Firestore.instance
+                                                  .collection('flashcards')
+                                                  .document(widget.flashCardID)
+                                                  .updateData({
+                                                    'userRemembers': false,
+                                                  });
+                                              SnackBar snackBar = SnackBar(
+                                                content: Padding(
+                                                  padding: const EdgeInsets.only(top: 8.0),
+                                                  child: Text(
+                                                    'This card has been marked not-remembered.',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(color: MyColorScheme.cinco()),
+                                                  ),
+                                                ),
+                                                backgroundColor: MyColorScheme.uno(),
+                                                action: SnackBarAction(
+                                                  label: 'Undo',
+                                                  onPressed: (){
+                                                    Firestore.instance
+                                                    .collection('flashcards')
+                                                    .document(widget.flashCardID)
+                                                    .updateData({
+                                                    'userRemembers': true,
+                                                  });
+                                                  },
+                                                ),
+                                              );
+                                              Scaffold.of(context).showSnackBar(snackBar);
+                                              await Future.delayed(Duration(seconds: 2));
+                                            },
+                                            elevation: 2.0,
+                                            fillColor: Colors.redAccent[700],
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 35.0,
+                                            ),
+                                            padding: EdgeInsets.all(15.0),
+                                            shape: CircleBorder(),
+                                          ),
+                                          Spacer(),
+                                          RawMaterialButton(
+                                            onPressed: () async{
+                                              print(widget.flashCardID);
+                                              Firestore.instance
+                                                  .collection('flashcards')
+                                                  .document(widget.flashCardID)
+                                                  .updateData({
+                                                'userRemembers': true,
+                                              });
+                                              SnackBar snackBar = SnackBar(
+                                                content: Padding(
+                                                  padding: const EdgeInsets.only(top:8.0),
+                                                  child: Text(
+                                                    'This card has been marked remembered.',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(color: MyColorScheme.cinco()),
+                                                  ),
+                                                ),
+                                                backgroundColor: MyColorScheme.uno(),
+                                                action: SnackBarAction(
+                                                  label: 'Undo',
+                                                  onPressed: (){
+                                                    Firestore.instance
+                                                    .collection('flashcards')
+                                                    .document(widget.flashCardID)
+                                                    .updateData({
+                                                      'userRemembers': false,
+                                                  });
+                                                  },
+                                                ),
+                                              );
+                                              Scaffold.of(context).showSnackBar(snackBar);
+                                              await Future.delayed(Duration(seconds: 2));
+                                            },
+                                            elevation: 2.0,
+                                            fillColor: Colors.greenAccent[400],
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                              size: 35.0,
+                                            ),
+                                            padding: EdgeInsets.all(15.0),
+                                            shape: CircleBorder(),
+                                          )
+                                        ],
+                                      ) : 
+                                      SizedBox(),
+                                ],
+                              ),
                             ),
                           ),
                         ),

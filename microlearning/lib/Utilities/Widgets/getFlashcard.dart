@@ -98,28 +98,32 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                       child: Form(
                         child: Column(
                           children: <Widget>[
-                            TextFormField(
-                                maxLength: 30,
-                                textAlign: TextAlign.center,
-                                initialValue: data[0],
-                                onChanged: (val) {
-                                  flashCardData[flashCardData.indexOf(data)]
-                                      [0] = val;
-                                },
-                                style: TextStyle(
-                                    color: MyColorScheme.uno(), fontSize: 16),
-                                decoration: InputDecoration(
-                                  counterText: '',
-                                  hintText: 'Term',
-                                  hintStyle: (TextStyle(color: Colors.white24)),
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  contentPadding: EdgeInsets.only(
-                                      left: 15, bottom: 0, top: 11, right: 15),
-                                )),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              child: TextFormField(
+                                  maxLines: null,
+                                  keyboardType: TextInputType.multiline,
+                                  textAlign: TextAlign.center,
+                                  initialValue: data[0],
+                                  onChanged: (val) {
+                                    flashCardData[flashCardData.indexOf(data)]
+                                        [0] = val;
+                                  },
+                                  style: TextStyle(
+                                      color: MyColorScheme.uno(), fontSize: 16),
+                                  decoration: InputDecoration(
+                                    counterText: '',
+                                    hintText: 'Term',
+                                    hintStyle: (TextStyle(color: Colors.white24)),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(
+                                        left: 15, bottom: 0, top: 11, right: 15),
+                                  )),
+                            ),
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Divider(
