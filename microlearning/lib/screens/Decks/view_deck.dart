@@ -23,7 +23,7 @@ class ViewDeck extends StatefulWidget {
       @required this.deckID,
       this.editAccess = true,
       this.backAvailable = true,
-      this.isdemo = true})
+      this.isdemo = false})
       : super(key: key);
   @override
   _ViewDeckState createState() =>
