@@ -90,7 +90,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                   child: InkWell(
                     splashColor: Colors.grey,
                     onTap: () async {
-                      name = await Navigator.push(context,
+                      name = await Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) => EditInfo()));
                     },
                     child: Container(

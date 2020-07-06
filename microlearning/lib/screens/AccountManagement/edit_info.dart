@@ -6,6 +6,8 @@ import 'package:microlearning/services/database.dart';
 import 'package:microlearning/services/google_signIn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'account_settings.dart';
+
 class EditInfo extends StatefulWidget {
   @override
   _EditInfoState createState() => _EditInfoState();
@@ -176,10 +178,13 @@ class _EditInfoState extends State<EditInfo> {
                             '_gender': _gender,
                             '_grade': _grade,
                           });
-                          Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) {
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
                             return AccountSettings(name: _name,);
-                          }), ModalRoute.withName('/home'));
+                          }));
+                          // Navigator.of(context).pushAndRemoveUntil(
+                          // MaterialPageRoute(builder: (context) {
+                          //   return AccountSettings(name: _name,);
+                          // }), ModalRoute.withName('/home'));
                         }
                       },
                     ),
