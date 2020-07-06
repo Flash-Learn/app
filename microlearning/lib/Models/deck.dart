@@ -38,7 +38,7 @@ Future<void> deleteDeck(String deckID) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String uid = prefs.get("uid");
   DocumentReference deckDocument =
-      Firestore.instance.collection("deck").document(deckID);
+      Firestore.instance.collection("decks").document(deckID);
 
   dynamic deckData = await deckDocument.get();
 
