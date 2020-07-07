@@ -112,7 +112,10 @@ class _SearchState extends State<Search> {
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            return _searchTerm.length > 0
+                            return _searchTerm.length > 0 &&
+                                    currSearchStuff[index].data["isPublic"] &&
+                                    currSearchStuff[index].data["deckID"] !=
+                                        null
                                 ? Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10.0, horizontal: 0.0),
