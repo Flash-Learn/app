@@ -589,6 +589,10 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
       });
       List<dynamic> cardsRemembered = deck.flashCardList;
 
+      void doNothing(int index){
+        print("memorized");
+      }
+
       if(isShuffled && !shuffleState){
         cardsRemembered.shuffle();
         shuffleState=true;
@@ -611,6 +615,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
               currentPage: currentPage,
               flashCardID: cardsRemembered[currentIndex],
               editAccess: widget.editAccess,
+              onMemorizeCallback: doNothing,
             );
           }),
       );
@@ -627,8 +632,12 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
         List<dynamic> cardsNotRemembered = snapshot.data;
 
+        void deleteAtIndex(int index){
+          cardsNotRemembered.removeAt(index);
+        }
+
         WidgetsBinding.instance.addPostFrameCallback((_){
-          // Add Your Code here.
+          //
           setState(() {
             numberOfCards = cardsNotRemembered.length.toDouble();
             if(currentView==1) {
@@ -665,6 +674,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
                   currentIndex: currentIndex,
                   currentPage: currentPage,
                   flashCardID: cardsNotRemembered[currentIndex],
+                  onMemorizeCallback: deleteAtIndex,
                 );
               } catch (e) {
                 _pageCtrl.jumpToPage(0);
