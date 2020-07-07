@@ -164,33 +164,6 @@ class _EditFlashCardState extends State<EditFlashCard> {
         absorbing: _disableTouch,
         child: Scaffold(
           backgroundColor: Colors.white,
-          floatingActionButton: FloatingActionButton.extended(
-            key: _keySave,
-            backgroundColor: MyColorScheme.accent(),
-            icon: _disableTouch ? null : Icon(Icons.check),
-            label: _disableTouch
-                ? Loading(size: 20)
-                : Text(
-                    'Save Deck',
-                    style: TextStyle(fontSize: 15),
-                  ), // Show loading icon when clicked
-            onPressed: () async {
-              setState(() {
-                _disableTouch = true;
-              });
-//              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
-              await updateFlashcardList(deck, flashCardData);
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => ViewDeck(
-                      deckID: newDeck.deckID,
-                      backAvailable: false,
-                      isdemo: isdemo,
-                    ),
-                  ),
-                  (Route<dynamic> route) => false);
-            },
-          ),
           appBar: AppBar(
             elevation: 2,
             backgroundColor: MyColorScheme.uno(),
@@ -207,6 +180,33 @@ class _EditFlashCardState extends State<EditFlashCard> {
                 Navigator.pop(context);
               },
             ),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () async {
+                  setState(() {
+                    _disableTouch = true;
+                  });
+    //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
+                  await updateFlashcardList(deck, flashCardData);
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => ViewDeck(
+                          deckID: newDeck.deckID,
+                          backAvailable: false,
+                          isdemo: isdemo,
+                        ),
+                      ),
+                      (Route<dynamic> route) => false);
+                },
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.check, color: MyColorScheme.accent(),),
+                    SizedBox(width: 5,),
+                    Text('Save', style: TextStyle(color: MyColorScheme.accent(), fontWeight: FontWeight.bold),),
+                  ],
+                ),
+              )
+            ],
           ),
           body: SingleChildScrollView(
             child: Column(
