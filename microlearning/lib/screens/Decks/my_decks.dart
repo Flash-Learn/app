@@ -389,6 +389,54 @@ class _ReorderListState extends State<ReorderList> {
                         ),
                     items: [
                       PopupMenuItem(
+                        value: "edit button",
+                        child: GestureDetector(
+                          onTap: () async {
+                            Navigator.pop(context, "edit button");
+                            setState(() {
+                              _disableTouch = true;
+                            });
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                              Deck deck;
+                              return StreamBuilder(
+                                stream: Firestore.instance.collection("decks").document(deckId).snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData)
+                                    return Scaffold(
+                                      backgroundColor: Colors.blue[200],
+                                    );
+                                  deck = Deck(
+                                    deckName: snapshot.data["deckName"],
+                                    tagsList: snapshot.data["tagsList"],
+                                    isPublic: snapshot.data["isPublic"],
+                                  );
+                                  deck.deckID = deckId;
+                                  deck.flashCardList = snapshot.data["flashcardList"];
+                                print(snapshot);
+                                return EditDecks(deck: deck,);
+                              },
+                            ); 
+                            }));
+                            setState(() {
+                              _disableTouch = false;
+                            });
+                          },
+                          child: Card(
+                            elevation: 0,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.edit,
+                                  color: MyColorScheme.accent(),
+                                ),
+                                SizedBox(width: 10,),
+                                Text("Edit Deck", textAlign: TextAlign.center,),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
                         value: "delete button",
                         child: GestureDetector(
                           onTap: () async {
@@ -409,7 +457,8 @@ class _ReorderListState extends State<ReorderList> {
                                   Icons.delete,
                                   color: MyColorScheme.accent(),
                                 ),
-                                Text("Delete"),
+                                SizedBox(width: 10,),
+                                Text("Delete", textAlign: TextAlign.center,),
                               ],
                             ),
                           ),
