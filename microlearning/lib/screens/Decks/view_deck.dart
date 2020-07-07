@@ -126,7 +126,7 @@ class _ViewDeckState extends State<ViewDeck> {
     _index++;
     if (_index == 1) {
       spotlight(_keyFlashcard);
-    }else {
+    } else {
       setState(() {
         _enabled = false;
       });
@@ -149,9 +149,8 @@ class _ViewDeckState extends State<ViewDeck> {
   }
 
   void changePercentage(double percentage, double numberOfCards) {
-
-    if(numberOfCards > 1)
-      percentage = (percentage - 1/numberOfCards) / (1 - 1/numberOfCards);
+    if (numberOfCards > 1)
+      percentage = (percentage - 1 / numberOfCards) / (1 - 1 / numberOfCards);
     else
       percentage = 1;
     percentage = percentage < 0.0 ? 0.0 : percentage;
@@ -167,7 +166,7 @@ class _ViewDeckState extends State<ViewDeck> {
       stream:
           Firestore.instance.collection("decks").document(deckID).snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return Text("loading...");
+        if (!snapshot.hasData) return Loading(size: 10);
         deck = Deck(
           deckName: snapshot.data["deckName"],
           tagsList: snapshot.data["tagsList"],
@@ -201,44 +200,46 @@ class _ViewDeckState extends State<ViewDeck> {
                   },
                 ),
                 actions: <Widget>[
-                  if(widget.editAccess)...[
-                  Padding(
-                    key: _keyEdit,
-                    padding: const EdgeInsets.only(right: 20),
-                    child: GestureDetector(
-                      onTapDown: (details) {
-                        _tapPosition = details.globalPosition;
-                      },
-                      onTap: () async {
-                        final RenderBox overlay =
-                            Overlay.of(context).context.findRenderObject();
-                        await showMenu(
-                          context: context,
-                          // found way to show delete button on the location of long press
-                          // not sure how it works
-                          position: RelativeRect.fromRect(
-                              _tapPosition &
-                                  Size(40, 40), // smaller rect, the touch area
-                              Offset.zero &
-                                  overlay.size // Bigger rect, the entire screen
-                              ),
-                          items: getPopUpItems(),
-                          elevation: 8.0,
-                        );
-                      },
-                      child: Icon(
-                        Icons.more_horiz,
-                        color: MyColorScheme.uno(),
+                  if (widget.editAccess) ...[
+                    Padding(
+                      key: _keyEdit,
+                      padding: const EdgeInsets.only(right: 20),
+                      child: GestureDetector(
+                        onTapDown: (details) {
+                          _tapPosition = details.globalPosition;
+                        },
+                        onTap: () async {
+                          final RenderBox overlay =
+                              Overlay.of(context).context.findRenderObject();
+                          await showMenu(
+                            context: context,
+                            // found way to show delete button on the location of long press
+                            // not sure how it works
+                            position: RelativeRect.fromRect(
+                                _tapPosition &
+                                    Size(
+                                        40, 40), // smaller rect, the touch area
+                                Offset.zero &
+                                    overlay
+                                        .size // Bigger rect, the entire screen
+                                ),
+                            items: getPopUpItems(),
+                            elevation: 8.0,
+                          );
+                        },
+                        child: Icon(
+                          Icons.more_horiz,
+                          color: MyColorScheme.uno(),
+                        ),
                       ),
                     ),
-                  ),
-                  ]else...[
+                  ] else ...[
                     Padding(
                       padding: EdgeInsets.only(right: 10),
                       child: IconButton(
                         icon: Icon(Icons.file_download),
                         color: MyColorScheme.accent(),
-                        onPressed: (){
+                        onPressed: () {
                           saveDeck(context, deck, deckID);
                         },
                       ),
@@ -249,8 +250,7 @@ class _ViewDeckState extends State<ViewDeck> {
                 title: Text(
                   deck.deckName,
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: MyColorScheme.uno()),
+                      fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
                 ),
               ),
               body: Container(
@@ -260,10 +260,10 @@ class _ViewDeckState extends State<ViewDeck> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Color.fromRGBO(84, 205, 255, 1),
-                          Color.fromRGBO(84, 205, 255, 1),
-                          Color.fromRGBO(27, 116, 210, 1)
-                        ])),
+                      Color.fromRGBO(84, 205, 255, 1),
+                      Color.fromRGBO(84, 205, 255, 1),
+                      Color.fromRGBO(27, 116, 210, 1)
+                    ])),
                 child: Column(
                   children: <Widget>[
                     Expanded(
@@ -324,9 +324,8 @@ class _ViewDeckState extends State<ViewDeck> {
     return deck;
   }
 
-  createAlertDialog(
-    BuildContext ctxt){
-      return showDialog(
+  createAlertDialog(BuildContext ctxt) {
+    return showDialog(
         context: ctxt,
         builder: (ctxt) {
           return Dialog(
@@ -357,10 +356,10 @@ class _ViewDeckState extends State<ViewDeck> {
               ),
             ),
           );
-        }
-      );
-    }
-  getPopUpItems(){
+        });
+  }
+
+  getPopUpItems() {
     List<PopupMenuItem> list = <PopupMenuItem>[
       PopupMenuItem(
         value: "edit button",
@@ -371,8 +370,8 @@ class _ViewDeckState extends State<ViewDeck> {
                 _disableTouch = true;
               });
               if (widget.editAccess)
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
                   return EditDecks(deck: deck);
                 }));
               else {
@@ -424,9 +423,7 @@ class _ViewDeckState extends State<ViewDeck> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                      isShuffled ? "Un-shuffle deck" : "Shuffle Deck"
-                  ),
+                  Text(isShuffled ? "Un-shuffle deck" : "Shuffle Deck"),
                 ],
               ),
             )),
@@ -462,26 +459,26 @@ class _ViewDeckState extends State<ViewDeck> {
         value: "notification button",
         child: GestureDetector(
             onTap: () async {
-              try{Navigator.pop(
-                  context, "notification button");
-              Duration resultingDuration =
-                  await showDurationPicker(
-                      context: context,
-                      initialTime: Duration(
-                          hours: 0, minutes: 10));
-              // print(resultingDuration.inHours);
-              // print(resultingDuration.inMinutes);
-              if(resultingDuration!=null){DateTime now = DateTime.now().toUtc().add(
-                    Duration(
-                        hours: resultingDuration.inHours,
-                        minutes:
-                            resultingDuration.inMinutes),
+              try {
+                Navigator.pop(context, "notification button");
+                Duration resultingDuration = await showDurationPicker(
+                    context: context,
+                    initialTime: Duration(hours: 0, minutes: 10));
+                // print(resultingDuration.inHours);
+                // print(resultingDuration.inMinutes);
+                if (resultingDuration != null) {
+                  DateTime now = DateTime.now().toUtc().add(
+                        Duration(
+                            hours: resultingDuration.inHours,
+                            minutes: resultingDuration.inMinutes),
+                      );
+                  await notification.singleNotification(
+                    now,
+                    "Reminder",
+                    "Revise your deck '${deck.deckName}'",
                   );
-              await notification.singleNotification(
-                now,
-                "Reminder",
-                "Revise your deck '${deck.deckName}'",
-              );}}catch(e){
+                }
+              } catch (e) {
                 print(e);
               }
             },
@@ -525,8 +522,7 @@ class FlashCardSwipeView extends StatefulWidget {
 
   _FlashCardSwipeViewState createState() =>
 //    print("===========================================");
-    _FlashCardSwipeViewState(deck: deck, isShuffled: isShuffled);
-
+      _FlashCardSwipeViewState(deck: deck, isShuffled: isShuffled);
 }
 
 class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
@@ -541,7 +537,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
   double numberOfCards = 1;
   double currentPage = 0.0;
-  int currentView=2;
+  int currentView = 2;
   bool shuffleState = false;
 
   Future<List<dynamic>> getNotRememberedCards() async {
@@ -565,7 +561,8 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     super.initState();
     _pageCtrl.addListener(() {
       setState(() {
-        widget.changePercentage((_pageCtrl.page + 1) / numberOfCards, numberOfCards);
+        widget.changePercentage(
+            (_pageCtrl.page + 1) / numberOfCards, numberOfCards);
         currentPage = _pageCtrl.page;
       });
     });
@@ -579,101 +576,99 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
           numberOfCards = deck.flashCardList.length.toDouble();
           //        _pageCtrl.jumpToPage(0);
           if (currentView == 2) {
-            shuffleState=false;
+            shuffleState = false;
             currentView = 1;
             _pageCtrl.jumpToPage(0);
             currentPage = _pageCtrl.page;
-            widget.changePercentage((_pageCtrl.page + 1) / numberOfCards, numberOfCards);
+            widget.changePercentage(
+                (_pageCtrl.page + 1) / numberOfCards, numberOfCards);
           }
         });
       });
       List<dynamic> cardsRemembered = deck.flashCardList;
 
-      if(isShuffled && !shuffleState){
+      if (isShuffled && !shuffleState) {
         cardsRemembered.shuffle();
-        shuffleState=true;
+        shuffleState = true;
         print("shuffling");
-      }
-      else if (!isShuffled && shuffleState){
+      } else if (!isShuffled && shuffleState) {
         cardsRemembered = deck.flashCardList;
-        shuffleState=false;
+        shuffleState = false;
         print("unshuffle");
       }
       return Container(
         child: PageView.builder(
-          controller: _pageCtrl,
-          scrollDirection: Axis.horizontal,
-          itemCount: cardsRemembered.length,
-          itemBuilder: (context, int currentIndex) {
-            return FlashCardView(
-              color: Colors.accents[currentIndex],
-              currentIndex: currentIndex,
-              currentPage: currentPage,
-              flashCardID: cardsRemembered[currentIndex],
-              editAccess: widget.editAccess,
-            );
-          }),
+            controller: _pageCtrl,
+            scrollDirection: Axis.horizontal,
+            itemCount: cardsRemembered.length,
+            itemBuilder: (context, int currentIndex) {
+              return FlashCardView(
+                color: Colors.accents[currentIndex],
+                currentIndex: currentIndex,
+                currentPage: currentPage,
+                flashCardID: cardsRemembered[currentIndex],
+                editAccess: widget.editAccess,
+              );
+            }),
       );
     }
 
     return FutureBuilder(
-      future: getNotRememberedCards(),
-      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-        if (!snapshot.hasData) {
-          return Loading(
-            size: 50,
-          );
-        }
+        future: getNotRememberedCards(),
+        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+          if (!snapshot.hasData) {
+            return Scaffold(
+              backgroundColor: Colors.blue[200],
+            );
+          }
 
-        List<dynamic> cardsNotRemembered = snapshot.data;
+          List<dynamic> cardsNotRemembered = snapshot.data;
 
-        WidgetsBinding.instance.addPostFrameCallback((_){
-          // Add Your Code here.
-          setState(() {
-            numberOfCards = cardsNotRemembered.length.toDouble();
-            if(currentView==1) {
-              currentView=2;
-              shuffleState=false;
-              _pageCtrl.jumpToPage(0);
-              currentPage=0;
-              widget.changePercentage((_pageCtrl.page + 1) / numberOfCards, numberOfCards);
-            }
-          });
-        });
-        return Container(
-          child: PageView.builder(
-            controller: _pageCtrl,
-            scrollDirection: Axis.horizontal,
-            itemCount: cardsNotRemembered.length,
-            itemBuilder: (context, int currentIndex) {
-                              //  print("${_pageCtrl.page}, $currentPage, $currentIndex");
-                              //  if(currentIndex >= cardsNotRemembered.length){
-                              //    _pageCtrl.jumpToPage(0);
-              if(isShuffled && !shuffleState){
-                cardsNotRemembered.shuffle();
-                shuffleState=true;
-                print("shuffling");
-              }
-              else if (!isShuffled && shuffleState){
-                cardsNotRemembered = snapshot.data;
-                shuffleState=false;
-                print("unshuffle");
-              }
-              try {
-                return FlashCardView(
-                  color: Colors.accents[currentIndex + 1],
-                  currentIndex: currentIndex,
-                  currentPage: currentPage,
-                  flashCardID: cardsNotRemembered[currentIndex],
-                );
-              } catch (e) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            // Add Your Code here.
+            setState(() {
+              numberOfCards = cardsNotRemembered.length.toDouble();
+              if (currentView == 1) {
+                currentView = 2;
+                shuffleState = false;
                 _pageCtrl.jumpToPage(0);
+                currentPage = 0;
+                widget.changePercentage(
+                    (_pageCtrl.page + 1) / numberOfCards, numberOfCards);
               }
-              return Container();
-            }
-          ),
-        );
-      }
-    );
+            });
+          });
+          return Container(
+            child: PageView.builder(
+                controller: _pageCtrl,
+                scrollDirection: Axis.horizontal,
+                itemCount: cardsNotRemembered.length,
+                itemBuilder: (context, int currentIndex) {
+                  //  print("${_pageCtrl.page}, $currentPage, $currentIndex");
+                  //  if(currentIndex >= cardsNotRemembered.length){
+                  //    _pageCtrl.jumpToPage(0);
+                  if (isShuffled && !shuffleState) {
+                    cardsNotRemembered.shuffle();
+                    shuffleState = true;
+                    print("shuffling");
+                  } else if (!isShuffled && shuffleState) {
+                    cardsNotRemembered = snapshot.data;
+                    shuffleState = false;
+                    print("unshuffle");
+                  }
+                  try {
+                    return FlashCardView(
+                      color: Colors.accents[currentIndex + 1],
+                      currentIndex: currentIndex,
+                      currentPage: currentPage,
+                      flashCardID: cardsNotRemembered[currentIndex],
+                    );
+                  } catch (e) {
+                    _pageCtrl.jumpToPage(0);
+                  }
+                  return Container();
+                }),
+          );
+        });
   }
 }
