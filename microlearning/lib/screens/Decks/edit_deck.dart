@@ -122,167 +122,173 @@ class _EditDecksState extends State<EditDecks> {
 
   @override
   Widget build(BuildContext context) {
-    return Spotlight(
-      enabled: _enabled,
-      radius: _radius,
-      description: _description,
-      center: _center,
-      onTap: () => _ontap(),
-      animation: true,
-      child: AbsorbPointer(
-        absorbing: _disableTouch,
-        child: Scaffold(
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: FloatingActionButton.extended(
-            key: _keyEditFlash,
-            onPressed: () async {
-              setState(() {
-                if (deck.deckName != "") {
-                  print(deck.deckName);
-                  _disableTouch = true;
-                }
-              });
-              await Firestore.instance
-                  .collection('decks')
-                  .document(deck.deckID)
-                  .updateData({
-                "deckName": deck.deckName,
-                "tagsList": deck.tagsList,
-              });
+    return WillPopScope(
+      onWillPop: () async {
+        await deleteDeck(deck.deckID);
+        return true;
+      },
+      child: Spotlight(
+        enabled: _enabled,
+        radius: _radius,
+        description: _description,
+        center: _center,
+        onTap: () => _ontap(),
+        animation: true,
+        child: AbsorbPointer(
+          absorbing: _disableTouch,
+          child: Scaffold(
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton.extended(
+              key: _keyEditFlash,
+              onPressed: () async {
+                setState(() {
+                  if (deck.deckName != "") {
+                    print(deck.deckName);
+                    _disableTouch = true;
+                  }
+                });
+                await Firestore.instance
+                    .collection('decks')
+                    .document(deck.deckID)
+                    .updateData({
+                  "deckName": deck.deckName,
+                  "tagsList": deck.tagsList,
+                });
 
-              Navigator.of(context)
-                  .pushReplacement(MaterialPageRoute(builder: (context) {
-                // TODO: save the changes made by the user in the deckInfo
-                // the changes made are stored in variable 'deck' which this page recieved when this page was made, so passing this variable only to the next page of editing the flashcards.
-                return EditFlashCard(deck: deck, isdemo: isdemo);
-              }));
-            },
-            backgroundColor: MyColorScheme.accent(),
-            icon: Icon(
-              Icons.keyboard_arrow_right,
+                Navigator.of(context)
+                    .pushReplacement(MaterialPageRoute(builder: (context) {
+                  // TODO: save the changes made by the user in the deckInfo
+                  // the changes made are stored in variable 'deck' which this page recieved when this page was made, so passing this variable only to the next page of editing the flashcards.
+                  return EditFlashCard(deck: deck, isdemo: isdemo);
+                }));
+              },
+              backgroundColor: MyColorScheme.accent(),
+              icon: Icon(
+                Icons.keyboard_arrow_right,
+              ),
+              label: Text('Add or Edit Flashcards'),
             ),
-            label: Text('Add or Edit Flashcards'),
-          ),
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            leading: widget.creating
-                ? IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              leading: widget.creating
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: MyColorScheme.accent(),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          _disableTouch = true;
+                        });
+                        deleteDeck(deck.deckID);
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return MyDecks();
+                        }));
+                      },
+                    )
+                  : IconButton(
+                      icon: Icon(Icons.arrow_back),
                       color: MyColorScheme.accent(),
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ViewDeck(
+                            deckID: deck.deckID,
+                          );
+                        }), ModalRoute.withName('/home'));
+                      },
                     ),
-                    onPressed: () async {
-                      setState(() {
-                        _disableTouch = true;
-                      });
-                      deleteDeck(deck.deckID);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) {
-                        return MyDecks();
-                      }));
-                    },
-                  )
-                : IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    color: MyColorScheme.accent(),
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ViewDeck(
-                          deckID: deck.deckID,
-                        );
-                      }), ModalRoute.withName('/home'));
-                    },
-                  ),
-            backgroundColor: MyColorScheme.uno(),
-            title: Text(
-              'Edit Deck',
-              style: TextStyle(
-                  color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+              backgroundColor: MyColorScheme.uno(),
+              title: Text(
+                'Edit Deck',
+                style: TextStyle(
+                    color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
             ),
-            centerTitle: true,
-          ),
-          body: Padding(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Icon(
-                        Icons.filter_none,
-                        color: MyColorScheme.accent(),
-                        size: 30,
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        'Deck Name',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                        textAlign: TextAlign.left,
-                        key: _keyDeckName,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    onChanged: (val) {
-                      deck.deckName = val;
-                    },
-                    initialValue: deck.deckName,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    decoration: inputTextDecorations(''),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Icon(
-                        Icons.bookmark,
-                        color: MyColorScheme.accent(),
-                        size: 35,
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        'Tags :',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                        textAlign: TextAlign.left,
-                        key: _keyTags,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  // Text("Check2"),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: 300,
+            body: Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Icon(
+                          Icons.filter_none,
+                          color: MyColorScheme.accent(),
+                          size: 30,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          'Deck Name',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                          textAlign: TextAlign.left,
+                          key: _keyDeckName,
+                        ),
+                      ],
                     ),
-                    child: Container(
-                      child: ListofTags(deck: deck),
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  // Text("Check 1"),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  // Text("Check"),
-                ],
+                    TextFormField(
+                      onChanged: (val) {
+                        deck.deckName = val;
+                      },
+                      initialValue: deck.deckName,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      decoration: inputTextDecorations(''),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Icon(
+                          Icons.bookmark,
+                          color: MyColorScheme.accent(),
+                          size: 35,
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          'Tags :',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                          textAlign: TextAlign.left,
+                          key: _keyTags,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    // Text("Check2"),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: 300,
+                      ),
+                      child: Container(
+                        child: ListofTags(deck: deck),
+                      ),
+                    ),
+                    // Text("Check 1"),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    // Text("Check"),
+                  ],
+                ),
               ),
             ),
           ),
