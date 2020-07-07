@@ -14,6 +14,7 @@ class FlashCardView extends StatefulWidget {
   final double currentPage;
   final String flashCardID;
   final bool editAccess;
+  final Function onMemorizeCallback;
 
   FlashCardView({
     this.color,
@@ -21,6 +22,7 @@ class FlashCardView extends StatefulWidget {
     this.currentPage,
     this.flashCardID,
     this.editAccess = true,
+    this.onMemorizeCallback,
   });
 
   @override
@@ -44,6 +46,74 @@ class _FlashCardViewState extends State<FlashCardView> {
   void getUId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     uid = prefs.getString('uid');
+  }
+
+  Future<void> clickNotMemorized () async {
+    Firestore.instance
+        .collection('flashcards')
+        .document(widget.flashCardID)
+        .updateData({
+      'userRemembers': false,
+    });
+    SnackBar snackBar = SnackBar(
+      content: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Text(
+          'This card has been marked not-remembered.',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: MyColorScheme.cinco()),
+        ),
+      ),
+      backgroundColor: MyColorScheme.uno(),
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: (){
+          Firestore.instance
+              .collection('flashcards')
+              .document(widget.flashCardID)
+              .updateData({
+            'userRemembers': true,
+          });
+        },
+      ),
+    );
+    Scaffold.of(context).showSnackBar(snackBar);
+    await Future.delayed(Duration(seconds: 2));
+  }
+
+  Future<void> clickMemorized () async {
+    print(widget.flashCardID);
+    widget.onMemorizeCallback(widget.currentIndex);
+    Firestore.instance
+        .collection('flashcards')
+        .document(widget.flashCardID)
+        .updateData({
+      'userRemembers': true,
+    });
+    SnackBar snackBar = SnackBar(
+      content: Padding(
+        padding: const EdgeInsets.only(top:8.0),
+        child: Text(
+          'This card has been marked remembered.',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: MyColorScheme.cinco()),
+        ),
+      ),
+      backgroundColor: MyColorScheme.uno(),
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: (){
+          Firestore.instance
+              .collection('flashcards')
+              .document(widget.flashCardID)
+              .updateData({
+            'userRemembers': false,
+          });
+        },
+      ),
+    );
+    Scaffold.of(context).showSnackBar(snackBar);
+    await Future.delayed(Duration(seconds: 2));
   }
 
   @override
@@ -130,36 +200,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                       children: <Widget>[
                                         RawMaterialButton(
                                           onPressed: () async{
-                                            Firestore.instance
-                                                .collection('flashcards')
-                                                .document(widget.flashCardID)
-                                                .updateData({
-                                                  'userRemembers': false,
-                                                });
-                                            SnackBar snackBar = SnackBar(
-                                              content: Padding(
-                                                padding: const EdgeInsets.only(top: 8.0),
-                                                child: Text(
-                                                  'This card has been marked not-remembered.',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(color: MyColorScheme.cinco()),
-                                                ),
-                                              ),
-                                              backgroundColor: MyColorScheme.uno(),
-                                              action: SnackBarAction(
-                                                label: 'Undo',
-                                                onPressed: (){
-                                                  Firestore.instance
-                                                  .collection('flashcards')
-                                                  .document(widget.flashCardID)
-                                                  .updateData({
-                                                  'userRemembers': true,
-                                                });
-                                                },
-                                              ),
-                                            );
-                                            Scaffold.of(context).showSnackBar(snackBar);
-                                            await Future.delayed(Duration(seconds: 2));
+                                            await clickNotMemorized();
                                           },
                                           elevation: 2.0,
                                           fillColor: Colors.redAccent[700],
@@ -175,6 +216,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                         RawMaterialButton(
                                           onPressed: () async{
                                             print(widget.flashCardID);
+                                            widget.onMemorizeCallback(widget.currentIndex);
                                             Firestore.instance
                                                 .collection('flashcards')
                                                 .document(widget.flashCardID)
@@ -314,36 +356,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                         children: <Widget>[
                                           RawMaterialButton(
                                             onPressed: () async{
-                                              Firestore.instance
-                                                  .collection('flashcards')
-                                                  .document(widget.flashCardID)
-                                                  .updateData({
-                                                    'userRemembers': false,
-                                                  });
-                                              SnackBar snackBar = SnackBar(
-                                                content: Padding(
-                                                  padding: const EdgeInsets.only(top: 8.0),
-                                                  child: Text(
-                                                    'This card has been marked not-remembered.',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(color: MyColorScheme.cinco()),
-                                                  ),
-                                                ),
-                                                backgroundColor: MyColorScheme.uno(),
-                                                action: SnackBarAction(
-                                                  label: 'Undo',
-                                                  onPressed: (){
-                                                    Firestore.instance
-                                                    .collection('flashcards')
-                                                    .document(widget.flashCardID)
-                                                    .updateData({
-                                                    'userRemembers': true,
-                                                  });
-                                                  },
-                                                ),
-                                              );
-                                              Scaffold.of(context).showSnackBar(snackBar);
-                                              await Future.delayed(Duration(seconds: 2));
+                                              await clickNotMemorized();
                                             },
                                             elevation: 2.0,
                                             fillColor: Colors.redAccent[700],
@@ -358,37 +371,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           Spacer(),
                                           RawMaterialButton(
                                             onPressed: () async{
-                                              print(widget.flashCardID);
-                                              Firestore.instance
-                                                  .collection('flashcards')
-                                                  .document(widget.flashCardID)
-                                                  .updateData({
-                                                'userRemembers': true,
-                                              });
-                                              SnackBar snackBar = SnackBar(
-                                                content: Padding(
-                                                  padding: const EdgeInsets.only(top:8.0),
-                                                  child: Text(
-                                                    'This card has been marked remembered.',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(color: MyColorScheme.cinco()),
-                                                  ),
-                                                ),
-                                                backgroundColor: MyColorScheme.uno(),
-                                                action: SnackBarAction(
-                                                  label: 'Undo',
-                                                  onPressed: (){
-                                                    Firestore.instance
-                                                    .collection('flashcards')
-                                                    .document(widget.flashCardID)
-                                                    .updateData({
-                                                      'userRemembers': false,
-                                                  });
-                                                  },
-                                                ),
-                                              );
-                                              Scaffold.of(context).showSnackBar(snackBar);
-                                              await Future.delayed(Duration(seconds: 2));
+                                              await clickMemorized();
                                             },
                                             elevation: 2.0,
                                             fillColor: Colors.greenAccent[400],
