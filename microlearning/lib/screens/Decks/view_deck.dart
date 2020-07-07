@@ -166,7 +166,10 @@ class _ViewDeckState extends State<ViewDeck> {
       stream:
           Firestore.instance.collection("decks").document(deckID).snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return Loading(size: 10);
+        if (!snapshot.hasData)
+          return Scaffold(
+            backgroundColor: Colors.blue[300],
+          );
         deck = Deck(
           deckName: snapshot.data["deckName"],
           tagsList: snapshot.data["tagsList"],
@@ -617,8 +620,8 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         future: getNotRememberedCards(),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (!snapshot.hasData) {
-            return Scaffold(
-              backgroundColor: Colors.blue[200],
+            return Loading(
+              size: 50,
             );
           }
 
