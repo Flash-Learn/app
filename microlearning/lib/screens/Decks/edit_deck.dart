@@ -154,6 +154,7 @@ class _EditDecksState extends State<EditDecks> {
                     .updateData({
                   "deckName": deck.deckName,
                   "tagsList": deck.tagsList,
+                  "isPublic": deck.isPublic,
                 });
 
                 Navigator.of(context)
@@ -244,8 +245,33 @@ class _EditDecksState extends State<EditDecks> {
                       },
                       initialValue: deck.deckName,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                       decoration: inputTextDecorations(''),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Checkbox(
+                              value: deck.isPublic,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  deck.isPublic = value;
+                                  print(deck.isPublic);
+                                });
+                              }),
+                          Text(
+                            'Make deck public',
+                            style: TextStyle(fontSize: 18),
+                          )
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 20,
