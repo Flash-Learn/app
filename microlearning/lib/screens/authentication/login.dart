@@ -133,7 +133,7 @@ class _LoginUserState extends State<LoginUser> {
                             onTap: () async {
                               if (_formkey.currentState.validate()) {
                                 dynamic result =
-                                    await _auth.signinWithEmail(email, password);
+                                    await _auth.signinWithEmail(email.trim(), password);
                                 if (result == null) {
                                   setState(() {
                                     error =
@@ -142,7 +142,7 @@ class _LoginUserState extends State<LoginUser> {
                                 } else {
                                   SharedPreferences prefs =
                                       await SharedPreferences.getInstance();
-                                  prefs.setString('email', email);
+                                  prefs.setString('email', email.trim());
                                   prefs.setString('uid', result.uid);
                                   prefs.setBool('googlesignin', false);
                                   Navigator.of(context).pushReplacement(
