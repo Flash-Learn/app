@@ -590,7 +590,11 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
       });
       List<dynamic> cardsRemembered = deck.flashCardList;
 
-      if (isShuffled && !shuffleState) {
+      void doNothing(int index){
+        print("memorized");
+      }
+
+      if(isShuffled && !shuffleState){
         cardsRemembered.shuffle();
         shuffleState = true;
         print("shuffling");
@@ -601,18 +605,19 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
       }
       return Container(
         child: PageView.builder(
-            controller: _pageCtrl,
-            scrollDirection: Axis.horizontal,
-            itemCount: cardsRemembered.length,
-            itemBuilder: (context, int currentIndex) {
-              return FlashCardView(
-                color: Colors.accents[currentIndex],
-                currentIndex: currentIndex,
-                currentPage: currentPage,
-                flashCardID: cardsRemembered[currentIndex],
-                editAccess: widget.editAccess,
-              );
-            }),
+          controller: _pageCtrl,
+          scrollDirection: Axis.horizontal,
+          itemCount: cardsRemembered.length,
+          itemBuilder: (context, int currentIndex) {
+            return FlashCardView(
+              color: Colors.accents[currentIndex],
+              currentIndex: currentIndex,
+              currentPage: currentPage,
+              flashCardID: cardsRemembered[currentIndex],
+              editAccess: widget.editAccess,
+              onMemorizeCallback: doNothing,
+            );
+          }),
       );
     }
 
@@ -627,13 +632,51 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
           List<dynamic> cardsNotRemembered = snapshot.data;
 
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            // Add Your Code here.
-            setState(() {
-              numberOfCards = cardsNotRemembered.length.toDouble();
-              if (currentView == 1) {
-                currentView = 2;
-                shuffleState = false;
+        void deleteAtIndex(int index){
+          cardsNotRemembered.removeAt(index);
+        }
+
+        WidgetsBinding.instance.addPostFrameCallback((_){
+          //
+          setState(() {
+            numberOfCards = cardsNotRemembered.length.toDouble();
+            if(currentView==1) {
+              currentView=2;
+              shuffleState=false;
+              _pageCtrl.jumpToPage(0);
+              currentPage=0;
+              widget.changePercentage((_pageCtrl.page + 1) / numberOfCards, numberOfCards);
+            }
+          });
+        });
+        return Container(
+          child: PageView.builder(
+            controller: _pageCtrl,
+            scrollDirection: Axis.horizontal,
+            itemCount: cardsNotRemembered.length,
+            itemBuilder: (context, int currentIndex) {
+                              //  print("${_pageCtrl.page}, $currentPage, $currentIndex");
+                              //  if(currentIndex >= cardsNotRemembered.length){
+                              //    _pageCtrl.jumpToPage(0);
+              if(isShuffled && !shuffleState){
+                cardsNotRemembered.shuffle();
+                shuffleState=true;
+                print("shuffling");
+              }
+              else if (!isShuffled && shuffleState){
+                cardsNotRemembered = snapshot.data;
+                shuffleState=false;
+                print("unshuffle");
+              }
+              try {
+                return FlashCardView(
+                  color: Colors.accents[currentIndex + 1],
+                  currentIndex: currentIndex,
+                  currentPage: currentPage,
+                  flashCardID: cardsNotRemembered[currentIndex],
+                  onMemorizeCallback: deleteAtIndex,
+                );
+              } catch (e) {
                 _pageCtrl.jumpToPage(0);
                 currentPage = 0;
                 widget.changePercentage(
