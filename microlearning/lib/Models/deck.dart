@@ -84,3 +84,15 @@ Future<Deck> createNewBlankDeck(String userID, {deckName: ""}) async {
 
   return newDeck;
 }
+
+
+void reorderDeckIDsForUser(List<dynamic> deckIDList) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String uid = prefs.get("uid");
+
+  await Firestore.instance.collection("user_data").document(uid).updateData({
+    "decks": deckIDList,
+  });
+
+  print("Updated!!");
+}

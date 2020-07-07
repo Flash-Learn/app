@@ -261,7 +261,9 @@ class _MyDecksState extends State<MyDecks> {
                             return GetUserInfo();
                           }));
                         }
-                        return ReorderList(userDeckIDs: userDeckIDs);
+                        return ReorderList(
+                          userDeckIDs: userDeckIDs,
+                        );
                       });
                 }),
           ),
@@ -319,6 +321,9 @@ class _ReorderListState extends State<ReorderList> {
         userDeckIDs.insert(newIndex, item);
       },
     );
+
+    // Update changes in database
+    reorderDeckIDsForUser(userDeckIDs);
   }
 
 
