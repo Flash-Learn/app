@@ -320,49 +320,49 @@ class _ViewDeckState extends State<ViewDeck> {
                                     ),
                                   )),
                             ),
-                            PopupMenuItem(
-                              value: "notification button",
-                              child: GestureDetector(
-                                  onTap: () async {
-                                    try{Navigator.pop(
-                                        context, "notification button");
-                                    Duration resultingDuration =
-                                        await showDurationPicker(
-                                            context: context,
-                                            initialTime: Duration(
-                                                hours: 0, minutes: 10));
-                                    // print(resultingDuration.inHours);
-                                    // print(resultingDuration.inMinutes);
-                                    if(resultingDuration!=null){DateTime now = DateTime.now().toUtc().add(
-                                          Duration(
-                                              hours: resultingDuration.inHours,
-                                              minutes:
-                                                  resultingDuration.inMinutes),
-                                        );
-                                    await notification.singleNotification(
-                                      now,
-                                      "Reminder",
-                                      "Revise your deck '${deck.deckName}'",
-                                    );}}catch(e){
-                                      print(e);
-                                    }
-                                  },
-                                  child: Card(
-                                    elevation: 0,
-                                    child: Row(
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.notifications,
-                                          color: MyColorScheme.accent(),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text('Remind me later')
-                                      ],
-                                    ),
-                                  )),
-                            ),
+//                            PopupMenuItem(
+//                              value: "notification button",
+//                              child: GestureDetector(
+//                                  onTap: () async {
+//                                    try{Navigator.pop(
+//                                        context, "notification button");
+//                                    Duration resultingDuration =
+//                                        await showDurationPicker(
+//                                            context: context,
+//                                            initialTime: Duration(
+//                                                hours: 0, minutes: 10));
+//                                    // print(resultingDuration.inHours);
+//                                    // print(resultingDuration.inMinutes);
+//                                    if(resultingDuration!=null){DateTime now = DateTime.now().toUtc().add(
+//                                          Duration(
+//                                              hours: resultingDuration.inHours,
+//                                              minutes:
+//                                                  resultingDuration.inMinutes),
+//                                        );
+//                                    await notification.singleNotification(
+//                                      now,
+//                                      "Reminder",
+//                                      "Revise your deck '${deck.deckName}'",
+//                                    );}}catch(e){
+//                                      print(e);
+//                                    }
+//                                  },
+//                                  child: Card(
+//                                    elevation: 0,
+//                                    child: Row(
+//                                      children: <Widget>[
+//                                        Icon(
+//                                          Icons.notifications,
+//                                          color: MyColorScheme.accent(),
+//                                        ),
+//                                        SizedBox(
+//                                          width: 10,
+//                                        ),
+//                                        Text('Remind me later')
+//                                      ],
+//                                    ),
+//                                  )),
+//                            ),
                           ],
                           elevation: 8.0,
                         );
