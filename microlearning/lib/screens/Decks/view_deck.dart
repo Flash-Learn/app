@@ -222,148 +222,7 @@ class _ViewDeckState extends State<ViewDeck> {
                               Offset.zero &
                                   overlay.size // Bigger rect, the entire screen
                               ),
-                          items: [
-                            PopupMenuItem(
-                              value: "edit button",
-                              child: GestureDetector(
-                                  onTap: () async {
-                                    Navigator.pop(context, "edit button");
-                                    setState(() {
-                                      _disableTouch = true;
-                                    });
-                                    if (widget.editAccess)
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) {
-                                        return EditDecks(deck: deck);
-                                      }));
-                                    else {
-                                      print(deck.flashCardList.length);
-                                      saveDeck(context, deck, deckID);
-                                    }
-                                    setState(() {
-                                      _disableTouch = false;
-                                    });
-                                  },
-                                  child: Card(
-                                    elevation: 0,
-                                    child: Row(
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.edit,
-                                          color: MyColorScheme.accent(),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text("Edit Deck"),
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                            PopupMenuItem(
-                              value: "shuffle button",
-                              child: GestureDetector(
-                                  onTap: () async {
-                                    Navigator.pop(context, "shuffle button");
-                                    setState(() {
-                                      _disableTouch = true;
-//                                      deck.flashCardList.shuffle();
-                                      isShuffled = !isShuffled;
-                                      print(isShuffled);
-                                    });
-                                    setState(() {
-                                      _disableTouch = false;
-                                    });
-                                  },
-                                  child: Card(
-                                    elevation: 0,
-                                    child: Row(
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.shuffle,
-                                          color: MyColorScheme.accent(),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                            isShuffled ? "Un-shuffle deck" : "Shuffle Deck"
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                            PopupMenuItem(
-                              value: "filter button",
-                              child: GestureDetector(
-                                  onTap: () async {
-                                    Navigator.pop(context, "filter button");
-                                    setState(() {
-                                      showAllcards = !showAllcards;
-                                    });
-                                  },
-                                  child: Card(
-                                    elevation: 0,
-                                    child: Row(
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.filter_list,
-                                          color: MyColorScheme.accent(),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        showAllcards
-                                            ? Text("Not memorized cards")
-                                            : Text("Show all cards"),
-                                      ],
-                                    ),
-                                  )),
-                            ),
-//                            PopupMenuItem(
-//                              value: "notification button",
-//                              child: GestureDetector(
-//                                  onTap: () async {
-//                                    try{Navigator.pop(
-//                                        context, "notification button");
-//                                    Duration resultingDuration =
-//                                        await showDurationPicker(
-//                                            context: context,
-//                                            initialTime: Duration(
-//                                                hours: 0, minutes: 10));
-//                                    // print(resultingDuration.inHours);
-//                                    // print(resultingDuration.inMinutes);
-//                                    if(resultingDuration!=null){DateTime now = DateTime.now().toUtc().add(
-//                                          Duration(
-//                                              hours: resultingDuration.inHours,
-//                                              minutes:
-//                                                  resultingDuration.inMinutes),
-//                                        );
-//                                    await notification.singleNotification(
-//                                      now,
-//                                      "Reminder",
-//                                      "Revise your deck '${deck.deckName}'",
-//                                    );}}catch(e){
-//                                      print(e);
-//                                    }
-//                                  },
-//                                  child: Card(
-//                                    elevation: 0,
-//                                    child: Row(
-//                                      children: <Widget>[
-//                                        Icon(
-//                                          Icons.notifications,
-//                                          color: MyColorScheme.accent(),
-//                                        ),
-//                                        SizedBox(
-//                                          width: 10,
-//                                        ),
-//                                        Text('Remind me later')
-//                                      ],
-//                                    ),
-//                                  )),
-//                            ),
-                          ],
+                          items: getPopUpItems(),
                           elevation: 8.0,
                         );
                       },
@@ -422,9 +281,6 @@ class _ViewDeckState extends State<ViewDeck> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-//                        SizedBox(
-//                          width: 30,
-//                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -469,9 +325,8 @@ class _ViewDeckState extends State<ViewDeck> {
   }
 
   createAlertDialog(
-    BuildContext ctxt,
-  ) {
-    return showDialog(
+    BuildContext ctxt){
+      return showDialog(
         context: ctxt,
         builder: (ctxt) {
           return Dialog(
@@ -502,7 +357,152 @@ class _ViewDeckState extends State<ViewDeck> {
               ),
             ),
           );
-        });
+        }
+      );
+    }
+  getPopUpItems(){
+    List<PopupMenuItem> list = <PopupMenuItem>[
+      PopupMenuItem(
+        value: "edit button",
+        child: GestureDetector(
+            onTap: () async {
+              Navigator.pop(context, "edit button");
+              setState(() {
+                _disableTouch = true;
+              });
+              if (widget.editAccess)
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                  return EditDecks(deck: deck);
+                }));
+              else {
+                print(deck.flashCardList.length);
+                saveDeck(context, deck, deckID);
+              }
+              setState(() {
+                _disableTouch = false;
+              });
+            },
+            child: Card(
+              elevation: 0,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.edit,
+                    color: MyColorScheme.accent(),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text("Edit Deck"),
+                ],
+              ),
+            )),
+      ),
+      PopupMenuItem(
+        value: "shuffle button",
+        child: GestureDetector(
+            onTap: () async {
+              Navigator.pop(context, "shuffle button");
+              setState(() {
+                _disableTouch = true;
+                isShuffled = !isShuffled;
+                print(isShuffled);
+              });
+              setState(() {
+                _disableTouch = false;
+              });
+            },
+            child: Card(
+              elevation: 0,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.shuffle,
+                    color: MyColorScheme.accent(),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                      isShuffled ? "Un-shuffle deck" : "Shuffle Deck"
+                  ),
+                ],
+              ),
+            )),
+      ),
+      PopupMenuItem(
+        value: "filter button",
+        child: GestureDetector(
+            onTap: () async {
+              Navigator.pop(context, "filter button");
+              setState(() {
+                showAllcards = !showAllcards;
+              });
+            },
+            child: Card(
+              elevation: 0,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.filter_list,
+                    color: MyColorScheme.accent(),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  showAllcards
+                      ? Text("Not memorized cards")
+                      : Text("Show all cards"),
+                ],
+              ),
+            )),
+      ),
+      PopupMenuItem(
+        value: "notification button",
+        child: GestureDetector(
+            onTap: () async {
+              try{Navigator.pop(
+                  context, "notification button");
+              Duration resultingDuration =
+                  await showDurationPicker(
+                      context: context,
+                      initialTime: Duration(
+                          hours: 0, minutes: 10));
+              // print(resultingDuration.inHours);
+              // print(resultingDuration.inMinutes);
+              if(resultingDuration!=null){DateTime now = DateTime.now().toUtc().add(
+                    Duration(
+                        hours: resultingDuration.inHours,
+                        minutes:
+                            resultingDuration.inMinutes),
+                  );
+              await notification.singleNotification(
+                now,
+                "Reminder",
+                "Revise your deck '${deck.deckName}'",
+              );}}catch(e){
+                print(e);
+              }
+            },
+            child: Card(
+              elevation: 0,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.notifications,
+                    color: MyColorScheme.accent(),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Remind me later')
+                ],
+              ),
+            )),
+      ),
+    ];
+    return list;
   }
 }
 
@@ -601,81 +601,79 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
       }
       return Container(
         child: PageView.builder(
-            controller: _pageCtrl,
-            scrollDirection: Axis.horizontal,
-            itemCount: cardsRemembered.length,
-            itemBuilder: (context, int currentIndex) {
-              return FlashCardView(
-                color: Colors.accents[currentIndex],
-                currentIndex: currentIndex,
-                currentPage: currentPage,
-                flashCardID: cardsRemembered[currentIndex],
-                editAccess: widget.editAccess,
-              );
-            }),
+          controller: _pageCtrl,
+          scrollDirection: Axis.horizontal,
+          itemCount: cardsRemembered.length,
+          itemBuilder: (context, int currentIndex) {
+            return FlashCardView(
+              color: Colors.accents[currentIndex],
+              currentIndex: currentIndex,
+              currentPage: currentPage,
+              flashCardID: cardsRemembered[currentIndex],
+              editAccess: widget.editAccess,
+            );
+          }),
       );
     }
 
     return FutureBuilder(
-        future: getNotRememberedCards(),
-        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-          if (!snapshot.hasData) {
-            return Loading(
-              size: 50,
-            );
-          }
-
-          List<dynamic> cardsNotRemembered = snapshot.data;
-
-          WidgetsBinding.instance.addPostFrameCallback((_){
-            // Add Your Code here.
-            setState(() {
-              numberOfCards = cardsNotRemembered.length.toDouble();
-              if(currentView==1) {
-                currentView=2;
-                shuffleState=false;
-                _pageCtrl.jumpToPage(0);
-                currentPage=0;
-                widget.changePercentage((_pageCtrl.page + 1) / numberOfCards, numberOfCards);
-              }
-            });
-          });
-
-          return Container(
-//            color: Colors.white,
-
-            child: PageView.builder(
-                controller: _pageCtrl,
-                scrollDirection: Axis.horizontal,
-                itemCount: cardsNotRemembered.length,
-                itemBuilder: (context, int currentIndex) {
-//                print("${_pageCtrl.page}, $currentPage, $currentIndex");
-//                if(currentIndex >= cardsNotRemembered.length){
-//                  _pageCtrl.jumpToPage(0);
-                  if(isShuffled && !shuffleState){
-                    cardsNotRemembered.shuffle();
-                    shuffleState=true;
-                    print("shuffling");
-                  }
-                  else if (!isShuffled && shuffleState){
-                    cardsNotRemembered = snapshot.data;
-                    shuffleState=false;
-                    print("unshuffle");
-                  }
-//                }
-                  try {
-                    return FlashCardView(
-                      color: Colors.accents[currentIndex + 1],
-                      currentIndex: currentIndex,
-                      currentPage: currentPage,
-                      flashCardID: cardsNotRemembered[currentIndex],
-                    );
-                  } catch (e) {
-                    _pageCtrl.jumpToPage(0);
-                  }
-                  return Container();
-                }),
+      future: getNotRememberedCards(),
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (!snapshot.hasData) {
+          return Loading(
+            size: 50,
           );
+        }
+
+        List<dynamic> cardsNotRemembered = snapshot.data;
+
+        WidgetsBinding.instance.addPostFrameCallback((_){
+          // Add Your Code here.
+          setState(() {
+            numberOfCards = cardsNotRemembered.length.toDouble();
+            if(currentView==1) {
+              currentView=2;
+              shuffleState=false;
+              _pageCtrl.jumpToPage(0);
+              currentPage=0;
+              widget.changePercentage((_pageCtrl.page + 1) / numberOfCards, numberOfCards);
+            }
+          });
         });
+        return Container(
+          child: PageView.builder(
+            controller: _pageCtrl,
+            scrollDirection: Axis.horizontal,
+            itemCount: cardsNotRemembered.length,
+            itemBuilder: (context, int currentIndex) {
+                              //  print("${_pageCtrl.page}, $currentPage, $currentIndex");
+                              //  if(currentIndex >= cardsNotRemembered.length){
+                              //    _pageCtrl.jumpToPage(0);
+              if(isShuffled && !shuffleState){
+                cardsNotRemembered.shuffle();
+                shuffleState=true;
+                print("shuffling");
+              }
+              else if (!isShuffled && shuffleState){
+                cardsNotRemembered = snapshot.data;
+                shuffleState=false;
+                print("unshuffle");
+              }
+              try {
+                return FlashCardView(
+                  color: Colors.accents[currentIndex + 1],
+                  currentIndex: currentIndex,
+                  currentPage: currentPage,
+                  flashCardID: cardsNotRemembered[currentIndex],
+                );
+              } catch (e) {
+                _pageCtrl.jumpToPage(0);
+              }
+              return Container();
+            }
+          ),
+        );
+      }
+    );
   }
 }
