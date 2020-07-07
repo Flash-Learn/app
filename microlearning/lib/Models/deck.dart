@@ -86,6 +86,12 @@ Future<Deck> createNewBlankDeck(String userID, {deckName: ""}) async {
 }
 
 
+Future<bool> deleteDeckOnBackPress(String deckID) async {
+  deleteDeck(deckID);
+
+  return true;
+}
+
 void reorderDeckIDsForUser(List<dynamic> deckIDList) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String uid = prefs.get("uid");
