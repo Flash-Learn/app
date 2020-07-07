@@ -145,7 +145,7 @@ class _RegisterUserState extends State<RegisterUser> {
                               onTap: () async {
                                 if (_formkey.currentState.validate()) {
                                   dynamic result = await _auth.registerWithEmail(
-                                      email, password);
+                                      email.trim(), password);
                                   if (result == null) {
                                     setState(() {
                                       error = 'Email not valid or already in use';
@@ -155,7 +155,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                       MaterialPageRoute(
                                         builder: (context) {
                                           return EmailVerification(
-                                              email: email, uid: result.uid);
+                                              email: email.trim(), uid: result.uid);
                                         },
                                       ),
                                     );
