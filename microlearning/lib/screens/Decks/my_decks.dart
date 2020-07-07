@@ -141,132 +141,150 @@ class _MyDecksState extends State<MyDecks> {
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color.fromRGBO(84, 205, 255, 1), Color.fromRGBO(84, 205, 255, 1), Color.fromRGBO(27, 116, 210, 1)])),
+                  colors: [
+                Color.fromRGBO(84, 205, 255, 1),
+                Color.fromRGBO(84, 205, 255, 1),
+                Color.fromRGBO(27, 116, 210, 1)
+              ])),
 
           child: Scaffold(
-            backgroundColor: Colors.transparent,
-            floatingActionButton: FloatingActionButton.extended(
-              key: _keyNewDeck,
-              backgroundColor: Color.fromRGBO(50, 217, 157, 1),
-              label: _disableTouch
-                  ? Loading(size: 20)
-                  : Text(
-                      'Create Deck',
-                      style: TextStyle(
+              backgroundColor: Colors.transparent,
+              floatingActionButton: FloatingActionButton.extended(
+                key: _keyNewDeck,
+                backgroundColor: Color.fromRGBO(50, 217, 157, 1),
+                label: _disableTouch
+                    ? Loading(size: 20)
+                    : Text(
+                        'Create Deck',
+                        style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
+                        ),
+                      ), // show loading if touch is disabled, otherwise show text
+                icon: _disableTouch
+                    ? null
+                    : Icon(
+                        Icons.add), // if touch is disabled remove the add Icon
+                onPressed: () async {
+                  setState(() {
+                    _disableTouch = true;
+                  });
+
+                  // newDeck is a bank new deck, which is being passed into the edit deck screen
+                  Deck newDeck = await createNewBlankDeck(uid);
+
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return EditDecks(
+                        deck: newDeck, isdemo: isdemo, creating: true);
+                  }));
+
+                  setState(() {
+                    _disableTouch = false;
+                  });
+                },
+              ),
+              appBar: AppBar(
+                  elevation: 2,
+                  // backgroundColor: MyColorScheme.uno(),
+                  backgroundColor: Color.fromRGBO(196, 208, 223, 0),
+                  centerTitle: true,
+                  title: Text(
+                    'My Decks',
+                    style: TextStyle(
+                        color: MyColorScheme.uno(),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  actions: <Widget>[
+                    // Stack(
+                    //   children: <Widget>[
+                    //     // commenting the notification button for now, will use it when classroom feature is encorporated
+                    //     // IconButton(
+                    //     //   icon: Icon(Icons.notifications),
+                    //     //   color: MyColorScheme.accent(),
+                    //     //   onPressed: (){
+                    //     //     Navigator.pushNamed(context
+                    //     //     , '/notificationinapp');
+                    //     //   },
+                    //     // ),
+                    //   ],
+                    // ),
+                    // IconButton(
+                    //   icon: Icon(Icons.help_outline),
+                    //   color: MyColorScheme.uno(),
+                    //   onPressed: (){
+                    //     createHelpDialog(context, 'This is the home page. Browse through the decks which are created by you or are downloaded from the collection of decks available online.');
+                    //   },
+                    // ),
+                    IconButton(
+                      key: _keySearch,
+                      icon: Icon(
+                        Icons.search,
+                        color: MyColorScheme.uno(),
                       ),
-                    ), // show loading if touch is disabled, otherwise show text
-              icon: _disableTouch
-                  ? null
-                  : Icon(Icons.add), // if touch is disabled remove the add Icon
-              onPressed: () async {
-                setState(() {
-                  _disableTouch = true;
-                });
-
-                // newDeck is a bank new deck, which is being passed into the edit deck screen
-                Deck newDeck = await createNewBlankDeck(uid);
-
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return EditDecks(deck: newDeck, isdemo: isdemo, creating: true);
-                }));
-
-                setState(() {
-                  _disableTouch = false;
-                });
-              },
-            ),
-            appBar: AppBar(
-                elevation: 2,
-                // backgroundColor: MyColorScheme.uno(),
-                backgroundColor: Color.fromRGBO(196, 208, 223, 0),
-                centerTitle: true,
-                title: Text(
-                  'My Decks',
-                  style: TextStyle(
-                      color: MyColorScheme.uno(), fontWeight: FontWeight.bold),
-                ),
-                actions: <Widget>[
-                  // Stack(
-                  //   children: <Widget>[
-                  //     // commenting the notification button for now, will use it when classroom feature is encorporated
-                  //     // IconButton(
-                  //     //   icon: Icon(Icons.notifications),
-                  //     //   color: MyColorScheme.accent(),
-                  //     //   onPressed: (){
-                  //     //     Navigator.pushNamed(context
-                  //     //     , '/notificationinapp');
-                  //     //   },
-                  //     // ),
-                  //   ],
-                  // ),
-                  // IconButton(
-                  //   icon: Icon(Icons.help_outline),
-                  //   color: MyColorScheme.uno(),
-                  //   onPressed: (){
-                  //     createHelpDialog(context, 'This is the home page. Browse through the decks which are created by you or are downloaded from the collection of decks available online.');
-                  //   },
-                  // ),
-                  IconButton(
-                    key: _keySearch,
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/search',
+                        );
+                      },
+                    ),
+                  ],
+                  leading: IconButton(
                     icon: Icon(
-                      Icons.search,
+                      Icons.account_circle,
                       color: MyColorScheme.uno(),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/search',
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AccountSettings();
+                          },
+                        ),
                       );
                     },
-                  ),
-                ],
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.account_circle,
-                    color: MyColorScheme.uno(),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return AccountSettings();
-                        },
-                      ),
+                  )),
+              body: GestureDetector(
+                onPanUpdate: (details) {
+                  if (details.delta.dx < 0) {
+                    Navigator.pushNamed(
+                      context,
+                      '/search',
                     );
-                  },
-                )),
-            body: FutureBuilder(
-                future: SharedPreferences.getInstance(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return Text("loading");
-                  print("user id is ${snapshot.data.getString('uid')}");
-                  final String userID = snapshot.data.getString('uid');
-                  uid = userID;
-                  return StreamBuilder(
-                      stream: Firestore.instance
-                          .collection('user_data')
-                          .document(userID)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        print(userID);
-                        if (!snapshot.hasData) return Text("loading");
-                        if (snapshot.data == null) return Container();
-                        try {
-                          userDeckIDs = snapshot.data["decks"];
-                        } catch (e) {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) {
-                            return GetUserInfo();
-                          }));
-                        }
-                        return ReorderList(
-                          userDeckIDs: userDeckIDs,
-                        );
-                      });
-                }),
-          ),
+                  }
+                },
+                child: FutureBuilder(
+                    future: SharedPreferences.getInstance(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return Text("loading");
+                      print("user id is ${snapshot.data.getString('uid')}");
+                      final String userID = snapshot.data.getString('uid');
+                      uid = userID;
+                      return StreamBuilder(
+                          stream: Firestore.instance
+                              .collection('user_data')
+                              .document(userID)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            print(userID);
+                            if (!snapshot.hasData) return Text("loading");
+                            if (snapshot.data == null) return Container();
+                            try {
+                              userDeckIDs = snapshot.data["decks"];
+                            } catch (e) {
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return GetUserInfo();
+                              }));
+                            }
+                            return ReorderList(
+                              userDeckIDs: userDeckIDs,
+                            );
+                          });
+                    }),
+              )
+            ),
         ),
       ),
     );
@@ -298,18 +316,16 @@ class _ReorderListState extends State<ReorderList> {
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: ReorderableListView(
           scrollDirection: Axis.vertical,
-          children: getDecksAsList(context, widget.userDeckIDs), 
+          children: getDecksAsList(context, widget.userDeckIDs),
           onReorder: _onReorder,
         ),
       ),
     );
   }
 
-
   Widget buildDeckInfo(BuildContext ctxt, String deckID) {
     return deckInfoCard(deckID);
   }
-
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(
@@ -326,109 +342,100 @@ class _ReorderListState extends State<ReorderList> {
     reorderDeckIDsForUser(userDeckIDs);
   }
 
-
-  getDecksAsList(BuildContext context, List<dynamic> userDeckIDs){
+  getDecksAsList(BuildContext context, List<dynamic> userDeckIDs) {
     int i = 0;
     String k;
-    return userDeckIDs.map<Widget>((dynamic deckId){
+    return userDeckIDs.map<Widget>((dynamic deckId) {
       i++;
       k = '$i';
-      return  Container(
+      return Container(
         height: 130,
         key: ValueKey(k),
-        child: Stack(
-          children: <Widget>[
-            GestureDetector(
+        child: Stack(children: <Widget>[
+          GestureDetector(
+              onTapDown: (details) {
+                _tapPosition = details.globalPosition;
+              },
+              onTap: () {
+                print(deckId);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewDeck(
+                        deckID: deckId,
+                      ),
+                    ));
+              },
+              child: buildDeckInfo(context, deckId)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              GestureDetector(
                 onTapDown: (details) {
                   _tapPosition = details.globalPosition;
                 },
-
-                onTap: () {
-                  print(deckId);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewDeck(
-                          deckID: deckId,
+                onTap: () async {
+                  final RenderBox overlay =
+                      Overlay.of(context).context.findRenderObject();
+                  await showMenu(
+                    context: context,
+                    // found way to show delete button on the location of long press
+                    // not sure how it works
+                    position: RelativeRect.fromRect(
+                        _tapPosition &
+                            Size(40, 40), // smaller rect, the touch area
+                        Offset.zero &
+                            overlay.size // Bigger rect, the entire screen
                         ),
-                      ));
-                },
-                child: buildDeckInfo(context, deckId)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                GestureDetector(
-                  onTapDown: (details) {
-                    _tapPosition = details.globalPosition;
-                  },
-                  onTap: () async {
-                    final RenderBox overlay =
-                        Overlay.of(context)
-                            .context
-                            .findRenderObject();
-                    await showMenu(
-                      context: context,
-                      // found way to show delete button on the location of long press
-                      // not sure how it works
-                      position: RelativeRect.fromRect(
-                          _tapPosition &
-                              Size(40,
-                                  40), // smaller rect, the touch area
-                          Offset.zero &
-                              overlay
-                                  .size // Bigger rect, the entire screen
-                          ),
-                      items: [
-                        PopupMenuItem(
-                          value: "delete button",
-                          child: GestureDetector(
-                              onTap: () async {
-                                Navigator.pop(
-                                    context, "delete button");
-                                setState(() {
-                                  _disableTouch = true;
-                                });
-                                createAlertDialog(
-                                    context, deckId, userDeckIDs);
-                                setState(() {
-                                  _disableTouch = false;
-                                });
-                              },
-                              child:Card(
-                                elevation: 0,
-                                child: Row(
-                                  children: <Widget>[
-                                    Icon(Icons.delete, color: MyColorScheme.accent(),),
-                                    Text("Delete"),
-                                  ],
+                    items: [
+                      PopupMenuItem(
+                        value: "delete button",
+                        child: GestureDetector(
+                          onTap: () async {
+                            Navigator.pop(context, "delete button");
+                            setState(() {
+                              _disableTouch = true;
+                            });
+                            createAlertDialog(context, deckId, userDeckIDs);
+                            setState(() {
+                              _disableTouch = false;
+                            });
+                          },
+                          child: Card(
+                            elevation: 0,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.delete,
+                                  color: MyColorScheme.accent(),
                                 ),
+                                Text("Delete"),
+                              ],
                             ),
                           ),
                         ),
-                      ],
-                      elevation: 8.0,
-                    );
-                  },
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.fromLTRB(0, 20, 10, 0),
-                    child: Icon(
-                      Icons.more_horiz,
-                      color: MyColorScheme.accent(),
-                    ),
+                      ),
+                    ],
+                    elevation: 8.0,
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                  child: Icon(
+                    Icons.more_horiz,
+                    color: MyColorScheme.accent(),
                   ),
-                )
-              ],
-            ),
-          ]
-        ),
+                ),
+              )
+            ],
+          ),
+        ]),
       );
-    }
-  ).toList();
+    }).toList();
   }
 
-
-  createAlertDialog(BuildContext ctxt, String deckid, List<dynamic> userDeckIDs) {
+  createAlertDialog(
+      BuildContext ctxt, String deckid, List<dynamic> userDeckIDs) {
     return showDialog(
         context: ctxt,
         builder: (ctxt) {
