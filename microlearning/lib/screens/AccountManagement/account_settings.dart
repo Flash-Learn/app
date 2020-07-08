@@ -123,12 +123,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                     splashColor: Colors.grey,
                     onTap: () {
                       signOutGoogle();
-                      return Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) {
-                          return WelcomeScreen();
-                        }),
-                        ModalRoute.withName('/'),
-                      );
+                      return Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/welcome', (Route<dynamic> route) => false);
                     },
                     child: Container(
                       height: 40,

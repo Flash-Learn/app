@@ -302,19 +302,26 @@ class _FlashCardViewState extends State<FlashCardView> {
                                 children: <Widget>[
                                   Spacer(),
                                   isPic
-                                      ? CachedNetworkImage(
-                                          imageUrl: definition,
-                                          imageBuilder: (context, imageProvider) => Container(
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: imageProvider,
-                                              ),
-                                            ),
-                                          ),
-                                          placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => const Icon(Icons.error),
-                                        )
+                                      ?Image.network(
+                                    definition,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes
+                                              : null,
+                                        ),
+                                      );
+                                    }
+                                      )
                                       : Text(
                                           definition,
                                           textAlign: TextAlign.center,

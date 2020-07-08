@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Montserrat'),
       routes: {
         '/': (context) => email == null ? WelcomeScreen() : MyDecks(),
+        '/welcome': (context) => WelcomeScreen(),
         '/login': (context) => LoginUser(),
         '/home': (context) => MyDecks(),
         '/register': (context) => RegisterUser(),
