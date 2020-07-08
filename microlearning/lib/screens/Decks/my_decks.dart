@@ -30,6 +30,7 @@ class _MyDecksState extends State<MyDecks> {
   _MyDecksState({this.isdemo = false});
   GlobalKey<_MyDecksState> _keyNewDeck = GlobalKey<_MyDecksState>();
   GlobalKey<_MyDecksState> _keySearch = GlobalKey<_MyDecksState>();
+  GlobalKey<_MyDecksState> _keyGroups = GlobalKey<_MyDecksState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
@@ -227,6 +228,19 @@ class _MyDecksState extends State<MyDecks> {
                         Navigator.pushNamed(
                           context,
                           '/search',
+                        );
+                      },
+                    ),
+                    IconButton(
+                      key: _keyGroups,
+                      icon: Icon(
+                        Icons.group,
+                        color: MyColorScheme.uno(),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/groups',
                         );
                       },
                     ),
