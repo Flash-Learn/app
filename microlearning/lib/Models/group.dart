@@ -24,17 +24,38 @@ Future<GroupData> createNewGroup(String uid) async {
     users: [],
   );
 
+  newGroup.users.add(uid);
+
   CollectionReference groupCollection = Firestore.instance.collection('groups');
 
   DocumentReference groupRef = await groupCollection.add({
     "decks": [],
     "description": "",
     "name": "",
-    "users": [uid],
+    "users": newGroup.users,
   });
   newGroup.groupID = groupRef.documentID;
   await groupCollection.document(newGroup.groupID).updateData({
     "groupID": newGroup.groupID,
   });
+
+  CollectionReference userCollection =
+      Firestore.instance.collection('user_data');
+
+  List<String> obj = [newGroup.groupID];
+
+  await userCollection
+      .document(uid)
+      .updateData({"groups": FieldValue.arrayUnion(obj)});
   return newGroup;
+}
+
+Future updateGroupData(GroupData groupData) async {
+  CollectionReference groupCollection = Firestore.instance.collection('groups');
+  await groupCollection.document(groupData.groupID).updateData({
+    "decks": groupData.decks,
+    "name": groupData.name,
+    "users": groupData.users,
+    "description": groupData.description,
+  });
 }
