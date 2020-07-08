@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
-import 'package:microlearning/screens/Groups/edit_group.dart';
+import 'package:microlearning/screens/Groups/init_group.dart';
 import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/screens/Groups/group_info_card.dart';
+import 'package:microlearning/screens/Groups/init_group.dart';
 import 'package:microlearning/screens/authentication/init_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,7 +29,7 @@ class _GroupListState extends State<GroupList> {
           String uid = prefs.getString('uid');
           GroupData newGroup = await createNewGroup(uid);
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return EditGroup(groupData: newGroup, creating: true);
+            return InitGroup(groupData: newGroup);
           }));
         },
         label: Text('Create group',
