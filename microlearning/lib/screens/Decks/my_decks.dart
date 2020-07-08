@@ -193,6 +193,7 @@ class _MyDecksState extends State<MyDecks> {
                     'My Decks',
                     style: TextStyle(
                         color: MyColorScheme.uno(),
+                        letterSpacing: 2,
                         fontWeight: FontWeight.bold),
                   ),
                   actions: <Widget>[
@@ -283,8 +284,7 @@ class _MyDecksState extends State<MyDecks> {
                             );
                           });
                     }),
-              )
-            ),
+              )),
         ),
       ),
     );
@@ -396,10 +396,14 @@ class _ReorderListState extends State<ReorderList> {
                             setState(() {
                               _disableTouch = true;
                             });
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(builder: (context) {
                               Deck deck;
                               return StreamBuilder(
-                                stream: Firestore.instance.collection("decks").document(deckId).snapshots(),
+                                stream: Firestore.instance
+                                    .collection("decks")
+                                    .document(deckId)
+                                    .snapshots(),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData)
                                     return Scaffold(
@@ -411,11 +415,14 @@ class _ReorderListState extends State<ReorderList> {
                                     isPublic: snapshot.data["isPublic"],
                                   );
                                   deck.deckID = deckId;
-                                  deck.flashCardList = snapshot.data["flashcardList"];
-                                print(snapshot);
-                                return EditDecks(deck: deck,);
-                              },
-                            ); 
+                                  deck.flashCardList =
+                                      snapshot.data["flashcardList"];
+                                  print(snapshot);
+                                  return EditDecks(
+                                    deck: deck,
+                                  );
+                                },
+                              );
                             }));
                             setState(() {
                               _disableTouch = false;
@@ -429,8 +436,13 @@ class _ReorderListState extends State<ReorderList> {
                                   Icons.edit,
                                   color: MyColorScheme.accent(),
                                 ),
-                                SizedBox(width: 10,),
-                                Text("Edit Deck", textAlign: TextAlign.center,),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Edit Deck",
+                                  textAlign: TextAlign.center,
+                                ),
                               ],
                             ),
                           ),
@@ -457,8 +469,13 @@ class _ReorderListState extends State<ReorderList> {
                                   Icons.delete,
                                   color: MyColorScheme.accent(),
                                 ),
-                                SizedBox(width: 10,),
-                                Text("Delete", textAlign: TextAlign.center,),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Delete",
+                                  textAlign: TextAlign.center,
+                                ),
                               ],
                             ),
                           ),
