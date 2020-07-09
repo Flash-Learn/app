@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:microlearning/Utilities/Widgets/deckReorderList.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Groups/init_group.dart';
+
+import 'my_groups.dart';
 
 class Group extends StatefulWidget {
 
@@ -29,6 +32,7 @@ class _GroupState extends State<Group> {
           return Loading(size: 50,);
         }
 
+        print(widget.groupID);
         GroupData group = GroupData(
           groupID: widget.groupID,
           description: snapshot.data["description"],
@@ -36,6 +40,8 @@ class _GroupState extends State<Group> {
           decks: snapshot.data["decks"],
           users: snapshot.data["users"],
         );
+
+        print(group.decks[0]);
 
         return Scaffold(
           appBar: AppBar(
@@ -53,6 +59,13 @@ class _GroupState extends State<Group> {
                 },
               )
             ],
+          ),
+
+          body: Container(
+            color: Colors.red,
+            child: DeckReorderList(
+              userDeckIDs: group.decks,
+            ),
           ),
         );
       }

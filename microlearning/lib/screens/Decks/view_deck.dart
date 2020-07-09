@@ -194,7 +194,7 @@ class _ViewDeckState extends State<ViewDeck> {
                   icon: Icon(Icons.arrow_back),
                   color: MyColorScheme.uno(),
                   onPressed: () {
-                    widget.editAccess
+                    !widget.backAvailable
                         ? Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (context) => MyDecks(),
