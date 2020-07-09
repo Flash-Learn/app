@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:microlearning/screens/Decks/my_decks.dart';
-import 'package:microlearning/screens/authentication/welcome.dart';
 import 'package:microlearning/services/database.dart';
 import 'package:microlearning/services/google_signIn.dart';
-import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/AccountManagement/edit_info.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountSettings extends StatefulWidget {
-  String name;
+  final String name;
   AccountSettings({this.name});
   @override
   _AccountSettingsState createState() => _AccountSettingsState(name: name);
@@ -23,7 +20,7 @@ class _AccountSettingsState extends State<AccountSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      backgroundColor: Colors.blue[400],
+        backgroundColor: Colors.blue[400],
         centerTitle: true,
         title: Text(
           'Account Settings',
@@ -123,8 +120,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                     splashColor: Colors.grey,
                     onTap: () {
                       signOutGoogle();
-                      return Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/welcome', (Route<dynamic> route) => false);
+                      return Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/welcome', (Route<dynamic> route) => false);
                     },
                     child: Container(
                       height: 40,

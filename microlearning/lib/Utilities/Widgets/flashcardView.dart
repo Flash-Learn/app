@@ -1,13 +1,10 @@
-//import 'package:flip_card/flip_card.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
-
 import 'flip_card.dart'; // created local copy of flip_card library
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FlashCardView extends StatefulWidget {
@@ -37,8 +34,10 @@ class _FlashCardViewState extends State<FlashCardView> {
   List<String> playListNames = <String>[];
   List<dynamic> userDecks = [];
   String uid;
-  final CollectionReference deckReference = Firestore.instance.collection("decks");
-  final CollectionReference flashcardReference = Firestore.instance.collection("flashcards");
+  final CollectionReference deckReference =
+      Firestore.instance.collection("decks");
+  final CollectionReference flashcardReference =
+      Firestore.instance.collection("flashcards");
 
   var _tapPosition;
   int side = 1;
@@ -52,7 +51,7 @@ class _FlashCardViewState extends State<FlashCardView> {
     uid = prefs.getString('uid');
   }
 
-  Future<void> clickNotMemorized () async {
+  Future<void> clickNotMemorized() async {
     Firestore.instance
         .collection('flashcards')
         .document(widget.flashCardID)
@@ -72,7 +71,7 @@ class _FlashCardViewState extends State<FlashCardView> {
       backgroundColor: MyColorScheme.uno(),
       action: SnackBarAction(
         label: 'Undo',
-        onPressed: (){
+        onPressed: () {
           Firestore.instance
               .collection('flashcards')
               .document(widget.flashCardID)
@@ -86,7 +85,7 @@ class _FlashCardViewState extends State<FlashCardView> {
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
-  Future<void> clickMemorized () async {
+  Future<void> clickMemorized() async {
     print(widget.flashCardID);
     widget.onMemorizeCallback(widget.currentIndex);
     await Firestore.instance
@@ -98,7 +97,7 @@ class _FlashCardViewState extends State<FlashCardView> {
     SnackBar snackBar = SnackBar(
       duration: Duration(milliseconds: 900),
       content: Padding(
-        padding: const EdgeInsets.only(top:8.0),
+        padding: const EdgeInsets.only(top: 8.0),
         child: Text(
           'This card has been marked remembered.',
           textAlign: TextAlign.center,
@@ -120,7 +119,6 @@ class _FlashCardViewState extends State<FlashCardView> {
     );
     Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(snackBar);
-
   }
 
   @override
@@ -151,12 +149,11 @@ class _FlashCardViewState extends State<FlashCardView> {
           bool userRemembers = true;
 
           dynamic tmp = snapshot.data['userRemembers'];
-          if(tmp == null || tmp == false)
-            userRemembers=false;
-          else{
-            userRemembers=true;
+          if (tmp == null || tmp == false)
+            userRemembers = false;
+          else {
+            userRemembers = true;
           }
-
 
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
@@ -172,7 +169,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                   transform: Matrix4.identity()
                     ..setEntry(1, 2, 0)
                     ..scale((1 - relativePosition.abs()).clamp(0.4, 0.6) + 0.4)
-                    ..rotateY(relativePosition*1.2),
+                    ..rotateY(relativePosition * 1.2),
                   alignment: relativePosition >= 0
                       ? Alignment.centerLeft
                       : Alignment.centerRight,
@@ -182,23 +179,20 @@ class _FlashCardViewState extends State<FlashCardView> {
                         _tapPosition = details.globalPosition;
                       },
                       onLongPress: () async {
-                        final RenderBox overlay = Overlay.of(context)
-                            .context
-                            .findRenderObject();
+                        final RenderBox overlay =
+                            Overlay.of(context).context.findRenderObject();
                         await showMenu(
-                            context: context,
-                            // found way to show delete button on the location of long press
-                            // not sure how it works
-                            position: RelativeRect.fromRect(
-                                _tapPosition &
-                                    Size(40,
-                                        40), // smaller rect, the touch area
-                                Offset.zero &
-                                    overlay
-                                        .size // Bigger rect, the entire screen
-                                ),
-                            items: getPopupItems(context),
-                          );
+                          context: context,
+                          // found way to show delete button on the location of long press
+                          // not sure how it works
+                          position: RelativeRect.fromRect(
+                              _tapPosition &
+                                  Size(40, 40), // smaller rect, the touch area
+                              Offset.zero &
+                                  overlay.size // Bigger rect, the entire screen
+                              ),
+                          items: getPopupItems(context),
+                        );
                       },
                       child: FlipCard(
                         direction: FlipDirection.HORIZONTAL,
@@ -208,60 +202,66 @@ class _FlashCardViewState extends State<FlashCardView> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   border: Border.all(
-                                      color: MyColorScheme.flashcardColor(), width: 3),
+                                      color: MyColorScheme.flashcardColor(),
+                                      width: 3),
                                   borderRadius: BorderRadius.circular(20)),
                               child: Center(
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Spacer(),
-                                      Text(
-                                        term,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Spacer(),
-                                      widget.editAccess ? Row(
-                                        children: <Widget>[
-                                          RawMaterialButton(
-                                            onPressed: () async{
-                                              await clickNotMemorized();
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.redAccent[700],
-                                            child: Icon(
-                                              Icons.close,
-                                              color: Colors.white,
-                                              size: 35.0,
-                                            ),
-                                            padding: EdgeInsets.all(15.0),
-                                            shape: CircleBorder(),
-                                          ),
-                                          Spacer(),
-                                          RawMaterialButton(
-                                            onPressed: () async{
-                                              await clickMemorized();
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.greenAccent[400],
-                                            child: Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                              size: 35.0,
-                                            ),
-                                            padding: EdgeInsets.all(15.0),
-                                            shape: CircleBorder(),
-                                          )
-                                        ],
-                                      ) : 
-                                      SizedBox(),
-                                    ]
-                                  ),
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Spacer(),
+                                        Text(
+                                          term,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Spacer(),
+                                        widget.editAccess
+                                            ? Row(
+                                                children: <Widget>[
+                                                  RawMaterialButton(
+                                                    onPressed: () async {
+                                                      await clickNotMemorized();
+                                                    },
+                                                    elevation: 2.0,
+                                                    fillColor:
+                                                        Colors.redAccent[700],
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      color: Colors.white,
+                                                      size: 35.0,
+                                                    ),
+                                                    padding:
+                                                        EdgeInsets.all(15.0),
+                                                    shape: CircleBorder(),
+                                                  ),
+                                                  Spacer(),
+                                                  RawMaterialButton(
+                                                    onPressed: () async {
+                                                      await clickMemorized();
+                                                    },
+                                                    elevation: 2.0,
+                                                    fillColor:
+                                                        Colors.greenAccent[400],
+                                                    child: Icon(
+                                                      Icons.check,
+                                                      color: Colors.white,
+                                                      size: 35.0,
+                                                    ),
+                                                    padding:
+                                                        EdgeInsets.all(15.0),
+                                                    shape: CircleBorder(),
+                                                  )
+                                                ],
+                                              )
+                                            : SizedBox(),
+                                      ]),
                                 ),
                               ),
                             ),
@@ -273,23 +273,24 @@ class _FlashCardViewState extends State<FlashCardView> {
                                     _tapPosition = details.globalPosition;
                                   },
                                   onTap: () async {
-                                    final RenderBox overlay = Overlay.of(context)
-                                        .context
-                                        .findRenderObject();
+                                    final RenderBox overlay =
+                                        Overlay.of(context)
+                                            .context
+                                            .findRenderObject();
                                     await showMenu(
-                                        context: context,
-                                        // found way to show delete button on the location of long press
-                                        // not sure how it works
-                                        position: RelativeRect.fromRect(
-                                            _tapPosition &
-                                                Size(40,
-                                                    40), // smaller rect, the touch area
-                                            Offset.zero &
-                                                overlay
-                                                    .size // Bigger rect, the entire screen
-                                            ),
-                                        items: getPopupItems(context),
-                                        );
+                                      context: context,
+                                      // found way to show delete button on the location of long press
+                                      // not sure how it works
+                                      position: RelativeRect.fromRect(
+                                          _tapPosition &
+                                              Size(40,
+                                                  40), // smaller rect, the touch area
+                                          Offset.zero &
+                                              overlay
+                                                  .size // Bigger rect, the entire screen
+                                          ),
+                                      items: getPopupItems(context),
+                                    );
                                   },
                                   child: Padding(
                                     padding:
@@ -309,7 +310,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                             decoration: BoxDecoration(
                                 color: MyColorScheme.flashcardColor(),
                                 border: Border.all(
-                                    color: MyColorScheme.flashcardColor(), width: 3),
+                                    color: MyColorScheme.flashcardColor(),
+                                    width: 3),
                                 borderRadius: BorderRadius.circular(20)),
                             child: Center(
                               child: Padding(
@@ -319,26 +321,27 @@ class _FlashCardViewState extends State<FlashCardView> {
                                   children: <Widget>[
                                     Spacer(),
                                     isPic
-                                        ?Image.network(
-                                      definition,
-                                      loadingBuilder: (BuildContext context,
-                                          Widget child,
-                                          ImageChunkEvent loadingProgress) {
-                                        if (loadingProgress == null) return child;
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                    null
-                                                ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes
-                                                : null,
-                                          ),
-                                        );
-                                      }
-                                        )
+                                        ? Image.network(definition,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent
+                                                        loadingProgress) {
+                                            if (loadingProgress == null)
+                                              return child;
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes
+                                                    : null,
+                                              ),
+                                            );
+                                          })
                                         : Text(
                                             definition,
                                             textAlign: TextAlign.center,
@@ -348,40 +351,43 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                 fontWeight: FontWeight.normal),
                                           ),
                                     Spacer(),
-                                        widget.editAccess ? Row(
-                                          children: <Widget>[
-                                            RawMaterialButton(
-                                              onPressed: () async{
-                                                await clickNotMemorized();
-                                              },
-                                              elevation: 2.0,
-                                              fillColor: Colors.redAccent[700],
-                                              child: Icon(
-                                                Icons.close,
-                                                color: Colors.white,
-                                                size: 35.0,
+                                    widget.editAccess
+                                        ? Row(
+                                            children: <Widget>[
+                                              RawMaterialButton(
+                                                onPressed: () async {
+                                                  await clickNotMemorized();
+                                                },
+                                                elevation: 2.0,
+                                                fillColor:
+                                                    Colors.redAccent[700],
+                                                child: Icon(
+                                                  Icons.close,
+                                                  color: Colors.white,
+                                                  size: 35.0,
+                                                ),
+                                                padding: EdgeInsets.all(15.0),
+                                                shape: CircleBorder(),
                                               ),
-                                              padding: EdgeInsets.all(15.0),
-                                              shape: CircleBorder(),
-                                            ),
-                                            Spacer(),
-                                            RawMaterialButton(
-                                              onPressed: () async{
-                                                await clickMemorized();
-                                              },
-                                              elevation: 2.0,
-                                              fillColor: Colors.greenAccent[400],
-                                              child: Icon(
-                                                Icons.check,
-                                                color: Colors.white,
-                                                size: 35.0,
-                                              ),
-                                              padding: EdgeInsets.all(15.0),
-                                              shape: CircleBorder(),
-                                            )
-                                          ],
-                                        ) : 
-                                        SizedBox(),
+                                              Spacer(),
+                                              RawMaterialButton(
+                                                onPressed: () async {
+                                                  await clickMemorized();
+                                                },
+                                                elevation: 2.0,
+                                                fillColor:
+                                                    Colors.greenAccent[400],
+                                                child: Icon(
+                                                  Icons.check,
+                                                  color: Colors.white,
+                                                  size: 35.0,
+                                                ),
+                                                padding: EdgeInsets.all(15.0),
+                                                shape: CircleBorder(),
+                                              )
+                                            ],
+                                          )
+                                        : SizedBox(),
                                   ],
                                 ),
                               ),
@@ -399,19 +405,19 @@ class _FlashCardViewState extends State<FlashCardView> {
                                       .context
                                       .findRenderObject();
                                   await showMenu(
-                                      context: context,
-                                      // found way to show delete button on the location of long press
-                                      // not sure how it works
-                                      position: RelativeRect.fromRect(
-                                          _tapPosition &
-                                              Size(40,
-                                                  40), // smaller rect, the touch area
-                                          Offset.zero &
-                                              overlay
-                                                  .size // Bigger rect, the entire screen
-                                          ),
-                                      items: getPopupItems(context),
-                                      );
+                                    context: context,
+                                    // found way to show delete button on the location of long press
+                                    // not sure how it works
+                                    position: RelativeRect.fromRect(
+                                        _tapPosition &
+                                            Size(40,
+                                                40), // smaller rect, the touch area
+                                        Offset.zero &
+                                            overlay
+                                                .size // Bigger rect, the entire screen
+                                        ),
+                                    items: getPopupItems(context),
+                                  );
                                 },
                                 child: Padding(
                                   padding:
@@ -475,7 +481,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                         onPressed: () async {
                           Navigator.pop(ctxt);
                           setState(() async {
-                            Deck newDeck = await createNewBlankDeck(uid, deckName: playlistname);
+                            Deck newDeck = await createNewBlankDeck(uid,
+                                deckName: playlistname);
                           });
 
                           _showbottomsheet(context);
@@ -497,45 +504,47 @@ class _FlashCardViewState extends State<FlashCardView> {
       i++;
       k = '$i';
       return StreamBuilder(
-        stream: Firestore.instance.collection('decks').document(deckID).snapshots(),
-        builder: (context, snapshot) {
+          stream: Firestore.instance
+              .collection('decks')
+              .document(deckID)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Text("loading");
+            }
 
-          if(!snapshot.hasData) {
-            return Text("loading");
-          }
+            Deck deck =
+                Deck(deckName: snapshot.data["deckName"], deckID: deckID);
 
-          Deck deck = Deck(deckName: snapshot.data["deckName"],
-                            deckID: deckID);
+            return Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Card(
+                color: MyColorScheme.accentLight(),
+                child: ListTile(
+                  trailing: Icon(Icons.playlist_add),
+                  contentPadding: EdgeInsets.all(10),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    dynamic flashRef = await flashcardReference.add({
+                      'term': term,
+                      'definition': definition,
+                      'isimage': isPic ? 'true' : 'false',
+                    });
 
-          return Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Card(
-              color: MyColorScheme.accentLight(),
-              child: ListTile(
-                trailing: Icon(Icons.playlist_add),
-                contentPadding: EdgeInsets.all(10),
-                onTap: () async {
-                  Navigator.pop(context);
-                  dynamic flashRef = await flashcardReference.add({
-                    'term': term,
-                    'definition': definition,
-                    'isimage': isPic ? 'true' : 'false',
-                  });
-
-                  await deckReference.document(deckID).updateData({
-                    'flashcardList': FieldValue.arrayUnion([flashRef.documentID]),
-                  });
-                },
-                title: Text(deck.deckName),
+                    await deckReference.document(deckID).updateData({
+                      'flashcardList':
+                          FieldValue.arrayUnion([flashRef.documentID]),
+                    });
+                  },
+                  title: Text(deck.deckName),
+                ),
               ),
-            ),
-          );
-        }
-      );
+            );
+          });
     }).toList();
   }
 
-  Widget bottomData(BuildContext context){
+  Widget bottomData(BuildContext context) {
     List<Widget> children = _buildlist(context);
     return Column(
       children: <Widget>[
@@ -555,8 +564,7 @@ class _FlashCardViewState extends State<FlashCardView> {
           height: MediaQuery.of(context).size.height * 0.4,
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: children,
@@ -573,46 +581,49 @@ class _FlashCardViewState extends State<FlashCardView> {
         context: context,
         builder: (BuildContext buildContext) {
           return StreamBuilder(
-            stream: Firestore.instance.collection('user_data').document(uid).snapshots(),
+            stream: Firestore.instance
+                .collection('user_data')
+                .document(uid)
+                .snapshots(),
             builder: (context, snapshot) {
-              if(!snapshot.hasData)
-                return Text("loading");
+              if (!snapshot.hasData) return Text("loading");
               userDecks = snapshot.data["decks"];
               return bottomData(context);
             },
           );
         });
   }
-  getPopupItems(context){
+
+  getPopupItems(context) {
     List<PopupMenuItem> children = <PopupMenuItem>[];
     children.add(
       PopupMenuItem(
         value: "add to playlist",
         child: GestureDetector(
             onTap: () async {
-              Navigator.pop(
-                  context, "add to playlist");
+              Navigator.pop(context, "add to playlist");
               await _showbottomsheet(
                   context); // function that makes the bottom sheet
             },
             child: Text("Add to playlists")),
       ),
     );
-    if(widget.editAccess)
-    {
+    if (widget.editAccess) {
       children.add(
         PopupMenuItem(
           value: "edit deck",
           child: GestureDetector(
-          onTap: () async {
-            Navigator.pop(
-                context, "edit deck");
-            
-            Navigator.of(context).push(MaterialPageRoute(builder: (context){
-              return EditFlashCard(deck: widget.deck,);
-            }));
-          },
-          child: Text("Edit Deck")),
+              onTap: () async {
+                Navigator.pop(context, "edit deck");
+
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return EditFlashCard(
+                    deck: widget.deck,
+                  );
+                }));
+              },
+              child: Text("Edit Deck")),
         ),
       );
     }

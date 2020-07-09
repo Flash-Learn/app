@@ -6,7 +6,6 @@ import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/Groups/init_group.dart';
 import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/screens/Groups/group_info_card.dart';
-import 'package:microlearning/screens/Groups/init_group.dart';
 import 'package:microlearning/screens/authentication/init_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,9 +45,9 @@ class _GroupListState extends State<GroupList> {
             ),
             onPressed: () {
               Navigator.pushNamed(
-                          context,
-                          '/groupsearch',
-                        );
+                context,
+                '/groupsearch',
+              );
             },
           ),
         ],
@@ -101,7 +100,8 @@ class _GroupListState extends State<GroupList> {
       ),
     );
   }
-  customBottomNav(){
+
+  customBottomNav() {
     return Container(
       height: 80,
       padding: EdgeInsets.only(bottom: 20),
@@ -111,8 +111,9 @@ class _GroupListState extends State<GroupList> {
           InkWell(
             splashColor: MyColorScheme.accent(),
             borderRadius: BorderRadius.circular(20),
-            onTap: (){
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (context) {
                 return MyDecks();
               }));
             },
@@ -123,18 +124,24 @@ class _GroupListState extends State<GroupList> {
                   Icons.library_books,
                   color: MyColorScheme.uno(),
                 ),
-                SizedBox(height: 5,),
-                Text('MyDecks', style: TextStyle(color: MyColorScheme.uno(),)),
+                SizedBox(
+                  height: 5,
+                ),
+                Text('MyDecks',
+                    style: TextStyle(
+                      color: MyColorScheme.uno(),
+                    )),
               ],
             ),
           ),
           GestureDetector(
-            onTap: ()async{
+            onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String uid = prefs.getString('uid');
               GroupData newGroup = await createNewGroup(uid);
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return InitGroup(groupData: newGroup);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) {
+                  return InitGroup(groupData: newGroup);
                 },
               ));
             },
@@ -144,14 +151,22 @@ class _GroupListState extends State<GroupList> {
               borderRadius: BorderRadius.circular(20),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: _disableTouch ? 
-                  Loading(size: 20,) :
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.add, color: MyColorScheme.uno(),),
-                      Text('Create Group', style: TextStyle(color: MyColorScheme.uno()),),
-                  ],
-                ),
+                child: _disableTouch
+                    ? Loading(
+                        size: 20,
+                      )
+                    : Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.add,
+                            color: MyColorScheme.uno(),
+                          ),
+                          Text(
+                            'Create Group',
+                            style: TextStyle(color: MyColorScheme.uno()),
+                          ),
+                        ],
+                      ),
               ),
             ),
           ),
@@ -164,8 +179,13 @@ class _GroupListState extends State<GroupList> {
                   Icons.group,
                   color: Colors.amber,
                 ),
-                SizedBox(height: 5,),
-                Text('MyGroups', style: TextStyle(color: Colors.amber),)
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'MyGroups',
+                  style: TextStyle(color: Colors.amber),
+                )
               ],
             ),
           )
@@ -232,7 +252,8 @@ class _ReorderListState extends State<ReorderList> {
                 },
                 onTap: () {
                   //TODO: add navigation to group
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
                     return Group(groupID: groupID);
                   }));
                 },

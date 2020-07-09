@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Utilities/functions/Infos.dart';
-import 'package:microlearning/services/database.dart';
-import 'package:microlearning/screens/Decks/my_decks.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GetUserInfo extends StatefulWidget {
   @override
@@ -10,14 +7,26 @@ class GetUserInfo extends StatefulWidget {
 }
 
 class _GetUserInfoState extends State<GetUserInfo> {
-
   final _formKey = GlobalKey<FormState>();
   String _name;
   String _gender;
   String _grade;
 
   List<String> genders = ["Male", "Female", "Others"];
-  List<String> grades = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+  List<String> grades = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -58,20 +67,20 @@ class _GetUserInfoState extends State<GetUserInfo> {
                   ),
                 ),
               ),
-              SizedBox(height: 20.0,),
-
+              SizedBox(
+                height: 20.0,
+              ),
               Row(
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: Text(  
+                    child: Text(
                       "Gender",
                       style: TextStyle(
                         fontSize: 18.0,
                       ),
                     ),
                   ),
-
                   Expanded(
                     flex: 2,
                     child: Container(
@@ -94,9 +103,9 @@ class _GetUserInfoState extends State<GetUserInfo> {
                   ),
                 ],
               ),
-
-              SizedBox(height: 20.0,),
-
+              SizedBox(
+                height: 20.0,
+              ),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -130,9 +139,9 @@ class _GetUserInfoState extends State<GetUserInfo> {
                   ),
                 ],
               ),
-
-              SizedBox(height: 20.0,),
-          
+              SizedBox(
+                height: 20.0,
+              ),
               RaisedButton(
                 color: Colors.black,
                 child: Center(
@@ -141,8 +150,8 @@ class _GetUserInfoState extends State<GetUserInfo> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                onPressed: () async{
-                  if(_formKey.currentState.validate()) {
+                onPressed: () async {
+                  if (_formKey.currentState.validate()) {
                     enterInfo(context, {
                       '_name': _name,
                       '_grade': _grade,
