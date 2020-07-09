@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/screens/Decks/edit_flashcard.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
@@ -604,20 +605,24 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         print("unshuffle");
       }
       return Container(
-        child: PageView.builder(
-            controller: _pageCtrl,
-            scrollDirection: Axis.horizontal,
-            itemCount: cardsRemembered.length,
-            itemBuilder: (context, int currentIndex) {
-              return FlashCardView(
-                color: Colors.accents[currentIndex],
-                currentIndex: currentIndex,
-                currentPage: currentPage,
-                flashCardID: cardsRemembered[currentIndex],
-                editAccess: widget.editAccess,
-                onMemorizeCallback: doNothing,
-              );
-            }),
+        child: PageView(
+          controller: _pageCtrl,
+          scrollDirection: Axis.horizontal,
+          children: getCardsAsList(cardsRemembered, widget.editAccess, doNothing),
+            // controller: _pageCtrl,
+            // scrollDirection: Axis.horizontal,
+            // itemCount: cardsRemembered.length,
+            // itemBuilder: (context, int currentIndex) {
+            //   return FlashCardView(
+            //     color: Colors.accents[currentIndex],
+            //     currentIndex: currentIndex,
+            //     currentPage: currentPage,
+            //     flashCardID: cardsRemembered[currentIndex],
+            //     editAccess: widget.editAccess,
+            //     onMemorizeCallback: doNothing,
+            //   );
+            // }
+            ),
       );
     }
 
@@ -675,6 +680,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
                       currentPage: currentPage,
                       flashCardID: cardsNotRemembered[currentIndex],
                       onMemorizeCallback: deleteAtIndex,
+                      deck: deck,
                     );
                   } catch (e) {
                     _pageCtrl.jumpToPage(0);
@@ -683,5 +689,56 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
                 }),
           );
         });
+  }
+  getCardsAsList(List<dynamic> cards, bool editaccess, Function onmemocall){
+    List<Widget> children = cards.map<Widget>((dynamic data){
+      return FlashCardView(
+        flashCardID: data,
+        editAccess: editaccess,
+        onMemorizeCallback: onmemocall,
+        currentIndex: cards.indexOf(data),
+        currentPage: currentPage,
+        deck: deck,
+      );
+    }).toList();
+    double relativePosition = cards.length - currentPage;
+    if(editaccess == true){children.add(
+      Padding(
+        padding: const EdgeInsets.fromLTRB(8, 35, 8, 35),
+        child: Transform(
+          transform: Matrix4.identity()
+            ..setEntry(1, 2, 0)
+            ..scale((1 - relativePosition.abs()).clamp(0.4, 0.6) + 0.4)
+            ..rotateY(relativePosition*1.2),
+          alignment: relativePosition >= 0
+              ? Alignment.centerLeft
+              : Alignment.centerRight,
+          child: GestureDetector(
+            onTap: (){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: ((context){
+                  return EditFlashCard(deck: deck,);
+                }))
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                      color: MyColorScheme.flashcardColor(), width: 3),
+                  borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Icon(
+                  Icons.add,
+                  size: 50,
+                  ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    }
+    return children;
   }
 }

@@ -139,10 +139,13 @@ class _ReorderListState extends State<ReorderList> {
   var _tapPosition;
   @override
   Widget build(BuildContext context) {
-    return ReorderableListView(
-      scrollDirection: Axis.vertical,
-      children: getGroupsAsList(context, widget.userGroupIDs),
-      onReorder: _onReorder,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: ReorderableListView(
+        scrollDirection: Axis.vertical,
+        children: getGroupsAsList(context, widget.userGroupIDs),
+        onReorder: _onReorder,
+      ),
     );
   }
 
