@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:microlearning/Utilities/Widgets/popUp.dart';
 
 class EditGroup extends StatefulWidget {
   final GroupData groupData;
@@ -110,7 +111,7 @@ class _EditGroupState extends State<EditGroup> {
                       });
                     },
                     decoration: InputDecoration(
-                      hintText: "Group description",
+                      hintText: "User email ID",
                       fillColor: Colors.white,
                       filled: true,
                       contentPadding: EdgeInsets.all(12.0),
@@ -134,6 +135,9 @@ class _EditGroupState extends State<EditGroup> {
                       ),
                     ),
                     onPressed: () async {
+                      bool alreadyThere = false;
+                      bool doesExist = false;
+                      bool didAdd = false;
                       CollectionReference userCollection =
                           Firestore.instance.collection('user_data');
                       try {
@@ -141,10 +145,23 @@ class _EditGroupState extends State<EditGroup> {
                             .where("email", isEqualTo: userToAdd)
                             .getDocuments();
                         user.documents.forEach((element) {
-                          groupData.users.add(element["email"]);
+                          doesExist = true;
+                          if (groupData.users.contains(element.documentID) ==
+                              false) {
+                            groupData.users.add(element.documentID);
+                          } else {
+                            alreadyThere = true;
+                          }
                         });
                       } catch (e) {
                         print(e);
+                        return;
+                      }
+                      if (!doesExist) {
+                        popUp(context, "No such user!");
+                        return;
+                      } else if (alreadyThere) {
+                        popUp(context, "User already in group!");
                         return;
                       }
                       try {
@@ -152,6 +169,9 @@ class _EditGroupState extends State<EditGroup> {
                       } catch (e) {
                         print(e);
                         return;
+                      }
+                      if (!didAdd) {
+                        popUp(context, "Some error occured. Try again!");
                       }
                     },
                   ),
