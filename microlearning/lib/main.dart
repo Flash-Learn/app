@@ -1,7 +1,7 @@
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/Decks/notifications_inapp.dart';
 import 'package:microlearning/screens/Decks/playlist_manage.dart';
-import 'package:microlearning/screens/Groups/groups_list.dart';
+import 'package:microlearning/screens/Groups/my_groups.dart';
 import 'package:microlearning/screens/Search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/screens/authentication/login.dart';
