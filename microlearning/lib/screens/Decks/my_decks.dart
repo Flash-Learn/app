@@ -42,6 +42,7 @@ class _MyDecksState extends State<MyDecks> {
   ];
   List<dynamic> userDeckIDs;
   int _index = 0;
+  int selectedIndex = 0;
 
   spotlight(Key key) {
     _index++;
@@ -148,44 +149,10 @@ class _MyDecksState extends State<MyDecks> {
                 Color.fromRGBO(84, 205, 255, 1),
                 Color.fromRGBO(27, 116, 210, 1)
               ])),
-
           child: Scaffold(
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            bottomNavigationBar: customBottomNav(),
               backgroundColor: Colors.transparent,
-              floatingActionButton: FloatingActionButton.extended(
-                key: _keyNewDeck,
-                backgroundColor: Color.fromRGBO(50, 217, 157, 1),
-                label: _disableTouch
-                    ? Loading(size: 20)
-                    : Text(
-                        'Create Deck',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ), // show loading if touch is disabled, otherwise show text
-                icon: _disableTouch
-                    ? null
-                    : Icon(
-                        Icons.add), // if touch is disabled remove the add Icon
-                onPressed: () async {
-                  setState(() {
-                    _disableTouch = true;
-                  });
-
-                  // newDeck is a bank new deck, which is being passed into the edit deck screen
-                  Deck newDeck = await createNewBlankDeck(uid);
-
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return EditDecks(
-                        deck: newDeck, isdemo: isdemo, creating: true);
-                  }));
-
-                  setState(() {
-                    _disableTouch = false;
-                  });
-                },
-              ),
               appBar: AppBar(
                   elevation: 2,
                   // backgroundColor: MyColorScheme.uno(),
@@ -199,26 +166,6 @@ class _MyDecksState extends State<MyDecks> {
                         fontWeight: FontWeight.bold),
                   ),
                   actions: <Widget>[
-                    // Stack(
-                    //   children: <Widget>[
-                    //     // commenting the notification button for now, will use it when classroom feature is encorporated
-                    //     // IconButton(
-                    //     //   icon: Icon(Icons.notifications),
-                    //     //   color: MyColorScheme.accent(),
-                    //     //   onPressed: (){
-                    //     //     Navigator.pushNamed(context
-                    //     //     , '/notificationinapp');
-                    //     //   },
-                    //     // ),
-                    //   ],
-                    // ),
-                    // IconButton(
-                    //   icon: Icon(Icons.help_outline),
-                    //   color: MyColorScheme.uno(),
-                    //   onPressed: (){
-                    //     createHelpDialog(context, 'This is the home page. Browse through the decks which are created by you or are downloaded from the collection of decks available online.');
-                    //   },
-                    // ),
                     IconButton(
                       key: _keySearch,
                       icon: Icon(
@@ -229,19 +176,6 @@ class _MyDecksState extends State<MyDecks> {
                         Navigator.pushNamed(
                           context,
                           '/search',
-                        );
-                      },
-                    ),
-                    IconButton(
-                      key: _keyGroups,
-                      icon: Icon(
-                        Icons.group,
-                        color: MyColorScheme.uno(),
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/groups',
                         );
                       },
                     ),
@@ -301,6 +235,88 @@ class _MyDecksState extends State<MyDecks> {
                     }),
               )),
         ),
+      ),
+    );
+  }
+  customBottomNav(){
+    return Container(
+      height: 80,
+      padding: EdgeInsets.only(bottom: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          InkWell(
+            splashColor: MyColorScheme.accent(),
+            borderRadius: BorderRadius.circular(20),
+            onTap: (){
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.library_books,
+                  color: Colors.amber,
+                ),
+                SizedBox(height: 5,),
+                Text('MyDecks', style: TextStyle(color: Colors.amber,)),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: ()async{
+              setState(() {
+                _disableTouch = true;
+              });
+              // newDeck is a bank new deck, which is being passed into the edit deck screen
+              Deck newDeck = await createNewBlankDeck(uid);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) {
+                return EditDecks(
+                    deck: newDeck, isdemo: isdemo, creating: true);
+              }));
+              setState(() {
+                _disableTouch = false;
+              });
+            },
+            child: Material(
+              elevation: 2,
+              color: Color.fromRGBO(50, 217, 157, 1),
+              borderRadius: BorderRadius.circular(20),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: _disableTouch ? 
+                  Loading(size: 20,) :
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.add, color: MyColorScheme.uno(),),
+                      Text('Create Deck', style: TextStyle(color: MyColorScheme.uno()),),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            splashColor: MyColorScheme.accent(),
+            onTap: (){
+              Navigator.pushNamed(
+                context,
+                '/groups',
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.group,
+                  color: MyColorScheme.uno(),
+                ),
+                SizedBox(height: 5,),
+                Text('MyGroups', style: TextStyle(color: MyColorScheme.uno()),)
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

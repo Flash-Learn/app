@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
+import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Groups/init_group.dart';
 import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/screens/Groups/group_info_card.dart';
@@ -18,28 +19,12 @@ class _GroupListState extends State<GroupList> {
   GlobalKey<_GroupListState> _keySearch = GlobalKey<_GroupListState>();
   GlobalKey<_GroupListState> _keyMyDecks = GlobalKey<_GroupListState>();
   List<dynamic> userGroupIDs;
+  bool _disableTouch = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: customBottomNav(),
       backgroundColor: Colors.transparent,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          //TODO: navigate to create new deck page
-          // TODO: disable touch on click
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          String uid = prefs.getString('uid');
-          GroupData newGroup = await createNewGroup(uid);
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return InitGroup(groupData: newGroup);
-          }));
-        },
-        label: Text('Create group',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            )),
-        icon: Icon(Icons.add),
-      ),
       appBar: AppBar(
         elevation: 2,
         backgroundColor: Color.fromRGBO(196, 208, 223, 0),
@@ -62,16 +47,6 @@ class _GroupListState extends State<GroupList> {
               //TOOD: navigate to group search
             },
           ),
-          IconButton(
-            key: _keyMyDecks,
-            icon: Icon(
-              Icons.library_books,
-              color: MyColorScheme.uno(),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
         ],
         leading: IconButton(
           icon: Icon(
@@ -119,6 +94,76 @@ class _GroupListState extends State<GroupList> {
             );
           },
         ),
+      ),
+    );
+  }
+  customBottomNav(){
+    return Container(
+      height: 80,
+      padding: EdgeInsets.only(bottom: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          InkWell(
+            splashColor: MyColorScheme.accent(),
+            borderRadius: BorderRadius.circular(20),
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.library_books,
+                  color: MyColorScheme.uno(),
+                ),
+                SizedBox(height: 5,),
+                Text('MyDecks', style: TextStyle(color: MyColorScheme.uno(),)),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: ()async{
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              String uid = prefs.getString('uid');
+              GroupData newGroup = await createNewGroup(uid);
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return InitGroup(groupData: newGroup);
+                },
+              ));
+            },
+            child: Material(
+              elevation: 2,
+              color: Color.fromRGBO(50, 217, 157, 1),
+              borderRadius: BorderRadius.circular(20),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: _disableTouch ? 
+                  Loading(size: 20,) :
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.add, color: MyColorScheme.uno(),),
+                      Text('Create Group', style: TextStyle(color: MyColorScheme.uno()),),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.group,
+                  color: Colors.amber,
+                ),
+                SizedBox(height: 5,),
+                Text('MyGroups', style: TextStyle(color: Colors.amber),)
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
