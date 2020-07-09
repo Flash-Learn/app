@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:algolia/algolia.dart';
-import 'package:microlearning/Models/algolia.dart'; // need to change this for the new search
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class GroupSearch extends StatefulWidget {
