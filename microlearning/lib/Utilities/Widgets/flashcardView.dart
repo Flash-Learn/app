@@ -1,4 +1,6 @@
 //import 'package:flip_card/flip_card.dart';
+import 'package:microlearning/screens/Decks/edit_flashcard.dart';
+
 import 'flip_card.dart'; // created local copy of flip_card library
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class FlashCardView extends StatefulWidget {
   final String flashCardID;
   final bool editAccess;
   final Function onMemorizeCallback;
+  final Deck deck;
 
   FlashCardView({
     this.color,
@@ -23,6 +26,7 @@ class FlashCardView extends StatefulWidget {
     this.flashCardID,
     this.editAccess = true,
     this.onMemorizeCallback,
+    this.deck,
   });
 
   @override
@@ -173,164 +177,55 @@ class _FlashCardViewState extends State<FlashCardView> {
                       ? Alignment.centerLeft
                       : Alignment.centerRight,
                   child: Stack(children: <Widget>[
-                    FlipCard(
-                      direction: FlipDirection.HORIZONTAL,
-                      front: Stack(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: MyColorScheme.flashcardColor(), width: 3),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Spacer(),
-                                    Text(
-                                      term,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Spacer(),
-                                    widget.editAccess ? Row(
-                                      children: <Widget>[
-                                        RawMaterialButton(
-                                          onPressed: () async{
-                                            await clickNotMemorized();
-                                          },
-                                          elevation: 2.0,
-                                          fillColor: Colors.redAccent[700],
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Colors.white,
-                                            size: 35.0,
-                                          ),
-                                          padding: EdgeInsets.all(15.0),
-                                          shape: CircleBorder(),
-                                        ),
-                                        Spacer(),
-                                        RawMaterialButton(
-                                          onPressed: () async{
-                                            await clickMemorized();
-                                          },
-                                          elevation: 2.0,
-                                          fillColor: Colors.greenAccent[400],
-                                          child: Icon(
-                                            Icons.check,
-                                            color: Colors.white,
-                                            size: 35.0,
-                                          ),
-                                          padding: EdgeInsets.all(15.0),
-                                          shape: CircleBorder(),
-                                        )
-                                      ],
-                                    ) : 
-                                    SizedBox(),
-                                  ]
+                    GestureDetector(
+                      onTapDown: (details) {
+                        _tapPosition = details.globalPosition;
+                      },
+                      onLongPress: () async {
+                        final RenderBox overlay = Overlay.of(context)
+                            .context
+                            .findRenderObject();
+                        await showMenu(
+                            context: context,
+                            // found way to show delete button on the location of long press
+                            // not sure how it works
+                            position: RelativeRect.fromRect(
+                                _tapPosition &
+                                    Size(40,
+                                        40), // smaller rect, the touch area
+                                Offset.zero &
+                                    overlay
+                                        .size // Bigger rect, the entire screen
                                 ),
-                              ),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              GestureDetector(
-                                onTapDown: (details) {
-                                  _tapPosition = details.globalPosition;
-                                },
-                                onTap: () async {
-                                  final RenderBox overlay = Overlay.of(context)
-                                      .context
-                                      .findRenderObject();
-                                  await showMenu(
-                                      context: context,
-                                      // found way to show delete button on the location of long press
-                                      // not sure how it works
-                                      position: RelativeRect.fromRect(
-                                          _tapPosition &
-                                              Size(40,
-                                                  40), // smaller rect, the touch area
-                                          Offset.zero &
-                                              overlay
-                                                  .size // Bigger rect, the entire screen
-                                          ),
-                                      items: [
-                                        PopupMenuItem(
-                                          value: "add to playlist",
-                                          child: GestureDetector(
-                                              onTap: () async {
-                                                Navigator.pop(
-                                                    context, "add to playlist");
-                                                await _showbottomsheet(context);
-                                              },
-                                              child: Text("Add to playlists")),
-                                        ),
-                                      ]);
-                                },
+                            items: getPopupItems(context),
+                          );
+                      },
+                      child: FlipCard(
+                        direction: FlipDirection.HORIZONTAL,
+                        front: Stack(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: MyColorScheme.flashcardColor(), width: 3),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Center(
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 20, 0),
-                                  child: Icon(
-                                    Icons.more_horiz,
-                                    color: MyColorScheme.accent(),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      back: Stack(children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                              color: MyColorScheme.flashcardColor(),
-                              border: Border.all(
-                                  color: MyColorScheme.flashcardColor(), width: 3),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Spacer(),
-                                  isPic
-                                      ?Image.network(
-                                    definition,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes
-                                              : null,
-                                        ),
-                                      );
-                                    }
-                                      )
-                                      : Text(
-                                          definition,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                  Spacer(),
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Spacer(),
+                                      Text(
+                                        term,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Spacer(),
                                       widget.editAccess ? Row(
                                         children: <Widget>[
                                           RawMaterialButton(
@@ -365,60 +260,172 @@ class _FlashCardViewState extends State<FlashCardView> {
                                         ],
                                       ) : 
                                       SizedBox(),
-                                ],
+                                    ]
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTapDown: (details) {
+                                    _tapPosition = details.globalPosition;
+                                  },
+                                  onTap: () async {
+                                    final RenderBox overlay = Overlay.of(context)
+                                        .context
+                                        .findRenderObject();
+                                    await showMenu(
+                                        context: context,
+                                        // found way to show delete button on the location of long press
+                                        // not sure how it works
+                                        position: RelativeRect.fromRect(
+                                            _tapPosition &
+                                                Size(40,
+                                                    40), // smaller rect, the touch area
+                                            Offset.zero &
+                                                overlay
+                                                    .size // Bigger rect, the entire screen
+                                            ),
+                                        items: getPopupItems(context),
+                                        );
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 10, 20, 0),
+                                    child: Icon(
+                                      Icons.more_horiz,
+                                      color: MyColorScheme.accent(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        back: Stack(children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(
+                                color: MyColorScheme.flashcardColor(),
+                                border: Border.all(
+                                    color: MyColorScheme.flashcardColor(), width: 3),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Spacer(),
+                                    isPic
+                                        ?Image.network(
+                                      definition,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent loadingProgress) {
+                                        if (loadingProgress == null) return child;
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes
+                                                : null,
+                                          ),
+                                        );
+                                      }
+                                        )
+                                        : Text(
+                                            definition,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.normal),
+                                          ),
+                                    Spacer(),
+                                        widget.editAccess ? Row(
+                                          children: <Widget>[
+                                            RawMaterialButton(
+                                              onPressed: () async{
+                                                await clickNotMemorized();
+                                              },
+                                              elevation: 2.0,
+                                              fillColor: Colors.redAccent[700],
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                                size: 35.0,
+                                              ),
+                                              padding: EdgeInsets.all(15.0),
+                                              shape: CircleBorder(),
+                                            ),
+                                            Spacer(),
+                                            RawMaterialButton(
+                                              onPressed: () async{
+                                                await clickMemorized();
+                                              },
+                                              elevation: 2.0,
+                                              fillColor: Colors.greenAccent[400],
+                                              child: Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                                size: 35.0,
+                                              ),
+                                              padding: EdgeInsets.all(15.0),
+                                              shape: CircleBorder(),
+                                            )
+                                          ],
+                                        ) : 
+                                        SizedBox(),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTapDown: (details) {
-                                _tapPosition = details.globalPosition;
-                              },
-                              onTap: () async {
-                                final RenderBox overlay = Overlay.of(context)
-                                    .context
-                                    .findRenderObject();
-                                await showMenu(
-                                    context: context,
-                                    // found way to show delete button on the location of long press
-                                    // not sure how it works
-                                    position: RelativeRect.fromRect(
-                                        _tapPosition &
-                                            Size(40,
-                                                40), // smaller rect, the touch area
-                                        Offset.zero &
-                                            overlay
-                                                .size // Bigger rect, the entire screen
-                                        ),
-                                    items: [
-                                      PopupMenuItem(
-                                        value: "add to playlist",
-                                        child: GestureDetector(
-                                            onTap: () async {
-                                              Navigator.pop(
-                                                  context, "add to playlist");
-                                              await _showbottomsheet(
-                                                  context); // function that makes the bottom sheet
-                                            },
-                                            child: Text("Add to playlists")),
-                                      ),
-                                    ]);
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 10, 20, 0),
-                                child: Icon(
-                                  Icons.more_horiz,
-                                  color: MyColorScheme.uno(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              GestureDetector(
+                                onTapDown: (details) {
+                                  _tapPosition = details.globalPosition;
+                                },
+                                onTap: () async {
+                                  final RenderBox overlay = Overlay.of(context)
+                                      .context
+                                      .findRenderObject();
+                                  await showMenu(
+                                      context: context,
+                                      // found way to show delete button on the location of long press
+                                      // not sure how it works
+                                      position: RelativeRect.fromRect(
+                                          _tapPosition &
+                                              Size(40,
+                                                  40), // smaller rect, the touch area
+                                          Offset.zero &
+                                              overlay
+                                                  .size // Bigger rect, the entire screen
+                                          ),
+                                      items: getPopupItems(context),
+                                      );
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 20, 0),
+                                  child: Icon(
+                                    Icons.more_horiz,
+                                    color: MyColorScheme.accent(),
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ]),
+                              )
+                            ],
+                          ),
+                        ]),
+                      ),
                     ),
                   ]),
                 ),
@@ -575,5 +582,40 @@ class _FlashCardViewState extends State<FlashCardView> {
             },
           );
         });
+  }
+  getPopupItems(context){
+    List<PopupMenuItem> children = <PopupMenuItem>[];
+    children.add(
+      PopupMenuItem(
+        value: "add to playlist",
+        child: GestureDetector(
+            onTap: () async {
+              Navigator.pop(
+                  context, "add to playlist");
+              await _showbottomsheet(
+                  context); // function that makes the bottom sheet
+            },
+            child: Text("Add to playlists")),
+      ),
+    );
+    if(widget.editAccess)
+    {
+      children.add(
+        PopupMenuItem(
+          value: "edit deck",
+          child: GestureDetector(
+          onTap: () async {
+            Navigator.pop(
+                context, "edit deck");
+            
+            Navigator.of(context).push(MaterialPageRoute(builder: (context){
+              return EditFlashCard(deck: widget.deck,);
+            }));
+          },
+          child: Text("Edit Deck")),
+        ),
+      );
+    }
+    return children;
   }
 }
