@@ -6,7 +6,7 @@ class EditGroup extends StatefulWidget {
   final GroupData groupData;
   EditGroup({@required this.groupData});
   @override
-  _EditGroupState createState() => _EditGroupState();
+  _EditGroupState createState() => _EditGroupState(groupData: groupData);
 }
 
 class _EditGroupState extends State<EditGroup> {
