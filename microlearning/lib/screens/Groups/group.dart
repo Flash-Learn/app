@@ -3,6 +3,7 @@ import 'package:microlearning/Models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/Widgets/deckReorderList.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
+import 'package:microlearning/screens/Groups/edit_group.dart';
 import 'package:microlearning/screens/Groups/init_group.dart';
 
 import 'my_groups.dart';
@@ -54,7 +55,7 @@ class _GroupState extends State<Group> {
                 icon: Icon(Icons.edit),
                 onPressed: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return InitGroup(groupData: group,);
+                    return EditGroup(groupData: group,);
                   }));
                 },
               )
