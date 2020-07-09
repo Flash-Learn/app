@@ -43,12 +43,6 @@ class _MyDecksState extends State<MyDecks> {
   int _index = 0;
   int selectedIndex = 0;
 
-  void onItemTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
-
   spotlight(Key key) {
     _index++;
     Rect target = Spotlight.getRectFromKey(key);
