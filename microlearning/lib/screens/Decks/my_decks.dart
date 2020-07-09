@@ -270,7 +270,7 @@ class _MyDecksState extends State<MyDecks> {
               // newDeck is a bank new deck, which is being passed into the edit deck screen
               Deck newDeck = await createNewBlankDeck(uid);
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) {
+                  .pushReplacement(MaterialPageRoute(builder: (context) {
                 return EditDecks(
                     deck: newDeck, isdemo: isdemo, creating: true);
               }));
