@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
+import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/Groups/init_group.dart';
 import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/screens/Groups/group_info_card.dart';
@@ -108,7 +109,9 @@ class _GroupListState extends State<GroupList> {
             splashColor: MyColorScheme.accent(),
             borderRadius: BorderRadius.circular(20),
             onTap: (){
-              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+                return MyDecks();
+              }));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
