@@ -25,6 +25,7 @@ class _GroupListState extends State<GroupList> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           //TODO: navigate to create new deck page
+          // TODO: disable touch on click
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String uid = prefs.getString('uid');
           GroupData newGroup = await createNewGroup(uid);
@@ -143,7 +144,7 @@ class _ReorderListState extends State<ReorderList> {
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: ReorderableListView(
         scrollDirection: Axis.vertical,
-        children: getGroupsAsList(context, widget.userGroupIDs),
+        children: getGroupsAsList(context, userGroupIDs),
         onReorder: _onReorder,
       ),
     );
@@ -180,6 +181,9 @@ class _ReorderListState extends State<ReorderList> {
                 },
                 onTap: () {
                   //TODO: add navigation to group
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    return Group(groupID: groupID);
+                  }));
                 },
                 child: buildGroupInfo(context, groupID),
               ),
