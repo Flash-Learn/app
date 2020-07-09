@@ -61,6 +61,7 @@ class _SearchState extends State<Search> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: TextField(
+                enableSuggestions: true,
                 onChanged: (val) {
                   setState(() {
                     _searchTerm = val;
@@ -74,7 +75,7 @@ class _SearchState extends State<Search> {
                     onPressed: () {},
                   ),
                   contentPadding: EdgeInsets.only(left: 25),
-                  hintText: "Search",
+                  hintText: "Search for a deck",
                   enabledBorder: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: MyColorScheme.accent(), width: 1.0),

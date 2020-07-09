@@ -58,7 +58,10 @@ class _GroupListState extends State<GroupList> {
               color: MyColorScheme.uno(),
             ),
             onPressed: () {
-              //TOOD: navigate to group search
+              Navigator.pushNamed(
+                          context,
+                          '/groupsearch',
+                        );
             },
           ),
           IconButton(

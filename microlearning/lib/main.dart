@@ -10,6 +10,7 @@ import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/authentication/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'package:microlearning/screens/Groups/Search/group_search.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/search': (context) => Search(),
         '/notificationinapp': (context) => NotificationInapp(),
         '/accountsettings': (context) => AccountSettings(),
+        '/groupsearch': (context) => GroupSearch(),
       },
     );
   }
