@@ -1,11 +1,16 @@
 import 'dart:typed_data';
+import 'dart:math';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-var i = -999999;
+Random random = new Random();
+var i = random.nextInt(999999999);
 
 class Notifications {
   FlutterLocalNotificationsPlugin localNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
+  var i2 = i++;
+
   initializeNotifications() async {
     var initializeAndroid = AndroidInitializationSettings('ic_launcher');
     var initializeIOS = IOSInitializationSettings(
@@ -37,12 +42,13 @@ class Notifications {
       priority: Priority.Max,
     );
 
-    if (i == 999999) {
-      i = -999999;
-    }
     var iosChannel = IOSNotificationDetails();
     var platformChannel = NotificationDetails(androidChannel, iosChannel);
     await localNotificationsPlugin.schedule(
-        i++, message, subtext, datetime, platformChannel);
+        i2, message, subtext, datetime, platformChannel);
+  }
+
+  Future cancelNotifications() async {
+    await localNotificationsPlugin.cancel(i2);
   }
 }

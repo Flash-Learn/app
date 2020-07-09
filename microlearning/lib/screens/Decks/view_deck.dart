@@ -51,6 +51,7 @@ class _ViewDeckState extends State<ViewDeck> {
       GlobalKey<_FlashCardSwipeViewState>();
   GlobalKey<_FlashCardSwipeViewState> _keyEdit =
       GlobalKey<_FlashCardSwipeViewState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
@@ -185,6 +186,7 @@ class _ViewDeckState extends State<ViewDeck> {
             onTap: () => _ontap(),
             animation: true,
             child: Scaffold(
+              key: _scaffoldKey,
               appBar: AppBar(
                 // backgroundColor: MyColorScheme.uno(),
                 // backgroundColor: Color.fromRGBO(118, 174, 247, 1),
@@ -480,6 +482,41 @@ class _ViewDeckState extends State<ViewDeck> {
                     "Reminder",
                     "Revise your deck '${deck.deckName}'",
                   );
+                  print(notification.i2);
+                  SnackBar snackBar = SnackBar(
+                    duration: Duration(milliseconds: 1200),
+                    content: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        'Reminder set!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: MyColorScheme.cinco()),
+                      ),
+                    ),
+                    action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () {
+                          notification.cancelNotifications();
+                          // print('cancelled');
+                          SnackBar snackBar = SnackBar(
+                            duration: Duration(milliseconds: 1200),
+                            content: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'Reminder cancelled',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: MyColorScheme.cinco()),
+                              ),
+                            ),
+                            backgroundColor: MyColorScheme.uno(),
+                          );
+                          _scaffoldKey.currentState.hideCurrentSnackBar();
+                          _scaffoldKey.currentState.showSnackBar(snackBar);
+                        }),
+                    backgroundColor: MyColorScheme.uno(),
+                  );
+                  _scaffoldKey.currentState.hideCurrentSnackBar();
+                  _scaffoldKey.currentState.showSnackBar(snackBar);
                 }
               } catch (e) {
                 print(e);
