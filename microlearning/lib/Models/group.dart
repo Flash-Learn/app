@@ -5,8 +5,8 @@ class GroupData {
   String groupID;
   String description;
   String name;
-  List<String> decks;
-  List<String> users;
+  List<dynamic> decks;
+  List<dynamic> users;
   GroupData({
     this.groupID,
     this.description,
@@ -57,5 +57,18 @@ Future updateGroupData(GroupData groupData) async {
     "name": groupData.name,
     "users": groupData.users,
     "description": groupData.description,
+  });
+}
+
+Future<void> leaveGroup(String groupID) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String uid = prefs.get("uid");
+  DocumentReference deckDocument =
+  Firestore.instance.collection("groups").document(groupID);
+
+  await deckDocument.delete();
+
+  await Firestore.instance.collection("user_data").document(uid).updateData({
+    "groups": FieldValue.arrayRemove([groupID]),
   });
 }

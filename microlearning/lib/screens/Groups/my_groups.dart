@@ -189,7 +189,7 @@ class _ReorderListState extends State<ReorderList> {
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: ReorderableListView(
         scrollDirection: Axis.vertical,
-        children: getGroupsAsList(context, widget.userGroupIDs),
+        children: getGroupsAsList(context, userGroupIDs),
         onReorder: _onReorder,
       ),
     );
@@ -226,6 +226,9 @@ class _ReorderListState extends State<ReorderList> {
                 },
                 onTap: () {
                   //TODO: add navigation to group
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    return Group(groupID: groupID);
+                  }));
                 },
                 child: buildGroupInfo(context, groupID),
               ),
