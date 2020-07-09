@@ -63,10 +63,10 @@ Future updateGroupData(GroupData groupData) async {
 Future<void> leaveGroup(String groupID) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String uid = prefs.get("uid");
-  DocumentReference deckDocument =
-  Firestore.instance.collection("groups").document(groupID);
+//  DocumentReference deckDocument =
+//  Firestore.instance.collection("groups").document(groupID);
 
-  await deckDocument.delete();
+//  await deckDocument.delete();
 
   await Firestore.instance.collection("user_data").document(uid).updateData({
     "groups": FieldValue.arrayRemove([groupID]),
