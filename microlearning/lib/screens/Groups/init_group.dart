@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
+import 'package:microlearning/screens/Groups/my_groups.dart';
 
 class InitGroup extends StatefulWidget {
   final GroupData groupData;
@@ -91,7 +92,9 @@ class _InitGroupState extends State<InitGroup> {
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     await updateGroupData(groupData);
-                    Navigator.pop(context);
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                      return GroupList();
+                    }));
                   }
                 },
               ),

@@ -22,80 +22,83 @@ class _GroupListState extends State<GroupList> {
   bool _disableTouch = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: customBottomNav(),
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        elevation: 2,
-        backgroundColor: Color.fromRGBO(196, 208, 223, 0),
-        centerTitle: true,
-        title: Text(
-          'My Groups',
-          style: TextStyle(
-              color: MyColorScheme.uno(),
-              letterSpacing: 2,
-              fontWeight: FontWeight.bold),
-        ),
-        actions: <Widget>[
-          IconButton(
-            key: _keySearch,
+    return AbsorbPointer(
+      absorbing: _disableTouch,
+      child: Scaffold(
+        bottomNavigationBar: customBottomNav(),
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          elevation: 2,
+          backgroundColor: Color.fromRGBO(196, 208, 223, 0),
+          centerTitle: true,
+          title: Text(
+            'My Groups',
+            style: TextStyle(
+                color: MyColorScheme.uno(),
+                letterSpacing: 2,
+                fontWeight: FontWeight.bold),
+          ),
+          actions: <Widget>[
+            IconButton(
+              key: _keySearch,
+              icon: Icon(
+                Icons.search,
+                color: MyColorScheme.uno(),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/groupsearch',
+                );
+              },
+            ),
+          ],
+          leading: IconButton(
             icon: Icon(
-              Icons.search,
+              Icons.account_circle,
               color: MyColorScheme.uno(),
             ),
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                '/groupsearch',
+              //TODO: navigate to account settings
+            },
+          ),
+        ),
+        body: GestureDetector(
+          onPanUpdate: (details) {
+            //TODO: go to search again
+          },
+          child: FutureBuilder(
+            future: SharedPreferences.getInstance(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Text('Loading');
+              }
+              final String uid = snapshot.data.getString('uid');
+              return StreamBuilder(
+                stream: Firestore.instance
+                    .collection('user_data')
+                    .document(uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Text('Loading');
+                  }
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+                  try {
+                    userGroupIDs = snapshot.data["groups"];
+                  } catch (e) {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return GetUserInfo();
+                    }));
+                  }
+                  return ReorderList(userGroupIDs: userGroupIDs);
+                },
               );
             },
           ),
-        ],
-        leading: IconButton(
-          icon: Icon(
-            Icons.account_circle,
-            color: MyColorScheme.uno(),
-          ),
-          onPressed: () {
-            //TODO: navigate to account settings
-          },
-        ),
-      ),
-      body: GestureDetector(
-        onPanUpdate: (details) {
-          //TODO: go to search again
-        },
-        child: FutureBuilder(
-          future: SharedPreferences.getInstance(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Text('Loading');
-            }
-            final String uid = snapshot.data.getString('uid');
-            return StreamBuilder(
-              stream: Firestore.instance
-                  .collection('user_data')
-                  .document(uid)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Text('Loading');
-                }
-                if (snapshot.data == null) {
-                  return Container();
-                }
-                try {
-                  userGroupIDs = snapshot.data["groups"];
-                } catch (e) {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return GetUserInfo();
-                  }));
-                }
-                return ReorderList(userGroupIDs: userGroupIDs);
-              },
-            );
-          },
         ),
       ),
     );
@@ -136,6 +139,9 @@ class _GroupListState extends State<GroupList> {
           ),
           GestureDetector(
             onTap: () async {
+              setState(() {
+                _disableTouch = true;
+              });
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String uid = prefs.getString('uid');
               GroupData newGroup = await createNewGroup(uid);
@@ -144,6 +150,9 @@ class _GroupListState extends State<GroupList> {
                   return InitGroup(groupData: newGroup);
                 },
               ));
+              setState(() {
+                _disableTouch = false;
+              });
             },
             child: Material(
               elevation: 2,
