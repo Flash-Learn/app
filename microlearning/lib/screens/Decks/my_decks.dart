@@ -309,7 +309,7 @@ class _MyDecksState extends State<MyDecks> {
             borderRadius: BorderRadius.circular(20),
             splashColor: MyColorScheme.accent(),
             onTap: () {
-              Navigator.pushNamed(
+              Navigator.popAndPushNamed(
                 context,
                 '/groups',
               );
