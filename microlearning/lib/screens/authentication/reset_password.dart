@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
+import 'package:microlearning/screens/authentication/welcome.dart';
 import 'package:microlearning/services/username_signIn.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 
@@ -88,13 +89,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   );
                                   Scaffold.of(context).showSnackBar(snackBar);
                                   await Future.delayed(Duration(seconds: 4));
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return LoginUser();
-                                      },
-                                    ),
-                                  );
+                                  Navigator.pop(context);
                                 }
                               }
                             },
