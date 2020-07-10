@@ -11,8 +11,8 @@ import 'package:microlearning/screens/Decks/view_deck.dart';
 
 class EditDecks extends StatefulWidget {
   final Deck deck;
-  bool isdemo;
-  bool creating;
+  final bool isdemo;
+  final bool creating;
   EditDecks(
       {Key key, @required this.deck, this.isdemo = false, this.creating: false})
       : super(key: key);

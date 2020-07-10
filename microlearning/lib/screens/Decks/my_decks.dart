@@ -1,14 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
-import 'package:microlearning/Utilities/Widgets/deckInfoCard.dart';
 import 'package:microlearning/Utilities/Widgets/deckReorderList.dart';
-import 'package:microlearning/Utilities/Widgets/helpDialog.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/authentication/init_info.dart';
 import 'package:microlearning/screens/Decks/edit_deck.dart';
-import 'package:microlearning/screens/Decks/view_deck.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
@@ -150,8 +147,9 @@ class _MyDecksState extends State<MyDecks> {
                 Color.fromRGBO(27, 116, 210, 1)
               ])),
           child: Scaffold(
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-            bottomNavigationBar: customBottomNav(),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              bottomNavigationBar: customBottomNav(),
               backgroundColor: Colors.transparent,
               appBar: AppBar(
                   elevation: 2,
@@ -238,7 +236,8 @@ class _MyDecksState extends State<MyDecks> {
       ),
     );
   }
-  customBottomNav(){
+
+  customBottomNav() {
     return Container(
       height: 80,
       padding: EdgeInsets.only(bottom: 20),
@@ -248,8 +247,7 @@ class _MyDecksState extends State<MyDecks> {
           InkWell(
             splashColor: MyColorScheme.accent(),
             borderRadius: BorderRadius.circular(20),
-            onTap: (){
-            },
+            onTap: () {},
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -257,13 +255,18 @@ class _MyDecksState extends State<MyDecks> {
                   Icons.library_books,
                   color: Colors.amber,
                 ),
-                SizedBox(height: 5,),
-                Text('MyDecks', style: TextStyle(color: Colors.amber,)),
+                SizedBox(
+                  height: 5,
+                ),
+                Text('MyDecks',
+                    style: TextStyle(
+                      color: Colors.amber,
+                    )),
               ],
             ),
           ),
           GestureDetector(
-            onTap: ()async{
+            onTap: () async {
               setState(() {
                 _disableTouch = true;
               });
@@ -271,8 +274,7 @@ class _MyDecksState extends State<MyDecks> {
               Deck newDeck = await createNewBlankDeck(uid);
               Navigator.of(context)
                   .pushReplacement(MaterialPageRoute(builder: (context) {
-                return EditDecks(
-                    deck: newDeck, isdemo: isdemo, creating: true);
+                return EditDecks(deck: newDeck, isdemo: isdemo, creating: true);
               }));
               setState(() {
                 _disableTouch = false;
@@ -284,21 +286,29 @@ class _MyDecksState extends State<MyDecks> {
               borderRadius: BorderRadius.circular(20),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: _disableTouch ? 
-                  Loading(size: 20,) :
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.add, color: MyColorScheme.uno(),),
-                      Text('Create Deck', style: TextStyle(color: MyColorScheme.uno()),),
-                  ],
-                ),
+                child: _disableTouch
+                    ? Loading(
+                        size: 20,
+                      )
+                    : Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.add,
+                            color: MyColorScheme.uno(),
+                          ),
+                          Text(
+                            'Create Deck',
+                            style: TextStyle(color: MyColorScheme.uno()),
+                          ),
+                        ],
+                      ),
               ),
             ),
           ),
           InkWell(
             borderRadius: BorderRadius.circular(20),
             splashColor: MyColorScheme.accent(),
-            onTap: (){
+            onTap: () {
               Navigator.pushNamed(
                 context,
                 '/groups',
@@ -311,8 +321,13 @@ class _MyDecksState extends State<MyDecks> {
                   Icons.group,
                   color: MyColorScheme.uno(),
                 ),
-                SizedBox(height: 5,),
-                Text('MyGroups', style: TextStyle(color: MyColorScheme.uno()),)
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'MyGroups',
+                  style: TextStyle(color: MyColorScheme.uno()),
+                )
               ],
             ),
           )

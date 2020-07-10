@@ -554,7 +554,7 @@ class FlashCardSwipeView extends StatefulWidget {
     this.isShuffled,
     @required this.key,
   });
-  bool isShuffled;
+  final bool isShuffled;
   final Key key;
   final dynamic changePercentage;
   final Deck deck;
@@ -562,7 +562,6 @@ class FlashCardSwipeView extends StatefulWidget {
   final bool showAllCards;
 
   _FlashCardSwipeViewState createState() =>
-//    print("===========================================");
       _FlashCardSwipeViewState(deck: deck, isShuffled: isShuffled);
 }
 
@@ -645,21 +644,22 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         child: PageView(
           controller: _pageCtrl,
           scrollDirection: Axis.horizontal,
-          children: getCardsAsList(cardsRemembered, widget.editAccess, doNothing),
-            // controller: _pageCtrl,
-            // scrollDirection: Axis.horizontal,
-            // itemCount: cardsRemembered.length,
-            // itemBuilder: (context, int currentIndex) {
-            //   return FlashCardView(
-            //     color: Colors.accents[currentIndex],
-            //     currentIndex: currentIndex,
-            //     currentPage: currentPage,
-            //     flashCardID: cardsRemembered[currentIndex],
-            //     editAccess: widget.editAccess,
-            //     onMemorizeCallback: doNothing,
-            //   );
-            // }
-            ),
+          children:
+              getCardsAsList(cardsRemembered, widget.editAccess, doNothing),
+          // controller: _pageCtrl,
+          // scrollDirection: Axis.horizontal,
+          // itemCount: cardsRemembered.length,
+          // itemBuilder: (context, int currentIndex) {
+          //   return FlashCardView(
+          //     color: Colors.accents[currentIndex],
+          //     currentIndex: currentIndex,
+          //     currentPage: currentPage,
+          //     flashCardID: cardsRemembered[currentIndex],
+          //     editAccess: widget.editAccess,
+          //     onMemorizeCallback: doNothing,
+          //   );
+          // }
+        ),
       );
     }
 
@@ -727,8 +727,9 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
           );
         });
   }
-  getCardsAsList(List<dynamic> cards, bool editaccess, Function onmemocall){
-    List<Widget> children = cards.map<Widget>((dynamic data){
+
+  getCardsAsList(List<dynamic> cards, bool editaccess, Function onmemocall) {
+    List<Widget> children = cards.map<Widget>((dynamic data) {
       return FlashCardView(
         flashCardID: data,
         editAccess: editaccess,
@@ -739,42 +740,44 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
       );
     }).toList();
     double relativePosition = cards.length - currentPage;
-    if(editaccess == true){children.add(
-      Padding(
-        padding: const EdgeInsets.fromLTRB(8, 35, 8, 35),
-        child: Transform(
-          transform: Matrix4.identity()
-            ..setEntry(1, 2, 0)
-            ..scale((1 - relativePosition.abs()).clamp(0.4, 0.6) + 0.4)
-            ..rotateY(relativePosition*1.2),
-          alignment: relativePosition >= 0
-              ? Alignment.centerLeft
-              : Alignment.centerRight,
-          child: GestureDetector(
-            onTap: (){
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: ((context){
-                  return EditFlashCard(deck: deck,);
-                }))
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: MyColorScheme.flashcardColor(), width: 3),
-                  borderRadius: BorderRadius.circular(20)),
-              child: Center(
-                child: Icon(
-                  Icons.add,
-                  size: 50,
+    if (editaccess == true) {
+      children.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 35, 8, 35),
+          child: Transform(
+            transform: Matrix4.identity()
+              ..setEntry(1, 2, 0)
+              ..scale((1 - relativePosition.abs()).clamp(0.4, 0.6) + 0.4)
+              ..rotateY(relativePosition * 1.2),
+            alignment: relativePosition >= 0
+                ? Alignment.centerLeft
+                : Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: ((context) {
+                  return EditFlashCard(
+                    deck: deck,
+                  );
+                })));
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                        color: MyColorScheme.flashcardColor(), width: 3),
+                    borderRadius: BorderRadius.circular(20)),
+                child: Center(
+                  child: Icon(
+                    Icons.add,
+                    size: 50,
                   ),
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
     }
     return children;
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
-import 'package:microlearning/Utilities/functions/loginButtonPress.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/authentication/register.dart';
 
@@ -15,11 +14,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color.fromRGBO(84, 205, 255, 1), Color.fromRGBO(84, 205, 255, 1), Color.fromRGBO(27, 116, 210, 1)]
-          ),
-        ),
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color.fromRGBO(84, 205, 255, 1),
+              Color.fromRGBO(84, 205, 255, 1),
+              Color.fromRGBO(27, 116, 210, 1)
+            ]),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
@@ -30,7 +32,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               //   image: AssetImage("assets/FlashLearn_Logo.png"),
               //   height: 100.0,
               // ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -46,7 +50,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   )
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
               Material(
                 borderRadius: BorderRadius.circular(10),
                 color: MyColorScheme.cinco(),
@@ -67,15 +73,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       color: Colors.transparent,
                       child: Center(
                         child: Text('Already a User?\nSign In',
-                        textAlign: TextAlign.center,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 14, color: Colors.white,)),
+                              fontSize: 14,
+                              color: Colors.white,
+                            )),
                       ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Material(
                 borderRadius: BorderRadius.circular(10),
                 color: MyColorScheme.cinco(),
@@ -96,15 +106,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       color: Colors.transparent,
                       child: Center(
                         child: Text('New User?\nSign Up',
-                          textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 14, color: Colors.white)),
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.white)),
                       ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
 //              Row(
 //                mainAxisAlignment: MainAxisAlignment.center,
 //                children: <Widget>[
@@ -148,35 +160,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ),
     );
   }
+
   void _showbottomsheet(context, widget) {
     showModalBottomSheet(
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
-      ),
-      context: context,
-      builder: (BuildContext buildContext) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.85,
-          color: Colors.transparent,
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+        ),
+        context: context,
+        builder: (BuildContext buildContext) {
+          return Container(
+              height: MediaQuery.of(context).size.height * 0.85,
+              color: Colors.transparent,
+              child: Column(
                 children: <Widget>[
-                  FlatButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    child: Text('Close', style: TextStyle(color: MyColorScheme.accent()),)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      FlatButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Close',
+                            style: TextStyle(color: MyColorScheme.accent()),
+                          )),
+                    ],
                   ),
+                  widget,
                 ],
-              ),
-              widget,
-            ],
-          )
-        );
-      }
-    );
+              ));
+        });
   }
 }

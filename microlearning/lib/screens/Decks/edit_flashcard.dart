@@ -3,7 +3,6 @@ import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/functions/updateFlashcardList.dart';
 import 'package:microlearning/Utilities/Widgets/getFlashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
@@ -30,7 +29,8 @@ class _EditFlashCardState extends State<EditFlashCard> {
 
   static final GlobalKey<_EditFlashCardState> _keyFlashcard =
       GlobalKey<_EditFlashCardState>();
-  static final GlobalKey<_EditFlashCardState> _keySave = GlobalKey<_EditFlashCardState>();
+  static final GlobalKey<_EditFlashCardState> _keySave =
+      GlobalKey<_EditFlashCardState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
@@ -64,7 +64,10 @@ class _EditFlashCardState extends State<EditFlashCard> {
               children: <Widget>[
                 Text(
                   text[_index],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: MyColorScheme.uno()),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,
                   maxLines: 2,
@@ -186,7 +189,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
                   setState(() {
                     _disableTouch = true;
                   });
-    //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
+                  //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
                   await updateFlashcardList(deck, flashCardData);
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
@@ -200,9 +203,19 @@ class _EditFlashCardState extends State<EditFlashCard> {
                 },
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.check, color: MyColorScheme.accent(),),
-                    SizedBox(width: 5,),
-                    Text('Save', style: TextStyle(color: MyColorScheme.accent(), fontWeight: FontWeight.bold),),
+                    Icon(
+                      Icons.check,
+                      color: MyColorScheme.accent(),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Save',
+                      style: TextStyle(
+                          color: MyColorScheme.accent(),
+                          fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
               )
