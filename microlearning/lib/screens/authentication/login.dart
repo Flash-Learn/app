@@ -101,11 +101,23 @@ class _LoginUserState extends State<LoginUser> {
                       });
                     },
                   ),
+                  SizedBox(
+                    height: 2,
+                  ),
+                  Text(
+                    error,
+                    style: TextStyle(color: Colors.red, fontSize: 12.0),
+                  ),
                   Container(
                       alignment: Alignment(1, 0),
-                      padding: EdgeInsets.only(top: 15, left: 20),
+                      padding: EdgeInsets.only(left: 20, bottom: 5),
                       child: InkWell(
-                        child: Text('Forgot Password'),
+                        child: Text(
+                          'Forgot Password',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                         onTap: () {
                           return Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
@@ -116,10 +128,7 @@ class _LoginUserState extends State<LoginUser> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    error,
-                    style: TextStyle(color: Colors.red, fontSize: 14.0),
-                  ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
