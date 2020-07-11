@@ -91,9 +91,7 @@ class _LoginUserState extends State<LoginUser> {
                       ),
                     ),
                     validator: (val) {
-                      return val.length < 6
-                          ? 'Length of password should be atleast 6 characters'
-                          : null;
+                      return val.length < 1 ? 'Enter your Password' : null;
                     },
                     onChanged: (val) {
                       setState(() {
@@ -152,13 +150,8 @@ class _LoginUserState extends State<LoginUser> {
                                 prefs.setString('email', email.trim());
                                 prefs.setString('uid', result.uid);
                                 prefs.setBool('googlesignin', false);
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return MyDecks();
-                                    },
-                                  ),
-                                );
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/home', (Route<dynamic> route) => false);
                               }
                             }
                           },
