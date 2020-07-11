@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/Widgets/deckReorderList.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Groups/edit_group.dart';
+import 'package:microlearning/screens/Groups/my_groups.dart';
 
 class Group extends StatefulWidget {
   final String groupID;
@@ -40,10 +41,14 @@ class _GroupState extends State<Group> {
             users: snapshot.data["users"],
           );
 
-          print(group.decks[0]);
-
           return Scaffold(
             appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.chevron_left),
+                onPressed: (){
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return GroupList();}));
+                },
+              ),
               title: Text(
                 snapshot.data["name"],
               ),
@@ -52,7 +57,7 @@ class _GroupState extends State<Group> {
                 IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {
-                    Navigator.push(context,
+                    Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) {
                       return EditGroup(
                         groupData: group,

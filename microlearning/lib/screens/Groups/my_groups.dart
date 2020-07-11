@@ -3,6 +3,7 @@ import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
+import 'package:microlearning/screens/Groups/edit_group.dart';
 import 'package:microlearning/screens/Groups/init_group.dart';
 import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/screens/Groups/group_info_card.dart';
@@ -145,9 +146,9 @@ class _GroupListState extends State<GroupList> {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String uid = prefs.getString('uid');
               GroupData newGroup = await createNewGroup(uid);
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) {
-                  return InitGroup(groupData: newGroup);
+                  return EditGroup(groupData: newGroup);
                 },
               ));
               setState(() {
@@ -262,7 +263,7 @@ class _ReorderListState extends State<ReorderList> {
                 onTap: () {
                   //TODO: add navigation to group
                   Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
                     return Group(groupID: groupID);
                   }));
                 },

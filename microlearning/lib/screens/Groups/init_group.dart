@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
+import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/screens/Groups/my_groups.dart';
 
 class InitGroup extends StatefulWidget {
@@ -40,18 +41,19 @@ class _InitGroupState extends State<InitGroup> {
                     groupData.name = val;
                   });
                 },
-                decoration: InputDecoration(
-                  hintText: "Group name",
-                  fillColor: Colors.white,
-                  filled: true,
-                  contentPadding: EdgeInsets.all(12.0),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2.0),
-                  ),
-                ),
+                decoration: inputTextDecorations('Group Name')
+                // InputDecoration(
+                //   hintText: "Group name",
+                //   fillColor: Colors.white,
+                //   filled: true,
+                //   contentPadding: EdgeInsets.all(12.0),
+                //   enabledBorder: OutlineInputBorder(
+                //     borderSide: BorderSide(color: Colors.white, width: 2.0),
+                //   ),
+                //   focusedBorder: OutlineInputBorder(
+                //     borderSide: BorderSide(color: Colors.black, width: 2.0),
+                //   ),
+                // ),
               ),
               SizedBox(
                 height: 20.0,
@@ -65,18 +67,7 @@ class _InitGroupState extends State<InitGroup> {
                     groupData.description = val;
                   });
                 },
-                decoration: InputDecoration(
-                  hintText: "Group description",
-                  fillColor: Colors.white,
-                  filled: true,
-                  contentPadding: EdgeInsets.all(12.0),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2.0),
-                  ),
-                ),
+                decoration: inputTextDecorations('Group Description')
               ),
               SizedBox(
                 height: 20.0,
