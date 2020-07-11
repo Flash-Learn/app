@@ -3,6 +3,7 @@ import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
+import 'package:microlearning/screens/Groups/edit_group.dart';
 import 'package:microlearning/screens/Groups/init_group.dart';
 import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/screens/Groups/group_info_card.dart';
@@ -147,7 +148,7 @@ class _GroupListState extends State<GroupList> {
               GroupData newGroup = await createNewGroup(uid);
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) {
-                  return InitGroup(groupData: newGroup);
+                  return EditGroup(groupData: newGroup);
                 },
               ));
               setState(() {

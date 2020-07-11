@@ -40,8 +40,6 @@ class _GroupState extends State<Group> {
             users: snapshot.data["users"],
           );
 
-          print(group.decks[0]);
-
           return Scaffold(
             appBar: AppBar(
               title: Text(
