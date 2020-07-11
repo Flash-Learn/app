@@ -146,7 +146,7 @@ class _GroupListState extends State<GroupList> {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String uid = prefs.getString('uid');
               GroupData newGroup = await createNewGroup(uid);
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) {
                   return EditGroup(groupData: newGroup);
                 },
@@ -263,7 +263,7 @@ class _ReorderListState extends State<ReorderList> {
                 onTap: () {
                   //TODO: add navigation to group
                   Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
                     return Group(groupID: groupID);
                   }));
                 },
