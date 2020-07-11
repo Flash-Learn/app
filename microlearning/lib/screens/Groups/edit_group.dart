@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/Widgets/popUp.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
+import 'package:microlearning/screens/Groups/group.dart';
+import 'package:microlearning/screens/Groups/my_groups.dart';
 
 class EditGroup extends StatefulWidget {
   final GroupData groupData;
@@ -22,6 +24,12 @@ class _EditGroupState extends State<EditGroup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left),
+          onPressed: (){
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return GroupList();}));
+          },
+        ),
         title: Text(
           "Edit Group",
           style: TextStyle(
@@ -35,7 +43,9 @@ class _EditGroupState extends State<EditGroup> {
         onPressed: () async {
           if(_formKeyDetails.currentState.validate()){  
             await updateGroupData(groupData);
-            Navigator.pop(context);}
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+              return Group(groupID: groupData.groupID,);
+            }));}
         },
       ),
       body: Container(
@@ -50,7 +60,7 @@ class _EditGroupState extends State<EditGroup> {
                   TextFormField(
                     onChanged: (val) {
                       setState(() {
-                        groupData.description = val;
+                        groupData.name = val;
                       });
                     },
                     validator: (String arg){
