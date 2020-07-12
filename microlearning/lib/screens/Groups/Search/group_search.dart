@@ -50,6 +50,7 @@ class _GroupSearchState extends State<GroupSearch> {
                   setState(() {
                     isSwitched = value;
                     print(isSwitched);
+                    print(state);
                   });
                 }),
           ],

@@ -52,6 +52,7 @@ class _SearchState extends State<Search> {
                   setState(() {
                     isSwitched = value;
                     print(isSwitched);
+                    print(state);
                   });
                 }),
           ],
