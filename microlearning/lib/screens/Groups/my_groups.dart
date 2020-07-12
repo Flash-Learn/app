@@ -31,6 +31,7 @@ class _GroupListState extends State<GroupList> {
         appBar: AppBar(
           elevation: 2,
           backgroundColor: Color.fromRGBO(196, 208, 223, 0),
+          // backgroundColor: Colors.blue,
           centerTitle: true,
           title: Text(
             'My Groups',
@@ -66,7 +67,12 @@ class _GroupListState extends State<GroupList> {
         ),
         body: GestureDetector(
           onPanUpdate: (details) {
-            //TODO: go to search again
+            if (details.delta.dx < 0) {
+                    Navigator.pushNamed(
+                      context,
+                      '/groupsearch',
+                    );
+                  }
           },
           child: FutureBuilder(
             future: SharedPreferences.getInstance(),
