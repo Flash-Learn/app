@@ -45,8 +45,11 @@ class _GroupState extends State<Group> {
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.chevron_left),
-                onPressed: (){
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return GroupList();}));
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
+                    return GroupList();
+                  }));
                 },
               ),
               title: Text(
@@ -57,7 +60,7 @@ class _GroupState extends State<Group> {
                 IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {
-                    Navigator.pushReplacement(context,
+                    Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return EditGroup(
                         groupData: group,
