@@ -56,37 +56,46 @@ class _SearchState extends State<Search> {
                 }),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Column(children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                enableSuggestions: true,
-                onChanged: (val) {
-                  setState(() {
-                    _searchTerm = val;
-                  });
-                },
-                decoration: InputDecoration(
-                  prefixIcon: IconButton(
-                    color: Colors.black,
-                    icon: Icon(Icons.search),
-                    iconSize: 20,
-                    onPressed: () {},
+        body: GestureDetector(
+                onPanUpdate: (details) {
+                  if (details.delta.dx > 0) {
+                    Navigator.pushNamed(
+                      context,
+                      '/home',
+                    );
+                  }
+                },        
+              child: SingleChildScrollView(
+                child: Column(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: TextField(
+                      enableSuggestions: true,
+                      onChanged: (val) {
+                        setState(() {
+                          _searchTerm = val;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: IconButton(
+                          color: Colors.black,
+                          icon: Icon(Icons.search),
+                          iconSize: 20,
+                          onPressed: () {},
+                        ),
+                        contentPadding: EdgeInsets.only(left: 25),
+                        hintText: "Search for a deck",
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: MyColorScheme.accent(), width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: MyColorScheme.accentLight(), width: 2.0),
+                        ),
+                      ),
+                    ),
                   ),
-                  contentPadding: EdgeInsets.only(left: 25),
-                  hintText: "Search for a deck",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: MyColorScheme.accent(), width: 1.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: MyColorScheme.accentLight(), width: 2.0),
-                  ),
-                ),
-              ),
-            ),
             SizedBox(
               height: 10,
             ),
@@ -135,7 +144,9 @@ class _SearchState extends State<Search> {
               },
             ),
           ]),
-        ));
+        )
+      )
+    );
   }
 }
 
@@ -216,5 +227,6 @@ Widget buildResultCard(context, result) {
             ),
           ),
         ),
-      ));
+      )
+    );
 }
