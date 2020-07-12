@@ -1,3 +1,4 @@
+import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
 import 'flip_card.dart'; // created local copy of flip_card library
 import 'package:flutter/foundation.dart';
@@ -141,7 +142,12 @@ class _FlashCardViewState extends State<FlashCardView> {
             .document(widget.flashCardID)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return Text("Loading");
+          if (!snapshot.hasData)
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 280.0, horizontal: 130),
+              child: Loading(size: 10),
+            );
           term = snapshot.data["term"];
           definition = snapshot.data["definition"];
           isPic = (snapshot.data["isimage"] == 'true');

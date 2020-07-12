@@ -170,7 +170,17 @@ class _ViewDeckState extends State<ViewDeck> {
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return Scaffold(
-            backgroundColor: Colors.blue[200],
+            body: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                    Color.fromRGBO(84, 205, 255, 1),
+                    Color.fromRGBO(84, 205, 255, 1),
+                    Color.fromRGBO(27, 116, 210, 1)
+                  ])),
+            ),
           );
         deck = Deck(
           deckName: snapshot.data["deckName"],
