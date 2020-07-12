@@ -30,137 +30,140 @@ class _GetUserInfoState extends State<GetUserInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Enter details",
-          style: TextStyle(color: Colors.white),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Enter details",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.black,
         ),
-        backgroundColor: Colors.black,
-      ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                validator: (val) {
-                  return val.isEmpty ? "Enter name" : null;
-                },
-                onChanged: (val) {
-                  setState(() {
-                    _name = val;
-                  });
-                },
-                decoration: InputDecoration(
-                  hintText: "Name",
-                  fillColor: Colors.white,
-                  filled: true,
-                  contentPadding: EdgeInsets.all(12.0),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2.0),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      "Gender",
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      width: 100,
-                      child: DropdownButtonFormField(
-                        value: _gender ?? "Others",
-                        items: genders.map((gender) {
-                          return DropdownMenuItem(
-                            value: gender,
-                            child: Text(gender),
-                          );
-                        }).toList(),
-                        onChanged: (val) {
-                          setState(() {
-                            _gender = val;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      "Class",
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      width: 100,
-                      child: DropdownButtonFormField(
-                        value: _grade ?? "1",
-                        items: grades.map((grade) {
-                          return DropdownMenuItem(
-                            value: grade,
-                            child: Text(grade),
-                          );
-                        }).toList(),
-                        onChanged: (val) {
-                          setState(() {
-                            _grade = val;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              RaisedButton(
-                color: Colors.black,
-                child: Center(
-                  child: Text(
-                    "Enter",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    enterInfo(context, {
-                      '_name': _name,
-                      '_grade': _grade,
-                      '_gender': _gender,
+        body: Container(
+          padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextFormField(
+                  validator: (val) {
+                    return val.isEmpty ? "Enter name" : null;
+                  },
+                  onChanged: (val) {
+                    setState(() {
+                      _name = val;
                     });
-                  }
-                },
-              ),
-            ],
+                  },
+                  decoration: InputDecoration(
+                    hintText: "Name",
+                    fillColor: Colors.white,
+                    filled: true,
+                    contentPadding: EdgeInsets.all(12.0),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "Gender",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        width: 100,
+                        child: DropdownButtonFormField(
+                          value: _gender ?? "Others",
+                          items: genders.map((gender) {
+                            return DropdownMenuItem(
+                              value: gender,
+                              child: Text(gender),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            setState(() {
+                              _gender = val;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "Class",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        width: 100,
+                        child: DropdownButtonFormField(
+                          value: _grade ?? "1",
+                          items: grades.map((grade) {
+                            return DropdownMenuItem(
+                              value: grade,
+                              child: Text(grade),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            setState(() {
+                              _grade = val;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                RaisedButton(
+                  color: Colors.black,
+                  child: Center(
+                    child: Text(
+                      "Enter",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  onPressed: () async {
+                    if (_formKey.currentState.validate()) {
+                      enterInfo(context, {
+                        '_name': _name,
+                        '_grade': _grade,
+                        '_gender': _gender,
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
