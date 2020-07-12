@@ -6,6 +6,7 @@ import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/authentication/init_info.dart';
 import 'package:microlearning/screens/Decks/edit_deck.dart';
+import 'package:microlearning/services/firebase_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
@@ -40,6 +41,7 @@ class _MyDecksState extends State<MyDecks> {
   List<dynamic> userDeckIDs;
   int _index = 0;
   int selectedIndex = 0;
+  PushNotificationService notificationService = PushNotificationService();
 
   spotlight(Key key) {
     _index++;
@@ -114,6 +116,7 @@ class _MyDecksState extends State<MyDecks> {
   @override
   void initState() {
     super.initState();
+    notificationService.initialise();
   }
 
   @override
