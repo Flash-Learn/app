@@ -149,10 +149,13 @@ class _FlashCardViewState extends State<FlashCardView> {
           bool userRemembers = true;
 
           dynamic tmp = snapshot.data['userRemembers'];
-          if (tmp == null || tmp == false)
+          if (tmp == null || tmp == false) {
             userRemembers = false;
+            print(userRemembers);
+          }
           else {
             userRemembers = true;
+            print(userRemembers);
           }
 
           return AnimatedSwitcher(
@@ -483,6 +486,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                           setState(() async {
                             Deck newDeck = await createNewBlankDeck(uid,
                                 deckName: playlistname);
+                                print(newDeck);
                           });
 
                           _showbottomsheet(context);
@@ -503,6 +507,7 @@ class _FlashCardViewState extends State<FlashCardView> {
     return userDecks.map<Widget>((dynamic deckID) {
       i++;
       k = '$i';
+      print(k);
       return StreamBuilder(
           stream: Firestore.instance
               .collection('decks')
