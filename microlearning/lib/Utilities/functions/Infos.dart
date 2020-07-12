@@ -18,9 +18,9 @@ Future enterInfo(dynamic context, dynamic data) async {
 
   Future.delayed(Duration.zero, ()
   {
-    return Navigator.pushReplacement(
+    return Navigator.pushAndRemoveUntil(
         context, MaterialPageRoute(builder: (context) {
       return MyDecks(isdemo: true,);
-    }));
+    }), (Route<dynamic> route)=>false);
   });
 }

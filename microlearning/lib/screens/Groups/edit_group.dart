@@ -151,8 +151,8 @@ class _EditGroupState extends State<EditGroup> {
               borderRadius: BorderRadius.circular(10)
             ),
             child: ListTile(
-              title: Text(name, style: TextStyle(fontSize: 18),),
-              subtitle: Text(mailID),
+              title: Text(name != null ? name : '', style: TextStyle(fontSize: 18),),
+              subtitle: Text(mailID != null ? mailID : ''),
             ),
           );
         }
