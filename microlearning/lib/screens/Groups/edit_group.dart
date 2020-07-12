@@ -22,113 +22,118 @@ class _EditGroupState extends State<EditGroup> {
   _EditGroupState({@required this.groupData});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left),
-          onPressed: (){
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return GroupList();}));
-          },
-        ),
-        title: Text(
-          "Edit Group",
-          style: TextStyle(
-            color: Colors.white,
+    return WillPopScope(
+      onWillPop: () async => false ,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left),
+            onPressed: (){
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return Group(groupID: groupData.groupID,);}));
+            },
+          ),
+          title: Text(
+            "Edit Group",
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('Done'),
-        icon: Icon(Icons.check),
-        onPressed: () async {
-          if(_formKeyDetails.currentState.validate()){  
-            await updateGroupData(groupData);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-              return Group(groupID: groupData.groupID,);
-            }));}
-        },
-      ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
-        child: Column(
-          children: <Widget>[
-            Form(
-              key: _formKeyDetails,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFormField(
-                    onChanged: (val) {
-                      setState(() {
-                        groupData.name = val;
-                      });
-                    },
-                    validator: (String arg){
-                      if(arg.length == 0){
-                        return 'Group name must not be empty';
-                      }else{
-                        return null;
-                      }
-                    },
-                    initialValue: groupData.name,
-                    decoration: inputTextDecorations('Group Name')
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  TextFormField(
-                    onChanged: (val) {
-                      setState(() {
-                        groupData.description = val;
-                      });
-                    },
-                    initialValue: groupData.description,
-                     validator: (String arg){
-                      if(arg.length == 0){
-                        return 'Group discription must not be empty';
-                      }else{
-                        return null;
-                      }
-                    },
-                    decoration: inputTextDecorations('Group Description')
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Center(
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                      onPressed: (){
-                        addUserDialog(context);
-                      },
-                      child: Text('Add a User'),
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text('Done'),
+          icon: Icon(Icons.check),
+          onPressed: () async {
+            if(_formKeyDetails.currentState.validate()){  
+              await updateGroupData(groupData);
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                return Group(groupID: groupData.groupID,);
+              }));}
+          },
+        ),
+        body: Container(
+          padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Form(
+                  key: _formKeyDetails,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Icon(Icons.group,),
-                      Text('Group Memebers:',style: TextStyle(color: MyColorScheme.accent(), fontWeight: FontWeight.bold, fontSize: 18),)
+                      TextFormField(
+                        onChanged: (val) {
+                          setState(() {
+                            groupData.name = val;
+                          });
+                        },
+                        validator: (String arg){
+                          if(arg.length == 0){
+                            return 'Group name must not be empty';
+                          }else{
+                            return null;
+                          }
+                        },
+                        initialValue: groupData.name,
+                        decoration: inputTextDecorations('Group Name')
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      TextFormField(
+                        onChanged: (val) {
+                          setState(() {
+                            groupData.description = val;
+                          });
+                        },
+                        initialValue: groupData.description,
+                         validator: (String arg){
+                          if(arg.length == 0){
+                            return 'Group discription must not be empty';
+                          }else{
+                            return null;
+                          }
+                        },
+                        decoration: inputTextDecorations('Group Description')
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Center(
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                          onPressed: (){
+                            addUserDialog(context);
+                          },
+                          child: Text('Add a User'),
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(Icons.group,),
+                          Text('Group Memebers:',style: TextStyle(color: MyColorScheme.accent(), fontWeight: FontWeight.bold, fontSize: 18),)
+                        ],
+                      ),
+                      SingleChildScrollView(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          child: ListView(
+                            children: buildUserLists(),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                  SingleChildScrollView(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: ListView(
-                        children: buildUserLists(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+              ],
             ),
-            SizedBox(
-              height: 20.0,
-            ),
-          ],
+          ),
         ),
       ),
     );
