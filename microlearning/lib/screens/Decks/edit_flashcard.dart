@@ -165,92 +165,95 @@ class _EditFlashCardState extends State<EditFlashCard> {
       // Widget to disable touch when loading
       child: AbsorbPointer(
         absorbing: _disableTouch,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 2,
-            backgroundColor: MyColorScheme.uno(),
-            title: Text(
-              'Edit Deck',
-              style: TextStyle(
-                  color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
-            ),
-            centerTitle: true,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              color: MyColorScheme.accent(),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () async {
-                  setState(() {
-                    _disableTouch = true;
-                  });
-                  //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
-                  await updateFlashcardList(deck, flashCardData);
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => ViewDeck(
-                          deckID: newDeck.deckID,
-                          backAvailable: false,
-                          isdemo: isdemo,
-                        ),
-                      ),
-                      (Route<dynamic> route) => false);
+        child: WillPopScope(
+          onWillPop: () async => false,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              elevation: 2,
+              backgroundColor: MyColorScheme.uno(),
+              title: Text(
+                'Edit Deck',
+                style: TextStyle(
+                    color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                color: MyColorScheme.accent(),
+                onPressed: () {
+                  Navigator.pop(context);
                 },
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.check,
-                      color: MyColorScheme.accent(),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'Save',
-                      style: TextStyle(
-                          color: MyColorScheme.accent(),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              key: _keyFlashcard,
-              children: <Widget>[
-                StreamBuilder<Object>(
-                    stream: getCardfromDataBase,
-                    // TODO: add the stream here for the getting the 2d array of the things
-                    builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      if (flashCardData.length - 1 ==
-                          newDeck.flashCardList.length + 1) {
-                        // flashCardData.add(['','']);
-                        return Container(
-                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                          child: GetFlashCardEdit(
-                            deck: deck,
-                            flashCardData: flashCardData,
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () async {
+                    setState(() {
+                      _disableTouch = true;
+                    });
+                    //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
+                    await updateFlashcardList(deck, flashCardData);
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => ViewDeck(
+                            deckID: newDeck.deckID,
+                            backAvailable: false,
+                            isdemo: isdemo,
                           ),
-                        );
-                      } else {
-                        return Center(
-                          child: SizedBox(
-                            child: CircularProgressIndicator(),
-                            width: 60,
-                            height: 60,
-                          ),
-                        );
-                      }
-                    }),
+                        ),
+                        (Route<dynamic> route) => false);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.check,
+                        color: MyColorScheme.accent(),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Save',
+                        style: TextStyle(
+                            color: MyColorScheme.accent(),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                )
               ],
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                key: _keyFlashcard,
+                children: <Widget>[
+                  StreamBuilder<Object>(
+                      stream: getCardfromDataBase,
+                      // TODO: add the stream here for the getting the 2d array of the things
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (flashCardData.length - 1 ==
+                            newDeck.flashCardList.length + 1) {
+                          // flashCardData.add(['','']);
+                          return Container(
+                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                            child: GetFlashCardEdit(
+                              deck: deck,
+                              flashCardData: flashCardData,
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: SizedBox(
+                              child: CircularProgressIndicator(),
+                              width: 60,
+                              height: 60,
+                            ),
+                          );
+                        }
+                      }),
+                ],
+              ),
             ),
           ),
         ),

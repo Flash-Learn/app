@@ -164,6 +164,7 @@ class _ViewDeckState extends State<ViewDeck> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return StreamBuilder(
       stream:
           Firestore.instance.collection("decks").document(deckID).snapshots(),
@@ -181,157 +182,169 @@ class _ViewDeckState extends State<ViewDeck> {
                     Color.fromRGBO(27, 116, 210, 1)
                   ])),
             ),
+=======
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: StreamBuilder(
+        stream:
+            Firestore.instance.collection("decks").document(deckID).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return Scaffold(
+              backgroundColor: Colors.blue[200],
+            );
+          deck = Deck(
+            deckName: snapshot.data["deckName"],
+            tagsList: snapshot.data["tagsList"],
+            isPublic: snapshot.data["isPublic"],
+>>>>>>> upstream/new_develop
           );
-        deck = Deck(
-          deckName: snapshot.data["deckName"],
-          tagsList: snapshot.data["tagsList"],
-          isPublic: snapshot.data["isPublic"],
-        );
-        deck.deckID = deckID;
-        deck.flashCardList = snapshot.data["flashcardList"];
-        return Spotlight(
-            enabled: _enabled,
-            radius: _radius,
-            description: _description,
-            center: _center,
-            onTap: () => _ontap(),
-            animation: true,
-            child: Scaffold(
-              key: _scaffoldKey,
-              appBar: AppBar(
-                // backgroundColor: MyColorScheme.uno(),
-                // backgroundColor: Color.fromRGBO(118, 174, 247, 1),
-                backgroundColor: Colors.lightBlue[200],
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  color: MyColorScheme.uno(),
-                  onPressed: () {
-                    !widget.backAvailable
-                        ? Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) => MyDecks(),
-                            ),
-                            (Route<dynamic> route) => false)
-                        : Navigator.of(context).pop();
-                  },
-                ),
-                actions: <Widget>[
-                  if (widget.editAccess) ...[
-                    Padding(
-                      key: _keyEdit,
-                      padding: const EdgeInsets.only(right: 20),
-                      child: GestureDetector(
-                        onTapDown: (details) {
-                          _tapPosition = details.globalPosition;
-                        },
-                        onTap: () async {
-                          final RenderBox overlay =
-                              Overlay.of(context).context.findRenderObject();
-                          await showMenu(
-                            context: context,
-                            // found way to show delete button on the location of long press
-                            // not sure how it works
-                            position: RelativeRect.fromRect(
-                                _tapPosition &
-                                    Size(
-                                        40, 40), // smaller rect, the touch area
-                                Offset.zero &
-                                    overlay
-                                        .size // Bigger rect, the entire screen
-                                ),
-                            items: getPopUpItems(),
-                            elevation: 8.0,
-                          );
-                        },
-                        child: Icon(
-                          Icons.more_horiz,
-                          color: MyColorScheme.uno(),
+          deck.deckID = deckID;
+          deck.flashCardList = snapshot.data["flashcardList"];
+          return Spotlight(
+              enabled: _enabled,
+              radius: _radius,
+              description: _description,
+              center: _center,
+              onTap: () => _ontap(),
+              animation: true,
+              child: Scaffold(
+                key: _scaffoldKey,
+                appBar: AppBar(
+                  // backgroundColor: MyColorScheme.uno(),
+                  // backgroundColor: Color.fromRGBO(118, 174, 247, 1),
+                  backgroundColor: Colors.lightBlue[200],
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    color: MyColorScheme.uno(),
+                    onPressed: () {
+                      !widget.backAvailable
+                          ? Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) => MyDecks(),
+                              ),
+                              (Route<dynamic> route) => false)
+                          : Navigator.of(context).pop();
+                    },
+                  ),
+                  actions: <Widget>[
+                    if (widget.editAccess) ...[
+                      Padding(
+                        key: _keyEdit,
+                        padding: const EdgeInsets.only(right: 20),
+                        child: GestureDetector(
+                          onTapDown: (details) {
+                            _tapPosition = details.globalPosition;
+                          },
+                          onTap: () async {
+                            final RenderBox overlay =
+                                Overlay.of(context).context.findRenderObject();
+                            await showMenu(
+                              context: context,
+                              // found way to show delete button on the location of long press
+                              // not sure how it works
+                              position: RelativeRect.fromRect(
+                                  _tapPosition &
+                                      Size(
+                                          40, 40), // smaller rect, the touch area
+                                  Offset.zero &
+                                      overlay
+                                          .size // Bigger rect, the entire screen
+                                  ),
+                              items: getPopUpItems(),
+                              elevation: 8.0,
+                            );
+                          },
+                          child: Icon(
+                            Icons.more_horiz,
+                            color: MyColorScheme.uno(),
+                          ),
                         ),
                       ),
-                    ),
-                  ] else ...[
-                    Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: IconButton(
-                        icon: Icon(Icons.file_download),
-                        color: MyColorScheme.accent(),
-                        onPressed: () {
-                          saveDeck(context, deck, deckID);
-                        },
-                      ),
-                    )
-                  ]
-                ],
-                centerTitle: true,
-                title: Text(
-                  deck.deckName,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                    ] else ...[
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: IconButton(
+                          icon: Icon(Icons.file_download),
+                          color: MyColorScheme.accent(),
+                          onPressed: () {
+                            saveDeck(context, deck, deckID);
+                          },
+                        ),
+                      )
+                    ]
+                  ],
+                  centerTitle: true,
+                  title: Text(
+                    deck.deckName,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                  ),
                 ),
-              ),
-              body: Container(
-                key: _keyFlashcard,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                      Color.fromRGBO(84, 205, 255, 1),
-                      Color.fromRGBO(84, 205, 255, 1),
-                      Color.fromRGBO(27, 116, 210, 1)
-                    ])),
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        child: FlashCardSwipeView(
-                          deck: deck,
-                          showAllCards: showAllcards,
-                          editAccess: widget.editAccess,
-                          changePercentage: changePercentage,
-                          isShuffled: isShuffled,
-                          key: isShuffled ? whenShuffled : whenNotShuffled,
+                body: Container(
+                  key: _keyFlashcard,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                        Color.fromRGBO(84, 205, 255, 1),
+                        Color.fromRGBO(84, 205, 255, 1),
+                        Color.fromRGBO(27, 116, 210, 1)
+                      ])),
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          child: FlashCardSwipeView(
+                            deck: deck,
+                            showAllCards: showAllcards,
+                            editAccess: widget.editAccess,
+                            changePercentage: changePercentage,
+                            isShuffled: isShuffled,
+                            key: isShuffled ? whenShuffled : whenNotShuffled,
+                          ),
                         ),
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                              child: Text(
-                                "Progress:",
-                                style: TextStyle(
-                                  letterSpacing: 3,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black45,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                                child: Text(
+                                  "Progress:",
+                                  style: TextStyle(
+                                    letterSpacing: 3,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black45,
+                                  ),
                                 ),
                               ),
-                            ),
-                            LinearPercentIndicator(
-                              percent: completedPercentage,
-                              backgroundColor: Colors.blueGrey[400],
-                              width: MediaQuery.of(context).size.width - 60,
-                              // // animation: true,
-                              linearStrokeCap: LinearStrokeCap.roundAll,
-                              progressColor: Colors.white,
-                              lineHeight: 20,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    )
-                  ],
+                              LinearPercentIndicator(
+                                percent: completedPercentage,
+                                backgroundColor: Colors.blueGrey[400],
+                                width: MediaQuery.of(context).size.width - 60,
+                                // // animation: true,
+                                linearStrokeCap: LinearStrokeCap.roundAll,
+                                progressColor: Colors.white,
+                                lineHeight: 20,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ));
-      },
+              ));
+        },
+      ),
     );
   }
 
