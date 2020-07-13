@@ -164,25 +164,6 @@ class _ViewDeckState extends State<ViewDeck> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return StreamBuilder(
-      stream:
-          Firestore.instance.collection("decks").document(deckID).snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return Scaffold(
-            body: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                    Color.fromRGBO(84, 205, 255, 1),
-                    Color.fromRGBO(84, 205, 255, 1),
-                    Color.fromRGBO(27, 116, 210, 1)
-                  ])),
-            ),
-=======
     return WillPopScope(
       onWillPop: () async => false,
       child: StreamBuilder(
@@ -197,7 +178,6 @@ class _ViewDeckState extends State<ViewDeck> {
             deckName: snapshot.data["deckName"],
             tagsList: snapshot.data["tagsList"],
             isPublic: snapshot.data["isPublic"],
->>>>>>> upstream/new_develop
           );
           deck.deckID = deckID;
           deck.flashCardList = snapshot.data["flashcardList"];
@@ -245,8 +225,8 @@ class _ViewDeckState extends State<ViewDeck> {
                               // not sure how it works
                               position: RelativeRect.fromRect(
                                   _tapPosition &
-                                      Size(
-                                          40, 40), // smaller rect, the touch area
+                                      Size(40,
+                                          40), // smaller rect, the touch area
                                   Offset.zero &
                                       overlay
                                           .size // Bigger rect, the entire screen
@@ -278,7 +258,8 @@ class _ViewDeckState extends State<ViewDeck> {
                   title: Text(
                     deck.deckName,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                        fontWeight: FontWeight.bold,
+                        color: MyColorScheme.uno()),
                   ),
                 ),
                 body: Container(
