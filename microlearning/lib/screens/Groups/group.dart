@@ -60,7 +60,7 @@ class _GroupState extends State<Group> {
                 IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {
-                    Navigator.push(context,
+                    Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) {
                       return EditGroup(
                         groupData: group,
