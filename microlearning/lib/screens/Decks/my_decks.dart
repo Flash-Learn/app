@@ -210,7 +210,12 @@ class _MyDecksState extends State<MyDecks> {
                   child: FutureBuilder(
                       future: SharedPreferences.getInstance(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) return Text("loading");
+                        if (!snapshot.hasData)
+                          return Center(
+                            child: Loading(
+                              size: 50,
+                            ),
+                          );
                         print("user id is ${snapshot.data.getString('uid')}");
                         final String userID = snapshot.data.getString('uid');
                         uid = userID;
@@ -221,7 +226,12 @@ class _MyDecksState extends State<MyDecks> {
                                 .snapshots(),
                             builder: (context, snapshot) {
                               print(userID);
-                              if (!snapshot.hasData) return Text("loading");
+                              if (!snapshot.hasData)
+                                return Center(
+                                  child: Loading(
+                                    size: 50,
+                                  ),
+                                );
                               if (snapshot.data == null) return Container();
                               try {
                                 userDeckIDs = snapshot.data["decks"];

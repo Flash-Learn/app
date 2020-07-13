@@ -3,6 +3,7 @@ import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/Widgets/deckReorderList.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Decks/edit_deck.dart';
 import 'package:microlearning/screens/Groups/edit_group.dart';
@@ -58,8 +59,11 @@ class _GroupState extends State<Group> {
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.chevron_left),
-                onPressed: (){
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return GroupList();}));
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
+                    return GroupList();
+                  }));
                 },
               ),
               title: Text(
@@ -77,7 +81,20 @@ class _GroupState extends State<Group> {
                       );
                     }));
                   },
-                )
+                ),
+              IconButton(
+                // key: _keySearch,
+                icon: Icon(
+                  Icons.search,
+                  color: MyColorScheme.uno(),
+                ),
+                onPressed: () {
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   '/groupsearch',
+                  // );
+                },
+              ),
               ],
             ),
             body: Container(

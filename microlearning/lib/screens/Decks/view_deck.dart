@@ -231,8 +231,8 @@ class _ViewDeckState extends State<ViewDeck> {
                               // not sure how it works
                               position: RelativeRect.fromRect(
                                   _tapPosition &
-                                      Size(
-                                          40, 40), // smaller rect, the touch area
+                                      Size(40,
+                                          40), // smaller rect, the touch area
                                   Offset.zero &
                                       overlay
                                           .size // Bigger rect, the entire screen
@@ -264,7 +264,8 @@ class _ViewDeckState extends State<ViewDeck> {
                   title: Text(
                     deck.deckName,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: MyColorScheme.uno()),
+                        fontWeight: FontWeight.bold,
+                        color: MyColorScheme.uno()),
                   ),
                 ),
                 body: Container(
@@ -704,8 +705,10 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         future: getNotRememberedCards(),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (!snapshot.hasData) {
-            return Loading(
-              size: 50,
+            return Center(
+              child: Loading(
+                size: 50,
+              ),
             );
           }
 
