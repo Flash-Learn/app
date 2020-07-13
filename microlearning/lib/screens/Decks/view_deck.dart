@@ -677,8 +677,10 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         future: getNotRememberedCards(),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (!snapshot.hasData) {
-            return Loading(
-              size: 50,
+            return Center(
+              child: Loading(
+                size: 50,
+              ),
             );
           }
 

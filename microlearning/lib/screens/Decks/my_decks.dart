@@ -210,7 +210,12 @@ class _MyDecksState extends State<MyDecks> {
                   child: FutureBuilder(
                       future: SharedPreferences.getInstance(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) return Text("loading");
+                        if (!snapshot.hasData)
+                          return Center(
+                            child: Loading(
+                              size: 50,
+                            ),
+                          );
                         print("user id is ${snapshot.data.getString('uid')}");
                         final String userID = snapshot.data.getString('uid');
                         uid = userID;
@@ -221,7 +226,12 @@ class _MyDecksState extends State<MyDecks> {
                                 .snapshots(),
                             builder: (context, snapshot) {
                               print(userID);
-                              if (!snapshot.hasData) return Text("loading");
+                              if (!snapshot.hasData)
+                                return Center(
+                                  child: Loading(
+                                    size: 50,
+                                  ),
+                                );
                               if (snapshot.data == null) return Container();
                               try {
                                 userDeckIDs = snapshot.data["decks"];
@@ -278,7 +288,8 @@ class _MyDecksState extends State<MyDecks> {
               });
               // newDeck is a bank new deck, which is being passed into the edit deck screen
               Deck newDeck = await createNewBlankDeck(uid);
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (context) {
                 return EditDecks(deck: newDeck, isdemo: isdemo, creating: true);
               }));
               setState(() {

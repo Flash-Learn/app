@@ -142,12 +142,7 @@ class _FlashCardViewState extends State<FlashCardView> {
             .document(widget.flashCardID)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 280.0, horizontal: 130),
-              child: Loading(size: 10),
-            );
+          if (!snapshot.hasData) return Center(child: Loading(size: 50));
           term = snapshot.data["term"];
           definition = snapshot.data["definition"];
           isPic = (snapshot.data["isimage"] == 'true');
@@ -158,8 +153,7 @@ class _FlashCardViewState extends State<FlashCardView> {
           if (tmp == null || tmp == false) {
             userRemembers = false;
             print(userRemembers);
-          }
-          else {
+          } else {
             userRemembers = true;
             print(userRemembers);
           }
@@ -492,7 +486,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                           setState(() async {
                             Deck newDeck = await createNewBlankDeck(uid,
                                 deckName: playlistname);
-                                print(newDeck);
+                            print(newDeck);
                           });
 
                           _showbottomsheet(context);
@@ -597,7 +591,16 @@ class _FlashCardViewState extends State<FlashCardView> {
                 .document(uid)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Text("loading");
+              if (!snapshot.hasData)
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("Loading..."),
+                    ],
+                  ),
+                );
               userDecks = snapshot.data["decks"];
               return bottomData(context);
             },
