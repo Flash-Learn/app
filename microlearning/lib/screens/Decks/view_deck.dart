@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
+import 'package:microlearning/screens/Groups/group.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
@@ -19,12 +20,16 @@ class ViewDeck extends StatefulWidget {
   final String deckID;
   final editAccess;
   final bool backAvailable;
+  final bool isDeckforGroup;
+  final String ifGroupThenGrpID;
   ViewDeck(
       {Key key,
       @required this.deckID,
       this.editAccess = true,
       this.backAvailable = true,
-      this.isdemo = false})
+      this.isdemo = false,
+      this.ifGroupThenGrpID = '',
+      this.isDeckforGroup = false})
       : super(key: key);
   @override
   _ViewDeckState createState() =>
@@ -201,7 +206,8 @@ class _ViewDeckState extends State<ViewDeck> {
                       !widget.backAvailable
                           ? Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                builder: (context) => MyDecks(),
+                                builder: (context)  {
+                                return widget.isDeckforGroup ? Group(groupID: widget.ifGroupThenGrpID,): MyDecks();}
                               ),
                               (Route<dynamic> route) => false)
                           : Navigator.of(context).pop();
@@ -284,6 +290,8 @@ class _ViewDeckState extends State<ViewDeck> {
                             changePercentage: changePercentage,
                             isShuffled: isShuffled,
                             key: isShuffled ? whenShuffled : whenNotShuffled,
+                            ifGroupThenGrpID: widget.ifGroupThenGrpID,
+                            isDeckforGroup: widget.isDeckforGroup,
                           ),
                         ),
                       ),
@@ -386,7 +394,6 @@ class _ViewDeckState extends State<ViewDeck> {
                 }));
               else {
                 print(deck.flashCardList.length);
-                saveDeck(context, deck, deckID);
               }
               setState(() {
                 _disableTouch = false;
@@ -438,7 +445,7 @@ class _ViewDeckState extends State<ViewDeck> {
               ),
             )),
       ),
-      PopupMenuItem(
+     if(!widget.isDeckforGroup)...[ PopupMenuItem(
         value: "filter button",
         child: GestureDetector(
             onTap: () async {
@@ -464,7 +471,30 @@ class _ViewDeckState extends State<ViewDeck> {
                 ],
               ),
             )),
-      ),
+      ),]else...[
+        PopupMenuItem(
+          child: GestureDetector(
+            onTap: () async {
+              Navigator.pop(context, "filter button");
+              saveDeck(context, deck, deckID);
+            },
+            child: Card(
+              elevation: 0,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.file_download,
+                    color: MyColorScheme.accent(),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Download Deck')
+                ],
+              ),
+            )),
+        ),
+      ],
       PopupMenuItem(
         value: "notification button",
         child: GestureDetector(
@@ -556,6 +586,8 @@ class FlashCardSwipeView extends StatefulWidget {
     this.editAccess,
     this.changePercentage,
     this.isShuffled,
+    this.ifGroupThenGrpID = '',
+    this.isDeckforGroup= false,
     @required this.key,
   });
   final bool isShuffled;
@@ -564,6 +596,8 @@ class FlashCardSwipeView extends StatefulWidget {
   final Deck deck;
   final bool editAccess;
   final bool showAllCards;
+  final bool isDeckforGroup;
+  final String ifGroupThenGrpID;
 
   _FlashCardSwipeViewState createState() =>
       _FlashCardSwipeViewState(deck: deck, isShuffled: isShuffled);
@@ -738,7 +772,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     List<Widget> children = cards.map<Widget>((dynamic data) {
       return FlashCardView(
         flashCardID: data,
-        editAccess: editaccess,
+        editAccess: editaccess^widget.isDeckforGroup,
         onMemorizeCallback: onmemocall,
         currentIndex: cards.indexOf(data),
         currentPage: currentPage,

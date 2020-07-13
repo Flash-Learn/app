@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
+import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/Widgets/getListTags.dart';
 import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
@@ -8,13 +9,17 @@ import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
+import 'package:microlearning/screens/Groups/group.dart';
+import 'package:microlearning/screens/Groups/my_groups.dart';
 
 class EditDecks extends StatefulWidget {
   final Deck deck;
   final bool isdemo;
   final bool creating;
+  final bool isDeckforGroup;
+  final String ifGroupThenGrpID;
   EditDecks(
-      {Key key, @required this.deck, this.isdemo = false, this.creating: false})
+      {Key key, @required this.deck, this.isdemo = false, this.creating: false, this.isDeckforGroup = false, this.ifGroupThenGrpID: ''})
       : super(key: key);
   @override
   _EditDecksState createState() => _EditDecksState(deck: deck, isdemo: isdemo);
@@ -160,7 +165,7 @@ class _EditDecksState extends State<EditDecks> {
                     .pushReplacement(MaterialPageRoute(builder: (context) {
                   // TODO: save the changes made by the user in the deckInfo
                   // the changes made are stored in variable 'deck' which this page recieved when this page was made, so passing this variable only to the next page of editing the flashcards.
-                  return EditFlashCard(deck: deck, isdemo: isdemo);
+                  return EditFlashCard(deck: deck, isdemo: isdemo, isDeckforGroup: widget.isDeckforGroup, ifGroupThenGrpID: widget.ifGroupThenGrpID,);
                 }));
               },
               backgroundColor: MyColorScheme.accent(),
@@ -181,10 +186,10 @@ class _EditDecksState extends State<EditDecks> {
                         setState(() {
                           _disableTouch = true;
                         });
-                        await deleteDeck(deck.deckID);
+                        !widget.isDeckforGroup ? await deleteDeck(deck.deckID) : await deleteDeckFromGroup(deck.deckID, widget.ifGroupThenGrpID);
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) {
-                          return MyDecks();
+                          return widget.isDeckforGroup ? Group(groupID:widget.ifGroupThenGrpID) : MyDecks();
                         }));
                       },
                     )
@@ -192,12 +197,13 @@ class _EditDecksState extends State<EditDecks> {
                       icon: Icon(Icons.arrow_back),
                       color: MyColorScheme.accent(),
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ViewDeck(
-                            deckID: deck.deckID,
-                          );
-                        }), ModalRoute.withName('/home'));
+                        Navigator.pop(context);
+                        // Navigator.pushAndRemoveUntil(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return ViewDeck(
+                        //     deckID: deck.deckID,
+                        //   );
+                        // }), ModalRoute.withName('/home'));
                       },
                     ),
               backgroundColor: MyColorScheme.uno(),
@@ -251,23 +257,25 @@ class _EditDecksState extends State<EditDecks> {
                     SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Checkbox(
-                            value: deck.isPublic,
-                            onChanged: (bool value) {
-                              setState(() {
-                                deck.isPublic = value;
-                                print(deck.isPublic);
-                              });
-                            }),
-                        Text(
-                          'Make deck public',
-                          style: TextStyle(fontSize: 18),
-                        )
-                      ],
-                    ),
+                    if(!widget.isDeckforGroup)...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Checkbox(
+                              value: deck.isPublic,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  deck.isPublic = value;
+                                  print(deck.isPublic);
+                                });
+                              }),
+                          Text(
+                            'Make deck public',
+                            style: TextStyle(fontSize: 18),
+                          )
+                        ],
+                      ),
+                    ],
                     SizedBox(
                       height: 20,
                     ),
