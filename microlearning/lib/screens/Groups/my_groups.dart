@@ -50,21 +50,21 @@ class _GroupListState extends State<GroupList> {
                   letterSpacing: 2,
                   fontWeight: FontWeight.bold),
             ),
-            actions: <Widget>[
-              IconButton(
-                key: _keySearch,
-                icon: Icon(
-                  Icons.search,
-                  color: MyColorScheme.uno(),
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/groupsearch',
-                  );
-                },
-              ),
-            ],
+            // actions: <Widget>[
+            //   IconButton(
+            //     key: _keySearch,
+            //     icon: Icon(
+            //       Icons.search,
+            //       color: MyColorScheme.uno(),
+            //     ),
+            //     onPressed: () {
+            //       Navigator.pushNamed(
+            //         context,
+            //         '/groupsearch',
+            //       );
+            //     },
+            //   ),
+            // ],
             leading: IconButton(
               icon: Icon(
                 Icons.account_circle,
@@ -78,10 +78,7 @@ class _GroupListState extends State<GroupList> {
           body: GestureDetector(
             onPanUpdate: (details) {
               if (details.delta.dx < 0) {
-                Navigator.pushNamed(
-                  context,
-                  '/groupsearch',
-                );
+                //TODO: remove this.
               }
             },
             child: FutureBuilder(
