@@ -25,86 +25,97 @@ class _GroupListState extends State<GroupList> {
   Widget build(BuildContext context) {
     return AbsorbPointer(
       absorbing: _disableTouch,
-      child: Scaffold(
-        bottomNavigationBar: customBottomNav(),
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          elevation: 2,
-          backgroundColor: Color.fromRGBO(196, 208, 223, 0),
-          // backgroundColor: Colors.blue,
-          centerTitle: true,
-          title: Text(
-            'My Groups',
-            style: TextStyle(
-                color: MyColorScheme.uno(),
-                letterSpacing: 2,
-                fontWeight: FontWeight.bold),
-          ),
-          actions: <Widget>[
-            IconButton(
-              key: _keySearch,
+      child: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Color.fromRGBO(84, 205, 255, 1),
+              Color.fromRGBO(84, 205, 255, 1),
+              Color.fromRGBO(27, 116, 210, 1)
+            ])),
+        child: Scaffold(
+          bottomNavigationBar: customBottomNav(),
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            elevation: 2,
+            backgroundColor: Color.fromRGBO(196, 208, 223, 0),
+            // backgroundColor: Colors.blue,
+            centerTitle: true,
+            title: Text(
+              'My Groups',
+              style: TextStyle(
+                  color: MyColorScheme.uno(),
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.bold),
+            ),
+            actions: <Widget>[
+              IconButton(
+                key: _keySearch,
+                icon: Icon(
+                  Icons.search,
+                  color: MyColorScheme.uno(),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/groupsearch',
+                  );
+                },
+              ),
+            ],
+            leading: IconButton(
               icon: Icon(
-                Icons.search,
+                Icons.account_circle,
                 color: MyColorScheme.uno(),
               ),
               onPressed: () {
+                //TODO: navigate to account settings
+              },
+            ),
+          ),
+          body: GestureDetector(
+            onPanUpdate: (details) {
+              if (details.delta.dx < 0) {
                 Navigator.pushNamed(
                   context,
                   '/groupsearch',
                 );
+              }
+            },
+            child: FutureBuilder(
+              future: SharedPreferences.getInstance(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Text('Loading');
+                }
+                final String uid = snapshot.data.getString('uid');
+                return StreamBuilder(
+                  stream: Firestore.instance
+                      .collection('user_data')
+                      .document(uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Text('Loading');
+                    }
+                    if (snapshot.data == null) {
+                      return Container();
+                    }
+                    try {
+                      userGroupIDs = snapshot.data["groups"];
+                    } catch (e) {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return GetUserInfo();
+                      }));
+                    }
+                    return ReorderList(userGroupIDs: userGroupIDs);
+                  },
+                );
               },
             ),
-          ],
-          leading: IconButton(
-            icon: Icon(
-              Icons.account_circle,
-              color: MyColorScheme.uno(),
-            ),
-            onPressed: () {
-              //TODO: navigate to account settings
-            },
-          ),
-        ),
-        body: GestureDetector(
-          onPanUpdate: (details) {
-            if (details.delta.dx < 0) {
-                    Navigator.pushNamed(
-                      context,
-                      '/groupsearch',
-                    );
-                  }
-          },
-          child: FutureBuilder(
-            future: SharedPreferences.getInstance(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Text('Loading');
-              }
-              final String uid = snapshot.data.getString('uid');
-              return StreamBuilder(
-                stream: Firestore.instance
-                    .collection('user_data')
-                    .document(uid)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Text('Loading');
-                  }
-                  if (snapshot.data == null) {
-                    return Container();
-                  }
-                  try {
-                    userGroupIDs = snapshot.data["groups"];
-                  } catch (e) {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return GetUserInfo();
-                    }));
-                  }
-                  return ReorderList(userGroupIDs: userGroupIDs);
-                },
-              );
-            },
           ),
         ),
       ),
