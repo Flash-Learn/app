@@ -124,8 +124,7 @@ class _EditDecksState extends State<EditDecks> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        await deleteDeck(deck.deckID);
-        return true;
+        return false;
       },
       child: Spotlight(
         enabled: _enabled,
@@ -182,7 +181,7 @@ class _EditDecksState extends State<EditDecks> {
                         setState(() {
                           _disableTouch = true;
                         });
-                        deleteDeck(deck.deckID);
+                        await deleteDeck(deck.deckID);
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) {
                           return MyDecks();
