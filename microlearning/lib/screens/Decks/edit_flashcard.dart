@@ -10,7 +10,9 @@ import 'package:microlearning/Utilities/constants/color_scheme.dart';
 class EditFlashCard extends StatefulWidget {
   final Deck deck;
   final bool isdemo;
-  EditFlashCard({Key key, @required this.deck, this.isdemo = false})
+  final bool isDeckforGroup;
+  final String ifGroupThenGrpID;
+  EditFlashCard({Key key, @required this.deck, this.isdemo = false, this.isDeckforGroup = false, this.ifGroupThenGrpID = ''})
       : super(key: key);
   @override
   _EditFlashCardState createState() =>
@@ -193,15 +195,17 @@ class _EditFlashCardState extends State<EditFlashCard> {
                     });
                     //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
                     await updateFlashcardList(deck, flashCardData);
-                    Navigator.of(context).pushAndRemoveUntil(
+                    Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => ViewDeck(
                             deckID: newDeck.deckID,
                             backAvailable: false,
                             isdemo: isdemo,
+                            isDeckforGroup: widget.isDeckforGroup,
+                            ifGroupThenGrpID: widget.ifGroupThenGrpID,
                           ),
                         ),
-                        (Route<dynamic> route) => false);
+                    );
                   },
                   child: Row(
                     children: <Widget>[

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
+import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/screens/Decks/edit_deck.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
@@ -10,12 +11,14 @@ import 'deckInfoCard.dart';
 class DeckReorderList extends StatefulWidget {
   const DeckReorderList({
     Key key,
-    this.belongsToGroup=false,
+    this.belongsToGroup = false,
+    this.ifGrpThenID='',
     @required this.userDeckIDs,
   }) : super(key: key);
 
   final bool belongsToGroup;
   final List userDeckIDs;
+  final String ifGrpThenID;
 
   @override
   _DeckReorderListState createState() => _DeckReorderListState(userDeckIDs);
@@ -85,10 +88,12 @@ class _DeckReorderListState extends State<DeckReorderList> {
                     MaterialPageRoute(
                       builder: (context) => ViewDeck(
                         deckID: deckId,
+                        ifGroupThenGrpID: widget.ifGrpThenID,
+                        isDeckforGroup: widget.belongsToGroup,
                       ),
                     ));
               },
-              child: buildDeckInfo(context, deckId)),
+              child: buildDeckInfo(context, deckId,)),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -118,7 +123,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
                             setState(() {
                               _disableTouch = true;
                             });
-                            Navigator.pushReplacement(context,
+                            Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                                   Deck deck;
                                   return StreamBuilder(
@@ -139,9 +144,11 @@ class _DeckReorderListState extends State<DeckReorderList> {
                                       deck.deckID = deckId;
                                       deck.flashCardList =
                                       snapshot.data["flashcardList"];
-                                      print(snapshot);
+                                      print('${widget.belongsToGroup} lolelmao');
                                       return EditDecks(
                                         deck: deck,
+                                        isDeckforGroup: widget.belongsToGroup,
+                                        ifGroupThenGrpID: widget.ifGrpThenID,
                                       );
                                     },
                                   );
@@ -178,7 +185,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
                             setState(() {
                               _disableTouch = true;
                             });
-                            createAlertDialog(context, deckId, userDeckIDs);
+                            createAlertDialog(context, deckId, userDeckIDs,);
                             setState(() {
                               _disableTouch = false;
                             });
@@ -262,7 +269,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
                             _disableTouch = false;
                             userDeckIDs.remove(deckid);
                           });
-                          await deleteDeck(deckid);
+                          !widget.belongsToGroup ? await deleteDeck(deckid) : await deleteDeckFromGroup(deckid, widget.ifGrpThenID);
                           Navigator.pop(ctxt);
                         },
                       )

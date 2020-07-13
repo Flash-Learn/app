@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/Widgets/deckReorderList.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
+import 'package:microlearning/screens/Decks/edit_deck.dart';
 import 'package:microlearning/screens/Groups/edit_group.dart';
 import 'package:microlearning/screens/Groups/my_groups.dart';
 
@@ -42,6 +44,17 @@ class _GroupState extends State<Group> {
           );
 
           return Scaffold(
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () async{
+                Deck newdeck = await addDeckToGroup(widget.groupID);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                  return EditDecks(deck: newdeck, creating: true, isdemo: false, isDeckforGroup: true, ifGroupThenGrpID: widget.groupID,);
+                }));
+              }, 
+              label: Text('Add a deck'),
+              icon: Icon(Icons.add),
+              ),
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.chevron_left),
@@ -71,6 +84,8 @@ class _GroupState extends State<Group> {
               color: Colors.red,
               child: DeckReorderList(
                 userDeckIDs: group.decks,
+                belongsToGroup: true,
+                ifGrpThenID: group.groupID,
               ),
             ),
           );
