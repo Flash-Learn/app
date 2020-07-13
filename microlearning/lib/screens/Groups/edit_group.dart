@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/Widgets/popUp.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
+import 'package:microlearning/screens/Groups/Search/group_search.dart';
 import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/screens/Groups/my_groups.dart';
 
@@ -23,15 +24,21 @@ class _EditGroupState extends State<EditGroup> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false ,
+      onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.chevron_left),
-            onPressed: (){
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return Group(groupID: groupData.groupID,);}));
+            onPressed: () {
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (context) {
+                return Group(
+                  groupID: groupData.groupID,
+                );
+              }));
             },
           ),
+          centerTitle: true,
           title: Text(
             "Edit Group",
             style: TextStyle(
@@ -43,11 +50,15 @@ class _EditGroupState extends State<EditGroup> {
           label: Text('Done'),
           icon: Icon(Icons.check),
           onPressed: () async {
-            if(_formKeyDetails.currentState.validate()){  
+            if (_formKeyDetails.currentState.validate()) {
               await updateGroupData(groupData);
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                return Group(groupID: groupData.groupID,);
-              }));}
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return Group(
+                  groupID: groupData.groupID,
+                );
+              }));
+            }
           },
         ),
         body: Container(
@@ -61,60 +72,73 @@ class _EditGroupState extends State<EditGroup> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       TextFormField(
-                        onChanged: (val) {
-                          setState(() {
-                            groupData.name = val;
-                          });
-                        },
-                        validator: (String arg){
-                          if(arg.length == 0){
-                            return 'Group name must not be empty';
-                          }else{
-                            return null;
-                          }
-                        },
-                        initialValue: groupData.name,
-                        decoration: inputTextDecorations('Group Name')
-                      ),
+                          onChanged: (val) {
+                            setState(() {
+                              groupData.name = val;
+                            });
+                          },
+                          validator: (String arg) {
+                            if (arg.length == 0) {
+                              return 'Group name must not be empty';
+                            } else {
+                              return null;
+                            }
+                          },
+                          initialValue: groupData.name,
+                          decoration: inputTextDecorations('Group Name')),
                       SizedBox(
                         height: 20.0,
                       ),
                       TextFormField(
-                        onChanged: (val) {
-                          setState(() {
-                            groupData.description = val;
-                          });
-                        },
-                        initialValue: groupData.description,
-                         validator: (String arg){
-                          if(arg.length == 0){
-                            return 'Group discription must not be empty';
-                          }else{
-                            return null;
-                          }
-                        },
-                        decoration: inputTextDecorations('Group Description')
-                      ),
+                          onChanged: (val) {
+                            setState(() {
+                              groupData.description = val;
+                            });
+                          },
+                          initialValue: groupData.description,
+                          validator: (String arg) {
+                            if (arg.length == 0) {
+                              return 'Group discription must not be empty';
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration:
+                              inputTextDecorations('Group Description')),
                       SizedBox(
                         height: 20.0,
                       ),
                       Center(
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                          onPressed: (){
-                            addUserDialog(context);
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {
+                            // addUserDialog(context);
+                            Navigator.of(context).push(
+                              // context.
+                              MaterialPageRoute(builder: (context) => GroupSearch(groupData: groupData,),)
+                              // '/groupsearch',
+                            );
                           },
                           child: Text('Add a User'),
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Icon(Icons.group,),
-                          Text('Group Memebers:',style: TextStyle(color: MyColorScheme.accent(), fontWeight: FontWeight.bold, fontSize: 18),)
+                          Icon(
+                            Icons.group,
+                          ),
+                          Text(
+                            'Group Memebers:',
+                            style: TextStyle(
+                                color: MyColorScheme.accent(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          )
                         ],
                       ),
                       SingleChildScrollView(
@@ -138,40 +162,42 @@ class _EditGroupState extends State<EditGroup> {
       ),
     );
   }
-  buildUserLists(){
-    return groupData.users.map<Widget>((dynamic username){
+
+  buildUserLists() {
+    return groupData.users.map<Widget>((dynamic username) {
       return StreamBuilder(
-        stream: Firestore.instance
-          .collection('user_data')
-          .document(username)
-          .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return Text("loading");
-          if (snapshot.data == null) return Container();
-          dynamic mailID = snapshot.data["email"];
-          dynamic name = snapshot.data["name"];
-          return Card(
-            margin: EdgeInsets.symmetric(vertical: 10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)
-            ),
-            child: ListTile(
-              title: Text(name != null ? name : '', style: TextStyle(fontSize: 18),),
-              subtitle: Text(mailID != null ? mailID : ''),
-            ),
-          );
-        }
-      );
+          stream: Firestore.instance
+              .collection('user_data')
+              .document(username)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return Text("loading");
+            if (snapshot.data == null) return Container();
+            dynamic mailID = snapshot.data["email"];
+            dynamic name = snapshot.data["name"];
+            return Card(
+              margin: EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: ListTile(
+                title: Text(
+                  name != null ? name : '',
+                  style: TextStyle(fontSize: 18),
+                ),
+                subtitle: Text(mailID != null ? mailID : ''),
+              ),
+            );
+          });
     }).toList();
   }
 
-
-
-  addUserDialog(BuildContext context,){
+  addUserDialog(
+    BuildContext context,
+  ) {
     return showDialog(
-      context: context,
-      builder: (context){
-        return Dialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             child: Container(
@@ -193,10 +219,10 @@ class _EditGroupState extends State<EditGroup> {
                             });
                           },
                           decoration: inputTextDecorations('User Email ID'),
-                          validator: (String arg){
-                            if(arg.length == 0){
+                          validator: (String arg) {
+                            if (arg.length == 0) {
                               return 'Please enter an Email ID';
-                            }else{
+                            } else {
                               return null;
                             }
                           },
@@ -208,7 +234,10 @@ class _EditGroupState extends State<EditGroup> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             FlatButton(
-                              child: Text('Cancel', style: TextStyle(color: Colors.red),),
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.red),
+                              ),
                               onPressed: () {
                                 Navigator.pop(context);
                               },
@@ -217,23 +246,26 @@ class _EditGroupState extends State<EditGroup> {
                               child: Center(
                                 child: Text(
                                   'Add',
-                                  style: TextStyle(color: MyColorScheme.accent()),
+                                  style:
+                                      TextStyle(color: MyColorScheme.accent()),
                                 ),
                               ),
                               onPressed: () async {
                                 bool alreadyThere = false;
                                 bool doesExist = false;
                                 bool didAdd = false;
-                                if(_formKeyUsers.currentState.validate()){
-                                    CollectionReference userCollection =
-                                      Firestore.instance.collection('user_data');
+                                if (_formKeyUsers.currentState.validate()) {
+                                  CollectionReference userCollection = Firestore
+                                      .instance
+                                      .collection('user_data');
                                   try {
                                     var user = await userCollection
                                         .where("email", isEqualTo: userToAdd)
                                         .getDocuments();
                                     user.documents.forEach((element) {
                                       doesExist = true;
-                                      if (groupData.users.contains(element.documentID) ==
+                                      if (groupData.users
+                                              .contains(element.documentID) ==
                                           false) {
                                         groupData.users.add(element.documentID);
                                       } else {
@@ -258,7 +290,8 @@ class _EditGroupState extends State<EditGroup> {
                                     return;
                                   }
                                   if (!didAdd) {
-                                    popUp(context, "Some error occured. Try again!");
+                                    popUp(context,
+                                        "Some error occured. Try again!");
                                   }
                                 }
                               },
@@ -272,7 +305,6 @@ class _EditGroupState extends State<EditGroup> {
               ),
             ),
           );
-      }
-    );
+        });
   }
 }

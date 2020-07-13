@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/Widgets/deckReorderList.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Groups/edit_group.dart';
 import 'package:microlearning/screens/Groups/my_groups.dart';
@@ -67,7 +68,20 @@ class _GroupState extends State<Group> {
                       );
                     }));
                   },
-                )
+                ),
+              IconButton(
+                // key: _keySearch,
+                icon: Icon(
+                  Icons.search,
+                  color: MyColorScheme.uno(),
+                ),
+                onPressed: () {
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   '/groupsearch',
+                  // );
+                },
+              ),
               ],
             ),
             body: Container(
