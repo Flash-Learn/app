@@ -71,6 +71,9 @@ class _EditGroupState extends State<EditGroup> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      SizedBox(
+                        height: 10,
+                      ),
                       TextFormField(
                           onChanged: (val) {
                             setState(() {
