@@ -45,6 +45,18 @@ class _EditGroupState extends State<EditGroup> {
               color: Colors.white,
             ),
           ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Leave', style: TextStyle(color: Colors.red[800], fontWeight: FontWeight.bold),),
+              onPressed: (){
+                leaveGroup(groupData.groupID);
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context){
+                    return GroupList();
+                  }), (route) => false);
+              },
+            )
+          ],
         ),
         floatingActionButton: FloatingActionButton.extended(
           label: Text('Done'),
@@ -117,7 +129,7 @@ class _EditGroupState extends State<EditGroup> {
                               borderRadius: BorderRadius.circular(10)),
                           onPressed: () {
                             // addUserDialog(context);
-                            Navigator.of(context).push(
+                            Navigator.of(context).pushReplacement(
                                 // context.
                                 MaterialPageRoute(
                               builder: (context) => GroupSearch(

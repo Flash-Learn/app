@@ -4,6 +4,7 @@ import 'package:microlearning/Utilities/Widgets/popUp.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:algolia/algolia.dart';
+import 'package:microlearning/screens/Groups/edit_group.dart';
 import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/Models/algolia.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
@@ -36,6 +37,7 @@ class _GroupSearchState extends State<GroupSearch> {
           bool alreadyThere = false;
           bool doesExist = false;
           bool didAdd = false;
+          String uidToBeAdded;
           CollectionReference userCollection =
               Firestore.instance.collection('user_data');
           try {
@@ -46,6 +48,7 @@ class _GroupSearchState extends State<GroupSearch> {
             user.documents.forEach((element) {
               doesExist = true;
               if (groupData.users.contains(element.documentID) == false) {
+                uidToBeAdded = element.documentID;
                 groupData.users.add(element.documentID);
                 popUpGood(context, "User added!");
               } else {
@@ -66,6 +69,7 @@ class _GroupSearchState extends State<GroupSearch> {
           }
           try {
             await updateGroupData(groupData);
+            await addGrouptoUser(groupData.groupID, uidToBeAdded);
           } catch (e) {
             print(e);
             return;
@@ -129,7 +133,9 @@ class _GroupSearchState extends State<GroupSearch> {
             icon: Icon(Icons.arrow_back),
             color: MyColorScheme.accent(),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                return EditGroup(groupData: widget.groupData);
+              }));
             },
           ),
           centerTitle: true,
