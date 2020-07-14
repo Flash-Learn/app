@@ -68,6 +68,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     if (!snapshot.hasData) return Text("loading...");
                     return Text(
                       name,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         letterSpacing: 2,
                         fontSize: 28,
@@ -76,7 +77,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                       ),
                     );
                   }),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.07),
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: 0,

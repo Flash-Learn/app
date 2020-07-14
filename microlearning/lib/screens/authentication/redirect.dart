@@ -4,14 +4,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:microlearning/screens/authentication/init_info.dart';
 import 'package:microlearning/screens/authentication/register.dart';
+import 'package:microlearning/services/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EmailVerification extends StatefulWidget {
   final String email;
   final String uid;
-  EmailVerification({Key key, @required this.email, @required this.uid}) : super(key: key);
+  EmailVerification({Key key, @required this.email, @required this.uid})
+      : super(key: key);
   @override
-  _EmailVerificationState createState() => _EmailVerificationState(email: email);
+  _EmailVerificationState createState() =>
+      _EmailVerificationState(email: email);
 }
 
 class _EmailVerificationState extends State<EmailVerification> {
@@ -23,24 +26,29 @@ class _EmailVerificationState extends State<EmailVerification> {
   _EmailVerificationState({this.email, this.uid});
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     Future(() async {
-        timer = Timer.periodic(Duration(seconds: 5), (timer) async {
-            await FirebaseAuth.instance.currentUser()..reload();
-            var user = await FirebaseAuth.instance.currentUser();
-            if (user.isEmailVerified) {  
-              isUserEmailVerified = user.isEmailVerified;
-              SharedPreferences prefs = await SharedPreferences.getInstance(); 
-              prefs.setString('email', user.email);
-              prefs.setString('uid', user.uid);
-              prefs.setBool('googlesignin', false);
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return GetUserInfo();}));
-              timer.cancel();
-            }
-        });
+      timer = Timer.periodic(Duration(seconds: 5), (timer) async {
+        await FirebaseAuth.instance.currentUser()
+          ..reload();
+        var user = await FirebaseAuth.instance.currentUser();
+        if (user.isEmailVerified) {
+          isUserEmailVerified = user.isEmailVerified;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('email', user.email);
+          prefs.setString('uid', user.uid);
+          prefs.setBool('googlesignin', false);
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+            return GetUserInfo();
+          }));
+          timer.cancel();
+        }
+      });
     });
   }
+
   @override
   void dispose() {
     print('disposed');
@@ -49,6 +57,7 @@ class _EmailVerificationState extends State<EmailVerification> {
       timer.cancel();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -65,21 +74,35 @@ class _EmailVerificationState extends State<EmailVerification> {
                   itemBuilder: (BuildContext context, int index) {
                     return DecoratedBox(
                       decoration: BoxDecoration(
-                        color: index.isEven ? Colors.black : Colors.white,
-                        border: Border.all(color: Colors.black)
-                      ),
+                          color: index.isEven ? Colors.black : Colors.white,
+                          border: Border.all(color: Colors.black)),
                     );
                   },
                 ),
-                SizedBox(height: 20,),
-                Text('An email verification link has been sent to $email \n Please verify.', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold,),),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'An email verification link has been sent to $email \n Please verify.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Material(
                   color: Colors.black,
-                                child: InkWell(
-                                  splashColor: Colors.grey,
+                  child: InkWell(
+                    splashColor: Colors.grey,
                     onTap: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {return RegisterUser();}));
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return RegisterUser();
+                      }));
                     },
                     child: Container(
                       height: 40,
@@ -88,7 +111,8 @@ class _EmailVerificationState extends State<EmailVerification> {
                         color: Colors.transparent,
                         child: Center(
                           child: Text('Email not right? Change',
-                              style: TextStyle(fontSize: 14, color: Colors.white)),
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.white)),
                         ),
                       ),
                     ),

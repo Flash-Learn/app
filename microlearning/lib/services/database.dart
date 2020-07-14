@@ -6,13 +6,16 @@ class DataBaseServices {
 
   final CollectionReference db = Firestore.instance.collection('user_data');
 
-  Future uploadData(String name, String grade, String gender) async {
+  Future uploadData(
+      String name, String grade, String gender, String email) async {
     return await db.document(uid).setData({
       'name': name,
       'grade': grade,
       'gender': gender,
       'decks': [],
       'uid': uid,
+      'email': email,
+      'groups': [],
     });
   }
 

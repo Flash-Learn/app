@@ -12,15 +12,17 @@ Future updateInfo(dynamic data) async {
 Future enterInfo(dynamic context, dynamic data) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String uid = prefs.getString('uid');
-  
-  DataBaseServices here = DataBaseServices(uid: uid);
-  here.uploadData(data['_name'], data['_grade'], data['_gender']);
+  String email = prefs.getString('email');
 
-  Future.delayed(Duration.zero, ()
-  {
-    return Navigator.pushAndRemoveUntil(
-        context, MaterialPageRoute(builder: (context) {
-      return MyDecks(isdemo: true,);
-    }), (Route<dynamic> route)=>false);
+  DataBaseServices here = DataBaseServices(uid: uid);
+  here.uploadData(data['_name'], data['_grade'], data['_gender'], email);
+
+  Future.delayed(Duration.zero, () {
+    return Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) {
+      return MyDecks(
+        isdemo: true,
+      );
+    }), (Route<dynamic> route) => false);
   });
 }
