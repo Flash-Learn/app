@@ -115,10 +115,14 @@ class _EditGroupState extends State<EditGroup> {
                           onPressed: () {
                             // addUserDialog(context);
                             Navigator.of(context).push(
-                              // context.
-                              MaterialPageRoute(builder: (context) => GroupSearch(groupData: groupData,),)
-                              // '/groupsearch',
-                            );
+                                // context.
+                                MaterialPageRoute(
+                              builder: (context) => GroupSearch(
+                                groupData: groupData,
+                              ),
+                            )
+                                // '/groupsearch',
+                                );
                           },
                           child: Text('Add a User'),
                         ),
@@ -143,7 +147,7 @@ class _EditGroupState extends State<EditGroup> {
                       ),
                       SingleChildScrollView(
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.3,
+                          height: MediaQuery.of(context).size.height * 0.5,
                           child: ListView(
                             children: buildUserLists(),
                           ),
@@ -191,120 +195,120 @@ class _EditGroupState extends State<EditGroup> {
     }).toList();
   }
 
-  addUserDialog(
-    BuildContext context,
-  ) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.3,
-              padding: EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Form(
-                    key: _formKeyUsers,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        TextFormField(
-                          onChanged: (val) {
-                            setState(() {
-                              userToAdd = val;
-                            });
-                          },
-                          decoration: inputTextDecorations('User Email ID'),
-                          validator: (String arg) {
-                            if (arg.length == 0) {
-                              return 'Please enter an Email ID';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            FlatButton(
-                              child: Center(
-                                child: Text(
-                                  'Add',
-                                  style:
-                                      TextStyle(color: MyColorScheme.accent()),
-                                ),
-                              ),
-                              onPressed: () async {
-                                bool alreadyThere = false;
-                                bool doesExist = false;
-                                bool didAdd = false;
-                                if (_formKeyUsers.currentState.validate()) {
-                                  CollectionReference userCollection = Firestore
-                                      .instance
-                                      .collection('user_data');
-                                  try {
-                                    var user = await userCollection
-                                        .where("email", isEqualTo: userToAdd)
-                                        .getDocuments();
-                                    user.documents.forEach((element) {
-                                      doesExist = true;
-                                      if (groupData.users
-                                              .contains(element.documentID) ==
-                                          false) {
-                                        groupData.users.add(element.documentID);
-                                      } else {
-                                        alreadyThere = true;
-                                      }
-                                    });
-                                  } catch (e) {
-                                    print(e);
-                                    return;
-                                  }
-                                  if (!doesExist) {
-                                    popUp(context, "No such user!");
-                                    return;
-                                  } else if (alreadyThere) {
-                                    popUp(context, "User already in group!");
-                                    return;
-                                  }
-                                  try {
-                                    await updateGroupData(groupData);
-                                  } catch (e) {
-                                    print(e);
-                                    return;
-                                  }
-                                  if (!didAdd) {
-                                    popUp(context,
-                                        "Some error occured. Try again!");
-                                  }
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
+  // addUserDialog(
+  //   BuildContext context,
+  // ) {
+  //   return showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return Dialog(
+  //           shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(20.0)),
+  //           child: Container(
+  //             height: MediaQuery.of(context).size.height * 0.3,
+  //             padding: EdgeInsets.all(15),
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               children: <Widget>[
+  //                 Form(
+  //                   key: _formKeyUsers,
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: <Widget>[
+  //                       TextFormField(
+  //                         onChanged: (val) {
+  //                           setState(() {
+  //                             userToAdd = val;
+  //                           });
+  //                         },
+  //                         decoration: inputTextDecorations('User Email ID'),
+  //                         validator: (String arg) {
+  //                           if (arg.length == 0) {
+  //                             return 'Please enter an Email ID';
+  //                           } else {
+  //                             return null;
+  //                           }
+  //                         },
+  //                       ),
+  //                       SizedBox(
+  //                         height: 20.0,
+  //                       ),
+  //                       Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                         children: <Widget>[
+  //                           FlatButton(
+  //                             child: Text(
+  //                               'Cancel',
+  //                               style: TextStyle(color: Colors.red),
+  //                             ),
+  //                             onPressed: () {
+  //                               Navigator.pop(context);
+  //                             },
+  //                           ),
+  //                           FlatButton(
+  //                             child: Center(
+  //                               child: Text(
+  //                                 'Add',
+  //                                 style:
+  //                                     TextStyle(color: MyColorScheme.accent()),
+  //                               ),
+  //                             ),
+  //                             onPressed: () async {
+  //                               bool alreadyThere = false;
+  //                               bool doesExist = false;
+  //                               bool didAdd = false;
+  //                               if (_formKeyUsers.currentState.validate()) {
+  //                                 CollectionReference userCollection = Firestore
+  //                                     .instance
+  //                                     .collection('user_data');
+  //                                 try {
+  //                                   var user = await userCollection
+  //                                       .where("email", isEqualTo: userToAdd)
+  //                                       .getDocuments();
+  //                                   user.documents.forEach((element) {
+  //                                     doesExist = true;
+  //                                     if (groupData.users
+  //                                             .contains(element.documentID) ==
+  //                                         false) {
+  //                                       groupData.users.add(element.documentID);
+  //                                     } else {
+  //                                       alreadyThere = true;
+  //                                     }
+  //                                   });
+  //                                 } catch (e) {
+  //                                   print(e);
+  //                                   return;
+  //                                 }
+  //                                 if (!doesExist) {
+  //                                   popUp(context, "No such user!");
+  //                                   return;
+  //                                 } else if (alreadyThere) {
+  //                                   popUp(context, "User already in group!");
+  //                                   return;
+  //                                 }
+  //                                 try {
+  //                                   await updateGroupData(groupData);
+  //                                 } catch (e) {
+  //                                   print(e);
+  //                                   return;
+  //                                 }
+  //                                 if (!didAdd) {
+  //                                   popUp(context,
+  //                                       "Some error occured. Try again!");
+  //                                 }
+  //                               }
+  //                             },
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       });
+  // }
 }

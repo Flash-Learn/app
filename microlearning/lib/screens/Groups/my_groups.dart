@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
+import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/Groups/edit_group.dart';
 import 'package:microlearning/screens/Groups/init_group.dart';
@@ -71,7 +72,13 @@ class _GroupListState extends State<GroupList> {
                 color: MyColorScheme.uno(),
               ),
               onPressed: () {
-                //TODO: navigate to account settings
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AccountSettings();
+                    },
+                  ),
+                );
               },
             ),
           ),

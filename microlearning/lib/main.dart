@@ -42,7 +42,6 @@ class MyApp extends StatelessWidget {
         '/search': (context) => Search(),
         '/notificationinapp': (context) => NotificationInapp(),
         '/accountsettings': (context) => AccountSettings(),
-        '/groupsearch': (context) => GroupSearch(),
       },
     );
   }
