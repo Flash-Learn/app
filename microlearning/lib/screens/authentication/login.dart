@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
+import 'package:microlearning/services/database.dart';
 import 'package:microlearning/services/username_signIn.dart';
 import 'package:microlearning/screens/authentication/reset_password.dart';
 // import 'package:microlearning/screens/Decks/my_decks.dart';
@@ -152,6 +153,9 @@ class _LoginUserState extends State<LoginUser> {
                                   prefs.setString('email', email.trim());
                                   prefs.setString('uid', result.uid);
                                   prefs.setBool('googlesignin', false);
+                                  DataBaseServices here =
+                                      DataBaseServices(uid: result.uid);
+                                  here.updateEmail(email);
                                   Navigator.of(context).pushNamedAndRemoveUntil(
                                       '/home', (Route<dynamic> route) => false);
                                 }

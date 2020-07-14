@@ -8,8 +8,6 @@ import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/Models/algolia.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
-String _searchTerm;
-
 class GroupSearch extends StatefulWidget {
   final GroupData groupData;
   GroupSearch({@required this.groupData});
@@ -20,6 +18,8 @@ class GroupSearch extends StatefulWidget {
 class _GroupSearchState extends State<GroupSearch> {
   bool isSwitched = false; //Variable for the state of switch
   final Algolia _algoliaApp = AlgoliaApplication.algolia;
+  String _searchTerm;
+
   GroupData groupData;
   _GroupSearchState({@required this.groupData});
 
@@ -31,95 +31,89 @@ class _GroupSearchState extends State<GroupSearch> {
   }
 
   Widget buildResultCard(context, result) {
-  return InkWell(
-      onTap: () async {
-        bool alreadyThere = false;
-        bool doesExist = false;
-        bool didAdd = false;
-        CollectionReference userCollection =
-            Firestore.instance.collection('user_data');
-        try {
-          var user = await userCollection
-              .where("email", isEqualTo: result.data["email"])
-              .getDocuments();
-              print(result.data["email"]);
-              print(groupData);
-          user.documents.forEach((element) {
-            doesExist = true;
-            if (groupData.users.contains(element.documentID) == false) {
-              groupData.users.add(element.documentID);
-            } else {
-              alreadyThere = true;
-            }
-          });
-        } catch (e) {
-          print(e);
-          return;
-        }
-        if (!doesExist) {
-          popUp(context, "No such user!");
-          return;
-        } else if (alreadyThere) {
-          popUp(context, "User already in group!");
-          return;
-        }
-        try {
-          await updateGroupData(groupData);
-        } catch (e) {
-          print(e);
-          return;
-        }
-        if (!didAdd) {
-          popUp(context, "Some error occured. Try again!");
-        }
-      },
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Container(
-            height: 80,
-            width: MediaQuery.of(context).size.width,
-            child: Material(
-              elevation: 3,
-              borderRadius: BorderRadius.circular(10),
-              color: MyColorScheme.uno(),
-              shadowColor: Colors.black,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              result.data["name"],
-                              style: TextStyle(
-                                  color: MyColorScheme.cinco(),
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w900),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        )),
-                  ],
+    return InkWell(
+        onTap: () async {
+          bool alreadyThere = false;
+          bool doesExist = false;
+          bool didAdd = false;
+          CollectionReference userCollection =
+              Firestore.instance.collection('user_data');
+          try {
+            var user = await userCollection
+                .where("email", isEqualTo: result.data["email"])
+                .getDocuments();
+            print(result.data["email"]);
+            user.documents.forEach((element) {
+              doesExist = true;
+              if (groupData.users.contains(element.documentID) == false) {
+                groupData.users.add(element.documentID);
+                popUpGood(context, "User added!");
+              } else {
+                alreadyThere = true;
+              }
+            });
+          } catch (e) {
+            print(e);
+            return;
+          }
+          // if (!doesExist) {
+          //   popUp(context, "No such user!");
+          //   return;
+          // }
+          if (alreadyThere) {
+            popUp(context, "User already in group!");
+            return;
+          }
+          try {
+            await updateGroupData(groupData);
+          } catch (e) {
+            print(e);
+            return;
+          }
+        },
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Container(
+              height: 80,
+              width: MediaQuery.of(context).size.width,
+              child: Material(
+                elevation: 3,
+                borderRadius: BorderRadius.circular(10),
+                color: MyColorScheme.uno(),
+                shadowColor: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                result.data["name"],
+                                style: TextStyle(
+                                    color: MyColorScheme.cinco(),
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w900),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          )),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ));
-}
-
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
-    String state = isSwitched
-        ? "Online Results"
-        : "Offline Results"; //for user to see offline/online results
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -135,19 +129,6 @@ class _GroupSearchState extends State<GroupSearch> {
           title: Text('Search',
               style: TextStyle(
                   fontWeight: FontWeight.bold, color: MyColorScheme.cinco())),
-          actions: <Widget>[
-            Switch(
-                activeColor: MyColorScheme.accent(),
-                inactiveTrackColor: MyColorScheme.accentLight(),
-                value: isSwitched,
-                onChanged: (value) {
-                  setState(() {
-                    isSwitched = value;
-                    print(isSwitched);
-                    print(state);
-                  });
-                }),
-          ],
         ),
         body: SingleChildScrollView(
           child: Column(children: <Widget>[
@@ -158,6 +139,7 @@ class _GroupSearchState extends State<GroupSearch> {
                 onChanged: (val) {
                   setState(() {
                     _searchTerm = val;
+                    print(_searchTerm);
                   });
                 },
                 decoration: InputDecoration(
@@ -206,7 +188,9 @@ class _GroupSearchState extends State<GroupSearch> {
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              return _searchTerm.length > 0
+                              return _searchTerm.length > 0 &&
+                                      currSearchStuff[index].data["email"] !=
+                                          null
                                   ? Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0, horizontal: 0.0),
@@ -227,4 +211,3 @@ class _GroupSearchState extends State<GroupSearch> {
         ));
   }
 }
-

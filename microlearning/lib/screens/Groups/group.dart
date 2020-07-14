@@ -45,17 +45,25 @@ class _GroupState extends State<Group> {
           );
 
           return Scaffold(
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
             floatingActionButton: FloatingActionButton.extended(
-              onPressed: () async{
+              onPressed: () async {
                 Deck newdeck = await addDeckToGroup(widget.groupID);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                  return EditDecks(deck: newdeck, creating: true, isdemo: false, isDeckforGroup: true, ifGroupThenGrpID: widget.groupID,);
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return EditDecks(
+                    deck: newdeck,
+                    creating: true,
+                    isdemo: false,
+                    isDeckforGroup: true,
+                    ifGroupThenGrpID: widget.groupID,
+                  );
                 }));
-              }, 
+              },
               label: Text('Add a deck'),
               icon: Icon(Icons.add),
-              ),
+            ),
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.chevron_left),
@@ -82,23 +90,22 @@ class _GroupState extends State<Group> {
                     }));
                   },
                 ),
-              IconButton(
-                // key: _keySearch,
-                icon: Icon(
-                  Icons.search,
-                  color: MyColorScheme.uno(),
+                IconButton(
+                  // key: _keySearch,
+                  icon: Icon(
+                    Icons.search,
+                    color: MyColorScheme.uno(),
+                  ),
+                  onPressed: () {
+                    // Navigator.pushNamed(
+                    //   context,
+                    //   '/groupsearch',
+                    // );
+                  },
                 ),
-                onPressed: () {
-                  // Navigator.pushNamed(
-                  //   context,
-                  //   '/groupsearch',
-                  // );
-                },
-              ),
               ],
             ),
             body: Container(
-              color: Colors.red,
               child: DeckReorderList(
                 userDeckIDs: group.decks,
                 belongsToGroup: true,

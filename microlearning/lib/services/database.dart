@@ -32,12 +32,18 @@ class DataBaseServices {
 
   Future updateData(String name, String grade, String gender) async {
     QuerySnapshot qs = await db.where('uid', isEqualTo: uid).getDocuments();
-    return await db.document(uid).setData({
+    return await db.document(uid).updateData({
       'name': name,
       'grade': grade,
       'gender': gender,
       'uid': qs.documents[0].data['uid'],
       'decks': qs.documents[0].data['decks'],
+    });
+  }
+
+  Future updateEmail(String email) async {
+    return await db.document(uid).updateData({
+      'email': email,
     });
   }
 
