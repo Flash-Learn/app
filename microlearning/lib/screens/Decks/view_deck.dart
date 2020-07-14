@@ -390,7 +390,7 @@ class _ViewDeckState extends State<ViewDeck> {
               if (widget.editAccess)
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                  return EditDecks(deck: deck);
+                  return widget.isDeckforGroup ? EditDecks(isDeckforGroup: true, deck: deck, ifGroupThenGrpID: widget.ifGroupThenGrpID,) : EditDecks(deck: deck);
                 }));
               else {
                 print(deck.flashCardList.length);
