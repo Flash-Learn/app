@@ -13,7 +13,7 @@ class PushNotificationService {
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
       },
-      onBackgroundMessage: myBackgroundMessageHandler,
+      onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
       },
