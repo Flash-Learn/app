@@ -15,6 +15,7 @@ class DataBaseServices {
       'decks': [],
       'uid': uid,
       'email': email,
+      'groups': [],
     });
   }
 
