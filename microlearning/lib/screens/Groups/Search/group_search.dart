@@ -73,9 +73,9 @@ class _GroupSearchState extends State<GroupSearch> {
         },
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
             child: Container(
-              height: 80,
+              height: 90,
               width: MediaQuery.of(context).size.width,
               child: Material(
                 elevation: 3,
@@ -91,18 +91,25 @@ class _GroupSearchState extends State<GroupSearch> {
                       SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                result.data["name"],
-                                style: TextStyle(
-                                    color: MyColorScheme.cinco(),
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w900),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                          child: Text(
+                            result.data["name"],
+                            style: TextStyle(
+                                color: MyColorScheme.cinco(),
+                                fontSize: 25,
+                                fontWeight: FontWeight.w900),
+                            overflow: TextOverflow.ellipsis,
                           )),
+                      SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          child: Text(
+                            result.data["email"],
+                            style: TextStyle(
+                              color: MyColorScheme.cinco(),
+                              fontSize: 14,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ))
                     ],
                   ),
                 ),

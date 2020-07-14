@@ -140,7 +140,7 @@ class _EditGroupState extends State<EditGroup> {
                             Icons.group,
                           ),
                           Text(
-                            'Group Memebers:',
+                            'Group Members:',
                             style: TextStyle(
                                 color: MyColorScheme.accent(),
                                 fontWeight: FontWeight.bold,
