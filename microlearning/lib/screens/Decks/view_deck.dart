@@ -205,11 +205,13 @@ class _ViewDeckState extends State<ViewDeck> {
                     onPressed: () {
                       !widget.backAvailable
                           ? Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (context)  {
-                                return widget.isDeckforGroup ? Group(groupID: widget.ifGroupThenGrpID,): MyDecks();}
-                              ),
-                              (Route<dynamic> route) => false)
+                              MaterialPageRoute(builder: (context) {
+                              return widget.isDeckforGroup
+                                  ? Group(
+                                      groupID: widget.ifGroupThenGrpID,
+                                    )
+                                  : MyDecks();
+                            }), (Route<dynamic> route) => false)
                           : Navigator.of(context).pop();
                     },
                   ),
@@ -251,10 +253,35 @@ class _ViewDeckState extends State<ViewDeck> {
                       Padding(
                         padding: EdgeInsets.only(right: 10),
                         child: IconButton(
-                          icon: Icon(Icons.file_download),
+                          icon: _disableTouch
+                              ? Icon(Icons.check)
+                              : Icon(Icons.file_download),
                           color: MyColorScheme.accent(),
                           onPressed: () {
+                            setState(() {
+                              _disableTouch = true;
+                            });
+                            SnackBar snackBar = SnackBar(
+                              duration: Duration(milliseconds: 1200),
+                              content: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  'Deck added to My Decks',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyColorScheme.cinco(),
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: MyColorScheme.uno(),
+                            );
+                            _scaffoldKey.currentState.hideCurrentSnackBar();
+                            _scaffoldKey.currentState.showSnackBar(snackBar);
                             saveDeck(context, deck, deckID);
+                            setState(() {
+                              _disableTouch = true;
+                            });
                           },
                         ),
                       )
@@ -390,7 +417,13 @@ class _ViewDeckState extends State<ViewDeck> {
               if (widget.editAccess)
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                  return widget.isDeckforGroup ? EditDecks(isDeckforGroup: true, deck: deck, ifGroupThenGrpID: widget.ifGroupThenGrpID,) : EditDecks(deck: deck);
+                  return widget.isDeckforGroup
+                      ? EditDecks(
+                          isDeckforGroup: true,
+                          deck: deck,
+                          ifGroupThenGrpID: widget.ifGroupThenGrpID,
+                        )
+                      : EditDecks(deck: deck);
                 }));
               else {
                 print(deck.flashCardList.length);
@@ -445,54 +478,56 @@ class _ViewDeckState extends State<ViewDeck> {
               ),
             )),
       ),
-     if(!widget.isDeckforGroup)...[ PopupMenuItem(
-        value: "filter button",
-        child: GestureDetector(
-            onTap: () async {
-              Navigator.pop(context, "filter button");
-              setState(() {
-                showAllcards = !showAllcards;
-              });
-            },
-            child: Card(
-              elevation: 0,
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.filter_list,
-                    color: MyColorScheme.accent(),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  showAllcards
-                      ? Text("Not memorized cards")
-                      : Text("Show all cards"),
-                ],
-              ),
-            )),
-      ),]else...[
+      if (!widget.isDeckforGroup) ...[
+        PopupMenuItem(
+          value: "filter button",
+          child: GestureDetector(
+              onTap: () async {
+                Navigator.pop(context, "filter button");
+                setState(() {
+                  showAllcards = !showAllcards;
+                });
+              },
+              child: Card(
+                elevation: 0,
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.filter_list,
+                      color: MyColorScheme.accent(),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    showAllcards
+                        ? Text("Not memorized cards")
+                        : Text("Show all cards"),
+                  ],
+                ),
+              )),
+        ),
+      ] else ...[
         PopupMenuItem(
           child: GestureDetector(
-            onTap: () async {
-              Navigator.pop(context, "filter button");
-              saveDeck(context, deck, deckID);
-            },
-            child: Card(
-              elevation: 0,
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.file_download,
-                    color: MyColorScheme.accent(),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text('Download Deck')
-                ],
-              ),
-            )),
+              onTap: () async {
+                Navigator.pop(context, "filter button");
+                saveDeck(context, deck, deckID);
+              },
+              child: Card(
+                elevation: 0,
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.file_download,
+                      color: MyColorScheme.accent(),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text('Download Deck')
+                  ],
+                ),
+              )),
         ),
       ],
       PopupMenuItem(
@@ -517,7 +552,6 @@ class _ViewDeckState extends State<ViewDeck> {
                     "Reminder",
                     "Revise your deck '${deck.deckName}'",
                   );
-                  print(notification.i2);
                   SnackBar snackBar = SnackBar(
                     duration: Duration(milliseconds: 1200),
                     content: Padding(
@@ -587,7 +621,7 @@ class FlashCardSwipeView extends StatefulWidget {
     this.changePercentage,
     this.isShuffled,
     this.ifGroupThenGrpID = '',
-    this.isDeckforGroup= false,
+    this.isDeckforGroup = false,
     @required this.key,
   });
   final bool isShuffled;
@@ -772,7 +806,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     List<Widget> children = cards.map<Widget>((dynamic data) {
       return FlashCardView(
         flashCardID: data,
-        editAccess: editaccess^widget.isDeckforGroup,
+        editAccess: editaccess ^ widget.isDeckforGroup,
         onMemorizeCallback: onmemocall,
         currentIndex: cards.indexOf(data),
         currentPage: currentPage,
