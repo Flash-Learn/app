@@ -29,7 +29,6 @@ class _MyDecksState extends State<MyDecks> {
   _MyDecksState({this.isdemo = false});
   GlobalKey<_MyDecksState> _keyNewDeck = GlobalKey<_MyDecksState>();
   GlobalKey<_MyDecksState> _keySearch = GlobalKey<_MyDecksState>();
-  GlobalKey<_MyDecksState> _keyGroups = GlobalKey<_MyDecksState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
@@ -297,6 +296,7 @@ class _MyDecksState extends State<MyDecks> {
               });
             },
             child: Material(
+              key: _keyNewDeck,
               elevation: 2,
               color: Color.fromRGBO(50, 217, 157, 1),
               borderRadius: BorderRadius.circular(20),

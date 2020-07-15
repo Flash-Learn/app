@@ -267,7 +267,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                   color: Colors.red[300],
                   child: MaterialButton(
                     //color: Colors.blue,
-                    key: ValueKey('issue is resolved now'),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -344,11 +343,10 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
               maxHeight: MediaQuery.of(context).size.height *0.7,
             ),
             child: Scrollbar(
-              child: ReorderableListView(
+              child: ListView(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
                 children: children,
                 key: Key(deck.deckName),
-                onReorder: _onReorder,
               ),
             ),
           ),
