@@ -167,9 +167,13 @@ class _GroupListState extends State<GroupList> {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String uid = prefs.getString('uid');
               GroupData newGroup = await createNewGroup(uid);
+              print(newGroup.groupID);
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) {
-                  return EditGroup(groupData: newGroup);
+                  return EditGroup(
+                    groupData: newGroup,
+                    creating: true,
+                  );
                 },
               ));
               setState(() {

@@ -92,17 +92,33 @@ class _GroupSearchState extends State<GroupSearch> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                          child: Text(
-                            result.data["name"],
-                            style: TextStyle(
-                                color: MyColorScheme.cinco(),
-                                fontSize: 25,
-                                fontWeight: FontWeight.w900),
-                            overflow: TextOverflow.ellipsis,
-                          )),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/userprofile.png'),
+                              radius: 10,
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                              child: Text(
+                                result.data["name"],
+                                style: TextStyle(
+                                    color: MyColorScheme.cinco(),
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w900),
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                        ],
+                      ),
                       SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
@@ -133,7 +149,8 @@ class _GroupSearchState extends State<GroupSearch> {
             icon: Icon(Icons.arrow_back),
             color: MyColorScheme.accent(),
             onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
                 return EditGroup(groupData: widget.groupData);
               }));
             },
