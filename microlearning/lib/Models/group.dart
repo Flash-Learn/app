@@ -61,8 +61,11 @@ Future updateGroupData(GroupData groupData) async {
   });
 }
 
-Future addGrouptoUser(String grpID, String uidToBeAdded) async{
-  await Firestore.instance.collection("user_data").document(uidToBeAdded).updateData({
+Future addGrouptoUser(String grpID, String uidToBeAdded) async {
+  await Firestore.instance
+      .collection("user_data")
+      .document(uidToBeAdded)
+      .updateData({
     "groups": FieldValue.arrayUnion([grpID]),
   });
 }
@@ -80,6 +83,19 @@ Future<void> leaveGroup(String groupID) async {
   });
   await Firestore.instance.collection("groups").document(groupID).updateData({
     "users": FieldValue.arrayRemove([uid]),
+  });
+}
+
+Future<void> deleteGroup(String groupID) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String uid = prefs.get("uid");
+  DocumentReference deckDocument =
+      Firestore.instance.collection("groups").document(groupID);
+
+  await deckDocument.delete();
+
+  await Firestore.instance.collection("user_data").document(uid).updateData({
+    "groups": FieldValue.arrayRemove([groupID]),
   });
 }
 
@@ -118,7 +134,6 @@ Future<Deck> addDeckToGroup(String groupID, {deckName: ""}) async {
 }
 
 Future<void> deleteDeckFromGroup(String deckID, String grpID) async {
-
   DocumentReference deckDocument =
       Firestore.instance.collection("decks").document(deckID);
 

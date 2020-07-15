@@ -10,7 +10,8 @@ import 'package:microlearning/screens/Groups/my_groups.dart';
 
 class EditGroup extends StatefulWidget {
   final GroupData groupData;
-  EditGroup({@required this.groupData});
+  final bool creating;
+  EditGroup({@required this.groupData, this.creating: false});
   @override
   _EditGroupState createState() => _EditGroupState(groupData: groupData);
 }
@@ -27,37 +28,50 @@ class _EditGroupState extends State<EditGroup> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.chevron_left),
-            onPressed: () {
-              Navigator.of(context)
-                  .pushReplacement(MaterialPageRoute(builder: (context) {
-                return Group(
-                  groupID: groupData.groupID,
-                );
-              }));
-            },
-          ),
-          centerTitle: true,
-          title: Text(
-            "Edit Group",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                'Leave',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            leading: widget.creating
+                ? IconButton(
+                    icon: Icon(Icons.chevron_left),
+                    onPressed: () async {
+                      await deleteGroup(groupData.groupID);
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                        return GroupList();
+                      }));
+                    },
+                  )
+                : IconButton(
+                    icon: Icon(Icons.chevron_left),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                        return Group(
+                          groupID: groupData.groupID,
+                        );
+                      }));
+                    },
+                  ),
+            centerTitle: true,
+            title: Text(
+              "Edit Group",
+              style: TextStyle(
+                color: Colors.white,
               ),
-              onPressed: () async {
-                await createAlertDialogLeaveGroup(context, groupData.groupID);
-              },
-            )
-          ],
-        ),
+            ),
+            actions: !widget.creating
+                ? <Widget>[
+                    FlatButton(
+                      child: Text(
+                        'Leave',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () async {
+                        await createAlertDialogLeaveGroup(
+                            context, groupData.groupID);
+                      },
+                    )
+                  ]
+                : null),
         floatingActionButton: FloatingActionButton.extended(
           label: Text('Done'),
           icon: Icon(Icons.check),
