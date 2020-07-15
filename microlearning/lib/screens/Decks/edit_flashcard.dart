@@ -156,112 +156,112 @@ class _EditFlashCardState extends State<EditFlashCard> {
   @override
   Widget build(BuildContext context) {
     // Widget to give demo to new user
-    return Spotlight(
-      enabled: _enabled,
-      radius: _radius,
-      description: _description,
-      center: _center,
-      onTap: () => _ontap(),
-      animation: true,
-
-      // Widget to disable touch when loading
-      child: AbsorbPointer(
-        absorbing: _disableTouch,
-        child: WillPopScope(
-          onWillPop: () async => false,
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              elevation: 2,
-              backgroundColor: MyColorScheme.uno(),
-              title: Text(
-                'Edit Deck',
-                style: TextStyle(
-                    color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
-              ),
-              centerTitle: true,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                color: MyColorScheme.accent(),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  onPressed: () async {
-                    setState(() {
-                      _disableTouch = true;
-                    });
-                    //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
-                    await updateFlashcardList(deck, flashCardData);
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => ViewDeck(
-                            deckID: newDeck.deckID,
-                            backAvailable: false,
-                            isdemo: isdemo,
-                            isDeckforGroup: widget.isDeckforGroup,
-                            ifGroupThenGrpID: widget.ifGroupThenGrpID,
-                          ),
-                        ),
-                    );
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.check,
-                        color: MyColorScheme.accent(),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        'Save',
-                        style: TextStyle(
+    return StreamBuilder<Object>(
+      stream: getCardfromDataBase,
+      builder: (context, snapshot) {
+        return Spotlight(
+          enabled: _enabled,
+          radius: _radius,
+          description: _description,
+          center: _center,
+          onTap: () => _ontap(),
+          animation: true,
+          // Widget to disable touch when loading
+          child: AbsorbPointer(
+            absorbing: _disableTouch,
+            child: WillPopScope(
+              onWillPop: () async => false,
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  elevation: 2,
+                  backgroundColor: MyColorScheme.uno(),
+                  title: Text(
+                    'Edit Deck',
+                    style: TextStyle(
+                        color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+                  ),
+                  centerTitle: true,
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    color: MyColorScheme.accent(),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      key: _keySave,
+                      onPressed: () async {
+                        setState(() {
+                          _disableTouch = true;
+                        });
+                        //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
+                        await updateFlashcardList(deck, flashCardData);
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => ViewDeck(
+                                deckID: newDeck.deckID,
+                                backAvailable: false,
+                                isdemo: isdemo,
+                                isDeckforGroup: widget.isDeckforGroup,
+                                ifGroupThenGrpID: widget.ifGroupThenGrpID,
+                              ),
+                            ),
+                        );
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.check,
                             color: MyColorScheme.accent(),
-                            fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Save',
+                            style: TextStyle(
+                                color: MyColorScheme.accent(),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
+                    )
+                  ],
+                ),
+                body: SingleChildScrollView(
+                  child: Column(
+                    key: _keyFlashcard,
+                    children: <Widget>[
+                            if (flashCardData.length - 1 ==
+                                newDeck.flashCardList.length + 1)...[
+                              // flashCardData.add(['','']);
+                              Container(
+                                padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                                child: SingleChildScrollView(
+                                  child: GetFlashCardEdit(
+                                    deck: deck,
+                                    flashCardData: flashCardData,
+                                  ),
+                                ),
+                              )]else...[
+                              Center(
+                                child: SizedBox(
+                                  child: CircularProgressIndicator(),
+                                  width: 60,
+                                  height: 60,
+                                ),
+                              )
+                            ]
                     ],
                   ),
-                )
-              ],
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                key: _keyFlashcard,
-                children: <Widget>[
-                  StreamBuilder<Object>(
-                      stream: getCardfromDataBase,
-                      // TODO: add the stream here for the getting the 2d array of the things
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (flashCardData.length - 1 ==
-                            newDeck.flashCardList.length + 1) {
-                          // flashCardData.add(['','']);
-                          return Container(
-                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                            child: GetFlashCardEdit(
-                              deck: deck,
-                              flashCardData: flashCardData,
-                            ),
-                          );
-                        } else {
-                          return Center(
-                            child: SizedBox(
-                              child: CircularProgressIndicator(),
-                              width: 60,
-                              height: 60,
-                            ),
-                          );
-                        }
-                      }),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }
