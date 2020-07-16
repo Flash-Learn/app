@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:photo_view/photo_view.dart';
 
 class FlashCardView extends StatefulWidget {
   final Color color;
@@ -323,28 +324,47 @@ class _FlashCardViewState extends State<FlashCardView> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Spacer(),
-                                    isPic
-                                        ? Image.network(definition,
-                                            loadingBuilder:
-                                                (BuildContext context,
-                                                    Widget child,
-                                                    ImageChunkEvent
-                                                        loadingProgress) {
-                                            if (loadingProgress == null)
-                                              return child;
+                                    isPic ? ClipRect(
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height *0.5,
+                                        child: PhotoView(
+                                          minScale: PhotoViewComputedScale.contained,
+                                          imageProvider: NetworkImage(definition),
+                                          backgroundDecoration: BoxDecoration(color: Colors.transparent),
+                                          maxScale: PhotoViewComputedScale.covered * 2.0,
+                                          loadingBuilder: (BuildContext context, ImageChunkEvent loadingProgress){
                                             return Center(
                                               child: CircularProgressIndicator(
-                                                value: loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes
-                                                    : null,
+                                                value: loadingProgress.expectedTotalBytes!= null ? 
+                                                loadingProgress.cumulativeBytesLoaded/loadingProgress.expectedTotalBytes 
+                                                : null
                                               ),
                                             );
-                                          })
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                        // ? Image.network(definition,
+                                        //     loadingBuilder:
+                                        //         (BuildContext context,
+                                        //             Widget child,
+                                        //             ImageChunkEvent
+                                        //                 loadingProgress) {
+                                        //     if (loadingProgress == null)
+                                        //       return child;
+                                        //     return Center(
+                                        //       child: CircularProgressIndicator(
+                                        //         value: loadingProgress
+                                        //                     .expectedTotalBytes !=
+                                        //                 null
+                                        //             ? loadingProgress
+                                        //                     .cumulativeBytesLoaded /
+                                        //                 loadingProgress
+                                        //                     .expectedTotalBytes
+                                        //             : null,
+                                        //       ),
+                                        //     );
+                                        //   })
                                         : Text(
                                             definition,
                                             textAlign: TextAlign.center,
