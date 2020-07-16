@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
+import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/Utilities/functions/Infos.dart';
 
 class GetUserInfo extends StatefulWidget {
@@ -34,11 +36,12 @@ class _GetUserInfoState extends State<GetUserInfo> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text(
-            "Enter details",
+            "Personal Information",
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.black,
+          backgroundColor: MyColorScheme.accent(),
         ),
         body: Container(
           padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
@@ -56,18 +59,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
                       _name = val;
                     });
                   },
-                  decoration: InputDecoration(
-                    hintText: "Name",
-                    fillColor: Colors.white,
-                    filled: true,
-                    contentPadding: EdgeInsets.all(12.0),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 2.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black, width: 2.0),
-                    ),
-                  ),
+                  decoration: inputTextDecorations("Name"),
                 ),
                 SizedBox(
                   height: 20.0,
@@ -145,7 +137,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
                   height: 20.0,
                 ),
                 RaisedButton(
-                  color: Colors.black,
+                  color: MyColorScheme.accent(),
                   child: Center(
                     child: Text(
                       "Enter",
