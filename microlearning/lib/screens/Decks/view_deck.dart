@@ -43,6 +43,7 @@ class _ViewDeckState extends State<ViewDeck> {
   bool isShuffled = false;
   double completedPercentage = 0;
   Deck deck;
+  bool isTestMode = false;
   Key whenShuffled = UniqueKey();
   Key whenNotShuffled = UniqueKey();
 
@@ -57,6 +58,8 @@ class _ViewDeckState extends State<ViewDeck> {
       GlobalKey<_FlashCardSwipeViewState>();
   GlobalKey<_FlashCardSwipeViewState> _keyEdit =
       GlobalKey<_FlashCardSwipeViewState>();
+  GlobalKey<_FlashCardSwipeViewState> _keyMode =
+      GlobalKey<_FlashCardSwipeViewState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Offset _center;
   double _radius;
@@ -65,6 +68,7 @@ class _ViewDeckState extends State<ViewDeck> {
   List<String> text = [
     'Click here for editing \n and more actions on deck',
     'Tap on the flash card to \n flip and view the other side',
+    'Click here to switch between \n read mode and learn mode'
   ];
   int _index = 0;
 
@@ -133,7 +137,9 @@ class _ViewDeckState extends State<ViewDeck> {
     _index++;
     if (_index == 1) {
       spotlight(_keyFlashcard);
-    } else {
+    } else if(_index == 2){
+      spotlight(_keyMode);
+    }else {
       setState(() {
         _enabled = false;
       });
@@ -166,7 +172,14 @@ class _ViewDeckState extends State<ViewDeck> {
       completedPercentage = percentage;
     });
   }
-
+  _showSnackbar(String text){
+    final snackbar = new SnackBar(
+      content: Text(text, textAlign: TextAlign.center, style: TextStyle(color: MyColorScheme.accent()),),
+      backgroundColor: MyColorScheme.uno(),
+      duration: Duration(seconds: 1),
+      );
+      _scaffoldKey.currentState.showSnackBar(snackbar);
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -217,6 +230,34 @@ class _ViewDeckState extends State<ViewDeck> {
                   ),
                   actions: <Widget>[
                     if (widget.editAccess) ...[
+                      Container(
+                      key: _keyMode,
+                      child: isTestMode ?
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: IconButton(
+                            icon: Icon(Icons.chrome_reader_mode),
+                            onPressed: (){
+                              setState(() {
+                               isTestMode = !isTestMode;
+                               _showSnackbar('Switched to learn mode');
+                              });
+                            },
+                          ),
+                        ) :
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: IconButton(
+                          icon: Icon(Icons.check_box),
+                          onPressed: (){
+                            WidgetsBinding.instance.addPostFrameCallback((_){
+                              setState(() {
+                              isTestMode = !isTestMode;
+                              _showSnackbar('Switched to test mode');
+                            });});
+                          },
+                        ),
+                        )
+                      ),
                       Padding(
                         key: _keyEdit,
                         padding: const EdgeInsets.only(right: 20),
@@ -319,6 +360,7 @@ class _ViewDeckState extends State<ViewDeck> {
                             key: isShuffled ? whenShuffled : whenNotShuffled,
                             ifGroupThenGrpID: widget.ifGroupThenGrpID,
                             isDeckforGroup: widget.isDeckforGroup,
+                            isTestMode: isTestMode,
                           ),
                         ),
                       ),
@@ -622,6 +664,7 @@ class FlashCardSwipeView extends StatefulWidget {
     this.isShuffled,
     this.ifGroupThenGrpID = '',
     this.isDeckforGroup = false,
+    this.isTestMode = false,
     @required this.key,
   });
   final bool isShuffled;
@@ -632,6 +675,7 @@ class FlashCardSwipeView extends StatefulWidget {
   final bool showAllCards;
   final bool isDeckforGroup;
   final String ifGroupThenGrpID;
+  final bool isTestMode;
 
   _FlashCardSwipeViewState createState() =>
       _FlashCardSwipeViewState(deck: deck, isShuffled: isShuffled);
@@ -651,6 +695,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   double currentPage = 0.0;
   int currentView = 2;
   bool shuffleState = false;
+  bool isTestMode = false;
 
   Future<List<dynamic>> getNotRememberedCards() async {
     List<dynamic> ret = [];
@@ -682,6 +727,14 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
   @override
   Widget build(BuildContext context) {
+    // if(widget.isTestMode){
+    //   print('hahalmaolol');
+    //   WidgetsBinding.instance.addPostFrameCallback((_){
+    //     setState(() {
+    //       isTestMode = true;
+    //     });
+    //   });
+    // }
     if (widget.showAllCards) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {
@@ -806,7 +859,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     List<Widget> children = cards.map<Widget>((dynamic data) {
       return FlashCardView(
         flashCardID: data,
-        editAccess: editaccess ^ widget.isDeckforGroup,
+        editAccess: editaccess^widget.isDeckforGroup ^ !widget.isTestMode,
         onMemorizeCallback: onmemocall,
         currentIndex: cards.indexOf(data),
         currentPage: currentPage,
