@@ -193,11 +193,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
                       icon: Icon(Icons.arrow_back),
                       color: MyColorScheme.accent(),
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => EditDecks(
-                                  deck: deck,
-                                  creating: false,
-                                )));
+                        Navigator.pop(context);
                       },
                     ),
                     actions: <Widget>[
@@ -247,22 +243,26 @@ class _EditFlashCardState extends State<EditFlashCard> {
                       children: <Widget>[
                         if (flashCardData.length - 1 ==
                             newDeck.flashCardList.length + 1) ...[
-                          // flashCardData.add(['','']);
-                          Container(
-                            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                            child: SingleChildScrollView(
-                              child: GetFlashCardEdit(
-                                deck: deck,
-                                flashCardData: flashCardData,
-                              ),
-                            ),
-                          )
-                        ] else ...[
+                          //   // flashCardData.add(['','']);
+                          //   Container(
+                          //     padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                          //     child: SingleChildScrollView(
+                          //       child: GetFlashCardEdit(
+                          //         deck: deck,
+                          //         flashCardData: flashCardData,
+                          //       ),
+                          //     ),
+                          //   )
+                          // ] else ...[
                           Center(
-                            child: SizedBox(
-                              child: CircularProgressIndicator(),
-                              width: 60,
-                              height: 60,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.8,
+                              child: SizedBox(
+                                child:
+                                    Center(child: CircularProgressIndicator()),
+                                width: 30,
+                                height: 30,
+                              ),
                             ),
                           )
                         ]
