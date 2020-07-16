@@ -353,6 +353,9 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                     (BuildContext context,
                                                         ImageChunkEvent
                                                             loadingProgress) {
+                                                              if(loadingProgress == null){
+                                                                return Container();
+                                                              }
                                                   return Center(
                                                     child: CircularProgressIndicator(
                                                         value: loadingProgress
