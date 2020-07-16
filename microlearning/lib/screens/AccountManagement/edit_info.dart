@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:microlearning/Utilities/constants/color_scheme.dart';
+import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/Utilities/functions/Infos.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/services/database.dart';
@@ -49,8 +51,9 @@ class _EditInfoState extends State<EditInfo> {
         if (snapshot.hasData) {
           return Scaffold(
             appBar: AppBar(
+              centerTitle: true,
               title: Text("Edit Information"),
-              backgroundColor: Colors.black,
+              backgroundColor: MyColorScheme.accent(),
             ),
             backgroundColor: Colors.white,
             body: Container(
@@ -61,30 +64,16 @@ class _EditInfoState extends State<EditInfo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     TextFormField(
-                      initialValue: _name,
-                      validator: (val) {
-                        return val.isEmpty ? "Enter name" : null;
-                      },
-                      onChanged: (val) {
-                        setState(() {
-                          _name = val;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        hintText: "Name",
-                        fillColor: Colors.white,
-                        filled: true,
-                        contentPadding: EdgeInsets.all(12.0),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                        ),
-                      ),
-                    ),
+                        initialValue: _name,
+                        validator: (val) {
+                          return val.isEmpty ? "Enter name" : null;
+                        },
+                        onChanged: (val) {
+                          setState(() {
+                            _name = val;
+                          });
+                        },
+                        decoration: inputTextDecorations("Name")),
                     SizedBox(
                       height: 20.0,
                     ),
@@ -161,7 +150,8 @@ class _EditInfoState extends State<EditInfo> {
                       height: 20.0,
                     ),
                     RaisedButton(
-                      color: Colors.black,
+                      elevation: 2,
+                      color: MyColorScheme.accent(),
                       child: Center(
                         child: Text(
                           "Enter",
@@ -196,7 +186,7 @@ class _EditInfoState extends State<EditInfo> {
           );
         } else {
           return Scaffold(
-            backgroundColor: Colors.grey,
+            backgroundColor: Colors.white,
             body: Center(
               child: SizedBox(
                 child: CircularProgressIndicator(),

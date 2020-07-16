@@ -19,16 +19,24 @@ class EditDecks extends StatefulWidget {
   final bool isDeckforGroup;
   final String ifGroupThenGrpID;
   EditDecks(
-      {Key key, @required this.deck, this.isdemo = false, this.creating: false, this.isDeckforGroup = false, this.ifGroupThenGrpID: ''})
+      {Key key,
+      @required this.deck,
+      this.isdemo = false,
+      this.creating: false,
+      this.isDeckforGroup = false,
+      this.ifGroupThenGrpID: ''})
       : super(key: key);
   @override
   _EditDecksState createState() => _EditDecksState(deck: deck, isdemo: isdemo);
 }
 
 class _EditDecksState extends State<EditDecks> {
-  bool _disableTouch = false;
   final Deck deck;
+  final _formkey = GlobalKey<FormState>();
+
+  String error = '';
   bool isdemo;
+  bool _disableTouch = false;
   _EditDecksState({@required this.deck, this.isdemo = false});
 
   GlobalKey<_EditDecksState> _keyDeckName = GlobalKey<_EditDecksState>();
@@ -146,27 +154,31 @@ class _EditDecksState extends State<EditDecks> {
             floatingActionButton: FloatingActionButton.extended(
               key: _keyEditFlash,
               onPressed: () async {
-                setState(() {
-                  if (deck.deckName != "") {
-                    print(deck.deckName);
+                if (_formkey.currentState.validate()) {
+                  setState(() {
                     _disableTouch = true;
-                  }
-                });
-                await Firestore.instance
-                    .collection('decks')
-                    .document(deck.deckID)
-                    .updateData({
-                  "deckName": deck.deckName,
-                  "tagsList": deck.tagsList,
-                  "isPublic": deck.isPublic,
-                });
+                  });
+                  await Firestore.instance
+                      .collection('decks')
+                      .document(deck.deckID)
+                      .updateData({
+                    "deckName": deck.deckName,
+                    "tagsList": deck.tagsList,
+                    "isPublic": deck.isPublic,
+                  });
 
-                Navigator.of(context)
-                    .pushReplacement(MaterialPageRoute(builder: (context) {
-                  // TODO: save the changes made by the user in the deckInfo
-                  // the changes made are stored in variable 'deck' which this page recieved when this page was made, so passing this variable only to the next page of editing the flashcards.
-                  return EditFlashCard(deck: deck, isdemo: isdemo, isDeckforGroup: widget.isDeckforGroup, ifGroupThenGrpID: widget.ifGroupThenGrpID,);
-                }));
+                  Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
+                    // TODO: save the changes made by the user in the deckInfo
+                    // the changes made are stored in variable 'deck' which this page recieved when this page was made, so passing this variable only to the next page of editing the flashcards.
+                    return EditFlashCard(
+                      deck: deck,
+                      isdemo: isdemo,
+                      isDeckforGroup: widget.isDeckforGroup,
+                      ifGroupThenGrpID: widget.ifGroupThenGrpID,
+                    );
+                  }));
+                }
               },
               backgroundColor: MyColorScheme.accent(),
               icon: Icon(
@@ -186,10 +198,15 @@ class _EditDecksState extends State<EditDecks> {
                         setState(() {
                           _disableTouch = true;
                         });
-                        !widget.isDeckforGroup ? await deleteDeck(deck.deckID) : await deleteDeckFromGroup(deck.deckID, widget.ifGroupThenGrpID);
+                        !widget.isDeckforGroup
+                            ? await deleteDeck(deck.deckID)
+                            : await deleteDeckFromGroup(
+                                deck.deckID, widget.ifGroupThenGrpID);
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) {
-                          return widget.isDeckforGroup ? Group(groupID:widget.ifGroupThenGrpID) : MyDecks();
+                          return widget.isDeckforGroup
+                              ? Group(groupID: widget.ifGroupThenGrpID)
+                              : MyDecks();
                         }));
                       },
                     )
@@ -197,13 +214,12 @@ class _EditDecksState extends State<EditDecks> {
                       icon: Icon(Icons.arrow_back),
                       color: MyColorScheme.accent(),
                       onPressed: () {
-                        Navigator.pop(context);
-                        // Navigator.pushAndRemoveUntil(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //   return ViewDeck(
-                        //     deckID: deck.deckID,
-                        //   );
-                        // }), ModalRoute.withName('/home'));
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return widget.isDeckforGroup
+                              ? Group(groupID: widget.ifGroupThenGrpID)
+                              : MyDecks();
+                        }));
                       },
                     ),
               backgroundColor: MyColorScheme.uno(),
@@ -244,20 +260,32 @@ class _EditDecksState extends State<EditDecks> {
                     SizedBox(
                       height: 10,
                     ),
-                    TextFormField(
-                      onChanged: (val) {
-                        deck.deckName = val;
-                      },
-                      initialValue: deck.deckName,
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                      decoration: inputTextDecorations(''),
+                    Form(
+                      key: _formkey,
+                      child: TextFormField(
+                        onChanged: (val) {
+                          deck.deckName = val;
+                        },
+                        validator: (val) =>
+                            val.isEmpty ? 'Deck Name cannot be empty' : null,
+                        initialValue: deck.deckName,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                        decoration: inputTextDecorations(''),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 2,
+                    ),
+                    Text(
+                      error,
+                      style: TextStyle(color: Colors.red, fontSize: 12.0),
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    if(!widget.isDeckforGroup)...[
+                    if (!widget.isDeckforGroup) ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[

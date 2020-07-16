@@ -13,7 +13,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-          child: Container(
+      child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -172,27 +172,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ),
         context: context,
         builder: (BuildContext buildContext) {
-          return Container(
-              height: MediaQuery.of(context).size.height * 0.85,
-              color: Colors.transparent,
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Close',
-                            style: TextStyle(color: MyColorScheme.accent()),
-                          )),
-                    ],
-                  ),
-                  widget,
-                ],
-              ));
+          return SingleChildScrollView(
+            child: Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                color: Colors.transparent,
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'Close',
+                              style: TextStyle(color: MyColorScheme.accent()),
+                            )),
+                      ],
+                    ),
+                    widget,
+                  ],
+                )),
+          );
         });
   }
 }
