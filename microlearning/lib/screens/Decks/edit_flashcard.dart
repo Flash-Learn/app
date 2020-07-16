@@ -193,11 +193,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
                       icon: Icon(Icons.arrow_back),
                       color: MyColorScheme.accent(),
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => EditDecks(
-                                  deck: deck,
-                                  creating: false,
-                                )));
+                        Navigator.pop(context);
                       },
                     ),
                     actions: <Widget>[
@@ -259,10 +255,14 @@ class _EditFlashCardState extends State<EditFlashCard> {
                           )
                         ] else ...[
                           Center(
-                            child: SizedBox(
-                              child: CircularProgressIndicator(),
-                              width: 60,
-                              height: 60,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.8,
+                              child: SizedBox(
+                                child:
+                                    Center(child: CircularProgressIndicator()),
+                                width: 30,
+                                height: 30,
+                              ),
                             ),
                           )
                         ]

@@ -167,8 +167,8 @@ class _EditDecksState extends State<EditDecks> {
                     "isPublic": deck.isPublic,
                   });
 
-                  Navigator.of(context)
-                      .pushReplacement(MaterialPageRoute(builder: (context) {
+                  Navigator.push((context),
+                      MaterialPageRoute(builder: (context) {
                     // TODO: save the changes made by the user in the deckInfo
                     // the changes made are stored in variable 'deck' which this page recieved when this page was made, so passing this variable only to the next page of editing the flashcards.
                     return EditFlashCard(
@@ -178,6 +178,9 @@ class _EditDecksState extends State<EditDecks> {
                       ifGroupThenGrpID: widget.ifGroupThenGrpID,
                     );
                   }));
+                  setState(() {
+                    _disableTouch = false;
+                  });
                 }
               },
               backgroundColor: MyColorScheme.accent(),
