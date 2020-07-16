@@ -64,17 +64,16 @@ class _EditInfoState extends State<EditInfo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     TextFormField(
-                      initialValue: _name,
-                      validator: (val) {
-                        return val.isEmpty ? "Enter name" : null;
-                      },
-                      onChanged: (val) {
-                        setState(() {
-                          _name = val;
-                        });
-                      },
-                      decoration: inputTextDecorations("Name")
-                    ),
+                        initialValue: _name,
+                        validator: (val) {
+                          return val.isEmpty ? "Enter name" : null;
+                        },
+                        onChanged: (val) {
+                          setState(() {
+                            _name = val;
+                          });
+                        },
+                        decoration: inputTextDecorations("Name")),
                     SizedBox(
                       height: 20.0,
                     ),
@@ -187,7 +186,7 @@ class _EditInfoState extends State<EditInfo> {
           );
         } else {
           return Scaffold(
-            backgroundColor: Colors.grey,
+            backgroundColor: Colors.white,
             body: Center(
               child: SizedBox(
                 child: CircularProgressIndicator(),
