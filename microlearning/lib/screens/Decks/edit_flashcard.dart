@@ -243,17 +243,17 @@ class _EditFlashCardState extends State<EditFlashCard> {
                       children: <Widget>[
                         if (flashCardData.length - 1 ==
                             newDeck.flashCardList.length + 1) ...[
-                          //   // flashCardData.add(['','']);
-                          //   Container(
-                          //     padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                          //     child: SingleChildScrollView(
-                          //       child: GetFlashCardEdit(
-                          //         deck: deck,
-                          //         flashCardData: flashCardData,
-                          //       ),
-                          //     ),
-                          //   )
-                          // ] else ...[
+                          // flashCardData.add(['','']);
+                          Container(
+                            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                            child: SingleChildScrollView(
+                              child: GetFlashCardEdit(
+                                deck: deck,
+                                flashCardData: flashCardData,
+                              ),
+                            ),
+                          )
+                        ] else ...[
                           Center(
                             child: Container(
                               height: MediaQuery.of(context).size.height * 0.8,
