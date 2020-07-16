@@ -271,7 +271,7 @@ class _LoginUserState extends State<LoginUser> {
                     // ],
                     // ),
                     SizedBox(
-                      height: 20,
+                      height: MediaQuery.of(context).size.height * 0.2,
                     ),
                   ],
                 ),
