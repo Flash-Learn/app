@@ -333,6 +333,9 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           backgroundDecoration: BoxDecoration(color: Colors.transparent),
                                           maxScale: PhotoViewComputedScale.covered * 2.0,
                                           loadingBuilder: (BuildContext context, ImageChunkEvent loadingProgress){
+                                            if(loadingProgress == null){
+                                              return Container();
+                                            }
                                             return Center(
                                               child: CircularProgressIndicator(
                                                 value: loadingProgress.expectedTotalBytes!= null ? 
