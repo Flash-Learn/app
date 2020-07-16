@@ -114,14 +114,18 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                   decoration: InputDecoration(
                                     counterText: '',
                                     hintText: 'Term',
-                                    hintStyle: (TextStyle(color: Colors.white24)),
+                                    hintStyle:
+                                        (TextStyle(color: Colors.white24)),
                                     border: InputBorder.none,
                                     focusedBorder: InputBorder.none,
                                     enabledBorder: InputBorder.none,
                                     errorBorder: InputBorder.none,
                                     disabledBorder: InputBorder.none,
                                     contentPadding: EdgeInsets.only(
-                                        left: 15, bottom: 0, top: 11, right: 15),
+                                        left: 15,
+                                        bottom: 0,
+                                        top: 11,
+                                        right: 15),
                                   )),
                             ),
                             Padding(
@@ -205,8 +209,10 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                       );
                                     },
                                     // height: 250,
-                                    height: MediaQuery.of(context).size.width * 0.5,
-                                    width: MediaQuery.of(context).size.width * 0.5,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -340,7 +346,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
           ),
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height *0.7,
+              maxHeight: MediaQuery.of(context).size.height * 0.9,
             ),
             child: Scrollbar(
               child: ListView(

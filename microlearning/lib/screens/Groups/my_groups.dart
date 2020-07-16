@@ -259,7 +259,7 @@ class _ReorderListState extends State<ReorderList> {
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
       if (newIndex > oldIndex) {
-        newIndex = -1;
+        newIndex -= 1;
       }
       final String item = userGroupIDs.removeAt(oldIndex);
       userGroupIDs.insert(newIndex, item);

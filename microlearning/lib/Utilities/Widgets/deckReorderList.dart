@@ -12,7 +12,7 @@ class DeckReorderList extends StatefulWidget {
   const DeckReorderList({
     Key key,
     this.belongsToGroup = false,
-    this.ifGrpThenID='',
+    this.ifGrpThenID = '',
     @required this.userDeckIDs,
   }) : super(key: key);
 
@@ -50,7 +50,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(
-          () {
+      () {
         if (newIndex > oldIndex) {
           newIndex -= 1;
         }
@@ -60,9 +60,9 @@ class _DeckReorderListState extends State<DeckReorderList> {
     );
 
     // Update changes in database
-    if(!widget.belongsToGroup)
+    if (!widget.belongsToGroup)
       reorderDeckIDsForUser(userDeckIDs);
-    else{
+    else {
       // TODO: reorder decks for group
     }
   }
@@ -93,7 +93,10 @@ class _DeckReorderListState extends State<DeckReorderList> {
                       ),
                     ));
               },
-              child: buildDeckInfo(context, deckId,)),
+              child: buildDeckInfo(
+                context,
+                deckId,
+              )),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -103,17 +106,19 @@ class _DeckReorderListState extends State<DeckReorderList> {
                 },
                 onTap: () async {
                   final RenderBox overlay =
-                  Overlay.of(context).context.findRenderObject();
+                      Overlay.of(context).context.findRenderObject();
                   await showMenu(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
                     context: context,
                     // found way to show delete button on the location of long press
                     // not sure how it works
                     position: RelativeRect.fromRect(
                         _tapPosition &
-                        Size(40, 40), // smaller rect, the touch area
+                            Size(40, 40), // smaller rect, the touch area
                         Offset.zero &
-                        overlay.size // Bigger rect, the entire screen
-                    ),
+                            overlay.size // Bigger rect, the entire screen
+                        ),
                     items: [
                       PopupMenuItem(
                         value: "edit button",
@@ -125,34 +130,34 @@ class _DeckReorderListState extends State<DeckReorderList> {
                             });
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                                  Deck deck;
-                                  return StreamBuilder(
-                                    stream: Firestore.instance
-                                        .collection("decks")
-                                        .document(deckId)
-                                        .snapshots(),
-                                    builder: (context, snapshot) {
-                                      if (!snapshot.hasData)
-                                        return Scaffold(
-                                          backgroundColor: Colors.blue[200],
-                                        );
-                                      deck = Deck(
-                                        deckName: snapshot.data["deckName"],
-                                        tagsList: snapshot.data["tagsList"],
-                                        isPublic: snapshot.data["isPublic"],
-                                      );
-                                      deck.deckID = deckId;
-                                      deck.flashCardList =
-                                      snapshot.data["flashcardList"];
-                                      print('${widget.belongsToGroup} lolelmao');
-                                      return EditDecks(
-                                        deck: deck,
-                                        isDeckforGroup: widget.belongsToGroup,
-                                        ifGroupThenGrpID: widget.ifGrpThenID,
-                                      );
-                                    },
+                              Deck deck;
+                              return StreamBuilder(
+                                stream: Firestore.instance
+                                    .collection("decks")
+                                    .document(deckId)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData)
+                                    return Scaffold(
+                                      backgroundColor: Colors.blue[200],
+                                    );
+                                  deck = Deck(
+                                    deckName: snapshot.data["deckName"],
+                                    tagsList: snapshot.data["tagsList"],
+                                    isPublic: snapshot.data["isPublic"],
                                   );
-                                }));
+                                  deck.deckID = deckId;
+                                  deck.flashCardList =
+                                      snapshot.data["flashcardList"];
+                                  print('${widget.belongsToGroup} lolelmao');
+                                  return EditDecks(
+                                    deck: deck,
+                                    isDeckforGroup: widget.belongsToGroup,
+                                    ifGroupThenGrpID: widget.ifGrpThenID,
+                                  );
+                                },
+                              );
+                            }));
                             setState(() {
                               _disableTouch = false;
                             });
@@ -185,7 +190,11 @@ class _DeckReorderListState extends State<DeckReorderList> {
                             setState(() {
                               _disableTouch = true;
                             });
-                            createAlertDialog(context, deckId, userDeckIDs,);
+                            createAlertDialog(
+                              context,
+                              deckId,
+                              userDeckIDs,
+                            );
                             setState(() {
                               _disableTouch = false;
                             });
@@ -215,7 +224,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 20, 5, 0),
                   child: Icon(
                     Icons.more_horiz,
                     color: MyColorScheme.accent(),
@@ -269,7 +278,10 @@ class _DeckReorderListState extends State<DeckReorderList> {
                             _disableTouch = false;
                             userDeckIDs.remove(deckid);
                           });
-                          !widget.belongsToGroup ? await deleteDeck(deckid) : await deleteDeckFromGroup(deckid, widget.ifGrpThenID);
+                          !widget.belongsToGroup
+                              ? await deleteDeck(deckid)
+                              : await deleteDeckFromGroup(
+                                  deckid, widget.ifGrpThenID);
                           Navigator.pop(ctxt);
                         },
                       )

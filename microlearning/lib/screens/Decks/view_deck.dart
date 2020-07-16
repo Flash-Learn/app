@@ -228,6 +228,9 @@ class _ViewDeckState extends State<ViewDeck> {
                             final RenderBox overlay =
                                 Overlay.of(context).context.findRenderObject();
                             await showMenu(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
                               context: context,
                               // found way to show delete button on the location of long press
                               // not sure how it works

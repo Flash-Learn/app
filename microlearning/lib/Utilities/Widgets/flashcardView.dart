@@ -186,6 +186,9 @@ class _FlashCardViewState extends State<FlashCardView> {
                         final RenderBox overlay =
                             Overlay.of(context).context.findRenderObject();
                         await showMenu(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
                           context: context,
                           // found way to show delete button on the location of long press
                           // not sure how it works
@@ -282,6 +285,9 @@ class _FlashCardViewState extends State<FlashCardView> {
                                             .context
                                             .findRenderObject();
                                     await showMenu(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5))),
                                       context: context,
                                       // found way to show delete button on the location of long press
                                       // not sure how it works
@@ -324,26 +330,44 @@ class _FlashCardViewState extends State<FlashCardView> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Spacer(),
-                                    isPic ? ClipRect(
-                                      child: Container(
-                                        height: MediaQuery.of(context).size.height *0.5,
-                                        child: PhotoView(
-                                          minScale: PhotoViewComputedScale.contained,
-                                          imageProvider: NetworkImage(definition),
-                                          backgroundDecoration: BoxDecoration(color: Colors.transparent),
-                                          maxScale: PhotoViewComputedScale.covered * 2.0,
-                                          loadingBuilder: (BuildContext context, ImageChunkEvent loadingProgress){
-                                            return Center(
-                                              child: CircularProgressIndicator(
-                                                value: loadingProgress.expectedTotalBytes!= null ? 
-                                                loadingProgress.cumulativeBytesLoaded/loadingProgress.expectedTotalBytes 
-                                                : null
+                                    isPic
+                                        ? ClipRect(
+                                            child: Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.5,
+                                              child: PhotoView(
+                                                minScale: PhotoViewComputedScale
+                                                    .contained,
+                                                imageProvider:
+                                                    NetworkImage(definition),
+                                                backgroundDecoration:
+                                                    BoxDecoration(
+                                                        color:
+                                                            Colors.transparent),
+                                                maxScale: PhotoViewComputedScale
+                                                        .covered *
+                                                    2.0,
+                                                loadingBuilder:
+                                                    (BuildContext context,
+                                                        ImageChunkEvent
+                                                            loadingProgress) {
+                                                  return Center(
+                                                    child: CircularProgressIndicator(
+                                                        value: loadingProgress
+                                                                    .expectedTotalBytes !=
+                                                                null
+                                                            ? loadingProgress
+                                                                    .cumulativeBytesLoaded /
+                                                                loadingProgress
+                                                                    .expectedTotalBytes
+                                                            : null),
+                                                  );
+                                                },
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    )
+                                            ),
+                                          )
                                         // ? Image.network(definition,
                                         //     loadingBuilder:
                                         //         (BuildContext context,
@@ -428,6 +452,9 @@ class _FlashCardViewState extends State<FlashCardView> {
                                       .context
                                       .findRenderObject();
                                   await showMenu(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5))),
                                     context: context,
                                     // found way to show delete button on the location of long press
                                     // not sure how it works
