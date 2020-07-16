@@ -3,6 +3,7 @@ import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/functions/updateFlashcardList.dart';
 import 'package:microlearning/Utilities/Widgets/getFlashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:microlearning/screens/Decks/edit_deck.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
 import 'package:flutter_spotlight/flutter_spotlight.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
@@ -12,7 +13,12 @@ class EditFlashCard extends StatefulWidget {
   final bool isdemo;
   final bool isDeckforGroup;
   final String ifGroupThenGrpID;
-  EditFlashCard({Key key, @required this.deck, this.isdemo = false, this.isDeckforGroup = false, this.ifGroupThenGrpID = ''})
+  EditFlashCard(
+      {Key key,
+      @required this.deck,
+      this.isdemo = false,
+      this.isDeckforGroup = false,
+      this.ifGroupThenGrpID = ''})
       : super(key: key);
   @override
   _EditFlashCardState createState() =>
@@ -157,48 +163,53 @@ class _EditFlashCardState extends State<EditFlashCard> {
   Widget build(BuildContext context) {
     // Widget to give demo to new user
     return StreamBuilder<Object>(
-      stream: getCardfromDataBase,
-      builder: (context, snapshot) {
-        return Spotlight(
-          enabled: _enabled,
-          radius: _radius,
-          description: _description,
-          center: _center,
-          onTap: () => _ontap(),
-          animation: true,
-          // Widget to disable touch when loading
-          child: AbsorbPointer(
-            absorbing: _disableTouch,
-            child: WillPopScope(
-              onWillPop: () async => false,
-              child: Scaffold(
-                backgroundColor: Colors.white,
-                appBar: AppBar(
-                  elevation: 2,
-                  backgroundColor: MyColorScheme.uno(),
-                  title: Text(
-                    'Edit Deck',
-                    style: TextStyle(
-                        color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
-                  ),
-                  centerTitle: true,
-                  leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    color: MyColorScheme.accent(),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      key: _keySave,
-                      onPressed: () async {
-                        setState(() {
-                          _disableTouch = true;
-                        });
-                        //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
-                        await updateFlashcardList(deck, flashCardData);
-                        Navigator.of(context).pushReplacement(
+        stream: getCardfromDataBase,
+        builder: (context, snapshot) {
+          return Spotlight(
+            enabled: _enabled,
+            radius: _radius,
+            description: _description,
+            center: _center,
+            onTap: () => _ontap(),
+            animation: true,
+            // Widget to disable touch when loading
+            child: AbsorbPointer(
+              absorbing: _disableTouch,
+              child: WillPopScope(
+                onWillPop: () async => false,
+                child: Scaffold(
+                  backgroundColor: Colors.white,
+                  appBar: AppBar(
+                    elevation: 2,
+                    backgroundColor: MyColorScheme.uno(),
+                    title: Text(
+                      'Edit Deck',
+                      style: TextStyle(
+                          color: MyColorScheme.cinco(),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    centerTitle: true,
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      color: MyColorScheme.accent(),
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => EditDecks(
+                                  deck: deck,
+                                  creating: false,
+                                )));
+                      },
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        key: _keySave,
+                        onPressed: () async {
+                          setState(() {
+                            _disableTouch = true;
+                          });
+                          //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
+                          await updateFlashcardList(deck, flashCardData);
+                          Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => ViewDeck(
                                 deckID: newDeck.deckID,
@@ -208,60 +219,60 @@ class _EditFlashCardState extends State<EditFlashCard> {
                                 ifGroupThenGrpID: widget.ifGroupThenGrpID,
                               ),
                             ),
-                        );
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.check,
-                            color: MyColorScheme.accent(),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Save',
-                            style: TextStyle(
-                                color: MyColorScheme.accent(),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    key: _keyFlashcard,
-                    children: <Widget>[
-                            if (flashCardData.length - 1 ==
-                                newDeck.flashCardList.length + 1)...[
-                              // flashCardData.add(['','']);
-                              Container(
-                                padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                                child: SingleChildScrollView(
-                                  child: GetFlashCardEdit(
-                                    deck: deck,
-                                    flashCardData: flashCardData,
-                                  ),
-                                ),
-                              )]else...[
-                              Center(
-                                child: SizedBox(
-                                  child: CircularProgressIndicator(),
-                                  width: 60,
-                                  height: 60,
-                                ),
-                              )
-                            ]
+                          );
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.check,
+                              color: MyColorScheme.accent(),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              'Save',
+                              style: TextStyle(
+                                  color: MyColorScheme.accent(),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
+                  ),
+                  body: SingleChildScrollView(
+                    child: Column(
+                      key: _keyFlashcard,
+                      children: <Widget>[
+                        if (flashCardData.length - 1 ==
+                            newDeck.flashCardList.length + 1) ...[
+                          // flashCardData.add(['','']);
+                          Container(
+                            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                            child: SingleChildScrollView(
+                              child: GetFlashCardEdit(
+                                deck: deck,
+                                flashCardData: flashCardData,
+                              ),
+                            ),
+                          )
+                        ] else ...[
+                          Center(
+                            child: SizedBox(
+                              child: CircularProgressIndicator(),
+                              width: 60,
+                              height: 60,
+                            ),
+                          )
+                        ]
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 }
