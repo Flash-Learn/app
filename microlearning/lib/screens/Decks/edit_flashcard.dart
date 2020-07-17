@@ -39,6 +39,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
       GlobalKey<_EditFlashCardState>();
   static final GlobalKey<_EditFlashCardState> _keySave =
       GlobalKey<_EditFlashCardState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Offset _center;
   double _radius;
   bool _enabled = false;
@@ -178,6 +179,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
               child: WillPopScope(
                 onWillPop: () async => false,
                 child: Scaffold(
+                  key: _scaffoldKey,
                   backgroundColor: Colors.white,
                   appBar: AppBar(
                     elevation: 2,
@@ -250,6 +252,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
                               child: GetFlashCardEdit(
                                 deck: deck,
                                 flashCardData: flashCardData,
+                                scaffoldKey: _scaffoldKey,
                               ),
                             ),
                           )
