@@ -236,7 +236,8 @@ class _ViewDeckState extends State<ViewDeck> {
                   ),
                   actions: <Widget>[
                     if (widget.editAccess) ...[
-                      Container(
+                      if(!widget.isDeckforGroup)...[
+                        Container(
                           key: _keyMode,
                           child: isTestMode
                               ? Padding(
@@ -268,6 +269,7 @@ class _ViewDeckState extends State<ViewDeck> {
                                     },
                                   ),
                                 )),
+                      ],
                       Padding(
                         key: _keyEdit,
                         padding: const EdgeInsets.only(right: 20),
@@ -871,7 +873,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     List<Widget> children = cards.map<Widget>((dynamic data) {
       return FlashCardView(
         flashCardID: data,
-        editAccess: editaccess ^ widget.isDeckforGroup ^ !widget.isTestMode,
+        editAccess: editaccess ^ (widget.isDeckforGroup | !widget.isTestMode),
         onMemorizeCallback: onmemocall,
         currentIndex: cards.indexOf(data),
         currentPage: currentPage,
