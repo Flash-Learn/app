@@ -871,7 +871,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     List<Widget> children = cards.map<Widget>((dynamic data) {
       return FlashCardView(
         flashCardID: data,
-        editAccess: editaccess ^ widget.isDeckforGroup ^ widget.isTestMode,
+        editAccess: editaccess ^ widget.isDeckforGroup ^ !widget.isTestMode,
         onMemorizeCallback: onmemocall,
         currentIndex: cards.indexOf(data),
         currentPage: currentPage,

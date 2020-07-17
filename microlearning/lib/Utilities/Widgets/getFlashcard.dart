@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -12,7 +13,11 @@ class GetFlashCardEdit extends StatefulWidget {
   final Deck deck;
   final GlobalKey<ScaffoldState> scaffoldKey;
 
-  GetFlashCardEdit({Key key, @required this.deck, @required this.flashCardData, @required this.scaffoldKey})
+  GetFlashCardEdit(
+      {Key key,
+      @required this.deck,
+      @required this.flashCardData,
+      @required this.scaffoldKey})
       : super(key: key);
   @override
   _GetFlashCardEditState createState() =>
@@ -26,6 +31,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
 
   int fieldCount = 0;
   int nextIndex = 0;
+  ScrollController _scrollController = new ScrollController();
   final _picker = ImagePicker();
 
   // function for getting the image from the source (camera or gallery)
@@ -58,13 +64,17 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     }
   }
 
-  _showSnackbar(String text){
+  _showSnackbar(String text) {
     final snackbar = new SnackBar(
-      content: Text(text, textAlign: TextAlign.center, style: TextStyle(color: MyColorScheme.accent()),),
+      content: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: MyColorScheme.accent()),
+      ),
       backgroundColor: MyColorScheme.uno(),
       duration: Duration(seconds: 1),
-      );
-      widget.scaffoldKey.currentState.showSnackBar(snackbar);
+    );
+    widget.scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
   // building own list of tags, cozz listview builder too much bt
@@ -271,7 +281,9 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     // generate the list of TextFields
     final List<Widget> children = _buildList(context);
     // append an 'add player' button to the end of the list
-    children.add(Container(height: MediaQuery.of(context).size.height * 0.3,));
+    children.add(Container(
+      height: MediaQuery.of(context).size.height * 0.3,
+    ));
     // build the ListView
     return AbsorbPointer(
       absorbing: _disableTouch,
@@ -313,7 +325,13 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                         flashCardData.add(['', '', 'false']);
                         //TODO: generate a id for flash card....But I don't think we will need this
                       });
-                      _showSnackbar('Added a Text Card');
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
+                      });
                     },
                   ),
                 ),
@@ -353,7 +371,13 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                         }
                         //TODO: generate a id for flash card....But I don't think we will need this
                       });
-                      _showSnackbar('Added a photo Card');
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
+                      });
                     },
                   ),
                 ),
@@ -366,6 +390,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
             ),
             child: Scrollbar(
               child: ListView(
+                controller: _scrollController,
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
                 children: children,
                 key: Key(deck.deckName),
