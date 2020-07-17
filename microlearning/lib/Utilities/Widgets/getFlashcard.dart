@@ -10,8 +10,9 @@ import 'package:microlearning/Utilities/constants/color_scheme.dart';
 class GetFlashCardEdit extends StatefulWidget {
   final List<dynamic> flashCardData;
   final Deck deck;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  GetFlashCardEdit({Key key, @required this.deck, @required this.flashCardData})
+  GetFlashCardEdit({Key key, @required this.deck, @required this.flashCardData, @required this.scaffoldKey})
       : super(key: key);
   @override
   _GetFlashCardEditState createState() =>
@@ -55,6 +56,15 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
         });
       }
     }
+  }
+
+  _showSnackbar(String text){
+    final snackbar = new SnackBar(
+      content: Text(text, textAlign: TextAlign.center, style: TextStyle(color: MyColorScheme.accent()),),
+      backgroundColor: MyColorScheme.uno(),
+      duration: Duration(seconds: 1),
+      );
+      widget.scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
   // building own list of tags, cozz listview builder too much bt
@@ -101,8 +111,10 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.6,
                               child: TextFormField(
+                                  autofocus: false,
+                                  enableSuggestions: false,
                                   maxLines: null,
-                                  keyboardType: TextInputType.multiline,
+                                  keyboardType: TextInputType.text,
                                   textAlign: TextAlign.center,
                                   initialValue: data[0],
                                   onChanged: (val) {
@@ -146,7 +158,8 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                   flashCardData[flashCardData.indexOf(data)]
                                       [1] = val;
                                 },
-                                keyboardType: TextInputType.multiline,
+                                keyboardType: TextInputType.text,
+                                textInputAction: TextInputAction.newline,
                                 decoration: InputDecoration(
                                   hintText: 'Definition',
                                   hintStyle: (TextStyle(color: Colors.white24)),
@@ -251,13 +264,14 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
   }
 
   bool _disableTouch = false;
+  ScrollController scroll;
 
   @override
   Widget build(BuildContext context) {
     // generate the list of TextFields
     final List<Widget> children = _buildList(context);
     // append an 'add player' button to the end of the list
-
+    children.add(Container(height: MediaQuery.of(context).size.height * 0.3,));
     // build the ListView
     return AbsorbPointer(
       absorbing: _disableTouch,
@@ -299,6 +313,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                         flashCardData.add(['', '', 'false']);
                         //TODO: generate a id for flash card....But I don't think we will need this
                       });
+                      _showSnackbar('Added a Text Card');
                     },
                   ),
                 ),
@@ -338,6 +353,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                         }
                         //TODO: generate a id for flash card....But I don't think we will need this
                       });
+                      _showSnackbar('Added a photo Card');
                     },
                   ),
                 ),
@@ -346,7 +362,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
           ),
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.9,
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
             ),
             child: Scrollbar(
               child: ListView(
