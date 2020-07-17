@@ -137,9 +137,9 @@ class _ViewDeckState extends State<ViewDeck> {
     _index++;
     if (_index == 1) {
       spotlight(_keyFlashcard);
-    } else if(_index == 2){
+    } else if (_index == 2) {
       spotlight(_keyMode);
-    }else {
+    } else {
       setState(() {
         _enabled = false;
       });
@@ -172,14 +172,20 @@ class _ViewDeckState extends State<ViewDeck> {
       completedPercentage = percentage;
     });
   }
-  _showSnackbar(String text){
+
+  _showSnackbar(String text) {
     final snackbar = new SnackBar(
-      content: Text(text, textAlign: TextAlign.center, style: TextStyle(color: MyColorScheme.accent()),),
+      content: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: MyColorScheme.accent()),
+      ),
       backgroundColor: MyColorScheme.uno(),
       duration: Duration(seconds: 1),
-      );
-      _scaffoldKey.currentState.showSnackBar(snackbar);
+    );
+    _scaffoldKey.currentState.showSnackBar(snackbar);
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -231,33 +237,37 @@ class _ViewDeckState extends State<ViewDeck> {
                   actions: <Widget>[
                     if (widget.editAccess) ...[
                       Container(
-                      key: _keyMode,
-                      child: isTestMode ?
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: IconButton(
-                            icon: Icon(Icons.chrome_reader_mode),
-                            onPressed: (){
-                              setState(() {
-                               isTestMode = !isTestMode;
-                               _showSnackbar('Switched to learn mode');
-                              });
-                            },
-                          ),
-                        ) :
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: IconButton(
-                          icon: Icon(Icons.check_box),
-                          onPressed: (){
-                            WidgetsBinding.instance.addPostFrameCallback((_){
-                              setState(() {
-                              isTestMode = !isTestMode;
-                              _showSnackbar('Switched to test mode');
-                            });});
-                          },
-                        ),
-                        )
-                      ),
+                          key: _keyMode,
+                          child: isTestMode
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: IconButton(
+                                    icon: Icon(Icons.chrome_reader_mode),
+                                    onPressed: () {
+                                      setState(() {
+                                        isTestMode = !isTestMode;
+                                        _showSnackbar('Switched to learn mode');
+                                      });
+                                    },
+                                  ),
+                                )
+                              : Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  child: IconButton(
+                                    icon: Icon(Icons.check_box),
+                                    onPressed: () {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        setState(() {
+                                          isTestMode = !isTestMode;
+                                          _showSnackbar(
+                                              'Switched to test mode');
+                                        });
+                                      });
+                                    },
+                                  ),
+                                )),
                       Padding(
                         key: _keyEdit,
                         padding: const EdgeInsets.only(right: 20),
@@ -523,7 +533,7 @@ class _ViewDeckState extends State<ViewDeck> {
               ),
             )),
       ),
-      if (!widget.isDeckforGroup) ...[
+      if (isTestMode) ...[
         PopupMenuItem(
           value: "filter button",
           child: GestureDetector(
@@ -551,7 +561,8 @@ class _ViewDeckState extends State<ViewDeck> {
                 ),
               )),
         ),
-      ] else ...[
+      ],
+      if (widget.isDeckforGroup) ...[
         PopupMenuItem(
           child: GestureDetector(
               onTap: () async {
@@ -584,8 +595,6 @@ class _ViewDeckState extends State<ViewDeck> {
                 Duration resultingDuration = await showDurationPicker(
                     context: context,
                     initialTime: Duration(hours: 0, minutes: 10));
-                // print(resultingDuration.inHours);
-                // print(resultingDuration.inMinutes);
                 if (resultingDuration != null) {
                   DateTime now = DateTime.now().toUtc().add(
                         Duration(
@@ -862,7 +871,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     List<Widget> children = cards.map<Widget>((dynamic data) {
       return FlashCardView(
         flashCardID: data,
-        editAccess: editaccess^widget.isDeckforGroup ^ !widget.isTestMode,
+        editAccess: editaccess ^ widget.isDeckforGroup ^ !widget.isTestMode,
         onMemorizeCallback: onmemocall,
         currentIndex: cards.indexOf(data),
         currentPage: currentPage,
