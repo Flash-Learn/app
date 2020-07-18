@@ -1,4 +1,5 @@
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
+import 'package:microlearning/screens/Decks/homeScreen.dart';
 import 'package:microlearning/screens/Decks/notifications_inapp.dart';
 import 'package:microlearning/screens/Groups/my_groups.dart';
 import 'package:microlearning/screens/Search/search.dart';
@@ -32,10 +33,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Montserrat'),
       routes: {
         // '/': (context) => email == null ? WelcomeScreen() : MyDecks(),
-        '/': (context) => email == null ? WelcomeScreen() : MyDecks(),
+        '/': (context) => email == null ? WelcomeScreen() : HomeScreen(),
         '/welcome': (context) => WelcomeScreen(),
         '/login': (context) => LoginUser(),
-        '/home': (context) => MyDecks(),
+        '/home': (context) => HomeScreen(),
+        '/decks': (context) => MyDecks(),
         '/groups': (context) => GroupList(),
         '/register': (context) => RegisterUser(),
         '/search': (context) => Search(),

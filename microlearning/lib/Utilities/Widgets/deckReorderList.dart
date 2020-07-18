@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
+import 'package:microlearning/Utilities/constants/transitions.dart';
 import 'package:microlearning/screens/Decks/edit_deck.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -74,6 +75,9 @@ class _DeckReorderListState extends State<DeckReorderList> {
       i++;
       k = '$i';
       return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
         height: 130,
         key: ValueKey(k),
         child: Stack(children: <Widget>[
@@ -85,8 +89,8 @@ class _DeckReorderListState extends State<DeckReorderList> {
                 print(deckId);
                 Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => ViewDeck(
+                    ScaleRoute(
+                      page: ViewDeck(
                         deckID: deckId,
                         ifGroupThenGrpID: widget.ifGrpThenID,
                         isDeckforGroup: widget.belongsToGroup,
