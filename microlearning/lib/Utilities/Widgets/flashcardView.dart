@@ -355,9 +355,9 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                     (BuildContext context,
                                                         ImageChunkEvent
                                                             loadingProgress) {
-                                                              if(loadingProgress == null){
-                                                                return Container();
-                                                              }
+                                                  if (loadingProgress == null) {
+                                                    return Container();
+                                                  }
                                                   return Center(
                                                     child: CircularProgressIndicator(
                                                         value: loadingProgress
@@ -671,7 +671,7 @@ class _FlashCardViewState extends State<FlashCardView> {
               await _showbottomsheet(
                   context); // function that makes the bottom sheet
             },
-            child: Text("Add to playlists")),
+            child: Text("Add to your Decks")),
       ),
     );
     if (widget.editAccess | widget.isDeckforGroup) {

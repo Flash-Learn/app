@@ -238,40 +238,67 @@ class _ViewDeckState extends State<ViewDeck> {
                   ),
                   actions: <Widget>[
                     if (widget.editAccess) ...[
-                      if (!widget.isDeckforGroup) ...[
+                      if (!widget.isDeckforGroup && showAllcards) ...[
                         Container(
                             key: _keyMode,
                             child: isTestMode
                                 ? Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8.0),
-                                    child: IconButton(
-                                      icon: Icon(Icons.chrome_reader_mode),
-                                      onPressed: () {
-                                        setState(() {
-                                          isTestMode = !isTestMode;
-                                          _showSnackbar(
-                                              'Switched to learn mode');
-                                        });
-                                      },
-                                    ),
+                                    //     child: IconButton(
+                                    //   icon: Icon(Icons.chrome_reader_mode),
+                                    //   onPressed: () {
+                                    //     setState(() {
+                                    //       isTestMode = !isTestMode;
+                                    //       _showSnackbar(
+                                    //           'Switched to learn mode');
+                                    //     });
+                                    //   },
+                                    // ),
+                                    child: Switch(
+                                        activeColor: MyColorScheme.accent(),
+                                        inactiveTrackColor:
+                                            MyColorScheme.accentLight(),
+                                        value: isTestMode,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            isTestMode = !isTestMode;
+                                            _showSnackbar(
+                                                'Switched to learn mode');
+                                          });
+                                        }),
                                   )
                                 : Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 8),
-                                    child: IconButton(
-                                      icon: Icon(Icons.check_box),
-                                      onPressed: () {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                          setState(() {
-                                            isTestMode = !isTestMode;
-                                            _showSnackbar(
-                                                'Switched to test mode');
+                                    // child: IconButton(
+                                    //   icon: Icon(Icons.check_box),
+                                    //   onPressed: () {
+                                    //     WidgetsBinding.instance
+                                    //         .addPostFrameCallback((_) {
+                                    //       setState(() {
+                                    //         isTestMode = !isTestMode;
+                                    //         _showSnackbar(
+                                    //             'Switched to test mode');
+                                    //       });
+                                    //     });
+                                    //   },
+                                    // ),
+                                    child: Switch(
+                                        activeColor: MyColorScheme.accent(),
+                                        inactiveTrackColor:
+                                            MyColorScheme.accentLight(),
+                                        value: isTestMode,
+                                        onChanged: (value) {
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback((_) {
+                                            setState(() {
+                                              isTestMode = !isTestMode;
+                                              _showSnackbar(
+                                                  'Switched to test mode');
+                                            });
                                           });
-                                        });
-                                      },
-                                    ),
+                                        }),
                                   )),
                       ],
                       Padding(
