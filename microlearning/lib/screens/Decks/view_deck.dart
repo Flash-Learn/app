@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
 import 'package:microlearning/screens/Groups/group.dart';
+import 'package:microlearning/services/pdf.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
@@ -183,6 +184,7 @@ class _ViewDeckState extends State<ViewDeck> {
       backgroundColor: MyColorScheme.uno(),
       duration: Duration(seconds: 1),
     );
+    _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
@@ -236,39 +238,41 @@ class _ViewDeckState extends State<ViewDeck> {
                   ),
                   actions: <Widget>[
                     if (widget.editAccess) ...[
-                      if(!widget.isDeckforGroup)...[
+                      if (!widget.isDeckforGroup) ...[
                         Container(
-                          key: _keyMode,
-                          child: isTestMode
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: IconButton(
-                                    icon: Icon(Icons.chrome_reader_mode),
-                                    onPressed: () {
-                                      setState(() {
-                                        isTestMode = !isTestMode;
-                                        _showSnackbar('Switched to learn mode');
-                                      });
-                                    },
-                                  ),
-                                )
-                              : Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  child: IconButton(
-                                    icon: Icon(Icons.check_box),
-                                    onPressed: () {
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
+                            key: _keyMode,
+                            child: isTestMode
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: IconButton(
+                                      icon: Icon(Icons.chrome_reader_mode),
+                                      onPressed: () {
                                         setState(() {
                                           isTestMode = !isTestMode;
                                           _showSnackbar(
-                                              'Switched to test mode');
+                                              'Switched to learn mode');
                                         });
-                                      });
-                                    },
-                                  ),
-                                )),
+                                      },
+                                    ),
+                                  )
+                                : Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8),
+                                    child: IconButton(
+                                      icon: Icon(Icons.check_box),
+                                      onPressed: () {
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                          setState(() {
+                                            isTestMode = !isTestMode;
+                                            _showSnackbar(
+                                                'Switched to test mode');
+                                          });
+                                        });
+                                      },
+                                    ),
+                                  )),
                       ],
                       Padding(
                         key: _keyEdit,
@@ -421,9 +425,8 @@ class _ViewDeckState extends State<ViewDeck> {
     );
   }
 
-  Deck _getThingsOnStartup() {
-    Deck deck = getDeckFromID(deckID);
-    return deck;
+  void _getPdfForDeck() {
+    generatePDF(deckID);
   }
 
   createAlertDialog(BuildContext ctxt) {
@@ -659,6 +662,30 @@ class _ViewDeckState extends State<ViewDeck> {
                     width: 10,
                   ),
                   Text('Remind me later')
+                ],
+              ),
+            )),
+      ),
+      PopupMenuItem(
+        value: "shareDeck",
+        child: GestureDetector(
+            onTap: () async {
+              Navigator.pop(context, "shareDeck");
+
+              _getPdfForDeck();
+            },
+            child: Card(
+              elevation: 0,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.share,
+                    color: MyColorScheme.accent(),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Share deck as Pdf')
                 ],
               ),
             )),
