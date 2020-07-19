@@ -17,6 +17,7 @@ class FlashCardView extends StatefulWidget {
   final bool editAccess;
   final Function onMemorizeCallback;
   final Deck deck;
+  final bool isDeckforGroup;
 
   FlashCardView({
     this.color,
@@ -26,6 +27,7 @@ class FlashCardView extends StatefulWidget {
     this.editAccess = true,
     this.onMemorizeCallback,
     this.deck,
+    this.isDeckforGroup = false,
   });
 
   @override
@@ -672,7 +674,7 @@ class _FlashCardViewState extends State<FlashCardView> {
             child: Text("Add to playlists")),
       ),
     );
-    if (widget.editAccess) {
+    if (widget.editAccess | widget.isDeckforGroup) {
       children.add(
         PopupMenuItem(
           value: "edit deck",
