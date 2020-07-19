@@ -899,6 +899,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   getCardsAsList(List<dynamic> cards, bool editaccess, Function onmemocall) {
     List<Widget> children = cards.map<Widget>((dynamic data) {
       return FlashCardView(
+        isDeckforGroup: widget.isDeckforGroup,
         flashCardID: data,
         editAccess: editaccess ^ (widget.isDeckforGroup | !widget.isTestMode),
         onMemorizeCallback: onmemocall,
