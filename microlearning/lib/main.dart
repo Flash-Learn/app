@@ -1,3 +1,4 @@
+import 'package:microlearning/Maintainance/updateUserData.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/Decks/homeScreen.dart';
 import 'package:microlearning/screens/Decks/notifications_inapp.dart';
@@ -10,6 +11,7 @@ import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/authentication/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'services/pdf.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Montserrat'),
       routes: {
         // '/': (context) => email == null ? WelcomeScreen() : MyDecks(),
-        '/': (context) => email == null ? WelcomeScreen() : HomeScreen(),
+        '/': (context) => email == null ? WelcomeScreen() : MyDecks(),
         '/welcome': (context) => WelcomeScreen(),
         '/login': (context) => LoginUser(),
         '/home': (context) => HomeScreen(),
