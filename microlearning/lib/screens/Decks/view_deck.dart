@@ -44,7 +44,7 @@ class _ViewDeckState extends State<ViewDeck> {
   bool isShuffled = false;
   double completedPercentage = 0;
   Deck deck;
-  bool isTestMode = false;
+  bool isTestMode = true;
   Key whenShuffled = UniqueKey();
   Key whenNotShuffled = UniqueKey();
 
@@ -238,7 +238,7 @@ class _ViewDeckState extends State<ViewDeck> {
                   ),
                   actions: <Widget>[
                     if (widget.editAccess) ...[
-                      if (!widget.isDeckforGroup && showAllcards) ...[
+                      if (showAllcards) ...[
                         Container(
                             key: _keyMode,
                             child: isTestMode
@@ -565,7 +565,7 @@ class _ViewDeckState extends State<ViewDeck> {
               ),
             )),
       ),
-      if (isTestMode) ...[
+      if (isTestMode && !widget.isDeckforGroup) ...[
         PopupMenuItem(
           value: "filter button",
           child: GestureDetector(
@@ -732,7 +732,7 @@ class FlashCardSwipeView extends StatefulWidget {
     this.isShuffled,
     this.ifGroupThenGrpID = '',
     this.isDeckforGroup = false,
-    this.isTestMode = false,
+    this.isTestMode = true,
     @required this.key,
   });
   final bool isShuffled;
@@ -927,7 +927,8 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
       return FlashCardView(
         isDeckforGroup: widget.isDeckforGroup,
         flashCardID: data,
-        editAccess: editaccess & widget.isTestMode,
+        editAccess: editaccess & !widget.isDeckforGroup,
+        isTestMode: widget.isTestMode,
         onMemorizeCallback: onmemocall,
         currentIndex: cards.indexOf(data),
         currentPage: currentPage,
