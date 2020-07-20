@@ -263,9 +263,9 @@ class _ViewDeckState extends State<ViewDeck> {
                                         onChanged: (value) {
                                           setState(() {
                                             isTestMode = !isTestMode;
-                                            _showSnackbar(
-                                                'Switched to learn mode');
                                           });
+                                          _showSnackbar(
+                                                'Switched to learn mode');
                                         }),
                                   )
                                 : Padding(
@@ -293,10 +293,10 @@ class _ViewDeckState extends State<ViewDeck> {
                                           WidgetsBinding.instance
                                               .addPostFrameCallback((_) {
                                             setState(() {
-                                              isTestMode = !isTestMode;
-                                              _showSnackbar(
-                                                  'Switched to test mode');
+                                              isTestMode = !isTestMode;                                              
                                             });
+                                            _showSnackbar(
+                                                  'Switched to test mode');
                                           });
                                         }),
                                   )),
@@ -763,7 +763,6 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   double currentPage = 0.0;
   int currentView = 2;
   bool shuffleState = false;
-  bool isTestMode = false;
 
   Future<List<dynamic>> getNotRememberedCards() async {
     List<dynamic> ret = [];
@@ -926,9 +925,9 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
   getCardsAsList(List<dynamic> cards, bool editaccess, Function onmemocall) {
     List<Widget> children = cards.map<Widget>((dynamic data) {
       return FlashCardView(
-        isDeckforGroup: widget.isDeckforGroup | !isTestMode,
+        isDeckforGroup: widget.isDeckforGroup,
         flashCardID: data,
-        editAccess: editaccess ^ (widget.isDeckforGroup | !widget.isTestMode),
+        editAccess: editaccess & widget.isTestMode,
         onMemorizeCallback: onmemocall,
         currentIndex: cards.indexOf(data),
         currentPage: currentPage,
