@@ -375,11 +375,15 @@ class _ViewDeckState extends State<ViewDeck> {
                     ]
                   ],
                   centerTitle: true,
-                  title: Text(
-                    deck.deckName,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: MyColorScheme.uno()),
+                  title: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Text(
+                      deck.deckName,
+                      overflow: TextOverflow.fade,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: MyColorScheme.uno()),
+                    ),
                   ),
                 ),
                 body: Container(

@@ -155,10 +155,8 @@ class _FlashCardViewState extends State<FlashCardView> {
           dynamic tmp = snapshot.data['userRemembers'];
           if (tmp == null || tmp == false) {
             userRemembers = false;
-            print(userRemembers);
           } else {
             userRemembers = true;
-            print(userRemembers);
           }
 
           return AnimatedSwitcher(
