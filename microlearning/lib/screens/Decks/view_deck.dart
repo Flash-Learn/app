@@ -350,15 +350,12 @@ class _ViewDeckState extends State<ViewDeck> {
                             });
                             SnackBar snackBar = SnackBar(
                               duration: Duration(milliseconds: 1200),
-                              content: Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Text(
-                                  'Deck added to My Decks',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: MyColorScheme.cinco(),
-                                    fontSize: 16,
-                                  ),
+                              content: Text(
+                                'Deck added to My Decks',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: MyColorScheme.accent(),
+                                  fontSize: 16,
                                 ),
                               ),
                               backgroundColor: MyColorScheme.uno(),
@@ -644,13 +641,10 @@ class _ViewDeckState extends State<ViewDeck> {
                   );
                   SnackBar snackBar = SnackBar(
                     duration: Duration(milliseconds: 1200),
-                    content: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        'Reminder set!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: MyColorScheme.cinco()),
-                      ),
+                    content: Text(
+                      'Reminder set!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: MyColorScheme.accent()),
                     ),
                     action: SnackBarAction(
                         label: 'Undo',
@@ -659,13 +653,10 @@ class _ViewDeckState extends State<ViewDeck> {
                           // print('cancelled');
                           SnackBar snackBar = SnackBar(
                             duration: Duration(milliseconds: 1200),
-                            content: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                'Reminder cancelled',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: MyColorScheme.cinco()),
-                              ),
+                            content: Text(
+                              'Reminder cancelled',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: MyColorScheme.accent()),
                             ),
                             backgroundColor: MyColorScheme.uno(),
                           );
