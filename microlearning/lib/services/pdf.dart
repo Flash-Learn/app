@@ -29,15 +29,14 @@ generatePDF(String deckID) async {
 //    tempCard[i][1] = ds.data["definition"];
     tempCard[i][2] = ds.data["isimage"];
 
-    if(tempCard[i][2]=='true'){
+    if (tempCard[i][2] == 'true') {
       tempCard[i][1] = await pdfImageFromImageProvider(
         pdf: pdf.document,
         image: NetworkImage(
           ds.data["definition"],
         ),
       );
-    }
-    else{
+    } else {
       tempCard[i][1] = ds.data["definition"];
     }
   }
@@ -72,7 +71,6 @@ generatePDF(String deckID) async {
 //
 //  }
 
-
   pdf.addPage(pdfLib.MultiPage(
       pageFormat: PdfPageFormat.a4,
       margin: pdfLib.EdgeInsets.all(32),
@@ -83,21 +81,19 @@ generatePDF(String deckID) async {
               child: pdfLib.Text(deck.deckName,
                   style: pdfLib.TextStyle(fontSize: 26))),
           pdfLib.Column(
-            children: List.generate(
-                deck.flashCardList.length,
-                (index) {
-
-                      if (tempCard[index][2] == "false"){
-                        return pdfLib.Column(children: <pdfLib.Widget>[
-                        pdfLib.Paragraph(
-                        text: "${index + 1}. ${tempCard[index][0]}",
-                        style: pdfLib.TextStyle(fontSize: 22)),
-                        pdfLib.Paragraph(
-                        text: "${tempCard[index][1]}",
-                        style: pdfLib.TextStyle(fontSize: 18)),
-                        pdfLib.SizedBox(height: 10)
-                        ]);
-                      }
+            children: List.generate(deck.flashCardList.length, (index) {
+              if (tempCard[index][2] == "false") {
+                return pdfLib.Column(children: <pdfLib.Widget>[
+                  pdfLib.Paragraph(
+                      text: "${index + 1}.  ${tempCard[index][0]}",
+                      style: pdfLib.TextStyle(fontSize: 22)),
+                  pdfLib.Paragraph(
+                      margin: pdfLib.EdgeInsets.only(left: 10),
+                      text: "${tempCard[index][1]}",
+                      style: pdfLib.TextStyle(fontSize: 18)),
+                  pdfLib.SizedBox(height: 10)
+                ]);
+              }
 
 //                      final image = pdfImageFromImageProvider(
 //                        pdf: pdf.document,
@@ -106,21 +102,17 @@ generatePDF(String deckID) async {
 //                        ),
 //                      );
 
-                      return pdfLib.Column(children: <pdfLib.Widget>[
-                        pdfLib.Paragraph(
-                            text: "${index + 1}. ${tempCard[index][0]}",
-                            style: pdfLib.TextStyle(fontSize: 22)),
-                        pdfLib.Image(tempCard[index][1]),
-                        pdfLib.SizedBox(height: 10)
-                      ]);
-
-                  }
-            ),
+              return pdfLib.Column(children: <pdfLib.Widget>[
+                pdfLib.Paragraph(
+                    text: "${index + 1}. ${tempCard[index][0]}",
+                    style: pdfLib.TextStyle(fontSize: 22)),
+                pdfLib.Image(tempCard[index][1]),
+                pdfLib.SizedBox(height: 20)
+              ]);
+            }),
           )
         ];
-      }
-      )
-  );
+      }));
 
   // final String dir = (await getApplicationDocumentsDirectory()).path;
   // print(dir);

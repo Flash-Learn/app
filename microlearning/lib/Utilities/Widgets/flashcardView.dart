@@ -64,13 +64,10 @@ class _FlashCardViewState extends State<FlashCardView> {
     });
     SnackBar snackBar = SnackBar(
       duration: Duration(milliseconds: 900),
-      content: Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: Text(
-          'This card has been marked not-remembered.',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: MyColorScheme.cinco()),
-        ),
+      content: Text(
+        'This card has been marked not-remembered.',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: MyColorScheme.accent()),
       ),
       backgroundColor: MyColorScheme.uno(),
       action: SnackBarAction(
@@ -100,13 +97,10 @@ class _FlashCardViewState extends State<FlashCardView> {
     });
     SnackBar snackBar = SnackBar(
       duration: Duration(milliseconds: 900),
-      content: Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: Text(
-          'This card has been marked remembered.',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: MyColorScheme.cinco()),
-        ),
+      content: Text(
+        'This card has been marked remembered.',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: MyColorScheme.accent()),
       ),
       backgroundColor: MyColorScheme.uno(),
       action: SnackBarAction(
@@ -155,10 +149,8 @@ class _FlashCardViewState extends State<FlashCardView> {
           dynamic tmp = snapshot.data['userRemembers'];
           if (tmp == null || tmp == false) {
             userRemembers = false;
-            print(userRemembers);
           } else {
             userRemembers = true;
-            print(userRemembers);
           }
 
           return AnimatedSwitcher(
