@@ -18,6 +18,7 @@ class FlashCardView extends StatefulWidget {
   final Function onMemorizeCallback;
   final Deck deck;
   final bool isDeckforGroup;
+  final bool isTestMode;
 
   FlashCardView({
     this.color,
@@ -28,6 +29,7 @@ class FlashCardView extends StatefulWidget {
     this.onMemorizeCallback,
     this.deck,
     this.isDeckforGroup = false,
+    this.isTestMode = true,
   });
 
   @override
@@ -195,7 +197,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                           items: getPopupItems(context),
                         );
                       },
-                      child: FlipCard(
+                      child: widget.isTestMode ? FlipCard(
                         direction: FlipDirection.HORIZONTAL,
                         front: Stack(
                           children: <Widget>[
@@ -223,7 +225,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Spacer(),
-                                        widget.editAccess
+                                        widget.editAccess & widget.isTestMode
                                             ? Row(
                                                 children: <Widget>[
                                                   RawMaterialButton(
@@ -395,7 +397,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                 fontWeight: FontWeight.normal),
                                           ),
                                     Spacer(),
-                                    widget.editAccess
+                                    (widget.editAccess & widget.isTestMode)
                                         ? Row(
                                             children: <Widget>[
                                               RawMaterialButton(
@@ -478,7 +480,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                             ],
                           ),
                         ]),
-                      ),
+                      ):getLearnMode(),
                     ),
                   ]),
                 ),
@@ -487,7 +489,71 @@ class _FlashCardViewState extends State<FlashCardView> {
           );
         });
   }
-
+   getLearnMode(){
+     return Stack(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                  color: MyColorScheme.flashcardColor(),
+                  width: 3),
+              borderRadius: BorderRadius.circular(20)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(term,
+              style: TextStyle(color: MyColorScheme.accent(), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+              Container(padding: EdgeInsets.symmetric(horizontal: 10),child: Divider(color: MyColorScheme.accent(), thickness: 3,)),
+              !isPic ? Text(definition,
+              style: TextStyle(fontSize: 16, color: MyColorScheme.accent()),textAlign: TextAlign.center,) :
+              ClipRect(
+                child: Container(
+                  height: MediaQuery.of(context)
+                          .size
+                          .height *
+                      0.5,
+                  child: PhotoView(
+                    minScale: PhotoViewComputedScale
+                        .contained,
+                    imageProvider:
+                        NetworkImage(definition),
+                    backgroundDecoration:
+                        BoxDecoration(
+                            color:
+                                Colors.transparent),
+                    maxScale: PhotoViewComputedScale
+                            .covered *
+                        2.0,
+                    loadingBuilder:
+                        (BuildContext context,
+                            ImageChunkEvent
+                                loadingProgress) {
+                      if (loadingProgress == null) {
+                        return Container();
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                            value: loadingProgress
+                                        .expectedTotalBytes !=
+                                    null
+                                ? loadingProgress
+                                        .cumulativeBytesLoaded /
+                                    loadingProgress
+                                        .expectedTotalBytes
+                                : null),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ]
+     );
+   }
   createAlertDialog(BuildContext ctxt) {
     String playlistname;
     return showDialog(
