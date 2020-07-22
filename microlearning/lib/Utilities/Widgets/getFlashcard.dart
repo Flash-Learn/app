@@ -121,16 +121,14 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.6,
                               child: TextFormField(
-                                  autofocus: false,
-                                  enableSuggestions: false,
                                   maxLines: null,
-                                  keyboardType: TextInputType.text,
                                   textAlign: TextAlign.center,
                                   initialValue: data[0],
                                   onChanged: (val) {
                                     flashCardData[flashCardData.indexOf(data)]
                                         [0] = val;
                                   },
+                                  keyboardType: TextInputType.multiline,
                                   style: TextStyle(
                                       color: MyColorScheme.uno(), fontSize: 16),
                                   decoration: InputDecoration(
@@ -168,7 +166,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                   flashCardData[flashCardData.indexOf(data)]
                                       [1] = val;
                                 },
-                                keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.newline,
                                 decoration: InputDecoration(
                                   hintText: 'Definition',
