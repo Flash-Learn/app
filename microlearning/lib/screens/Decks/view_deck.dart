@@ -164,7 +164,8 @@ class _ViewDeckState extends State<ViewDeck> {
 
   void changePercentage(double percentage, double numberOfCards) {
     if (numberOfCards > 1)
-      percentage = (percentage - 1 / numberOfCards) / (1 - 1 / numberOfCards);
+//      percentage = (percentage - 1 / numberOfCards) / (1 - 1 / numberOfCards);
+      percentage = percentage;
     else
       percentage = 1;
     percentage = percentage < 0.0 ? 0.0 : percentage;
