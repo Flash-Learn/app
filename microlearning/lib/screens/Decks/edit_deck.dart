@@ -227,7 +227,7 @@ class _EditDecksState extends State<EditDecks> {
                     ),
               backgroundColor: MyColorScheme.uno(),
               title: Text(
-                'Edit Deck',
+                widget.creating ? 'Create Deck': 'Edit Deck',
                 style: TextStyle(
                     color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
               ),
