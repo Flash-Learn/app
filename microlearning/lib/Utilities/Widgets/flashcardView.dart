@@ -197,16 +197,19 @@ class _FlashCardViewState extends State<FlashCardView> {
                           items: getPopupItems(context),
                         );
                       },
-                      child: widget.isTestMode ? FlipCard(
+                      child: widget.isTestMode ?
+                      FlipCard(
                         direction: FlipDirection.HORIZONTAL,
                         front: Stack(
                           children: <Widget>[
                             Container(
                               decoration: BoxDecoration(
+//                                  color: userRemembers ? Color.fromRGBO(149, 242, 145, 1) : Colors.red,
                                   color: Colors.white,
                                   border: Border.all(
-                                      color: MyColorScheme.flashcardColor(),
-                                      width: 3),
+//                                      color: MyColorScheme.flashcardColor(),
+                                        color: userRemembers ? Color.fromRGBO(166, 250, 165, 1) : Color.fromRGBO(250, 165, 165, 1),
+                                      width: 7),
                                   borderRadius: BorderRadius.circular(20)),
                               child: Center(
                                 child: Padding(
@@ -221,6 +224,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.black,
+//                                              color: userRemembers ? Color.fromRGBO(149, 242, 145, 1) : Colors.red,
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -251,16 +255,16 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                     },
                                                     elevation: 2.0,
                                                     fillColor:
-                                                        Colors.greenAccent[400],
+                                                    Colors.greenAccent[400],
                                                     child: Icon(
                                                       Icons.check,
                                                       color: Colors.white,
                                                       size: 35.0,
                                                     ),
                                                     padding:
-                                                        EdgeInsets.all(15.0),
+                                                    EdgeInsets.all(15.0),
                                                     shape: CircleBorder(),
-                                                  )
+                                                  ),
                                                 ],
                                               )
                                             : SizedBox(),
