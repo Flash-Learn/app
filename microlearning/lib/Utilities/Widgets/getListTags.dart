@@ -32,7 +32,7 @@ class _ListofTagsState extends State<ListofTags> {
       (TextEditingController controller) {
         i++;
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+          padding: EdgeInsets.symmetric(horizontal: 60, vertical: 5),
           child: Stack(
             children: <Widget>[
               TextField(
@@ -52,10 +52,12 @@ class _ListofTagsState extends State<ListofTags> {
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 3, vertical: 12),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 1.0),
+                    borderSide:
+                        BorderSide(color: MyColorScheme.accent(), width: 1.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    borderSide:
+                        BorderSide(color: MyColorScheme.accent(), width: 1.5),
                   ),
                 ),
               ),
@@ -63,7 +65,10 @@ class _ListofTagsState extends State<ListofTags> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   IconButton(
-                    icon: Icon(Icons.clear),
+                    icon: Icon(
+                      Icons.clear,
+                      color: MyColorScheme.accent(),
+                    ),
                     onPressed: () {
                       setState(() {
                         fieldCount--; // decrementing the controller number
@@ -106,7 +111,7 @@ class _ListofTagsState extends State<ListofTags> {
               });
             },
             child: Container(
-              height: 40,
+              height: 35,
               child: Material(
                 borderRadius: BorderRadius.circular(5),
                 color: Colors.transparent,

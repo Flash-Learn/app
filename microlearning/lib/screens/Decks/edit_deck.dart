@@ -215,7 +215,7 @@ class _EditDecksState extends State<EditDecks> {
                     )
                   : IconButton(
                       icon: Icon(Icons.arrow_back),
-                      color: MyColorScheme.accent(),
+                      color: Colors.white,
                       onPressed: () {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) {
@@ -225,11 +225,13 @@ class _EditDecksState extends State<EditDecks> {
                         }));
                       },
                     ),
-              backgroundColor: MyColorScheme.uno(),
+              backgroundColor: MyColorScheme.accent(),
               title: Text(
-                widget.creating ? 'Create Deck': 'Edit Deck',
+                widget.creating ? 'Create Deck' : 'Edit Deck',
                 style: TextStyle(
-                    color: MyColorScheme.cinco(), fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2),
               ),
               centerTitle: true,
             ),
@@ -240,26 +242,6 @@ class _EditDecksState extends State<EditDecks> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Icon(
-                          Icons.filter_none,
-                          color: MyColorScheme.accent(),
-                          size: 30,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          'Deck Name',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                          textAlign: TextAlign.left,
-                          key: _keyDeckName,
-                        ),
-                      ],
-                    ),
                     SizedBox(
                       height: 10,
                     ),
@@ -275,7 +257,7 @@ class _EditDecksState extends State<EditDecks> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20),
-                        decoration: inputTextDecorations(''),
+                        decoration: inputTextDecorations('Deck Name'),
                       ),
                     ),
                     SizedBox(
@@ -286,7 +268,7 @@ class _EditDecksState extends State<EditDecks> {
                       style: TextStyle(color: Colors.red, fontSize: 12.0),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     if (!widget.isDeckforGroup) ...[
                       Row(
@@ -308,7 +290,7 @@ class _EditDecksState extends State<EditDecks> {
                       ),
                     ],
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -316,7 +298,7 @@ class _EditDecksState extends State<EditDecks> {
                         Icon(
                           Icons.bookmark,
                           color: MyColorScheme.accent(),
-                          size: 35,
+                          size: 25,
                         ),
                         SizedBox(
                           width: 4,
@@ -324,7 +306,7 @@ class _EditDecksState extends State<EditDecks> {
                         Text(
                           'Tags :',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                              fontWeight: FontWeight.bold, fontSize: 16),
                           textAlign: TextAlign.left,
                           key: _keyTags,
                         ),

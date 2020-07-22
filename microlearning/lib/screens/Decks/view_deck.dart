@@ -266,7 +266,7 @@ class _ViewDeckState extends State<ViewDeck> {
                                             isTestMode = !isTestMode;
                                           });
                                           _showSnackbar(
-                                                'Switched to learn mode');
+                                              'Switched to learn mode');
                                         }),
                                   )
                                 : Padding(
@@ -294,10 +294,10 @@ class _ViewDeckState extends State<ViewDeck> {
                                           WidgetsBinding.instance
                                               .addPostFrameCallback((_) {
                                             setState(() {
-                                              isTestMode = !isTestMode;                                              
+                                              isTestMode = !isTestMode;
                                             });
                                             _showSnackbar(
-                                                  'Switched to test mode');
+                                                'Switched to test mode');
                                           });
                                         }),
                                   )),
@@ -626,6 +626,7 @@ class _ViewDeckState extends State<ViewDeck> {
             onTap: () async {
               try {
                 Navigator.pop(context, "notification button");
+                notification.requestIOSPermission();
                 Duration resultingDuration = await showDurationPicker(
                     context: context,
                     initialTime: Duration(hours: 0, minutes: 10));
