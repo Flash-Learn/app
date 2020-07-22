@@ -493,6 +493,7 @@ class _FlashCardViewState extends State<FlashCardView> {
      return Stack(
       children: <Widget>[
         Container(
+          height: MediaQuery.of(context).size.height * 0.8,
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
@@ -503,48 +504,62 @@ class _FlashCardViewState extends State<FlashCardView> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(term,
-              style: TextStyle(color: MyColorScheme.accent(), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.2,
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Text(term,
+                    style: TextStyle(color: MyColorScheme.accent(), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                  ),
+                ),
+              ),
               Container(padding: EdgeInsets.symmetric(horizontal: 10),child: Divider(color: MyColorScheme.accent(), thickness: 3,)),
-              !isPic ? Text(definition,
-              style: TextStyle(fontSize: 16, color: MyColorScheme.accent()),textAlign: TextAlign.center,) :
-              ClipRect(
-                child: Container(
-                  height: MediaQuery.of(context)
-                          .size
-                          .height *
-                      0.5,
-                  child: PhotoView(
-                    minScale: PhotoViewComputedScale
-                        .contained,
-                    imageProvider:
-                        NetworkImage(definition),
-                    backgroundDecoration:
-                        BoxDecoration(
-                            color:
-                                Colors.transparent),
-                    maxScale: PhotoViewComputedScale
-                            .covered *
-                        2.0,
-                    loadingBuilder:
-                        (BuildContext context,
-                            ImageChunkEvent
-                                loadingProgress) {
-                      if (loadingProgress == null) {
-                        return Container();
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                            value: loadingProgress
-                                        .expectedTotalBytes !=
-                                    null
-                                ? loadingProgress
-                                        .cumulativeBytesLoaded /
-                                    loadingProgress
-                                        .expectedTotalBytes
-                                : null),
-                      );
-                    },
+              Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: Center(
+                  child: !isPic ? SingleChildScrollView(
+                    child: Text(definition,
+                    style: TextStyle(fontSize: 16, color: MyColorScheme.accent()),textAlign: TextAlign.center,),
+                  ) :
+                  ClipRect(
+                    child: Container(
+                      height: MediaQuery.of(context)
+                              .size
+                              .height *
+                          0.5,
+                      child: PhotoView(
+                        minScale: PhotoViewComputedScale
+                            .contained,
+                        imageProvider:
+                            NetworkImage(definition),
+                        backgroundDecoration:
+                            BoxDecoration(
+                                color:
+                                    Colors.transparent),
+                        maxScale: PhotoViewComputedScale
+                                .covered *
+                            2.0,
+                        loadingBuilder:
+                            (BuildContext context,
+                                ImageChunkEvent
+                                    loadingProgress) {
+                          if (loadingProgress == null) {
+                            return Container();
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                                value: loadingProgress
+                                            .expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress
+                                            .cumulativeBytesLoaded /
+                                        loadingProgress
+                                            .expectedTotalBytes
+                                    : null),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
