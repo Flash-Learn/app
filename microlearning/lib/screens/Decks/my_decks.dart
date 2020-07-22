@@ -241,6 +241,7 @@ class _MyDecksState extends State<MyDecks> {
                                 }));
                               }
                               return DeckReorderList(
+                                uid: uid,
                                 userDeckIDs: userDeckIDs,
                               );
                             });

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
+import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/Utilities/constants/transitions.dart';
 import 'package:microlearning/screens/Decks/edit_deck.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
@@ -14,18 +15,21 @@ class DeckReorderList extends StatefulWidget {
     Key key,
     this.belongsToGroup = false,
     this.ifGrpThenID = '',
+    this.uid,
     @required this.userDeckIDs,
   }) : super(key: key);
 
   final bool belongsToGroup;
   final List userDeckIDs;
   final String ifGrpThenID;
+  final String uid;
 
   @override
   _DeckReorderListState createState() => _DeckReorderListState(userDeckIDs);
 }
 
 class _DeckReorderListState extends State<DeckReorderList> {
+  List<dynamic> userGroups = [];
   _DeckReorderListState(this.userDeckIDs);
   var _tapPosition;
   List<dynamic> userDeckIDs;
@@ -187,6 +191,33 @@ class _DeckReorderListState extends State<DeckReorderList> {
                         ),
                       ),
                       PopupMenuItem(
+                        value: "add to group",
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context, "add to group");
+                            _showBottomSheet(deckId);
+                          },
+                          child: Card(
+                            elevation: 0,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.library_books,
+                                  color: MyColorScheme.accent(),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Add to Group",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
                         value: "delete button",
                         child: GestureDetector(
                           onTap: () async {
@@ -240,6 +271,88 @@ class _DeckReorderListState extends State<DeckReorderList> {
         ]),
       );
     }).toList();
+  }
+  _buildGroupList(String deckId){
+    int i = 0;
+    String k;
+    return userGroups.map<Widget>((dynamic data){
+      i++;
+      k = '$i';
+      print(k);
+      return StreamBuilder(
+          stream: Firestore.instance
+              .collection('groups')
+              .document(data)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Text("loading");
+            }
+
+            String grpName = snapshot.data["name"];
+            String grpDescription = snapshot.data["description"];
+
+            return Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Card(
+                color: MyColorScheme.accentLight(),
+                child: ListTile(
+                  trailing: Icon(Icons.playlist_add),
+                  contentPadding: EdgeInsets.all(10),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    // dynamic flashRef = await flashcardReference.add({
+                    //   'term': term,
+                    //   'definition': definition,
+                    //   'isimage': isPic ? 'true' : 'false',
+                    // });
+                    await Firestore.instance.collection("groups").document(data).updateData({
+                      "decks": FieldValue.arrayUnion([deckId]),
+                    });
+                  },
+                  title: Text(grpName),
+                  subtitle: Text(grpDescription),
+                ),
+              ),
+            );
+          });
+    }).toList();
+  }
+  bottomData(String deckId){
+    List<Widget> children = _buildGroupList(deckId);
+    return Column(
+      children: <Widget>[
+        Container(
+          height: MediaQuery.of(context).size.height * 0.4,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: children,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _showBottomSheet(String deckID){
+    showModalBottomSheet(
+      context: context, 
+      builder: (BuildContext context){
+        return StreamBuilder(
+          stream: Firestore.instance.collection('user_data').document(widget.uid).snapshots(),
+          builder: (context, snapshot){
+            if(!snapshot.hasData){
+              return Center(child: Loading(size: 20));
+            }
+            userGroups = snapshot.data["groups"];
+            return bottomData(deckID);
+          },
+        );
+      });
   }
 
   createAlertDialog(
