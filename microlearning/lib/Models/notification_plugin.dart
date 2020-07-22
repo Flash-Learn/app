@@ -14,12 +14,23 @@ class Notifications {
   initializeNotifications() async {
     var initializeAndroid = AndroidInitializationSettings('ic_launcher');
     var initializeIOS = IOSInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
     );
     var initSettings = InitializationSettings(initializeAndroid, initializeIOS);
     await localNotificationsPlugin.initialize(initSettings);
+  }
+
+  requestIOSPermission() {
+    localNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
+        .requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
   }
 
   Future singleNotification(DateTime datetime, String message, String subtext,
