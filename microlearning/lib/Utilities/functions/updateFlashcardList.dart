@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Models/deck.dart';
+import 'package:microlearning/Models/flashcard.dart';
 
-Future<void> updateFlashcardList(Deck deck, List<List<String>> flashCardData) async {
+Future<void> updateFlashcardList(Deck deck, List<FlashCard> flashCardData) async {
 
   // NOTE: flashCardData is 1 indexed and flashCardList is 0 indexed.
 
-  int initialLength = deck.flashCardList.length, newLength = flashCardData.length-1;
+  int initialLength = deck.flashCardList.length, newLength = flashCardData.length;
 
   print("$initialLength $newLength");
 
@@ -14,20 +15,24 @@ Future<void> updateFlashcardList(Deck deck, List<List<String>> flashCardData) as
 
   if(newLength >= initialLength){
     for(var i=0; i<initialLength; i++){
-      var j=i+1;
+      var j=i;
       flashcardReference.document(deck.flashCardList[i]).updateData({
-        'term': flashCardData[j][0],
-        'definition': flashCardData[j][1],
-        'isimage': flashCardData[j][2],
+        'term': flashCardData[j].term,
+        'definition': flashCardData[j].definition,
+        'isTermPhoto': flashCardData[j].isTermPhoto,
+        'isDefinitionPhoto': flashCardData[j].isDefinitionPhoto,
+        'isOneSided': flashCardData[j].isOneSided
       });
     }
 
     for(var i=initialLength; i<newLength; i++){
-      var j=i+1;
+      var j=i;
       dynamic flashRef = await flashcardReference.add({
-        'term': flashCardData[j][0],
-        'definition': flashCardData[j][1],
-        'isimage': flashCardData[j][2],
+        'term': flashCardData[j].term,
+        'definition': flashCardData[j].definition,
+        'isTermPhoto': flashCardData[j].isTermPhoto,
+        'isDefinitionPhoto': flashCardData[j].isDefinitionPhoto,
+        'isOneSided': flashCardData[j].isOneSided
       });
 
       await deckReference.document(deck.deckID).updateData({
@@ -38,11 +43,13 @@ Future<void> updateFlashcardList(Deck deck, List<List<String>> flashCardData) as
 
   else{
     for(var i=0; i<newLength; i++){
-      var j=i+1;
+      var j=i;
       await flashcardReference.document(deck.flashCardList[i]).updateData({
-        'term': flashCardData[j][0],
-        'definition': flashCardData[j][1],
-        'isimage': flashCardData[j][2]
+        'term': flashCardData[j].term,
+        'definition': flashCardData[j].definition,
+        'isTermPhoto': flashCardData[j].isTermPhoto,
+        'isDefinitionPhoto': flashCardData[j].isDefinitionPhoto,
+        'isOneSided': flashCardData[j].isOneSided
       });
     }
 

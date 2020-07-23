@@ -4,10 +4,16 @@ class FlashCard {
   String flashCardID;
   String term;
   String definition;
+  bool isTermPhoto;
+  bool isDefinitionPhoto;
+  bool isOneSided;
 
   FlashCard({
     this.term,
-    this.definition
+    this.definition,
+    this.isTermPhoto,
+    this.isDefinitionPhoto,
+    this.isOneSided,
   }){
     // TODO: add flash card to database
   }
