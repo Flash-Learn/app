@@ -140,7 +140,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                               counterText: '',
                               hintText: 'Term',
                               hintStyle:
-                                  (TextStyle(color: Colors.white24)),
+                                  (TextStyle(color: Colors.white70)),
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -207,7 +207,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                         )
                       ],
                     ),
-                    Container(width: MediaQuery.of(context).size.width * 0.5,child: Divider(thickness: 2,color: Colors.white,)),
+                    Container(width: MediaQuery.of(context).size.width * 0.6,child: Divider(thickness: 2,color: Colors.white,)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -225,7 +225,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                               textInputAction: TextInputAction.newline,
                               decoration: InputDecoration(
                                 hintText: 'Definition',
-                                hintStyle: (TextStyle(color: Colors.white24)),
+                                hintStyle: (TextStyle(color: Colors.white70)),
                                 border: InputBorder.none,
                                 focusedBorder: InputBorder.none,
                                 enabledBorder: InputBorder.none,
