@@ -163,7 +163,7 @@ class _FlashCardViewState extends State<FlashCardView> {
             child: Padding(
               key: ValueKey<int>(side),
               // padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 8),
-              padding: const EdgeInsets.fromLTRB(8, 35, 8, 35),
+              padding: widget.isTestMode ? EdgeInsets.fromLTRB(8, 35, 8, 35) : EdgeInsets.fromLTRB(8, 0, 8, 35),
               child: Container(
                 child: Transform(
                   transform: Matrix4.identity()
@@ -511,79 +511,163 @@ class _FlashCardViewState extends State<FlashCardView> {
         });
   }
    getLearnMode(){
-     return Stack(
-      children: <Widget>[
-        Container(
-          height: MediaQuery.of(context).size.height * 0.8,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                  color: MyColorScheme.flashcardColor(),
-                  width: 3),
-              borderRadius: BorderRadius.circular(20)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height * 0.2,
-                child: SingleChildScrollView(
-                  child: Text(term,
-                  style: TextStyle(color: MyColorScheme.accent(), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
-                ),
-              ),
-              Container(padding: EdgeInsets.symmetric(horizontal: 10),child: Divider(color: MyColorScheme.accent(), thickness: 3,)),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.4,
-                child: !isPic ? SingleChildScrollView(
-                  child: Text(definition,
-                  style: TextStyle(fontSize: 16, color: MyColorScheme.accent()),textAlign: TextAlign.left),
-                ) :
-                ClipRect(
-                  child: Container(
-                    height: MediaQuery.of(context)
-                            .size
-                            .height *
-                        0.5,
-                    child: PhotoView(
-                      minScale: PhotoViewComputedScale
-                          .contained,
-                      imageProvider:
-                          NetworkImage(definition),
-                      backgroundDecoration:
-                          BoxDecoration(
-                              color:
-                                  Colors.transparent),
-                      maxScale: PhotoViewComputedScale
-                              .covered *
-                          2.0,
-                      loadingBuilder:
-                          (BuildContext context,
-                              ImageChunkEvent
-                                  loadingProgress) {
-                        if (loadingProgress == null) {
-                          return Container();
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(
-                              value: loadingProgress
-                                          .expectedTotalBytes !=
-                                      null
-                                  ? loadingProgress
-                                          .cumulativeBytesLoaded /
-                                      loadingProgress
-                                          .expectedTotalBytes
-                                  : null),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        )
-      ]
+     return LayoutBuilder(
+       builder: (BuildContext context, BoxConstraints constraints) {
+//         print(constraints.maxHeight);
+         double minHeight = constraints.maxHeight;
+         return SingleChildScrollView(
+           child: Column(
+             children: <Widget>[
+               SizedBox(
+                 height: 20,
+               ),
+               LayoutBuilder(
+
+                   builder: (BuildContext context, BoxConstraints constraints) {
+//                     print(constraints.maxHeight);
+                     return ConstrainedBox(
+                       constraints: BoxConstraints(
+                         minHeight: minHeight-20,
+                         minWidth: constraints.maxWidth,
+                       ),
+                       child: Container(
+//         height: MediaQuery.of(context).size.height,
+                         decoration: BoxDecoration(
+                             color: Colors.white,
+                             border: Border.all(
+                                 color: MyColorScheme.flashcardColor(),
+                                 width: 3),
+                             borderRadius: BorderRadius.circular(20)),
+                         child: Column(
+//            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: <Widget>[
+                             Padding(
+                               padding: const EdgeInsets.fromLTRB(
+                                   10, 30, 15, 10),
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: <Widget>[
+                                   Text(
+                                     "TERM",
+                                     style: TextStyle(
+                                       color: Color.fromRGBO(27, 116, 210, 1),
+                                       fontSize: 10,
+                                       letterSpacing: 3,
+                                       fontWeight: FontWeight.w900,
+                                     ),
+                                     textAlign: TextAlign.left,
+
+                                   ),
+                                   SizedBox(
+                                     height: 5,
+                                   ),
+                                   Text(
+                                     term,
+                                     style: TextStyle(
+                                       fontFamily: 'Roboto',
+                                       color: Colors.black,
+                                       fontSize: 20,
+                                       letterSpacing: 1,
+                                       fontWeight: FontWeight.w900,
+                                     ),
+                                     textAlign: TextAlign.left,
+                                   ),
+                                 ],
+                               ),
+                             ),
+//              Container(padding: EdgeInsets.symmetric(horizontal: 10),child: Divider(color: MyColorScheme.accent(), thickness: 3,)),
+                             Padding(
+                               padding: const EdgeInsets.fromLTRB(
+                                   10, 10, 15, 10),
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: <Widget>[
+                                   Text(
+                                     "DEFINITION",
+                                     style: TextStyle(
+                                       color: Color.fromRGBO(27, 116, 210, 1),
+                                       fontSize: 10,
+                                       letterSpacing: 3,
+                                       fontWeight: FontWeight.w900,
+                                     ),
+                                     textAlign: TextAlign.left,
+
+                                   ),
+                                   SizedBox(
+                                     height: 5,
+                                   ),
+                                   Container(
+//               height: MediaQuery.of(context).size.height * 0.4,
+                                     child: !isPic ?
+                                     Text(
+                                         definition,
+                                         style: TextStyle(
+                                           fontFamily: 'Roboto',
+                                           fontSize: 16,
+                                           color: Colors.black,
+                                           fontWeight: FontWeight.w400,
+                                         ),
+                                         textAlign: TextAlign.left
+                                     )
+                                         :
+                                     ClipRect(
+                                       child: Container(
+                                         height: MediaQuery
+                                             .of(context)
+                                             .size
+                                             .height *
+                                             0.5,
+                                         child: PhotoView(
+                                           minScale: PhotoViewComputedScale
+                                               .contained,
+                                           imageProvider:
+                                           NetworkImage(definition),
+                                           backgroundDecoration:
+                                           BoxDecoration(
+                                               color:
+                                               Colors.transparent),
+                                           maxScale: PhotoViewComputedScale
+                                               .covered *
+                                               2.0,
+                                           loadingBuilder:
+                                               (BuildContext context,
+                                               ImageChunkEvent
+                                               loadingProgress) {
+                                             if (loadingProgress == null) {
+                                               return Container();
+                                             }
+                                             return Center(
+                                               child: CircularProgressIndicator(
+                                                   value: loadingProgress
+                                                       .expectedTotalBytes !=
+                                                       null
+                                                       ? loadingProgress
+                                                       .cumulativeBytesLoaded /
+                                                       loadingProgress
+                                                           .expectedTotalBytes
+                                                       : null),
+                                             );
+                                           },
+                                         ),
+                                       ),
+                                     ),
+                                   ),
+                                 ],
+                               ),
+                             ),
+                           ],
+                         ),
+                       ),
+                     );
+                   }
+
+
+               ),
+             ],
+           ),
+         );
+       }
      );
    }
   createAlertDialog(BuildContext ctxt) {
