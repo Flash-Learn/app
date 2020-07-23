@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
+import 'package:microlearning/Models/flashcard.dart';
 import 'package:microlearning/Utilities/functions/updateFlashcardList.dart';
 import 'package:microlearning/Utilities/Widgets/getFlashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,7 +29,7 @@ class EditFlashCard extends StatefulWidget {
 class _EditFlashCardState extends State<EditFlashCard> {
   bool isdemo;
   Stream<dynamic> getCardfromDataBase;
-  List<List<String>> flashCardData;
+  List<FlashCard> flashCardData;
   Deck deck;
 
   _EditFlashCardState({@required this.deck, this.isdemo});
@@ -135,7 +136,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
       });
     }
     newDeck = deck;
-    flashCardData = [<String>[]];
+    flashCardData = <FlashCard>[];
 
     getCardfromDataBase = (() async* {
       // add the function to get the flashcards from database and save it in flashCardData, while retriving data from
@@ -150,12 +151,12 @@ class _EditFlashCardState extends State<EditFlashCard> {
             .get()
             .then((ref) {
           flashCardData.add(
-              [ref.data["term"], ref.data["definition"], ref.data['isimage']]);
+            FlashCard(term: ref.data["term"], definition: ref.data["definition"], isTermPhoto: ref.data["isTermPhoto"], isDefinitionPhoto: ref.data["isDefinitionPhoto"], isOneSided: ref.data["isOneSided"])
+              // FlashCard(term: ref.data["term"],defintion: ref.data["definition"], ref.data['isimage'])
+          );
         });
       }
-      flashCardData.add(['', '', 'false']);
-      print(flashCardData.length);
-      print("yield go brrr");
+      flashCardData.add(FlashCard(term: '', definition: '', isTermPhoto: false, isDefinitionPhoto: false , isOneSided: false));
       yield 1;
     })();
   }
@@ -243,7 +244,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
                     child: Column(
                       key: _keyFlashcard,
                       children: <Widget>[
-                        if (flashCardData.length - 1 ==
+                        if (flashCardData.length ==
                             newDeck.flashCardList.length + 1) ...[
                           // flashCardData.add(['','']);
                           Container(

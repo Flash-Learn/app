@@ -4,12 +4,13 @@ import 'package:flutter/scheduler.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:microlearning/Models/flashcard.dart';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class GetFlashCardEdit extends StatefulWidget {
-  final List<dynamic> flashCardData;
+  final List<FlashCard> flashCardData;
   final Deck deck;
   final GlobalKey<ScaffoldState> scaffoldKey;
 
@@ -25,7 +26,7 @@ class GetFlashCardEdit extends StatefulWidget {
 }
 
 class _GetFlashCardEditState extends State<GetFlashCardEdit> {
-  List<dynamic> flashCardData;
+  List<FlashCard> flashCardData;
   Deck deck;
   _GetFlashCardEditState({@required this.deck, @required this.flashCardData});
 
@@ -57,7 +58,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
         StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
         String url = (await taskSnapshot.ref.getDownloadURL()).toString();
         setState(() {
-          flashCardData[index][1] =
+          flashCardData[index].definition =
               url; // saving the url into the list of flashcards
         });
       }
@@ -84,16 +85,16 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     // fill in keys if the list is not long enough (in case one key is added)
     i = 0;
     return flashCardData.map<Widget>(
-      (dynamic data) {
+      (FlashCard data) {
         i++;
         k = '$i';
         print(k);
-        if (flashCardData.indexOf(data) == 0) {
-          return Padding(
-            key: ValueKey(k),
-            padding: EdgeInsets.zero,
-          );
-        } else {
+        // if (flashCardData.indexOf(data) == 0) {
+        //   return Padding(
+        //     key: ValueKey(k),
+        //     padding: EdgeInsets.zero,
+        //   );
+        // } else {
           return Dismissible(
             key: ValueKey(k),
             onDismissed: (direction) {
@@ -121,16 +122,14 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.6,
                               child: TextFormField(
-                                  autofocus: false,
-                                  enableSuggestions: false,
                                   maxLines: null,
-                                  keyboardType: TextInputType.text,
                                   textAlign: TextAlign.center,
-                                  initialValue: data[0],
+                                  initialValue: data.term,
                                   onChanged: (val) {
                                     flashCardData[flashCardData.indexOf(data)]
-                                        [0] = val;
+                                        .term = val;
                                   },
+                                  keyboardType: TextInputType.multiline,
                                   style: TextStyle(
                                       color: MyColorScheme.uno(), fontSize: 16),
                                   decoration: InputDecoration(
@@ -158,17 +157,16 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                 indent: 20,
                               ),
                             ),
-                            if (data[2] == 'false') ...[
+                            if (data.isDefinitionPhoto == false) ...[
                               TextFormField(
                                 maxLines: null,
                                 textAlign: TextAlign.center,
-                                initialValue: data[1],
+                                initialValue: data.definition,
                                 style: TextStyle(color: MyColorScheme.uno()),
                                 onChanged: (val) {
                                   flashCardData[flashCardData.indexOf(data)]
-                                      [1] = val;
+                                      .definition = val;
                                 },
-                                keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.newline,
                                 decoration: InputDecoration(
                                   hintText: 'Definition',
@@ -183,7 +181,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                 ),
                               ),
                             ] else ...[
-                              if (data[1] == 'null') ...[
+                              if (data.definition == 'null') ...[
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   child: Row(
@@ -213,7 +211,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                                   child: Image.network(
-                                    data[1],
+                                    data.definition,
                                     loadingBuilder: (BuildContext context,
                                         Widget child,
                                         ImageChunkEvent loadingProgress) {
@@ -268,7 +266,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
               ],
             ),
           );
-        }
       },
     ).toList(); // building the list of flashcards in their edit mode
   }
@@ -322,7 +319,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                     onPressed: () {
                       setState(() {
                         fieldCount++;
-                        flashCardData.add(['', '', 'false']);
+                        flashCardData.add(FlashCard(term: '', definition: '', isTermPhoto: false, isDefinitionPhoto: false, isOneSided: false));
                         //TODO: generate a id for flash card....But I don't think we will need this
                       });
                       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -364,7 +361,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                       setState(() {
                         fieldCount++;
                         try {
-                          flashCardData.add(['', 'null', 'true']);
+                          flashCardData.add(FlashCard(term: '', definition: 'null', isTermPhoto: false, isDefinitionPhoto: true, isOneSided: false));
                         } catch (e) {
                           print('here is the error');
                           print(e);
