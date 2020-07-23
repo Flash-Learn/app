@@ -36,7 +36,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
   final _picker = ImagePicker();
 
   // function for getting the image from the source (camera or gallery)
-  getImage(ImageSource source, BuildContext context, int index) async {
+  getImage(ImageSource source, BuildContext context, int index, bool forTerm) async {
     final image = await _picker.getImage(
         source: source); // take the image from the source
     if (image != null) {
@@ -58,8 +58,14 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
         StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
         String url = (await taskSnapshot.ref.getDownloadURL()).toString();
         setState(() {
-          flashCardData[index].definition =
-              url; // saving the url into the list of flashcards
+          if(forTerm){
+            flashCardData[index].term = url;
+            flashCardData[index].isTermPhoto = true;
+          } else {
+            flashCardData[index].isDefinitionPhoto = true;
+            flashCardData[index].definition =
+                url;
+                } // saving the url into the list of flashcards
         });
       }
     }
@@ -104,170 +110,422 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
               });
             },
             background: Container(
-              color: Colors.grey,
+              color: Colors.red[400],
             ),
-            child: Stack(
-              children: <Widget>[
-                Padding(
-                  key: ValueKey(k),
-                  padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                      decoration: BoxDecoration(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: MyColorScheme.accent(),
                       ),
-                      child: Form(
-                        child: Column(
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        !data.isTermPhoto ? Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: TextFormField(
+                            maxLines: null,
+                            textAlign: TextAlign.center,
+                            initialValue: data.term,
+                            onChanged: (val) {
+                              flashCardData[flashCardData.indexOf(data)]
+                                  .term = val;
+                            },
+                            keyboardType: TextInputType.multiline,
+                            style: TextStyle(
+                                color: MyColorScheme.uno(), fontSize: 16),
+                            decoration: InputDecoration(
+                              counterText: '',
+                              hintText: 'Term',
+                              hintStyle:
+                                  (TextStyle(color: Colors.white24)),
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.only(
+                                  left: 15,
+                                  bottom: 0,
+                                  top: 11,
+                                  right: 15),
+                            )),
+                        ): 
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                            padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
+                            child: Image.network(
+                              data.term,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress
+                                                .expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress
+                                                .expectedTotalBytes
+                                        : null,
+                                  ),
+                                );
+                              },
+                              // height: 250,
+                              height:
+                                  MediaQuery.of(context).size.width * 0.5,
+                              width:
+                                  MediaQuery.of(context).size.width * 0.5,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        Column(
                           children: <Widget>[
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              child: TextFormField(
-                                  maxLines: null,
-                                  textAlign: TextAlign.center,
-                                  initialValue: data.term,
-                                  onChanged: (val) {
-                                    flashCardData[flashCardData.indexOf(data)]
-                                        .term = val;
-                                  },
-                                  keyboardType: TextInputType.multiline,
-                                  style: TextStyle(
-                                      color: MyColorScheme.uno(), fontSize: 16),
-                                  decoration: InputDecoration(
-                                    counterText: '',
-                                    hintText: 'Term',
-                                    hintStyle:
-                                        (TextStyle(color: Colors.white24)),
-                                    border: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 15,
-                                        bottom: 0,
-                                        top: 11,
-                                        right: 15),
-                                  )),
+                            IconButton(
+                              icon: Icon(Icons.image),
+                              color: MyColorScheme.uno(),
+                              iconSize: 20,
+                              onPressed: (){
+                                imagePopUp(context, data, true);
+                              },
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Divider(
-                                color: Colors.grey[800],
-                                endIndent: 20,
-                                indent: 20,
-                              ),
-                            ),
-                            if (data.isDefinitionPhoto == false) ...[
-                              TextFormField(
-                                maxLines: null,
-                                textAlign: TextAlign.center,
-                                initialValue: data.definition,
-                                style: TextStyle(color: MyColorScheme.uno()),
-                                onChanged: (val) {
-                                  flashCardData[flashCardData.indexOf(data)]
-                                      .definition = val;
-                                },
-                                textInputAction: TextInputAction.newline,
-                                decoration: InputDecoration(
-                                  hintText: 'Definition',
-                                  hintStyle: (TextStyle(color: Colors.white24)),
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  contentPadding: EdgeInsets.only(
-                                      left: 15, bottom: 11, top: 0, right: 15),
-                                ),
-                              ),
-                            ] else ...[
-                              if (data.definition == 'null') ...[
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(Icons.camera),
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          getImage(ImageSource.camera, context,
-                                              flashCardData.indexOf(data));
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(Icons.photo),
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          getImage(ImageSource.gallery, context,
-                                              flashCardData.indexOf(data));
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ] else ...[
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                                  child: Image.network(
-                                    data.definition,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes
-                                              : null,
-                                        ),
-                                      );
-                                    },
-                                    // height: 250,
-                                    height:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ]
-                            ]
+                            data.isTermPhoto ? IconButton(
+                              icon: Icon(Icons.cancel),
+                              color: Colors.white,
+                              onPressed: (){
+                                setState(() {
+                                  flashCardData[flashCardData.indexOf(data)].isTermPhoto = false;
+                                  flashCardData[flashCardData.indexOf(data)].term = '';
+                                });
+                              },
+                            ) : Container(height: 0,)
                           ],
-                        ),
-                      )),
+                        )
+                      ],
+                    ),
+                    Container(width: MediaQuery.of(context).size.width * 0.5,child: Divider(thickness: 2,color: Colors.white,)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        !data.isDefinitionPhoto ? Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: TextFormField(
+                              maxLines: null,
+                              textAlign: TextAlign.center,
+                              initialValue: data.definition,
+                              style: TextStyle(color: MyColorScheme.uno()),
+                              onChanged: (val) {
+                                flashCardData[flashCardData.indexOf(data)]
+                                    .definition = val;
+                              },
+                              textInputAction: TextInputAction.newline,
+                              decoration: InputDecoration(
+                                hintText: 'Definition',
+                                hintStyle: (TextStyle(color: Colors.white24)),
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                contentPadding: EdgeInsets.only(
+                                    left: 15, bottom: 11, top: 0, right: 15),
+                              ),
+                            ),
+                        ): 
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                            padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
+                            child: Image.network(
+                              data.definition,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress
+                                                .expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress
+                                                .expectedTotalBytes
+                                        : null,
+                                  ),
+                                );
+                              },
+                              // height: 250,
+                              height:
+                                  MediaQuery.of(context).size.width * 0.5,
+                              width:
+                                  MediaQuery.of(context).size.width * 0.5,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        Column(
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.image),
+                              color: MyColorScheme.uno(),
+                              iconSize: 20,
+                              onPressed: (){
+                                imagePopUp(context, data, false);
+                              },
+                            ),
+                            data.isDefinitionPhoto ? IconButton(
+                              icon: Icon(Icons.cancel),
+                              color: Colors.white,
+                              onPressed: (){
+                                setState(() {
+                                  flashCardData[flashCardData.indexOf(data)].isTermPhoto = false;
+                                  flashCardData[flashCardData.indexOf(data)].term = '';
+                                });
+                              },
+                            ) : Container(height: 0,)
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.white,
-                        onPressed: () {
-                          setState(() {
-                            flashCardData.remove(data);
-                            print(flashCardData.length);
-                            fieldCount--;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+              ),
+            )
+            // Stack(
+            //   children: <Widget>[
+            //     Padding(
+            //       key: ValueKey(k),
+            //       padding: const EdgeInsets.all(5.0),
+            //       child: Container(
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(10),
+            //             color: MyColorScheme.accent(),
+            //           ),
+            //           child: Form(
+            //             child: Column(
+            //               children: <Widget>[
+            //                 Container(
+            //                   width: MediaQuery.of(context).size.width * 0.6,
+                              // child: TextFormField(
+                              //     maxLines: null,
+                              //     textAlign: TextAlign.center,
+                              //     initialValue: data.term,
+                              //     onChanged: (val) {
+                              //       flashCardData[flashCardData.indexOf(data)]
+                              //           .term = val;
+                              //     },
+                              //     keyboardType: TextInputType.multiline,
+                              //     style: TextStyle(
+                              //         color: MyColorScheme.uno(), fontSize: 16),
+                              //     decoration: InputDecoration(
+                              //       counterText: '',
+                              //       hintText: 'Term',
+                              //       hintStyle:
+                              //           (TextStyle(color: Colors.white24)),
+                              //       border: InputBorder.none,
+                              //       focusedBorder: InputBorder.none,
+                              //       enabledBorder: InputBorder.none,
+                              //       errorBorder: InputBorder.none,
+                              //       disabledBorder: InputBorder.none,
+                              //       contentPadding: EdgeInsets.only(
+                              //           left: 15,
+                              //           bottom: 0,
+                              //           top: 11,
+                              //           right: 15),
+                              //     )),
+            //                 ),
+            //                 Padding(
+            //                   padding: const EdgeInsets.all(10.0),
+            //                   child: Divider(
+            //                     color: Colors.grey[800],
+            //                     endIndent: 20,
+            //                     indent: 20,
+            //                   ),
+            //                 ),
+            //                 if (data.isDefinitionPhoto == false) ...[
+                              // TextFormField(
+                              //   maxLines: null,
+                              //   textAlign: TextAlign.center,
+                              //   initialValue: data.definition,
+                              //   style: TextStyle(color: MyColorScheme.uno()),
+                              //   onChanged: (val) {
+                              //     flashCardData[flashCardData.indexOf(data)]
+                              //         .definition = val;
+                              //   },
+                              //   textInputAction: TextInputAction.newline,
+                              //   decoration: InputDecoration(
+                              //     hintText: 'Definition',
+                              //     hintStyle: (TextStyle(color: Colors.white24)),
+                              //     border: InputBorder.none,
+                              //     focusedBorder: InputBorder.none,
+                              //     enabledBorder: InputBorder.none,
+                              //     errorBorder: InputBorder.none,
+                              //     disabledBorder: InputBorder.none,
+                              //     contentPadding: EdgeInsets.only(
+                              //         left: 15, bottom: 11, top: 0, right: 15),
+                              //   ),
+                              // ),
+            //                 ] else ...[
+            //                   if (data.definition == 'null') ...[
+            //                     Container(
+            //                       padding: EdgeInsets.all(10),
+            //                       child: Row(
+            //                         mainAxisAlignment:
+            //                             MainAxisAlignment.spaceAround,
+            //                         children: <Widget>[
+                                      // IconButton(
+                                      //   icon: Icon(Icons.camera),
+                                      //   color: Colors.white,
+                                      //   onPressed: () {
+                                      //     getImage(ImageSource.camera, context,
+                                      //         flashCardData.indexOf(data));
+                                      //   },
+                                      // ),
+                                      // IconButton(
+                                      //   icon: Icon(Icons.photo),
+                                      //   color: Colors.white,
+                                      //   onPressed: () {
+                                      //     getImage(ImageSource.gallery, context,
+                                      //         flashCardData.indexOf(data));
+                                      //   },
+                                      // )
+            //                         ],
+            //                       ),
+            //                     ),
+            //                   ] else ...[
+                                // Padding(
+                                //   padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                //   child: Image.network(
+                                //     data.definition,
+                                //     loadingBuilder: (BuildContext context,
+                                //         Widget child,
+                                //         ImageChunkEvent loadingProgress) {
+                                //       if (loadingProgress == null) return child;
+                                //       return Center(
+                                //         child: CircularProgressIndicator(
+                                //           value: loadingProgress
+                                //                       .expectedTotalBytes !=
+                                //                   null
+                                //               ? loadingProgress
+                                //                       .cumulativeBytesLoaded /
+                                //                   loadingProgress
+                                //                       .expectedTotalBytes
+                                //               : null,
+                                //         ),
+                                //       );
+                                //     },
+                                //     // height: 250,
+                                //     height:
+                                //         MediaQuery.of(context).size.width * 0.5,
+                                //     width:
+                                //         MediaQuery.of(context).size.width * 0.5,
+                                //     fit: BoxFit.cover,
+                                //   ),
+                                // ),
+            //                   ]
+            //                 ]
+            //               ],
+            //             ),
+            //           )),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.all(20.0),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         crossAxisAlignment: CrossAxisAlignment.center,
+            //         children: <Widget>[
+            //           IconButton(
+            //             icon: Icon(Icons.delete_outline),
+            //             color: Colors.white,
+            //             onPressed: () {
+            //               setState(() {
+            //                 flashCardData.remove(data);
+            //                 print(flashCardData.length);
+            //                 fieldCount--;
+            //               });
+            //             },
+            //           ),
+            //         ],
+            //       ),
+            //     )
+            //   ],
+            // ),
           );
       },
     ).toList(); // building the list of flashcards in their edit mode
+  }
+
+  imagePopUp(BuildContext context, FlashCard data, bool forTerm){
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0)),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.25,
+            padding: EdgeInsets.all(15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.camera),
+                          color: Colors.black,
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            await getImage(ImageSource.camera, context,
+                                flashCardData.indexOf(data), forTerm);
+                          },
+                        ),
+                        Text('Camera')
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.photo),
+                          color: Colors.black,
+                          onPressed: () async{
+                            Navigator.pop(context);
+                            await getImage(ImageSource.gallery, context,
+                                flashCardData.indexOf(data), forTerm);
+                          },
+                        ),
+                        Text('Gallery'),
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text('Cancel'),
+                      textColor: Colors.redAccent,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      });
   }
 
   bool _disableTouch = false;
@@ -286,101 +544,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
       absorbing: _disableTouch,
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Material(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.red[300],
-                  child: MaterialButton(
-                    //color: Colors.blue,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(
-                          Icons.text_fields,
-                          color: Colors.black,
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        Text(
-                          "Add text card",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        fieldCount++;
-                        flashCardData.add(FlashCard(term: '', definition: '', isTermPhoto: false, isDefinitionPhoto: false, isOneSided: false));
-                        //TODO: generate a id for flash card....But I don't think we will need this
-                      });
-                      SchedulerBinding.instance.addPostFrameCallback((_) {
-                        _scrollController.animateTo(
-                          _scrollController.position.maxScrollExtent,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        );
-                      });
-                    },
-                  ),
-                ),
-                Material(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.red[300],
-                  child: MaterialButton(
-                    key: ValueKey('photo card'),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(
-                          Icons.photo,
-                          color: Colors.black,
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        Text(
-                          "Add photo card",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        fieldCount++;
-                        try {
-                          flashCardData.add(FlashCard(term: '', definition: 'null', isTermPhoto: false, isDefinitionPhoto: true, isOneSided: false));
-                        } catch (e) {
-                          print('here is the error');
-                          print(e);
-                        }
-                        //TODO: generate a id for flash card....But I don't think we will need this
-                      });
-                      SchedulerBinding.instance.addPostFrameCallback((_) {
-                        _scrollController.animateTo(
-                          _scrollController.position.maxScrollExtent,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        );
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
           ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: MediaQuery.of(context).size.height * 0.8,
