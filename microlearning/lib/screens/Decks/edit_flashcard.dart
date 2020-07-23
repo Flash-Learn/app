@@ -151,13 +151,22 @@ class _EditFlashCardState extends State<EditFlashCard> {
             .document(newDeck.flashCardList[i])
             .get()
             .then((ref) {
-          flashCardData.add(
-            FlashCard(term: ref.data["term"], definition: ref.data["definition"], isTermPhoto: ref.data["isTermPhoto"], isDefinitionPhoto: ref.data["isDefinitionPhoto"], isOneSided: ref.data["isOneSided"])
+          flashCardData.add(FlashCard(
+                  term: ref.data["term"],
+                  definition: ref.data["definition"],
+                  isTermPhoto: ref.data["isTermPhoto"],
+                  isDefinitionPhoto: ref.data["isDefinitionPhoto"],
+                  isOneSided: ref.data["isOneSided"])
               // FlashCard(term: ref.data["term"],defintion: ref.data["definition"], ref.data['isimage'])
-          );
+              );
         });
       }
-      flashCardData.add(FlashCard(term: '', definition: '', isTermPhoto: false, isDefinitionPhoto: false , isOneSided: false));
+      flashCardData.add(FlashCard(
+          term: '',
+          definition: '',
+          isTermPhoto: false,
+          isDefinitionPhoto: false,
+          isOneSided: false));
       setState(() {
         isLoading = false;
       });
@@ -251,20 +260,26 @@ class _EditFlashCardState extends State<EditFlashCard> {
                         if (isLoading == false) ...[
                           // flashCardData.add(['','']);
                           Container(
-                            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                            padding: EdgeInsets.fromLTRB(25, 20, 25, 0),
                             child: Column(
                               children: <Widget>[
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center,
                                   children: <Widget>[
+                                    // Container(
+                                    //   // padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    // ),
                                     Material(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.red[300],
                                       child: MaterialButton(
                                         //color: Colors.blue,
                                         child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: <Widget>[
                                             Icon(
                                               Icons.add,
@@ -274,7 +289,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
                                             //   width: 3,
                                             // ),
                                             Text(
-                                              "Two-sided card",
+                                              "Two-sided Card",
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
@@ -284,7 +299,12 @@ class _EditFlashCardState extends State<EditFlashCard> {
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            flashCardData.add(FlashCard(term: '', definition: '', isTermPhoto: false, isDefinitionPhoto: false, isOneSided: false));
+                                            flashCardData.add(FlashCard(
+                                                term: '',
+                                                definition: '',
+                                                isTermPhoto: false,
+                                                isDefinitionPhoto: false,
+                                                isOneSided: false));
                                             //TODO: generate a id for flash card....But I don't think we will need this
                                           });
                                           // SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -297,24 +317,30 @@ class _EditFlashCardState extends State<EditFlashCard> {
                                         },
                                       ),
                                     ),
+                                    // Text("hel;lop"),
+                                    SizedBox(
+                                      width: 65,
+                                    ),
                                     Material(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.red[300],
                                       child: MaterialButton(
                                         key: ValueKey('photo card'),
                                         child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: <Widget>[
                                             Icon(
-                                                Icons.add,
-                                                color: Colors.black,
-                                              ),
-                                          //   SizedBox(
-                                          //     width: 3,
-                                          //   ),
+                                              Icons.add,
+                                              color: Colors.black,
+                                            ),
+                                            //   SizedBox(
+                                            //     width: 3,
+                                            //   ),
                                             Text(
-                                              "One-sided card",
+                                              "One-sided Card",
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
@@ -327,7 +353,12 @@ class _EditFlashCardState extends State<EditFlashCard> {
                                             // fieldCount++;
                                             try {
                                               setState(() {
-                                                flashCardData.add(FlashCard(term: '', definition: '', isTermPhoto: false, isDefinitionPhoto: false, isOneSided: true));
+                                                flashCardData.add(FlashCard(
+                                                    term: '',
+                                                    definition: '',
+                                                    isTermPhoto: false,
+                                                    isDefinitionPhoto: false,
+                                                    isOneSided: true));
                                               });
                                             } catch (e) {
                                               print('here is the error');
