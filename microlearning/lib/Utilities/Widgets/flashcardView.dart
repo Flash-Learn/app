@@ -163,7 +163,9 @@ class _FlashCardViewState extends State<FlashCardView> {
             child: Padding(
               key: ValueKey<int>(side),
               // padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 8),
-              padding: widget.isTestMode ? EdgeInsets.fromLTRB(8, 35, 8, 35) : EdgeInsets.fromLTRB(8, 0, 8, 35),
+              padding: widget.isTestMode
+                  ? EdgeInsets.fromLTRB(8, 35, 8, 35)
+                  : EdgeInsets.fromLTRB(8, 0, 8, 35),
               child: Container(
                 child: Transform(
                   transform: Matrix4.identity()
@@ -197,311 +199,337 @@ class _FlashCardViewState extends State<FlashCardView> {
                           items: getPopupItems(context),
                         );
                       },
-                      child: widget.isTestMode ?
-                      FlipCard(
-                        direction: FlipDirection.HORIZONTAL,
-                        front: Stack(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-//                                  color: userRemembers ? Color.fromRGBO(149, 242, 145, 1) : Colors.red,
-                                  color: Colors.white,
-                                  border: Border.all(
-//                                      color: MyColorScheme.flashcardColor(),
-                                        color: userRemembers ? Color.fromRGBO(166, 250, 165, 1) : Color.fromRGBO(250, 165, 165, 1),
-                                      width: 7),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            term,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.black,
-//                                              color: userRemembers ? Color.fromRGBO(149, 242, 145, 1) : Colors.red,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ]),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            widget.editAccess & widget.isTestMode
-                              ? Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                      child: widget.isTestMode
+                          ? FlipCard(
+                              direction: FlipDirection.HORIZONTAL,
+                              front: Stack(
                                 children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          RawMaterialButton(
-                                            onPressed: () async {
-                                              await clickNotMemorized();
-                                            },
-                                            elevation: 2.0,
-                                            fillColor:
-                                                Colors.redAccent[700],
-                                            child: Icon(
-                                              Icons.close,
-                                              color: Colors.white,
-                                              size: 35.0,
-                                            ),
-                                            padding:
-                                                EdgeInsets.all(15.0),
-                                            shape: CircleBorder(),
-                                          ),
-                                          RawMaterialButton(
-                                            onPressed: () async {
-                                              await clickMemorized();
-                                            },
-                                            elevation: 2.0,
-                                            fillColor:
-                                            Colors.greenAccent[400],
-                                            child: Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                              size: 35.0,
-                                            ),
-                                            padding:
-                                            EdgeInsets.all(15.0),
-                                            shape: CircleBorder(),
-                                          ),
-                                        ],
+                                  Container(
+                                    decoration: BoxDecoration(
+//                                  color: userRemembers ? Color.fromRGBO(149, 242, 145, 1) : Colors.red,
+                                        color: Colors.white,
+                                        border: Border.all(
+//                                      color: MyColorScheme.flashcardColor(),
+                                            color: userRemembers
+                                                ? Color.fromRGBO(
+                                                    166, 250, 165, 1)
+                                                : Color.fromRGBO(
+                                                    250, 165, 165, 1),
+                                            width: 7),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(20),
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  term,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+//                                              color: userRemembers ? Color.fromRGBO(149, 242, 145, 1) : Colors.red,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ]),
+                                        ),
                                       ),
+                                    ),
+                                  ),
+                                  widget.editAccess & widget.isTestMode
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: <Widget>[
+                                                  RawMaterialButton(
+                                                    onPressed: () async {
+                                                      await clickNotMemorized();
+                                                    },
+                                                    elevation: 2.0,
+                                                    fillColor:
+                                                        Colors.redAccent[700],
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      color: Colors.white,
+                                                      size: 35.0,
+                                                    ),
+                                                    padding:
+                                                        EdgeInsets.all(15.0),
+                                                    shape: CircleBorder(),
+                                                  ),
+                                                  RawMaterialButton(
+                                                    onPressed: () async {
+                                                      await clickMemorized();
+                                                    },
+                                                    elevation: 2.0,
+                                                    fillColor:
+                                                        Colors.greenAccent[400],
+                                                    child: Icon(
+                                                      Icons.check,
+                                                      color: Colors.white,
+                                                      size: 35.0,
+                                                    ),
+                                                    padding:
+                                                        EdgeInsets.all(15.0),
+                                                    shape: CircleBorder(),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox(),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      GestureDetector(
+                                        onTapDown: (details) {
+                                          _tapPosition = details.globalPosition;
+                                        },
+                                        onTap: () async {
+                                          final RenderBox overlay =
+                                              Overlay.of(context)
+                                                  .context
+                                                  .findRenderObject();
+                                          await showMenu(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(5))),
+                                            context: context,
+                                            // found way to show delete button on the location of long press
+                                            // not sure how it works
+                                            position: RelativeRect.fromRect(
+                                                _tapPosition &
+                                                    Size(40,
+                                                        40), // smaller rect, the touch area
+                                                Offset.zero &
+                                                    overlay
+                                                        .size // Bigger rect, the entire screen
+                                                ),
+                                            items: getPopupItems(context),
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 10, 20, 0),
+                                          child: Icon(
+                                            Icons.more_horiz,
+                                            color: MyColorScheme.accent(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
-                              )
-                              : SizedBox(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTapDown: (details) {
-                                    _tapPosition = details.globalPosition;
-                                  },
-                                  onTap: () async {
-                                    final RenderBox overlay =
-                                        Overlay.of(context)
-                                            .context
-                                            .findRenderObject();
-                                    await showMenu(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5))),
-                                      context: context,
-                                      // found way to show delete button on the location of long press
-                                      // not sure how it works
-                                      position: RelativeRect.fromRect(
-                                          _tapPosition &
-                                              Size(40,
-                                                  40), // smaller rect, the touch area
-                                          Offset.zero &
-                                              overlay
-                                                  .size // Bigger rect, the entire screen
-                                          ),
-                                      items: getPopupItems(context),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 20, 0),
-                                    child: Icon(
-                                      Icons.more_horiz,
-                                      color: MyColorScheme.accent(),
+                              ),
+                              back: Stack(children: <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: MyColorScheme.flashcardColor(),
+                                      border: Border.all(
+                                          color: MyColorScheme.flashcardColor(),
+                                          width: 3),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            isPic
+                                                ? ClipRect(
+                                                    child: Container(
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.5,
+                                                      child: PhotoView(
+                                                        minScale:
+                                                            PhotoViewComputedScale
+                                                                .contained,
+                                                        imageProvider:
+                                                            NetworkImage(
+                                                                definition),
+                                                        backgroundDecoration:
+                                                            BoxDecoration(
+                                                                color: Colors
+                                                                    .transparent),
+                                                        maxScale:
+                                                            PhotoViewComputedScale
+                                                                    .covered *
+                                                                2.0,
+                                                        loadingBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                ImageChunkEvent
+                                                                    loadingProgress) {
+                                                          if (loadingProgress ==
+                                                              null) {
+                                                            return Container();
+                                                          }
+                                                          return Center(
+                                                            child: CircularProgressIndicator(
+                                                                value: loadingProgress
+                                                                            .expectedTotalBytes !=
+                                                                        null
+                                                                    ? loadingProgress
+                                                                            .cumulativeBytesLoaded /
+                                                                        loadingProgress
+                                                                            .expectedTotalBytes
+                                                                    : null),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  )
+                                                // ? Image.network(definition,
+                                                //     loadingBuilder:
+                                                //         (BuildContext context,
+                                                //             Widget child,
+                                                //             ImageChunkEvent
+                                                //                 loadingProgress) {
+                                                //     if (loadingProgress == null)
+                                                //       return child;
+                                                //     return Center(
+                                                //       child: CircularProgressIndicator(
+                                                //         value: loadingProgress
+                                                //                     .expectedTotalBytes !=
+                                                //                 null
+                                                //             ? loadingProgress
+                                                //                     .cumulativeBytesLoaded /
+                                                //                 loadingProgress
+                                                //                     .expectedTotalBytes
+                                                //             : null,
+                                                //       ),
+                                                //     );
+                                                //   })
+                                                : Text(
+                                                    definition,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                            Container(
+                                              height: 50,
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        back: Stack(children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                                color: MyColorScheme.flashcardColor(),
-                                border: Border.all(
-                                    color: MyColorScheme.flashcardColor(),
-                                    width: 3),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      isPic
-                                          ? ClipRect(
-                                              child: Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.5,
-                                                child: PhotoView(
-                                                  minScale: PhotoViewComputedScale
-                                                      .contained,
-                                                  imageProvider:
-                                                      NetworkImage(definition),
-                                                  backgroundDecoration:
-                                                      BoxDecoration(
-                                                          color:
-                                                              Colors.transparent),
-                                                  maxScale: PhotoViewComputedScale
-                                                          .covered *
-                                                      2.0,
-                                                  loadingBuilder:
-                                                      (BuildContext context,
-                                                          ImageChunkEvent
-                                                              loadingProgress) {
-                                                    if (loadingProgress == null) {
-                                                      return Container();
-                                                    }
-                                                    return Center(
-                                                      child: CircularProgressIndicator(
-                                                          value: loadingProgress
-                                                                      .expectedTotalBytes !=
-                                                                  null
-                                                              ? loadingProgress
-                                                                      .cumulativeBytesLoaded /
-                                                                  loadingProgress
-                                                                      .expectedTotalBytes
-                                                              : null),
-                                                    );
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      child: (widget.editAccess &
+                                              widget.isTestMode)
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                RawMaterialButton(
+                                                  onPressed: () async {
+                                                    await clickNotMemorized();
                                                   },
+                                                  elevation: 2.0,
+                                                  fillColor:
+                                                      Colors.redAccent[700],
+                                                  child: Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                    size: 35.0,
+                                                  ),
+                                                  padding: EdgeInsets.all(15.0),
+                                                  shape: CircleBorder(),
                                                 ),
-                                              ),
+                                                RawMaterialButton(
+                                                  onPressed: () async {
+                                                    await clickMemorized();
+                                                  },
+                                                  elevation: 2.0,
+                                                  fillColor:
+                                                      Colors.greenAccent[400],
+                                                  child: Icon(
+                                                    Icons.check,
+                                                    color: Colors.white,
+                                                    size: 35.0,
+                                                  ),
+                                                  padding: EdgeInsets.all(15.0),
+                                                  shape: CircleBorder(),
+                                                )
+                                              ],
                                             )
-                                          // ? Image.network(definition,
-                                          //     loadingBuilder:
-                                          //         (BuildContext context,
-                                          //             Widget child,
-                                          //             ImageChunkEvent
-                                          //                 loadingProgress) {
-                                          //     if (loadingProgress == null)
-                                          //       return child;
-                                          //     return Center(
-                                          //       child: CircularProgressIndicator(
-                                          //         value: loadingProgress
-                                          //                     .expectedTotalBytes !=
-                                          //                 null
-                                          //             ? loadingProgress
-                                          //                     .cumulativeBytesLoaded /
-                                          //                 loadingProgress
-                                          //                     .expectedTotalBytes
-                                          //             : null,
-                                          //       ),
-                                          //     );
-                                          //   })
-                                          : Text(
-                                              definition,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.normal),
-                                            ),
-                                    Container(height: 50,)
-                                    ],
-                                  ),
+                                          : SizedBox(),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ),
-                          ),
-                          Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: (widget.editAccess & widget.isTestMode)
-                                ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      RawMaterialButton(
-                                        onPressed: () async {
-                                          await clickNotMemorized();
-                                        },
-                                        elevation: 2.0,
-                                        fillColor:
-                                            Colors.redAccent[700],
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTapDown: (details) {
+                                        _tapPosition = details.globalPosition;
+                                      },
+                                      onTap: () async {
+                                        final RenderBox overlay =
+                                            Overlay.of(context)
+                                                .context
+                                                .findRenderObject();
+                                        await showMenu(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5))),
+                                          context: context,
+                                          // found way to show delete button on the location of long press
+                                          // not sure how it works
+                                          position: RelativeRect.fromRect(
+                                              _tapPosition &
+                                                  Size(40,
+                                                      40), // smaller rect, the touch area
+                                              Offset.zero &
+                                                  overlay
+                                                      .size // Bigger rect, the entire screen
+                                              ),
+                                          items: getPopupItems(context),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 10, 20, 0),
                                         child: Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 35.0,
+                                          Icons.more_horiz,
+                                          color: MyColorScheme.accent(),
                                         ),
-                                        padding: EdgeInsets.all(15.0),
-                                        shape: CircleBorder(),
                                       ),
-                                      RawMaterialButton(
-                                        onPressed: () async {
-                                          await clickMemorized();
-                                        },
-                                        elevation: 2.0,
-                                        fillColor:
-                                            Colors.greenAccent[400],
-                                        child: Icon(
-                                          Icons.check,
-                                          color: Colors.white,
-                                          size: 35.0,
-                                        ),
-                                        padding: EdgeInsets.all(15.0),
-                                        shape: CircleBorder(),
-                                      )
-                                    ],
-                                  )
-                                : SizedBox(),
-                            ),
-                          ],
-                        ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              GestureDetector(
-                                onTapDown: (details) {
-                                  _tapPosition = details.globalPosition;
-                                },
-                                onTap: () async {
-                                  final RenderBox overlay = Overlay.of(context)
-                                      .context
-                                      .findRenderObject();
-                                  await showMenu(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5))),
-                                    context: context,
-                                    // found way to show delete button on the location of long press
-                                    // not sure how it works
-                                    position: RelativeRect.fromRect(
-                                        _tapPosition &
-                                            Size(40,
-                                                40), // smaller rect, the touch area
-                                        Offset.zero &
-                                            overlay
-                                                .size // Bigger rect, the entire screen
-                                        ),
-                                    items: getPopupItems(context),
-                                  );
-                                },
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 20, 0),
-                                  child: Icon(
-                                    Icons.more_horiz,
-                                    color: MyColorScheme.accent(),
-                                  ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
-                        ]),
-                      ):getLearnMode(),
+                              ]),
+                            )
+                          : getLearnMode(),
                     ),
                   ]),
                 ),
@@ -510,166 +538,149 @@ class _FlashCardViewState extends State<FlashCardView> {
           );
         });
   }
-   getLearnMode(){
-     return LayoutBuilder(
-       builder: (BuildContext context, BoxConstraints constraints) {
+
+  getLearnMode() {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
 //         print(constraints.maxHeight);
-         double minHeight = constraints.maxHeight;
-         return SingleChildScrollView(
-           child: Column(
-             children: <Widget>[
-               SizedBox(
-                 height: 20,
-               ),
-               LayoutBuilder(
-
-                   builder: (BuildContext context, BoxConstraints constraints) {
+      double minHeight = constraints.maxHeight;
+      return SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
 //                     print(constraints.maxHeight);
-                     return ConstrainedBox(
-                       constraints: BoxConstraints(
-                         minHeight: minHeight-20,
-                         minWidth: constraints.maxWidth,
-                       ),
-                       child: Container(
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: minHeight - 20,
+                  minWidth: constraints.maxWidth,
+                ),
+                child: Container(
 //         height: MediaQuery.of(context).size.height,
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             border: Border.all(
-                                 color: MyColorScheme.flashcardColor(),
-                                 width: 3),
-                             borderRadius: BorderRadius.circular(20)),
-                         child: Column(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          color: MyColorScheme.flashcardColor(), width: 3),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Column(
 //            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                           children: <Widget>[
-                             Padding(
-                               padding: const EdgeInsets.fromLTRB(
-                                   10, 30, 15, 10),
-                               child: Column(
-                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                 children: <Widget>[
-                                   Text(
-                                     "TERM",
-                                     style: TextStyle(
-                                       color: Color.fromRGBO(27, 116, 210, 1),
-                                       fontSize: 10,
-                                       letterSpacing: 3,
-                                       fontWeight: FontWeight.w900,
-                                     ),
-                                     textAlign: TextAlign.left,
-
-                                   ),
-                                   SizedBox(
-                                     height: 5,
-                                   ),
-                                   Text(
-                                     term,
-                                     style: TextStyle(
-                                       fontFamily: 'Roboto',
-                                       color: Colors.black,
-                                       fontSize: 20,
-                                       letterSpacing: 1,
-                                       fontWeight: FontWeight.w900,
-                                     ),
-                                     textAlign: TextAlign.left,
-                                   ),
-                                 ],
-                               ),
-                             ),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 30, 15, 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "TERM",
+                              style: TextStyle(
+                                color: Color.fromRGBO(27, 116, 210, 1),
+                                fontSize: 10,
+                                letterSpacing: 3,
+                                fontWeight: FontWeight.w900,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              term,
+                              style: TextStyle(
+                                fontFamily: 'Roboto',
+                                color: Colors.black,
+                                fontSize: 20,
+                                letterSpacing: 1,
+                                fontWeight: FontWeight.w900,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                      ),
 //              Container(padding: EdgeInsets.symmetric(horizontal: 10),child: Divider(color: MyColorScheme.accent(), thickness: 3,)),
-                             Padding(
-                               padding: const EdgeInsets.fromLTRB(
-                                   10, 10, 15, 10),
-                               child: Column(
-                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                 children: <Widget>[
-                                   Text(
-                                     "DEFINITION",
-                                     style: TextStyle(
-                                       color: Color.fromRGBO(27, 116, 210, 1),
-                                       fontSize: 10,
-                                       letterSpacing: 3,
-                                       fontWeight: FontWeight.w900,
-                                     ),
-                                     textAlign: TextAlign.left,
-
-                                   ),
-                                   SizedBox(
-                                     height: 5,
-                                   ),
-                                   Container(
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 15, 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "DEFINITION",
+                              style: TextStyle(
+                                color: Color.fromRGBO(27, 116, 210, 1),
+                                fontSize: 10,
+                                letterSpacing: 3,
+                                fontWeight: FontWeight.w900,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
 //               height: MediaQuery.of(context).size.height * 0.4,
-                                     child: !isPic ?
-                                     Text(
-                                         definition,
-                                         style: TextStyle(
-                                           fontFamily: 'Roboto',
-                                           fontSize: 16,
-                                           color: Colors.black,
-                                           fontWeight: FontWeight.w400,
-                                         ),
-                                         textAlign: TextAlign.left
-                                     )
-                                         :
-                                     ClipRect(
-                                       child: Container(
-                                         height: MediaQuery
-                                             .of(context)
-                                             .size
-                                             .height *
-                                             0.5,
-                                         child: PhotoView(
-                                           minScale: PhotoViewComputedScale
-                                               .contained,
-                                           imageProvider:
-                                           NetworkImage(definition),
-                                           backgroundDecoration:
-                                           BoxDecoration(
-                                               color:
-                                               Colors.transparent),
-                                           maxScale: PhotoViewComputedScale
-                                               .covered *
-                                               2.0,
-                                           loadingBuilder:
-                                               (BuildContext context,
-                                               ImageChunkEvent
-                                               loadingProgress) {
-                                             if (loadingProgress == null) {
-                                               return Container();
-                                             }
-                                             return Center(
-                                               child: CircularProgressIndicator(
-                                                   value: loadingProgress
-                                                       .expectedTotalBytes !=
-                                                       null
-                                                       ? loadingProgress
-                                                       .cumulativeBytesLoaded /
-                                                       loadingProgress
-                                                           .expectedTotalBytes
-                                                       : null),
-                                             );
-                                           },
-                                         ),
-                                       ),
-                                     ),
-                                   ),
-                                 ],
-                               ),
-                             ),
-                           ],
-                         ),
-                       ),
-                     );
-                   }
+                              child: !isPic
+                                  ? Text(definition,
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      textAlign: TextAlign.left)
+                                  : ClipRect(
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.5,
+                                        child: PhotoView(
+                                          minScale:
+                                              PhotoViewComputedScale.contained,
+                                          imageProvider:
+                                              NetworkImage(definition),
+                                          backgroundDecoration: BoxDecoration(
+                                              color: Colors.transparent),
+                                          maxScale:
+                                              PhotoViewComputedScale.covered *
+                                                  2.0,
+                                          loadingBuilder: (BuildContext context,
+                                              ImageChunkEvent loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return Container();
+                                            }
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes
+                                                      : null),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
+      );
+    });
+  }
 
-
-               ),
-             ],
-           ),
-         );
-       }
-     );
-   }
   createAlertDialog(BuildContext ctxt) {
     String playlistname;
     return showDialog(

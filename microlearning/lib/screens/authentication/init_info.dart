@@ -52,14 +52,19 @@ class _GetUserInfoState extends State<GetUserInfo> {
               children: <Widget>[
                 TextFormField(
                   validator: (val) {
-                    return val.isEmpty ? "Enter name" : null;
+                    Pattern pattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+                    RegExp regex = new RegExp(pattern);
+                    if (!regex.hasMatch(val))
+                      return 'Invalid Name';
+                    else
+                      return null;
                   },
                   onChanged: (val) {
                     setState(() {
                       _name = val;
                     });
                   },
-                  decoration: inputTextDecorations("Name"),
+                  decoration: inputTextDecorations("Your Name"),
                 ),
                 SizedBox(
                   height: 20.0,
@@ -71,6 +76,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
                       child: Text(
                         "Gender",
                         style: TextStyle(
+                          color: MyColorScheme.accent(),
                           fontSize: 18.0,
                         ),
                       ),
@@ -107,6 +113,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
                       child: Text(
                         "Class",
                         style: TextStyle(
+                          color: MyColorScheme.accent(),
                           fontSize: 18.0,
                         ),
                       ),
@@ -140,7 +147,7 @@ class _GetUserInfoState extends State<GetUserInfo> {
                   color: MyColorScheme.accent(),
                   child: Center(
                     child: Text(
-                      "Enter",
+                      "Create Account",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -148,8 +155,8 @@ class _GetUserInfoState extends State<GetUserInfo> {
                     if (_formKey.currentState.validate()) {
                       enterInfo(context, {
                         '_name': _name,
-                        '_grade': _grade,
-                        '_gender': _gender,
+                        '_grade': _grade ?? '1',
+                        '_gender': _gender ?? 'Others',
                       });
                     }
                   },
