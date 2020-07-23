@@ -93,7 +93,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
     return flashCardData.map<Widget>(
       (FlashCard data) {
         i++;
-        k = '$i';
+        k = '${i * flashCardData.length}';
         print(k);
         // if (flashCardData.indexOf(data) == 0) {
         //   return Padding(
@@ -106,20 +106,19 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
             onDismissed: (direction) {
               setState(() {
                 flashCardData.remove(data);
-                fieldCount--;
               });
             },
             background: Container(
               color: Colors.red[400],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: MyColorScheme.accent(),
                       ),
-                child: Column(
+                child: !data.isOneSided ? Column(
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -282,8 +281,8 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                               color: Colors.white,
                               onPressed: (){
                                 setState(() {
-                                  flashCardData[flashCardData.indexOf(data)].isTermPhoto = false;
-                                  flashCardData[flashCardData.indexOf(data)].term = '';
+                                  flashCardData[flashCardData.indexOf(data)].isDefinitionPhoto = false;
+                                  flashCardData[flashCardData.indexOf(data)].definition = '';
                                 });
                               },
                             ) : Container(height: 0,)
@@ -291,6 +290,94 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                         )
                       ],
                     ),
+                  ],
+                ) : 
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    !data.isTermPhoto ? Container(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 10) ,
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: TextFormField(
+                        maxLines: null,
+                        textAlign: TextAlign.center,
+                        initialValue: data.term,
+                        onChanged: (val) {
+                          flashCardData[flashCardData.indexOf(data)]
+                              .term = val;
+                        },
+                        keyboardType: TextInputType.multiline,
+                        style: TextStyle(
+                            color: MyColorScheme.uno(), fontSize: 16),
+                        decoration: InputDecoration(
+                          counterText: '',
+                          hintText: 'Term',
+                          hintStyle:
+                              (TextStyle(color: Colors.white24)),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.only(
+                              left: 15,
+                              bottom: 0,
+                              top: 11,
+                              right: 15),
+                        )),
+                    ): 
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                        padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
+                        child: Image.network(
+                          data.term,
+                          loadingBuilder: (BuildContext context,
+                              Widget child,
+                              ImageChunkEvent loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress
+                                            .expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress
+                                            .cumulativeBytesLoaded /
+                                        loadingProgress
+                                            .expectedTotalBytes
+                                    : null,
+                              ),
+                            );
+                          },
+                          // height: 250,
+                          height:
+                              MediaQuery.of(context).size.width * 0.5,
+                          width:
+                              MediaQuery.of(context).size.width * 0.5,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    Column(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.image),
+                          color: MyColorScheme.uno(),
+                          iconSize: 20,
+                          onPressed: (){
+                            imagePopUp(context, data, true);
+                          },
+                        ),
+                        data.isTermPhoto ? IconButton(
+                          icon: Icon(Icons.cancel),
+                          color: Colors.white,
+                          onPressed: (){
+                            setState(() {
+                              flashCardData[flashCardData.indexOf(data)].isTermPhoto = false;
+                              flashCardData[flashCardData.indexOf(data)].term = '';
+                            });
+                          },
+                        ) : Container(height: 0,)
+                      ],
+                    )
                   ],
                 ),
               ),

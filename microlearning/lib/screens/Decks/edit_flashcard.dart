@@ -252,109 +252,107 @@ class _EditFlashCardState extends State<EditFlashCard> {
                           // flashCardData.add(['','']);
                           Container(
                             padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Material(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.red[300],
-                                        child: MaterialButton(
-                                          //color: Colors.blue,
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Icon(
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Material(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.red[300],
+                                      child: MaterialButton(
+                                        //color: Colors.blue,
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.black,
+                                            ),
+                                            // SizedBox(
+                                            //   width: 3,
+                                            // ),
+                                            Text(
+                                              "Two-sided card",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            flashCardData.add(FlashCard(term: '', definition: '', isTermPhoto: false, isDefinitionPhoto: false, isOneSided: false));
+                                            //TODO: generate a id for flash card....But I don't think we will need this
+                                          });
+                                          // SchedulerBinding.instance.addPostFrameCallback((_) {
+                                          //   _scrollController.animateTo(
+                                          //     _scrollController.position.maxScrollExtent,
+                                          //     duration: const Duration(milliseconds: 300),
+                                          //     curve: Curves.easeOut,
+                                          //   );
+                                          // });
+                                        },
+                                      ),
+                                    ),
+                                    Material(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.red[300],
+                                      child: MaterialButton(
+                                        key: ValueKey('photo card'),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Icon(
                                                 Icons.add,
                                                 color: Colors.black,
                                               ),
-                                              // SizedBox(
-                                              //   width: 3,
-                                              // ),
-                                              Text(
-                                                "One-sided card",
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              flashCardData.add(FlashCard(term: '', definition: '', isTermPhoto: false, isDefinitionPhoto: false, isOneSided: false));
-                                              //TODO: generate a id for flash card....But I don't think we will need this
-                                            });
-                                            // SchedulerBinding.instance.addPostFrameCallback((_) {
-                                            //   _scrollController.animateTo(
-                                            //     _scrollController.position.maxScrollExtent,
-                                            //     duration: const Duration(milliseconds: 300),
-                                            //     curve: Curves.easeOut,
-                                            //   );
-                                            // });
-                                          },
+                                          //   SizedBox(
+                                          //     width: 3,
+                                          //   ),
+                                            Text(
+                                              "One-sided card",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          ],
                                         ),
+                                        onPressed: () {
+                                          setState(() {
+                                            // fieldCount++;
+                                            try {
+                                              setState(() {
+                                                flashCardData.add(FlashCard(term: '', definition: '', isTermPhoto: false, isDefinitionPhoto: false, isOneSided: true));
+                                              });
+                                            } catch (e) {
+                                              print('here is the error');
+                                              print(e);
+                                            }
+                                            //TODO: generate a id for flash card....But I don't think we will need this
+                                          });
+                                          // SchedulerBinding.instance.addPostFrameCallback((_) {
+                                          //   _scrollController.animateTo(
+                                          //     _scrollController.position.maxScrollExtent,
+                                          //     duration: const Duration(milliseconds: 300),
+                                          //     curve: Curves.easeOut,
+                                          //   );
+                                          // });
+                                        },
                                       ),
-                                      Material(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.red[300],
-                                        child: MaterialButton(
-                                          key: ValueKey('photo card'),
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Icon(
-                                                  Icons.add,
-                                                  color: Colors.black,
-                                                ),
-                                            //   SizedBox(
-                                            //     width: 3,
-                                            //   ),
-                                              Text(
-                                                "Two-sided card",
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              // fieldCount++;
-                                              try {
-                                                setState(() {
-                                                  flashCardData.add(FlashCard(term: '', definition: 'null', isTermPhoto: false, isDefinitionPhoto: true, isOneSided: false));
-                                                });
-                                              } catch (e) {
-                                                print('here is the error');
-                                                print(e);
-                                              }
-                                              //TODO: generate a id for flash card....But I don't think we will need this
-                                            });
-                                            // SchedulerBinding.instance.addPostFrameCallback((_) {
-                                            //   _scrollController.animateTo(
-                                            //     _scrollController.position.maxScrollExtent,
-                                            //     duration: const Duration(milliseconds: 300),
-                                            //     curve: Curves.easeOut,
-                                            //   );
-                                            // });
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  GetFlashCardEdit(
-                                    deck: deck,
-                                    flashCardData: flashCardData,
-                                    scaffoldKey: _scaffoldKey,
-                                  ),
-                                ],
-                              ),
+                                    ),
+                                  ],
+                                ),
+                                GetFlashCardEdit(
+                                  deck: deck,
+                                  flashCardData: flashCardData,
+                                  scaffoldKey: _scaffoldKey,
+                                ),
+                              ],
                             ),
                           )
                         ] else ...[
