@@ -195,7 +195,7 @@ class _EditDecksState extends State<EditDecks> {
                   ? IconButton(
                       icon: Icon(
                         Icons.arrow_back,
-                        color: MyColorScheme.accent(),
+                        color: Colors.white,
                       ),
                       onPressed: () async {
                         setState(() {

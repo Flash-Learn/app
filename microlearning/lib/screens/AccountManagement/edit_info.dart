@@ -66,14 +66,20 @@ class _EditInfoState extends State<EditInfo> {
                     TextFormField(
                         initialValue: _name,
                         validator: (val) {
-                          return val.isEmpty ? "Enter name" : null;
+                          Pattern pattern =
+                              r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+                          RegExp regex = new RegExp(pattern);
+                          if (!regex.hasMatch(val))
+                            return 'Invalid Name';
+                          else
+                            return null;
                         },
                         onChanged: (val) {
                           setState(() {
                             _name = val;
                           });
                         },
-                        decoration: inputTextDecorations("Name")),
+                        decoration: inputTextDecorations("Your Name")),
                     SizedBox(
                       height: 20.0,
                     ),
@@ -84,8 +90,7 @@ class _EditInfoState extends State<EditInfo> {
                           child: Text(
                             "Gender",
                             style: TextStyle(
-                              fontSize: 18.0,
-                            ),
+                                fontSize: 18.0, color: MyColorScheme.accent()),
                           ),
                         ),
                         Expanded(
@@ -121,6 +126,7 @@ class _EditInfoState extends State<EditInfo> {
                             "Class",
                             style: TextStyle(
                               fontSize: 18.0,
+                              color: MyColorScheme.accent(),
                             ),
                           ),
                         ),
@@ -154,7 +160,7 @@ class _EditInfoState extends State<EditInfo> {
                       color: MyColorScheme.accent(),
                       child: Center(
                         child: Text(
-                          "Enter",
+                          "Save Profile",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
