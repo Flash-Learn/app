@@ -1,3 +1,4 @@
+import 'package:microlearning/Utilities/Widgets/flashcard_side.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
 import 'flip_card.dart'; // created local copy of flip_card library
@@ -47,7 +48,7 @@ class _FlashCardViewState extends State<FlashCardView> {
 
   var _tapPosition;
   int side = 1;
-  bool isPic = false;
+  bool isPic = false, isDefinitionPhoto, isTermPhoto, isOneSided;
   String term = "";
   String definition = "";
   String display;
@@ -144,7 +145,11 @@ class _FlashCardViewState extends State<FlashCardView> {
           if (!snapshot.hasData) return Center(child: Loading(size: 50));
           term = snapshot.data["term"];
           definition = snapshot.data["definition"];
-          isPic = (snapshot.data["isimage"] == 'true');
+          isPic = snapshot.data["isDefinitionPhoto"] ;
+          isDefinitionPhoto = snapshot.data["isDefinitionPhoto"] ;
+          isTermPhoto = snapshot.data["isTermPhoto"] ;
+          isOneSided = snapshot.data["isOneSided"] ;
+
 
           bool userRemembers = true;
 
@@ -204,42 +209,9 @@ class _FlashCardViewState extends State<FlashCardView> {
                               direction: FlipDirection.HORIZONTAL,
                               front: Stack(
                                 children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
-//                                  color: userRemembers ? Color.fromRGBO(149, 242, 145, 1) : Colors.red,
-                                        color: Colors.white,
-                                        border: Border.all(
-//                                      color: MyColorScheme.flashcardColor(),
-                                            color: userRemembers
-                                                ? Color.fromRGBO(
-                                                    166, 250, 165, 1)
-                                                : Color.fromRGBO(
-                                                    250, 165, 165, 1),
-                                            width: 7),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(20),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  term,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-//                                              color: userRemembers ? Color.fromRGBO(149, 242, 145, 1) : Colors.red,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ]),
-                                        ),
-                                      ),
-                                    ),
+                                  FlashcardSide(
+                                    isPic: isTermPhoto,
+                                    content: term,
                                   ),
                                   widget.editAccess & widget.isTestMode
                                       ? Column(
@@ -335,199 +307,215 @@ class _FlashCardViewState extends State<FlashCardView> {
                                   ),
                                 ],
                               ),
-                              back: Stack(children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: MyColorScheme.flashcardColor(),
-                                      border: Border.all(
-                                          color: MyColorScheme.flashcardColor(),
-                                          width: 3),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            isPic
-                                                ? ClipRect(
-                                                    child: Container(
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.5,
-                                                      child: PhotoView(
-                                                        minScale:
-                                                            PhotoViewComputedScale
-                                                                .contained,
-                                                        imageProvider:
-                                                            NetworkImage(
-                                                                definition),
-                                                        backgroundDecoration:
-                                                            BoxDecoration(
-                                                                color: Colors
-                                                                    .transparent),
-                                                        maxScale:
-                                                            PhotoViewComputedScale
-                                                                    .covered *
-                                                                2.0,
-                                                        loadingBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                ImageChunkEvent
-                                                                    loadingProgress) {
-                                                          if (loadingProgress ==
-                                                              null) {
-                                                            return Container();
-                                                          }
-                                                          return Center(
-                                                            child: CircularProgressIndicator(
-                                                                value: loadingProgress
-                                                                            .expectedTotalBytes !=
-                                                                        null
-                                                                    ? loadingProgress
-                                                                            .cumulativeBytesLoaded /
-                                                                        loadingProgress
-                                                                            .expectedTotalBytes
-                                                                    : null),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                  )
-                                                // ? Image.network(definition,
-                                                //     loadingBuilder:
-                                                //         (BuildContext context,
-                                                //             Widget child,
-                                                //             ImageChunkEvent
-                                                //                 loadingProgress) {
-                                                //     if (loadingProgress == null)
-                                                //       return child;
-                                                //     return Center(
-                                                //       child: CircularProgressIndicator(
-                                                //         value: loadingProgress
-                                                //                     .expectedTotalBytes !=
-                                                //                 null
-                                                //             ? loadingProgress
-                                                //                     .cumulativeBytesLoaded /
-                                                //                 loadingProgress
-                                                //                     .expectedTotalBytes
-                                                //             : null,
-                                                //       ),
-                                                //     );
-                                                //   })
-                                                : Text(
-                                                    definition,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                            Container(
-                                              height: 50,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                              back:
+//                              FlashcardSide(
+//                                isPic: isPic,
+//                                content: definition,
+//                                editAccess: widget.editAccess,
+//                                isTestMode: widget.isTestMode,
+//                                clickMemorized: clickMemorized(),
+//                                clickNotMemorized: clickNotMemorized(),
+//                                getPopupItems: getPopupItems(context),
+//                              ),
+                        Stack(children: <Widget>[
+//                          Container(
+//                            decoration: BoxDecoration(
+//                                color: MyColorScheme.flashcardColor(),
+//                                border: Border.all(
+//                                    color: MyColorScheme.flashcardColor(),
+//                                    width: 3),
+//                                borderRadius: BorderRadius.circular(20)),
+//                            child: Center(
+//                              child: Padding(
+//                                padding: const EdgeInsets.all(20.0),
+//                                child: SingleChildScrollView(
+//                                  child: Column(
+//                                    mainAxisAlignment:
+//                                    MainAxisAlignment.center,
+//                                    children: <Widget>[
+//                                      isPic
+//                                          ? ClipRect(
+//                                        child: Container(
+//                                          height:
+//                                          MediaQuery.of(context)
+//                                              .size
+//                                              .height *
+//                                              0.5,
+//                                          child: PhotoView(
+//                                            minScale:
+//                                            PhotoViewComputedScale
+//                                                .contained,
+//                                            imageProvider:
+//                                            NetworkImage(
+//                                                definition),
+//                                            backgroundDecoration:
+//                                            BoxDecoration(
+//                                                color: Colors
+//                                                    .transparent),
+//                                            maxScale:
+//                                            PhotoViewComputedScale
+//                                                .covered *
+//                                                2.0,
+//                                            loadingBuilder:
+//                                                (BuildContext
+//                                            context,
+//                                                ImageChunkEvent
+//                                                loadingProgress) {
+//                                              if (loadingProgress ==
+//                                                  null) {
+//                                                return Container();
+//                                              }
+//                                              return Center(
+//                                                child: CircularProgressIndicator(
+//                                                    value: loadingProgress
+//                                                        .expectedTotalBytes !=
+//                                                        null
+//                                                        ? loadingProgress
+//                                                        .cumulativeBytesLoaded /
+//                                                        loadingProgress
+//                                                            .expectedTotalBytes
+//                                                        : null),
+//                                              );
+//                                            },
+//                                          ),
+//                                        ),
+//                                      )
+//                                      // ? Image.network(definition,
+//                                      //     loadingBuilder:
+//                                      //         (BuildContext context,
+//                                      //             Widget child,
+//                                      //             ImageChunkEvent
+//                                      //                 loadingProgress) {
+//                                      //     if (loadingProgress == null)
+//                                      //       return child;
+//                                      //     return Center(
+//                                      //       child: CircularProgressIndicator(
+//                                      //         value: loadingProgress
+//                                      //                     .expectedTotalBytes !=
+//                                      //                 null
+//                                      //             ? loadingProgress
+//                                      //                     .cumulativeBytesLoaded /
+//                                      //                 loadingProgress
+//                                      //                     .expectedTotalBytes
+//                                      //             : null,
+//                                      //       ),
+//                                      //     );
+//                                      //   })
+//                                          : Text(
+//                                        definition,
+//                                        textAlign: TextAlign.center,
+//                                        style: TextStyle(
+//                                            color: Colors.black,
+//                                            fontSize: 18,
+//                                            fontWeight:
+//                                            FontWeight.normal),
+//                                      ),
+//                                      Container(
+//                                        height: 50,
+//                                      )
+//                                    ],
+//                                  ),
+//                                ),
+//                              ),
+//                            ),
+//                          ),
+                          FlashcardSide(
+                            isPic: isDefinitionPhoto,
+                            content: definition,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Padding(
+                                padding:
+                                const EdgeInsets.only(bottom: 8.0),
+                                child: (widget.editAccess &
+                                widget.isTestMode)
+                                    ? Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment
+                                      .spaceBetween,
                                   children: <Widget>[
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 8.0),
-                                      child: (widget.editAccess &
-                                              widget.isTestMode)
-                                          ? Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                RawMaterialButton(
-                                                  onPressed: () async {
-                                                    await clickNotMemorized();
-                                                  },
-                                                  elevation: 2.0,
-                                                  fillColor:
-                                                      Colors.redAccent[700],
-                                                  child: Icon(
-                                                    Icons.close,
-                                                    color: Colors.white,
-                                                    size: 35.0,
-                                                  ),
-                                                  padding: EdgeInsets.all(15.0),
-                                                  shape: CircleBorder(),
-                                                ),
-                                                RawMaterialButton(
-                                                  onPressed: () async {
-                                                    await clickMemorized();
-                                                  },
-                                                  elevation: 2.0,
-                                                  fillColor:
-                                                      Colors.greenAccent[400],
-                                                  child: Icon(
-                                                    Icons.check,
-                                                    color: Colors.white,
-                                                    size: 35.0,
-                                                  ),
-                                                  padding: EdgeInsets.all(15.0),
-                                                  shape: CircleBorder(),
-                                                )
-                                              ],
-                                            )
-                                          : SizedBox(),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    GestureDetector(
-                                      onTapDown: (details) {
-                                        _tapPosition = details.globalPosition;
+                                    RawMaterialButton(
+                                      onPressed: () async {
+                                        await clickNotMemorized();
                                       },
-                                      onTap: () async {
-                                        final RenderBox overlay =
-                                            Overlay.of(context)
-                                                .context
-                                                .findRenderObject();
-                                        await showMenu(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(5))),
-                                          context: context,
-                                          // found way to show delete button on the location of long press
-                                          // not sure how it works
-                                          position: RelativeRect.fromRect(
-                                              _tapPosition &
-                                                  Size(40,
-                                                      40), // smaller rect, the touch area
-                                              Offset.zero &
-                                                  overlay
-                                                      .size // Bigger rect, the entire screen
-                                              ),
-                                          items: getPopupItems(context),
-                                        );
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 10, 20, 0),
-                                        child: Icon(
-                                          Icons.more_horiz,
-                                          color: MyColorScheme.accent(),
-                                        ),
+                                      elevation: 2.0,
+                                      fillColor:
+                                      Colors.redAccent[700],
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 35.0,
                                       ),
+                                      padding: EdgeInsets.all(15.0),
+                                      shape: CircleBorder(),
+                                    ),
+                                    RawMaterialButton(
+                                      onPressed: () async {
+                                        await clickMemorized();
+                                      },
+                                      elevation: 2.0,
+                                      fillColor:
+                                      Colors.greenAccent[400],
+                                      child: Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 35.0,
+                                      ),
+                                      padding: EdgeInsets.all(15.0),
+                                      shape: CircleBorder(),
                                     )
                                   ],
+                                )
+                                    : SizedBox(),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              GestureDetector(
+                                onTapDown: (details) {
+                                  _tapPosition = details.globalPosition;
+                                },
+                                onTap: () async {
+                                  final RenderBox overlay =
+                                  Overlay.of(context)
+                                      .context
+                                      .findRenderObject();
+                                  await showMenu(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5))),
+                                    context: context,
+                                    // found way to show delete button on the location of long press
+                                    // not sure how it works
+                                    position: RelativeRect.fromRect(
+                                        _tapPosition &
+                                        Size(40,
+                                            40), // smaller rect, the touch area
+                                        Offset.zero &
+                                        overlay
+                                            .size // Bigger rect, the entire screen
+                                    ),
+                                    items: getPopupItems(context),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      0, 10, 20, 0),
+                                  child: Icon(
+                                    Icons.more_horiz,
+                                    color: MyColorScheme.accent(),
+                                  ),
                                 ),
-                              ]),
+                              )
+                            ],
+                          ),
+                        ]),
+
+
                             )
                           : getLearnMode(),
                     ),
@@ -622,7 +610,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                             ),
                             Container(
 //               height: MediaQuery.of(context).size.height * 0.4,
-                              child: !isPic
+                              child: !isDefinitionPhoto
                                   ? Text(definition,
                                       style: TextStyle(
                                         fontFamily: 'Roboto',
@@ -770,7 +758,9 @@ class _FlashCardViewState extends State<FlashCardView> {
                     dynamic flashRef = await flashcardReference.add({
                       'term': term,
                       'definition': definition,
-                      'isimage': isPic ? 'true' : 'false',
+                      'isDefinitionPhoto': isDefinitionPhoto,
+                      'isTermPhoto': isTermPhoto,
+                      'isOneSided': isOneSided,
                     });
 
                     await deckReference.document(deckID).updateData({
