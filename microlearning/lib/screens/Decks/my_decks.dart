@@ -126,128 +126,125 @@ class _MyDecksState extends State<MyDecks> {
       });
     }
     // Widget for app demo
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Spotlight(
-        enabled: _enabled,
-        radius: _radius,
-        description: _description,
-        center: _center,
-        onTap: () => _ontap(),
-        animation: true,
+    return Spotlight(
+      enabled: _enabled,
+      radius: _radius,
+      description: _description,
+      center: _center,
+      onTap: () => _ontap(),
+      animation: true,
 
-        // Widget to block taps during loading
-        child: AbsorbPointer(
-          absorbing: _disableTouch,
-          child: Container(
-            // only for gradient
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                  Color.fromRGBO(84, 205, 255, 1),
-                  Color.fromRGBO(84, 205, 255, 1),
-                  Color.fromRGBO(27, 116, 210, 1)
-                ])),
-            child: Scaffold(
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerFloat,
-                bottomNavigationBar: customBottomNav(),
-                backgroundColor: Colors.transparent,
-                appBar: AppBar(
-                    elevation: 2,
-                    // backgroundColor: MyColorScheme.uno(),
-                    backgroundColor: Color.fromRGBO(196, 208, 223, 0),
-                    centerTitle: true,
-                    title: Text(
-                      'My Decks',
-                      style: TextStyle(
-                          color: MyColorScheme.uno(),
-                          letterSpacing: 2,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    actions: <Widget>[
-                      IconButton(
-                        key: _keySearch,
-                        icon: Icon(
-                          Icons.search,
-                          color: MyColorScheme.uno(),
-                        ),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/search',
-                          );
-                        },
-                      ),
-                    ],
-                    leading: IconButton(
+      // Widget to block taps during loading
+      child: AbsorbPointer(
+        absorbing: _disableTouch,
+        child: Container(
+          // only for gradient
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                Color.fromRGBO(84, 205, 255, 1),
+                Color.fromRGBO(84, 205, 255, 1),
+                Color.fromRGBO(27, 116, 210, 1)
+              ])),
+          child: Scaffold(
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              bottomNavigationBar: customBottomNav(),
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                  elevation: 2,
+                  // backgroundColor: MyColorScheme.uno(),
+                  backgroundColor: Color.fromRGBO(196, 208, 223, 0),
+                  centerTitle: true,
+                  title: Text(
+                    'My Decks',
+                    style: TextStyle(
+                        color: MyColorScheme.uno(),
+                        letterSpacing: 2,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  actions: <Widget>[
+                    IconButton(
+                      key: _keySearch,
                       icon: Icon(
-                        Icons.account_circle,
+                        Icons.search,
                         color: MyColorScheme.uno(),
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return AccountSettings();
-                            },
-                          ),
+                        Navigator.pushNamed(
+                          context,
+                          '/search',
                         );
                       },
-                    )),
-                body: GestureDetector(
-                  onPanUpdate: (details) {
-                    if (details.delta.dx < 0) {
-                      Navigator.pushNamed(
-                        context,
-                        '/search',
+                    ),
+                  ],
+                  leading: IconButton(
+                    icon: Icon(
+                      Icons.account_circle,
+                      color: MyColorScheme.uno(),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AccountSettings();
+                          },
+                        ),
                       );
-                    }
-                  },
-                  child: FutureBuilder(
-                      future: SharedPreferences.getInstance(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData)
-                          return Center(
-                            child: Loading(
-                              size: 50,
-                            ),
-                          );
-                        print("user id is ${snapshot.data.getString('uid')}");
-                        final String userID = snapshot.data.getString('uid');
-                        uid = userID;
-                        return StreamBuilder(
-                            stream: Firestore.instance
-                                .collection('user_data')
-                                .document(userID)
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              print(userID);
-                              if (!snapshot.hasData)
-                                return Center(
-                                  child: Loading(
-                                    size: 50,
-                                  ),
-                                );
-                              if (snapshot.data == null) return Container();
-                              try {
-                                userDeckIDs = snapshot.data["decks"];
-                              } catch (e) {
-                                Navigator.pushReplacement(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return GetUserInfo();
-                                }));
-                              }
-                              return DeckReorderList(
-                                uid: uid,
-                                userDeckIDs: userDeckIDs,
+                    },
+                  )),
+              body: GestureDetector(
+                onPanUpdate: (details) {
+                  if (details.delta.dx < 0) {
+                    Navigator.pushNamed(
+                      context,
+                      '/search',
+                    );
+                  }
+                },
+                child: FutureBuilder(
+                    future: SharedPreferences.getInstance(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData)
+                        return Center(
+                          child: Loading(
+                            size: 50,
+                          ),
+                        );
+                      print("user id is ${snapshot.data.getString('uid')}");
+                      final String userID = snapshot.data.getString('uid');
+                      uid = userID;
+                      return StreamBuilder(
+                          stream: Firestore.instance
+                              .collection('user_data')
+                              .document(userID)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            print(userID);
+                            if (!snapshot.hasData)
+                              return Center(
+                                child: Loading(
+                                  size: 50,
+                                ),
                               );
-                            });
-                      }),
-                )),
-          ),
+                            if (snapshot.data == null) return Container();
+                            try {
+                              userDeckIDs = snapshot.data["decks"];
+                            } catch (e) {
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return GetUserInfo();
+                              }));
+                            }
+                            return DeckReorderList(
+                              uid: uid,
+                              userDeckIDs: userDeckIDs,
+                            );
+                          });
+                    }),
+              )),
         ),
       ),
     );
@@ -255,9 +252,9 @@ class _MyDecksState extends State<MyDecks> {
 
   customBottomNav() {
     return Container(
-      height: 80,
+      height: 70,
       // padding: EdgeInsets.only(bottom: 20),
-      color: Color.fromRGBO(196, 208, 243, 0.25),
+      color: Color.fromRGBO(57, 146, 210, 1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -354,4 +351,3 @@ class _MyDecksState extends State<MyDecks> {
     );
   }
 }
-

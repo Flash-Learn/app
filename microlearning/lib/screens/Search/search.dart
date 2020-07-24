@@ -31,18 +31,18 @@ class _SearchState extends State<Search> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: MyColorScheme.uno(),
+          backgroundColor: Colors.lightBlue[200],
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            color: MyColorScheme.accent(),
+            color: Colors.white,
             onPressed: () {
               Navigator.pop(context);
             },
           ),
           centerTitle: true,
           title: Text('Search',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: MyColorScheme.cinco())),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
           // actions: <Widget>[
           //   Switch(
           //       activeColor: MyColorScheme.accent(),

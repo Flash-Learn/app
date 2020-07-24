@@ -24,7 +24,12 @@ class _GroupState extends State<Group> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () {
+        return Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) {
+          return GroupList();
+        }));
+      },
       child: StreamBuilder(
           stream: Firestore.instance
               .collection('groups')
@@ -68,7 +73,7 @@ class _GroupState extends State<Group> {
               ),
               appBar: AppBar(
                 leading: IconButton(
-                  icon: Icon(Icons.chevron_left),
+                  icon: Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.of(context)
                         .pushReplacement(MaterialPageRoute(builder: (context) {

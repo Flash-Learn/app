@@ -128,8 +128,8 @@ class _GroupListState extends State<GroupList> {
 
   customBottomNav() {
     return Container(
-      height: 80,
-      padding: EdgeInsets.only(bottom: 20),
+      height: 70,
+      color: Color.fromRGBO(106, 198, 205, 0.25),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
