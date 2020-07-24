@@ -22,37 +22,41 @@ class _EditGroupState extends State<EditGroup> {
   String userToAdd;
   GroupData groupData;
   _EditGroupState({@required this.groupData});
+
+  onPressedBack() async {
+    if (widget.creating) {
+      await deleteGroup(groupData.groupID);
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return GroupList();
+      }));
+    } else {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return Group(
+          groupID: groupData.groupID,
+        );
+      }));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () {
+        return onPressedBack();
+      },
       child: Scaffold(
         appBar: AppBar(
-            leading: widget.creating
-                ? IconButton(
-                    icon: Icon(Icons.chevron_left),
-                    onPressed: () async {
-                      await deleteGroup(groupData.groupID);
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) {
-                        return GroupList();
-                      }));
-                    },
-                  )
-                : IconButton(
-                    icon: Icon(Icons.chevron_left),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) {
-                        return Group(
-                          groupID: groupData.groupID,
-                        );
-                      }));
-                    },
-                  ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () async {
+                onPressedBack();
+              },
+            ),
             centerTitle: true,
             title: Text(
-              "Edit Group",
+              widget.creating ? "Create Group" : "Edit Group",
               style: TextStyle(
                 color: Colors.white,
               ),

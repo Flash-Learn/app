@@ -190,217 +190,214 @@ class _EditFlashCardState extends State<EditFlashCard> {
             // Widget to disable touch when loading
             child: AbsorbPointer(
               absorbing: _disableTouch,
-              child: WillPopScope(
-                onWillPop: () async => false,
-                child: Scaffold(
-                  key: _scaffoldKey,
-                  backgroundColor: Colors.white,
-                  appBar: AppBar(
-                    elevation: 2,
-                    backgroundColor: MyColorScheme.uno(),
-                    title: Text(
-                      'Edit Deck',
-                      style: TextStyle(
-                          color: MyColorScheme.cinco(),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    centerTitle: true,
-                    leading: IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      color: MyColorScheme.accent(),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                        key: _keySave,
-                        onPressed: () async {
-                          setState(() {
-                            _disableTouch = true;
-                          });
-                          //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
-                          await updateFlashcardList(deck, flashCardData);
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => ViewDeck(
-                                deckID: newDeck.deckID,
-                                backAvailable: false,
-                                isdemo: isdemo,
-                                isDeckforGroup: widget.isDeckforGroup,
-                                ifGroupThenGrpID: widget.ifGroupThenGrpID,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.check,
-                              color: MyColorScheme.accent(),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'Save',
-                              style: TextStyle(
-                                  color: MyColorScheme.accent(),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+              child: Scaffold(
+                key: _scaffoldKey,
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  elevation: 2,
+                  backgroundColor: MyColorScheme.accent(),
+                  title: Text(
+                    'Edit Deck',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
-                  body: SingleChildScrollView(
-                    child: Column(
-                      key: _keyFlashcard,
-                      children: <Widget>[
-                        if (isLoading == false) ...[
-                          // flashCardData.add(['','']);
-                          Container(
-                            padding: EdgeInsets.fromLTRB(25, 20, 25, 0),
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    // Container(
-                                    //   // padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    // ),
-                                    Material(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.red[300],
-                                      child: MaterialButton(
-                                        //color: Colors.blue,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.add,
-                                              color: Colors.black,
-                                            ),
-                                            // SizedBox(
-                                            //   width: 3,
-                                            // ),
-                                            Text(
-                                              "Two-sided Card",
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            flashCardData.add(FlashCard(
-                                                term: '',
-                                                definition: '',
-                                                isTermPhoto: false,
-                                                isDefinitionPhoto: false,
-                                                isOneSided: false));
-                                            //TODO: generate a id for flash card....But I don't think we will need this
-                                          });
-                                          // SchedulerBinding.instance.addPostFrameCallback((_) {
-                                          //   _scrollController.animateTo(
-                                          //     _scrollController.position.maxScrollExtent,
-                                          //     duration: const Duration(milliseconds: 300),
-                                          //     curve: Curves.easeOut,
-                                          //   );
-                                          // });
-                                        },
-                                      ),
-                                    ),
-                                    // Text("hel;lop"),
-                                    SizedBox(
-                                      width: 65,
-                                    ),
-                                    Material(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.red[300],
-                                      child: MaterialButton(
-                                        key: ValueKey('photo card'),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.add,
-                                              color: Colors.black,
-                                            ),
-                                            //   SizedBox(
-                                            //     width: 3,
-                                            //   ),
-                                            Text(
-                                              "One-sided Card",
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            // fieldCount++;
-                                            try {
-                                              setState(() {
-                                                flashCardData.add(FlashCard(
-                                                    term: '',
-                                                    definition: '',
-                                                    isTermPhoto: false,
-                                                    isDefinitionPhoto: false,
-                                                    isOneSided: true));
-                                              });
-                                            } catch (e) {
-                                              print('here is the error');
-                                              print(e);
-                                            }
-                                            //TODO: generate a id for flash card....But I don't think we will need this
-                                          });
-                                          // SchedulerBinding.instance.addPostFrameCallback((_) {
-                                          //   _scrollController.animateTo(
-                                          //     _scrollController.position.maxScrollExtent,
-                                          //     duration: const Duration(milliseconds: 300),
-                                          //     curve: Curves.easeOut,
-                                          //   );
-                                          // });
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                GetFlashCardEdit(
-                                  deck: deck,
-                                  flashCardData: flashCardData,
-                                  scaffoldKey: _scaffoldKey,
-                                ),
-                              ],
+                  centerTitle: true,
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      key: _keySave,
+                      onPressed: () async {
+                        setState(() {
+                          _disableTouch = true;
+                        });
+                        //              flashCardData.insert(1, ['', '']); // hotfix to remove all the blank cards
+                        await updateFlashcardList(deck, flashCardData);
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => ViewDeck(
+                              deckID: newDeck.deckID,
+                              backAvailable: false,
+                              isdemo: isdemo,
+                              isDeckforGroup: widget.isDeckforGroup,
+                              ifGroupThenGrpID: widget.ifGroupThenGrpID,
                             ),
-                          )
-                        ] else ...[
-                          Center(
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.8,
-                              child: SizedBox(
-                                child:
-                                    Center(child: CircularProgressIndicator()),
-                                width: 30,
-                                height: 30,
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.check,
+                            color: MyColorScheme.accent(),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Save',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                body: SingleChildScrollView(
+                  child: Column(
+                    key: _keyFlashcard,
+                    children: <Widget>[
+                      if (isLoading == false) ...[
+                        // flashCardData.add(['','']);
+                        Container(
+                          padding: EdgeInsets.fromLTRB(25, 20, 25, 0),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  // Container(
+                                  //   // padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  // ),
+                                  Material(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.red[300],
+                                    child: MaterialButton(
+                                      //color: Colors.blue,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.add,
+                                            color: Colors.black,
+                                          ),
+                                          // SizedBox(
+                                          //   width: 3,
+                                          // ),
+                                          Text(
+                                            "Two-sided Card",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          flashCardData.add(FlashCard(
+                                              term: '',
+                                              definition: '',
+                                              isTermPhoto: false,
+                                              isDefinitionPhoto: false,
+                                              isOneSided: false));
+                                          //TODO: generate a id for flash card....But I don't think we will need this
+                                        });
+                                        // SchedulerBinding.instance.addPostFrameCallback((_) {
+                                        //   _scrollController.animateTo(
+                                        //     _scrollController.position.maxScrollExtent,
+                                        //     duration: const Duration(milliseconds: 300),
+                                        //     curve: Curves.easeOut,
+                                        //   );
+                                        // });
+                                      },
+                                    ),
+                                  ),
+                                  // Text("hel;lop"),
+                                  SizedBox(
+                                    width: 25,
+                                  ),
+                                  Material(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.red[300],
+                                    child: MaterialButton(
+                                      key: ValueKey('photo card'),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.add,
+                                            color: Colors.black,
+                                          ),
+                                          //   SizedBox(
+                                          //     width: 3,
+                                          //   ),
+                                          Text(
+                                            "One-sided Card",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          // fieldCount++;
+                                          try {
+                                            setState(() {
+                                              flashCardData.add(FlashCard(
+                                                  term: '',
+                                                  definition: '',
+                                                  isTermPhoto: false,
+                                                  isDefinitionPhoto: false,
+                                                  isOneSided: true));
+                                            });
+                                          } catch (e) {
+                                            print('here is the error');
+                                            print(e);
+                                          }
+                                          //TODO: generate a id for flash card....But I don't think we will need this
+                                        });
+                                        // SchedulerBinding.instance.addPostFrameCallback((_) {
+                                        //   _scrollController.animateTo(
+                                        //     _scrollController.position.maxScrollExtent,
+                                        //     duration: const Duration(milliseconds: 300),
+                                        //     curve: Curves.easeOut,
+                                        //   );
+                                        // });
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              GetFlashCardEdit(
+                                deck: deck,
+                                flashCardData: flashCardData,
+                                scaffoldKey: _scaffoldKey,
+                              ),
+                            ],
+                          ),
+                        )
+                      ] else ...[
+                        Center(
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.8,
+                            child: SizedBox(
+                              child: Center(child: CircularProgressIndicator()),
+                              width: 30,
+                              height: 30,
                             ),
-                          )
-                        ]
-                      ],
-                    ),
+                          ),
+                        )
+                      ]
+                    ],
                   ),
                 ),
               ),

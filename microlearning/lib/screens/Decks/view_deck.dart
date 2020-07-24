@@ -175,6 +175,20 @@ class _ViewDeckState extends State<ViewDeck> {
     });
   }
 
+  onPressedBack() {
+    if (!widget.backAvailable) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) {
+        return widget.isDeckforGroup
+            ? Group(
+                groupID: widget.ifGroupThenGrpID,
+              )
+            : MyDecks();
+      }), (Route<dynamic> route) => false);
+    } else
+      Navigator.of(context).pop();
+  }
+
   _showSnackbar(String text) {
     final snackbar = new SnackBar(
       content: Text(
@@ -192,7 +206,9 @@ class _ViewDeckState extends State<ViewDeck> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        return onPressedBack();
+      },
       child: StreamBuilder(
         stream:
             Firestore.instance.collection("decks").document(deckID).snapshots(),
@@ -225,16 +241,7 @@ class _ViewDeckState extends State<ViewDeck> {
                     icon: Icon(Icons.arrow_back),
                     color: MyColorScheme.uno(),
                     onPressed: () {
-                      !widget.backAvailable
-                          ? Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) {
-                              return widget.isDeckforGroup
-                                  ? Group(
-                                      groupID: widget.ifGroupThenGrpID,
-                                    )
-                                  : MyDecks();
-                            }), (Route<dynamic> route) => false)
-                          : Navigator.of(context).pop();
+                      onPressedBack();
                     },
                   ),
                   actions: <Widget>[
@@ -509,10 +516,14 @@ class _ViewDeckState extends State<ViewDeck> {
                   return widget.isDeckforGroup
                       ? EditDecks(
                           isDeckforGroup: true,
+                          isFromViewDeck: true,
                           deck: deck,
                           ifGroupThenGrpID: widget.ifGroupThenGrpID,
                         )
-                      : EditDecks(deck: deck);
+                      : EditDecks(
+                          deck: deck,
+                          isFromViewDeck: true,
+                        );
                 }));
               else {
                 print(deck.flashCardList.length);

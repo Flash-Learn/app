@@ -3,6 +3,7 @@ import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/Widgets/getListTags.dart';
 import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
+import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
@@ -18,12 +19,14 @@ class EditDecks extends StatefulWidget {
   final bool creating;
   final bool isDeckforGroup;
   final String ifGroupThenGrpID;
+  final bool isFromViewDeck;
   EditDecks(
       {Key key,
       @required this.deck,
       this.isdemo = false,
       this.creating: false,
       this.isDeckforGroup = false,
+      this.isFromViewDeck = false,
       this.ifGroupThenGrpID: ''})
       : super(key: key);
   @override
@@ -109,6 +112,43 @@ class _EditDecksState extends State<EditDecks> {
     });
   }
 
+  onPressedBack() async {
+    if (widget.isFromViewDeck) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => ViewDeck(
+            deckID: deck.deckID,
+            backAvailable: false,
+            isdemo: isdemo,
+            isDeckforGroup: widget.isDeckforGroup,
+            ifGroupThenGrpID: widget.ifGroupThenGrpID,
+          ),
+        ),
+      );
+    } else if (widget.creating) {
+      setState(() {
+        _disableTouch = true;
+      });
+      !widget.isDeckforGroup
+          ? await deleteDeck(deck.deckID)
+          : await deleteDeckFromGroup(deck.deckID, widget.ifGroupThenGrpID);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return widget.isDeckforGroup
+            ? Group(groupID: widget.ifGroupThenGrpID)
+            : MyDecks();
+      }));
+    } else {
+      setState(() {
+        _disableTouch = true;
+      });
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return widget.isDeckforGroup
+            ? Group(groupID: widget.ifGroupThenGrpID)
+            : MyDecks();
+      }));
+    }
+  }
+
   _ontap() {
     _index++;
     if (_index == 1) {
@@ -137,7 +177,7 @@ class _EditDecksState extends State<EditDecks> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return onPressedBack();
       },
       child: Spotlight(
         enabled: _enabled,
@@ -191,40 +231,13 @@ class _EditDecksState extends State<EditDecks> {
             ),
             backgroundColor: Colors.white,
             appBar: AppBar(
-              leading: widget.creating
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          _disableTouch = true;
-                        });
-                        !widget.isDeckforGroup
-                            ? await deleteDeck(deck.deckID)
-                            : await deleteDeckFromGroup(
-                                deck.deckID, widget.ifGroupThenGrpID);
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) {
-                          return widget.isDeckforGroup
-                              ? Group(groupID: widget.ifGroupThenGrpID)
-                              : MyDecks();
-                        }));
-                      },
-                    )
-                  : IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      color: Colors.white,
-                      onPressed: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) {
-                          return widget.isDeckforGroup
-                              ? Group(groupID: widget.ifGroupThenGrpID)
-                              : MyDecks();
-                        }));
-                      },
-                    ),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                color: Colors.white,
+                onPressed: () async {
+                  onPressedBack();
+                },
+              ),
               backgroundColor: MyColorScheme.accent(),
               title: Text(
                 widget.creating ? 'Create Deck' : 'Edit Deck',
