@@ -318,9 +318,7 @@ class _EditFlashCardState extends State<EditFlashCard> {
                                       ),
                                     ),
                                     // Text("hel;lop"),
-                                    SizedBox(
-                                      width: 65,
-                                    ),
+                                    SizedBox(width: 10,),
                                     Material(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.red[300],

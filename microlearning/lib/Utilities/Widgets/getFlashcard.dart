@@ -114,7 +114,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
               color: Colors.red[400],
             ),
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Container(
                 decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
