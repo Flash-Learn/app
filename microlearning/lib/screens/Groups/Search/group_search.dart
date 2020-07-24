@@ -144,10 +144,10 @@ class _GroupSearchState extends State<GroupSearch> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: MyColorScheme.uno(),
+          backgroundColor: Colors.lightBlue[200],
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            color: MyColorScheme.accent(),
+            color: Colors.white,
             onPressed: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) {
@@ -157,8 +157,8 @@ class _GroupSearchState extends State<GroupSearch> {
           ),
           centerTitle: true,
           title: Text('Search',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: MyColorScheme.cinco())),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         ),
         body: SingleChildScrollView(
           child: Column(children: <Widget>[

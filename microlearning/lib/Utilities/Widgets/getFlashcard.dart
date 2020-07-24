@@ -38,7 +38,8 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
   final _picker = ImagePicker();
 
   // function for getting the image from the source (camera or gallery)
-  getImage(ImageSource source, BuildContext context, int index, bool forTerm) async {
+  getImage(
+      ImageSource source, BuildContext context, int index, bool forTerm) async {
     final image = await _picker.getImage(
         source: source); // take the image from the source
     if (image != null) {
@@ -60,14 +61,13 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
         StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
         String url = (await taskSnapshot.ref.getDownloadURL()).toString();
         setState(() {
-          if(forTerm){
+          if (forTerm) {
             flashCardData[index].term = url;
             flashCardData[index].isTermPhoto = true;
           } else {
             flashCardData[index].isDefinitionPhoto = true;
-            flashCardData[index].definition =
-                url;
-                } // saving the url into the list of flashcards
+            flashCardData[index].definition = url;
+          } // saving the url into the list of flashcards
         });
       }
     }
@@ -103,7 +103,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
         //     padding: EdgeInsets.zero,
         //   );
         // } else {
-          return Dismissible(
+        return Dismissible(
             key: ValueKey(k),
             onDismissed: (direction) {
               setState(() {
@@ -111,277 +111,336 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
               });
             },
             background: Container(
-              color: Colors.red[400],
+              color: Colors.grey[200],
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Container(
                 decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: MyColorScheme.accent(),
-                      ),
-                child: !data.isOneSided ? Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        !data.isTermPhoto ? Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          child: TextFormField(
-                            maxLines: null,
-                            textAlign: TextAlign.center,
-                            initialValue: data.term,
-                            onChanged: (val) {
-                              flashCardData[flashCardData.indexOf(data)]
-                                  .term = val;
-                            },
-                            keyboardType: TextInputType.multiline,
-                            style: TextStyle(
-                                color: MyColorScheme.uno(), fontSize: 16),
-                            decoration: InputDecoration(
-                              counterText: '',
-                              hintText: 'Term',
-                              hintStyle:
-                                  (TextStyle(color: Colors.white70)),
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.only(
-                                  left: 15,
-                                  bottom: 0,
-                                  top: 11,
-                                  right: 15),
-                            )),
-                        ): 
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                            padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
-                            child: Image.network(
-                              data.term,
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress
-                                                .expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress
-                                                .expectedTotalBytes
-                                        : null,
-                                  ),
-                                );
-                              },
-                              // height: 250,
-                              height:
-                                  MediaQuery.of(context).size.width * 0.5,
-                              width:
-                                  MediaQuery.of(context).size.width * 0.5,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        Column(
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.image),
-                              color: MyColorScheme.uno(),
-                              iconSize: 20,
-                              onPressed: (){
-                                imagePopUp(context, data, true);
-                              },
-                            ),
-                            data.isTermPhoto ? IconButton(
-                              icon: Icon(Icons.cancel),
-                              color: Colors.white,
-                              onPressed: (){
-                                setState(() {
-                                  flashCardData[flashCardData.indexOf(data)].isTermPhoto = false;
-                                  flashCardData[flashCardData.indexOf(data)].term = '';
-                                });
-                              },
-                            ) : Container(height: 0,)
-                          ],
-                        )
-                      ],
-                    ),
-                    Container(width: MediaQuery.of(context).size.width * 0.6,child: Divider(thickness: 2,color: Colors.white,)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        !data.isDefinitionPhoto ? Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          child: TextFormField(
-                              maxLines: null,
-                              textAlign: TextAlign.center,
-                              initialValue: data.definition,
-                              style: TextStyle(color: MyColorScheme.uno()),
-                              onChanged: (val) {
-                                flashCardData[flashCardData.indexOf(data)]
-                                    .definition = val;
-                              },
-                              textInputAction: TextInputAction.newline,
-                              decoration: InputDecoration(
-                                hintText: 'Definition',
-                                hintStyle: (TextStyle(color: Colors.white70)),
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.only(
-                                    left: 15, bottom: 11, top: 0, right: 15),
-                              ),
-                            ),
-                        ): 
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                            padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
-                            child: Image.network(
-                              data.definition,
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress
-                                                .expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress
-                                                .expectedTotalBytes
-                                        : null,
-                                  ),
-                                );
-                              },
-                              // height: 250,
-                              height:
-                                  MediaQuery.of(context).size.width * 0.5,
-                              width:
-                                  MediaQuery.of(context).size.width * 0.5,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        Column(
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.image),
-                              color: MyColorScheme.uno(),
-                              iconSize: 20,
-                              onPressed: (){
-                                imagePopUp(context, data, false);
-                              },
-                            ),
-                            data.isDefinitionPhoto ? IconButton(
-                              icon: Icon(Icons.cancel),
-                              color: Colors.white,
-                              onPressed: (){
-                                setState(() {
-                                  flashCardData[flashCardData.indexOf(data)].isDefinitionPhoto = false;
-                                  flashCardData[flashCardData.indexOf(data)].definition = '';
-                                });
-                              },
-                            ) : Container(height: 0,)
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
-                ) : 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    !data.isTermPhoto ? Container(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 10) ,
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: TextFormField(
-                        maxLines: null,
-                        textAlign: TextAlign.center,
-                        initialValue: data.term,
-                        onChanged: (val) {
-                          flashCardData[flashCardData.indexOf(data)]
-                              .term = val;
-                        },
-                        keyboardType: TextInputType.multiline,
-                        style: TextStyle(
-                            color: MyColorScheme.uno(), fontSize: 16),
-                        decoration: InputDecoration(
-                          counterText: '',
-                          hintText: 'Term',
-                          hintStyle:
-                              (TextStyle(color: Colors.white24)),
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          contentPadding: EdgeInsets.only(
-                              left: 15,
-                              bottom: 0,
-                              top: 11,
-                              right: 15),
-                        )),
-                    ): 
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                        padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
-                        child: Image.network(
-                          data.term,
-                          loadingBuilder: (BuildContext context,
-                              Widget child,
-                              ImageChunkEvent loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress
-                                            .expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress
-                                            .cumulativeBytesLoaded /
-                                        loadingProgress
-                                            .expectedTotalBytes
-                                    : null,
-                              ),
-                            );
-                          },
-                          // height: 250,
-                          height:
-                              MediaQuery.of(context).size.width * 0.5,
-                          width:
-                              MediaQuery.of(context).size.width * 0.5,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    Column(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.image),
-                          color: MyColorScheme.uno(),
-                          iconSize: 20,
-                          onPressed: (){
-                            imagePopUp(context, data, true);
-                          },
-                        ),
-                        data.isTermPhoto ? IconButton(
-                          icon: Icon(Icons.cancel),
-                          color: Colors.white,
-                          onPressed: (){
-                            setState(() {
-                              flashCardData[flashCardData.indexOf(data)].isTermPhoto = false;
-                              flashCardData[flashCardData.indexOf(data)].term = '';
-                            });
-                          },
-                        ) : Container(height: 0,)
-                      ],
-                    )
-                  ],
+                  borderRadius: BorderRadius.circular(10),
+                  color: MyColorScheme.accentLight(),
                 ),
+                child: !data.isOneSided
+                    ? Column(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              !data.isTermPhoto
+                                  ? Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      child: TextFormField(
+                                          maxLines: null,
+                                          textAlign: TextAlign.center,
+                                          initialValue: data.term,
+                                          onChanged: (val) {
+                                            flashCardData[
+                                                    flashCardData.indexOf(data)]
+                                                .term = val;
+                                          },
+                                          keyboardType: TextInputType.multiline,
+                                          style: TextStyle(
+                                              color: MyColorScheme.uno(),
+                                              fontSize: 16),
+                                          decoration: InputDecoration(
+                                            counterText: '',
+                                            hintText: 'Term',
+                                            hintStyle: (TextStyle(
+                                                color: Colors.white70)),
+                                            border: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            enabledBorder: InputBorder.none,
+                                            errorBorder: InputBorder.none,
+                                            disabledBorder: InputBorder.none,
+                                            contentPadding: EdgeInsets.only(
+                                                left: 15,
+                                                bottom: 0,
+                                                top: 11,
+                                                right: 15),
+                                          )),
+                                    )
+                                  : Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      padding:
+                                          EdgeInsets.fromLTRB(20, 20, 0, 10),
+                                      child: Image.network(
+                                        data.term,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                        // height: 250,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                              Column(
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(Icons.image),
+                                    color: MyColorScheme.uno(),
+                                    iconSize: 20,
+                                    onPressed: () {
+                                      imagePopUp(context, data, true);
+                                    },
+                                  ),
+                                  data.isTermPhoto
+                                      ? IconButton(
+                                          icon: Icon(Icons.cancel),
+                                          color: Colors.white,
+                                          onPressed: () {
+                                            setState(() {
+                                              flashCardData[flashCardData
+                                                      .indexOf(data)]
+                                                  .isTermPhoto = false;
+                                              flashCardData[flashCardData
+                                                      .indexOf(data)]
+                                                  .term = '';
+                                            });
+                                          },
+                                        )
+                                      : Container(
+                                          height: 0,
+                                        )
+                                ],
+                              )
+                            ],
+                          ),
+                          Container(
+                              padding: EdgeInsets.only(right: 20),
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Divider(
+                                thickness: 2,
+                                color: Colors.white,
+                              )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              !data.isDefinitionPhoto
+                                  ? Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      child: TextFormField(
+                                        maxLines: null,
+                                        textAlign: TextAlign.center,
+                                        initialValue: data.definition,
+                                        style: TextStyle(
+                                            color: MyColorScheme.uno()),
+                                        onChanged: (val) {
+                                          flashCardData[
+                                                  flashCardData.indexOf(data)]
+                                              .definition = val;
+                                        },
+                                        textInputAction:
+                                            TextInputAction.newline,
+                                        decoration: InputDecoration(
+                                          hintText: 'Definition',
+                                          hintStyle: (TextStyle(
+                                              color: Colors.white70)),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 15,
+                                              bottom: 11,
+                                              top: 0,
+                                              right: 15),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      padding:
+                                          EdgeInsets.fromLTRB(20, 20, 0, 10),
+                                      child: Image.network(
+                                        data.definition,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                        // height: 250,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                              Column(
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(Icons.image),
+                                    color: MyColorScheme.uno(),
+                                    iconSize: 20,
+                                    onPressed: () {
+                                      imagePopUp(context, data, false);
+                                    },
+                                  ),
+                                  data.isDefinitionPhoto
+                                      ? IconButton(
+                                          icon: Icon(Icons.cancel),
+                                          color: Colors.white,
+                                          onPressed: () {
+                                            setState(() {
+                                              flashCardData[flashCardData
+                                                      .indexOf(data)]
+                                                  .isDefinitionPhoto = false;
+                                              flashCardData[flashCardData
+                                                      .indexOf(data)]
+                                                  .definition = '';
+                                            });
+                                          },
+                                        )
+                                      : Container(
+                                          height: 0,
+                                        )
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          !data.isTermPhoto
+                              ? Container(
+                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  child: TextFormField(
+                                      maxLines: null,
+                                      textAlign: TextAlign.center,
+                                      initialValue: data.term,
+                                      onChanged: (val) {
+                                        flashCardData[
+                                                flashCardData.indexOf(data)]
+                                            .term = val;
+                                      },
+                                      keyboardType: TextInputType.multiline,
+                                      style: TextStyle(
+                                          color: MyColorScheme.uno(),
+                                          fontSize: 16),
+                                      decoration: InputDecoration(
+                                        counterText: '',
+                                        hintText: 'Term',
+                                        hintStyle:
+                                            (TextStyle(color: Colors.white24)),
+                                        border: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        errorBorder: InputBorder.none,
+                                        disabledBorder: InputBorder.none,
+                                        contentPadding: EdgeInsets.only(
+                                            left: 15,
+                                            bottom: 0,
+                                            top: 11,
+                                            right: 15),
+                                      )),
+                                )
+                              : Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
+                                  child: Image.network(
+                                    data.term,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                    // height: 250,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                          Column(
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(Icons.image),
+                                color: MyColorScheme.uno(),
+                                iconSize: 20,
+                                onPressed: () {
+                                  imagePopUp(context, data, true);
+                                },
+                              ),
+                              data.isTermPhoto
+                                  ? IconButton(
+                                      icon: Icon(Icons.cancel),
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        setState(() {
+                                          flashCardData[
+                                                  flashCardData.indexOf(data)]
+                                              .isTermPhoto = false;
+                                          flashCardData[
+                                                  flashCardData.indexOf(data)]
+                                              .term = '';
+                                        });
+                                      },
+                                    )
+                                  : Container(
+                                      height: 0,
+                                    )
+                            ],
+                          )
+                        ],
+                      ),
               ),
             )
             // Stack(
@@ -399,33 +458,33 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
             //               children: <Widget>[
             //                 Container(
             //                   width: MediaQuery.of(context).size.width * 0.6,
-                              // child: TextFormField(
-                              //     maxLines: null,
-                              //     textAlign: TextAlign.center,
-                              //     initialValue: data.term,
-                              //     onChanged: (val) {
-                              //       flashCardData[flashCardData.indexOf(data)]
-                              //           .term = val;
-                              //     },
-                              //     keyboardType: TextInputType.multiline,
-                              //     style: TextStyle(
-                              //         color: MyColorScheme.uno(), fontSize: 16),
-                              //     decoration: InputDecoration(
-                              //       counterText: '',
-                              //       hintText: 'Term',
-                              //       hintStyle:
-                              //           (TextStyle(color: Colors.white24)),
-                              //       border: InputBorder.none,
-                              //       focusedBorder: InputBorder.none,
-                              //       enabledBorder: InputBorder.none,
-                              //       errorBorder: InputBorder.none,
-                              //       disabledBorder: InputBorder.none,
-                              //       contentPadding: EdgeInsets.only(
-                              //           left: 15,
-                              //           bottom: 0,
-                              //           top: 11,
-                              //           right: 15),
-                              //     )),
+            // child: TextFormField(
+            //     maxLines: null,
+            //     textAlign: TextAlign.center,
+            //     initialValue: data.term,
+            //     onChanged: (val) {
+            //       flashCardData[flashCardData.indexOf(data)]
+            //           .term = val;
+            //     },
+            //     keyboardType: TextInputType.multiline,
+            //     style: TextStyle(
+            //         color: MyColorScheme.uno(), fontSize: 16),
+            //     decoration: InputDecoration(
+            //       counterText: '',
+            //       hintText: 'Term',
+            //       hintStyle:
+            //           (TextStyle(color: Colors.white24)),
+            //       border: InputBorder.none,
+            //       focusedBorder: InputBorder.none,
+            //       enabledBorder: InputBorder.none,
+            //       errorBorder: InputBorder.none,
+            //       disabledBorder: InputBorder.none,
+            //       contentPadding: EdgeInsets.only(
+            //           left: 15,
+            //           bottom: 0,
+            //           top: 11,
+            //           right: 15),
+            //     )),
             //                 ),
             //                 Padding(
             //                   padding: const EdgeInsets.all(10.0),
@@ -436,28 +495,28 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
             //                   ),
             //                 ),
             //                 if (data.isDefinitionPhoto == false) ...[
-                              // TextFormField(
-                              //   maxLines: null,
-                              //   textAlign: TextAlign.center,
-                              //   initialValue: data.definition,
-                              //   style: TextStyle(color: MyColorScheme.uno()),
-                              //   onChanged: (val) {
-                              //     flashCardData[flashCardData.indexOf(data)]
-                              //         .definition = val;
-                              //   },
-                              //   textInputAction: TextInputAction.newline,
-                              //   decoration: InputDecoration(
-                              //     hintText: 'Definition',
-                              //     hintStyle: (TextStyle(color: Colors.white24)),
-                              //     border: InputBorder.none,
-                              //     focusedBorder: InputBorder.none,
-                              //     enabledBorder: InputBorder.none,
-                              //     errorBorder: InputBorder.none,
-                              //     disabledBorder: InputBorder.none,
-                              //     contentPadding: EdgeInsets.only(
-                              //         left: 15, bottom: 11, top: 0, right: 15),
-                              //   ),
-                              // ),
+            // TextFormField(
+            //   maxLines: null,
+            //   textAlign: TextAlign.center,
+            //   initialValue: data.definition,
+            //   style: TextStyle(color: MyColorScheme.uno()),
+            //   onChanged: (val) {
+            //     flashCardData[flashCardData.indexOf(data)]
+            //         .definition = val;
+            //   },
+            //   textInputAction: TextInputAction.newline,
+            //   decoration: InputDecoration(
+            //     hintText: 'Definition',
+            //     hintStyle: (TextStyle(color: Colors.white24)),
+            //     border: InputBorder.none,
+            //     focusedBorder: InputBorder.none,
+            //     enabledBorder: InputBorder.none,
+            //     errorBorder: InputBorder.none,
+            //     disabledBorder: InputBorder.none,
+            //     contentPadding: EdgeInsets.only(
+            //         left: 15, bottom: 11, top: 0, right: 15),
+            //   ),
+            // ),
             //                 ] else ...[
             //                   if (data.definition == 'null') ...[
             //                     Container(
@@ -466,55 +525,55 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
             //                         mainAxisAlignment:
             //                             MainAxisAlignment.spaceAround,
             //                         children: <Widget>[
-                                      // IconButton(
-                                      //   icon: Icon(Icons.camera),
-                                      //   color: Colors.white,
-                                      //   onPressed: () {
-                                      //     getImage(ImageSource.camera, context,
-                                      //         flashCardData.indexOf(data));
-                                      //   },
-                                      // ),
-                                      // IconButton(
-                                      //   icon: Icon(Icons.photo),
-                                      //   color: Colors.white,
-                                      //   onPressed: () {
-                                      //     getImage(ImageSource.gallery, context,
-                                      //         flashCardData.indexOf(data));
-                                      //   },
-                                      // )
+            // IconButton(
+            //   icon: Icon(Icons.camera),
+            //   color: Colors.white,
+            //   onPressed: () {
+            //     getImage(ImageSource.camera, context,
+            //         flashCardData.indexOf(data));
+            //   },
+            // ),
+            // IconButton(
+            //   icon: Icon(Icons.photo),
+            //   color: Colors.white,
+            //   onPressed: () {
+            //     getImage(ImageSource.gallery, context,
+            //         flashCardData.indexOf(data));
+            //   },
+            // )
             //                         ],
             //                       ),
             //                     ),
             //                   ] else ...[
-                                // Padding(
-                                //   padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                                //   child: Image.network(
-                                //     data.definition,
-                                //     loadingBuilder: (BuildContext context,
-                                //         Widget child,
-                                //         ImageChunkEvent loadingProgress) {
-                                //       if (loadingProgress == null) return child;
-                                //       return Center(
-                                //         child: CircularProgressIndicator(
-                                //           value: loadingProgress
-                                //                       .expectedTotalBytes !=
-                                //                   null
-                                //               ? loadingProgress
-                                //                       .cumulativeBytesLoaded /
-                                //                   loadingProgress
-                                //                       .expectedTotalBytes
-                                //               : null,
-                                //         ),
-                                //       );
-                                //     },
-                                //     // height: 250,
-                                //     height:
-                                //         MediaQuery.of(context).size.width * 0.5,
-                                //     width:
-                                //         MediaQuery.of(context).size.width * 0.5,
-                                //     fit: BoxFit.cover,
-                                //   ),
-                                // ),
+            // Padding(
+            //   padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+            //   child: Image.network(
+            //     data.definition,
+            //     loadingBuilder: (BuildContext context,
+            //         Widget child,
+            //         ImageChunkEvent loadingProgress) {
+            //       if (loadingProgress == null) return child;
+            //       return Center(
+            //         child: CircularProgressIndicator(
+            //           value: loadingProgress
+            //                       .expectedTotalBytes !=
+            //                   null
+            //               ? loadingProgress
+            //                       .cumulativeBytesLoaded /
+            //                   loadingProgress
+            //                       .expectedTotalBytes
+            //               : null,
+            //         ),
+            //       );
+            //     },
+            //     // height: 250,
+            //     height:
+            //         MediaQuery.of(context).size.width * 0.5,
+            //     width:
+            //         MediaQuery.of(context).size.width * 0.5,
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
             //                   ]
             //                 ]
             //               ],
@@ -543,78 +602,78 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
             //     )
             //   ],
             // ),
-          );
+            );
       },
     ).toList(); // building the list of flashcards in their edit mode
   }
 
-  imagePopUp(BuildContext context, FlashCard data, bool forTerm){
+  imagePopUp(BuildContext context, FlashCard data, bool forTerm) {
     return showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0)),
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.25,
-            padding: EdgeInsets.all(15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.camera),
-                          color: Colors.black,
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            await getImage(ImageSource.camera, context,
-                                flashCardData.indexOf(data), forTerm);
-                          },
-                        ),
-                        Text('Camera')
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.photo),
-                          color: Colors.black,
-                          onPressed: () async{
-                            Navigator.pop(context);
-                            await getImage(ImageSource.gallery, context,
-                                flashCardData.indexOf(data), forTerm);
-                          },
-                        ),
-                        Text('Gallery'),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    FlatButton(
-                      child: Text('Cancel'),
-                      textColor: Colors.redAccent,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                )
-              ],
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.25,
+              padding: EdgeInsets.all(15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.camera),
+                            color: Colors.black,
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await getImage(ImageSource.camera, context,
+                                  flashCardData.indexOf(data), forTerm);
+                            },
+                          ),
+                          Text('Camera')
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.photo),
+                            color: Colors.black,
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await getImage(ImageSource.gallery, context,
+                                  flashCardData.indexOf(data), forTerm);
+                            },
+                          ),
+                          Text('Gallery'),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text('Cancel'),
+                        textColor: Colors.redAccent,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      });
+          );
+        });
   }
 
   bool _disableTouch = false;
