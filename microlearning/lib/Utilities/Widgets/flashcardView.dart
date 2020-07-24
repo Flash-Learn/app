@@ -169,7 +169,7 @@ class _FlashCardViewState extends State<FlashCardView> {
               key: ValueKey<int>(side),
               // padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 8),
               padding: widget.isTestMode
-                  ? EdgeInsets.fromLTRB(8, 35, 8, 35)
+                  ? EdgeInsets.fromLTRB(8, 10, 8, 10)
                   : EdgeInsets.fromLTRB(8, 0, 8, 35),
               child: Container(
                 child: Transform(
