@@ -47,6 +47,7 @@ class _ViewDeckState extends State<ViewDeck> {
   bool isTestMode = true;
   Key whenShuffled = UniqueKey();
   Key whenNotShuffled = UniqueKey();
+  List<bool> isSelected;
 
   _ViewDeckState({this.deckID, this.isdemo});
   bool _disableTouch = false;
@@ -149,6 +150,7 @@ class _ViewDeckState extends State<ViewDeck> {
 
   @override
   void initState() {
+    isSelected = [true, false];
 //    deck = _getThingsOnStartup();
     super.initState();
     if (isdemo == true) {
@@ -240,67 +242,67 @@ class _ViewDeckState extends State<ViewDeck> {
                   actions: <Widget>[
                     if (widget.editAccess) ...[
                       if (showAllcards) ...[
-                        Container(
-                            key: _keyMode,
-                            child: isTestMode
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    //     child: IconButton(
-                                    //   icon: Icon(Icons.chrome_reader_mode),
-                                    //   onPressed: () {
-                                    //     setState(() {
-                                    //       isTestMode = !isTestMode;
-                                    //       _showSnackbar(
-                                    //           'Switched to learn mode');
-                                    //     });
-                                    //   },
-                                    // ),
-                                    child: Switch(
-                                        activeColor: MyColorScheme.accent(),
-                                        inactiveTrackColor:
-                                            MyColorScheme.accentLight(),
-                                        value: isTestMode,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            isTestMode = !isTestMode;
-                                          });
-                                          _showSnackbar(
-                                              'Switched to learn mode');
-                                        }),
-                                  )
-                                : Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8),
-                                    // child: IconButton(
-                                    //   icon: Icon(Icons.check_box),
-                                    //   onPressed: () {
-                                    //     WidgetsBinding.instance
-                                    //         .addPostFrameCallback((_) {
-                                    //       setState(() {
-                                    //         isTestMode = !isTestMode;
-                                    //         _showSnackbar(
-                                    //             'Switched to test mode');
-                                    //       });
-                                    //     });
-                                    //   },
-                                    // ),
-                                    child: Switch(
-                                        activeColor: MyColorScheme.accent(),
-                                        inactiveTrackColor:
-                                            MyColorScheme.accentLight(),
-                                        value: isTestMode,
-                                        onChanged: (value) {
-                                          WidgetsBinding.instance
-                                              .addPostFrameCallback((_) {
-                                            setState(() {
-                                              isTestMode = !isTestMode;
-                                            });
-                                            _showSnackbar(
-                                                'Switched to test mode');
-                                          });
-                                        }),
-                                  )),
+                        // Container(
+                        //     key: _keyMode,
+                        //     child: isTestMode
+                        //         ? Padding(
+                        //             padding: const EdgeInsets.symmetric(
+                        //                 horizontal: 8.0),
+                        //             //     child: IconButton(
+                        //             //   icon: Icon(Icons.chrome_reader_mode),
+                        //             //   onPressed: () {
+                        //             //     setState(() {
+                        //             //       isTestMode = !isTestMode;
+                        //             //       _showSnackbar(
+                        //             //           'Switched to learn mode');
+                        //             //     });
+                        //             //   },
+                        //             // ),
+                        //             child: Switch(
+                        //                 activeColor: MyColorScheme.accent(),
+                        //                 inactiveTrackColor:
+                        //                     MyColorScheme.accentLight(),
+                        //                 value: isTestMode,
+                        //                 onChanged: (value) {
+                        //                   setState(() {
+                        //                     isTestMode = !isTestMode;
+                        //                   });
+                        //                   _showSnackbar(
+                        //                       'Switched to learn mode');
+                        //                 }),
+                        //           )
+                        //         : Padding(
+                        //             padding:
+                        //                 EdgeInsets.symmetric(horizontal: 8),
+                        //             // child: IconButton(
+                        //             //   icon: Icon(Icons.check_box),
+                        //             //   onPressed: () {
+                        //             //     WidgetsBinding.instance
+                        //             //         .addPostFrameCallback((_) {
+                        //             //       setState(() {
+                        //             //         isTestMode = !isTestMode;
+                        //             //         _showSnackbar(
+                        //             //             'Switched to test mode');
+                        //             //       });
+                        //             //     });
+                        //             //   },
+                        //             // ),
+                        //             child: Switch(
+                        //                 activeColor: MyColorScheme.accent(),
+                        //                 inactiveTrackColor:
+                        //                     MyColorScheme.accentLight(),
+                        //                 value: isTestMode,
+                        //                 onChanged: (value) {
+                        //                   WidgetsBinding.instance
+                        //                       .addPostFrameCallback((_) {
+                        //                     setState(() {
+                        //                       isTestMode = !isTestMode;
+                        //                     });
+                        //                     _showSnackbar(
+                        //                         'Switched to test mode');
+                        //                   });
+                        //                 }),
+                        //           )),
                       ],
                       Padding(
                         key: _keyEdit,
@@ -397,6 +399,55 @@ class _ViewDeckState extends State<ViewDeck> {
                       ])),
                   child: Column(
                     children: <Widget>[
+                      SizedBox(height: 10,),
+                      Container(
+                        height: 40,
+                        child: ToggleButtons(
+                          borderColor: Colors.white,
+                          fillColor: Colors.white,
+                          borderWidth: 1,
+                          selectedBorderColor: Colors.white,
+                          selectedColor: MyColorScheme.accentLight(),
+                          borderRadius: BorderRadius.circular(10),
+                          children: <Widget>[
+                              Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                  'Test Mode',
+                                  style: TextStyle(fontSize: 14),
+                              ),
+                              ),
+                              Padding(
+                              padding: const EdgeInsets.symmetric(horizontal:8.0),
+                              child: Text(
+                                  'Learn Mode',
+                                  style: TextStyle(fontSize: 14),
+                              ),
+                              ),
+                          ],
+                          onPressed: (int index) {
+                              setState(() {
+                              // for (int i = 0; i < isSelected.length; i++) {
+                              //     isSelected[i] = i == index;
+                              // }
+                              // isTestMode = !isTestMode;
+                              if(isSelected[0]==true && index == 1){
+                                isSelected[0] = false;
+                                isSelected[1] = true;
+                                isTestMode = !isTestMode;
+                                _showSnackbar('Switched to Learn Mode'); 
+                              }
+                              if(isSelected[1]==true && index == 0){
+                                isSelected[1] = false;
+                                isSelected[0] = true;
+                                isTestMode = !isTestMode;
+                                _showSnackbar('Switched to Test Mode'); 
+                              }
+                              });
+                          },
+                          isSelected: isSelected,
+                        ),
+                      ),
                       Expanded(
                         child: Container(
                           child: FlashCardSwipeView(
@@ -416,19 +467,7 @@ class _ViewDeckState extends State<ViewDeck> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                                child: Text(
-                                  "Progress:",
-                                  style: TextStyle(
-                                    letterSpacing: 3,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black45,
-                                  ),
-                                ),
-                              ),
                               LinearPercentIndicator(
                                 percent: completedPercentage,
                                 backgroundColor: Colors.blueGrey[400],
@@ -442,9 +481,7 @@ class _ViewDeckState extends State<ViewDeck> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      )
+                      SizedBox(height: 20,),
                     ],
                   ),
                 ),
@@ -936,7 +973,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
     if (editaccess == true) {
       children.add(
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 35, 8, 35),
+          padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
           child: Transform(
             transform: Matrix4.identity()
               ..setEntry(1, 2, 0)
