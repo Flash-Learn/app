@@ -8,6 +8,8 @@ import 'package:microlearning/Models/flashcard.dart';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
+import 'package:flutter/services.dart';
+
 
 class GetFlashCardEdit extends StatefulWidget {
   final List<FlashCard> flashCardData;
@@ -616,7 +618,6 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
   }
 
   bool _disableTouch = false;
-  ScrollController scroll;
 
   @override
   Widget build(BuildContext context) {
@@ -636,11 +637,19 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
               maxHeight: MediaQuery.of(context).size.height * 0.8,
             ),
             child: Scrollbar(
-              child: ListView(
-                controller: _scrollController,
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
-                children: children,
-                key: Key(deck.deckName),
+              child: NotificationListener<ScrollStartNotification>(
+                onNotification: (scrollNotification){
+                  if (scrollNotification.dragDetails == null) {
+                    return;
+                  }
+                  FocusScope.of(context).unfocus();
+                },
+                child: ListView(
+                  controller: _scrollController,
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
+                  children: children,
+                  key: Key(deck.deckName),
+                ),
               ),
             ),
           ),
