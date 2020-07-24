@@ -67,10 +67,11 @@ class _EditInfoState extends State<EditInfo> {
                         initialValue: _name,
                         validator: (val) {
                           Pattern pattern =
-                              r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+                              // r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9 ]+)*$';
+                              r'^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$';
                           RegExp regex = new RegExp(pattern);
                           if (!regex.hasMatch(val))
-                            return 'Invalid Name';
+                            return 'Invalid Name, use only Letters in your name.';
                           else
                             return null;
                         },
