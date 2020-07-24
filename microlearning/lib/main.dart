@@ -1,17 +1,14 @@
-import 'package:microlearning/Maintainance/updateUserData.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
-import 'package:microlearning/screens/Decks/homeScreen.dart';
+import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/Decks/notifications_inapp.dart';
 import 'package:microlearning/screens/Groups/my_groups.dart';
 import 'package:microlearning/screens/Search/search.dart';
-import 'package:flutter/material.dart';
 import 'package:microlearning/screens/authentication/login.dart';
 import 'package:microlearning/screens/authentication/register.dart';
-import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/authentication/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
-import 'services/pdf.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +21,9 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final email;
+
   MyApp({@required this.email});
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
