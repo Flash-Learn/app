@@ -52,6 +52,7 @@ class _FlashCardViewState extends State<FlashCardView> {
   String term = "";
   String definition = "";
   String display;
+  bool isLoading = false;
 
   void getUId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -555,7 +556,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 30, 15, 10),
+                        padding: const EdgeInsets.fromLTRB(18, 30, 15, 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -588,7 +589,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                       ),
 //              Container(padding: EdgeInsets.symmetric(horizontal: 10),child: Divider(color: MyColorScheme.accent(), thickness: 3,)),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 15, 10),
+                        padding: const EdgeInsets.fromLTRB(18, 10, 15, 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -618,6 +619,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                       textAlign: TextAlign.left)
                                   : ClipRect(
                                       child: Container(
+                                        padding: EdgeInsets.only(top: 10),
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.5,
@@ -675,7 +677,7 @@ class _FlashCardViewState extends State<FlashCardView> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             child: Container(
-              height: MediaQuery.of(ctxt).size.height * 0.3,
+              height: MediaQuery.of(ctxt).size.height * 0.2,
               padding: EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -686,7 +688,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                       playlistname = newplaylist;
                     },
                     decoration: InputDecoration(
-                      hintText: 'New PlayList',
+                      hintText: 'New Deck Name',
                     ),
                   ),
                   SizedBox(
@@ -696,7 +698,10 @@ class _FlashCardViewState extends State<FlashCardView> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       FlatButton(
-                        child: Text('Cancel'),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.red),
+                        ),
                         onPressed: () {
                           Navigator.pop(ctxt);
                         },
@@ -704,14 +709,45 @@ class _FlashCardViewState extends State<FlashCardView> {
                       FlatButton(
                         child: Text('Done'),
                         onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
                           Navigator.pop(ctxt);
-                          setState(() async {
-                            Deck newDeck = await createNewBlankDeck(uid,
-                                deckName: playlistname);
-                            print(newDeck);
+                          Navigator.pop(context);
+                          Deck newDeck = await createNewBlankDeck(uid,
+                              deckName: playlistname);
+                          print(newDeck);
+
+                          dynamic flashRef = await flashcardReference.add({
+                            'term': term,
+                            'definition': definition,
+                            'isDefinitionPhoto': isDefinitionPhoto,
+                            'isTermPhoto': isTermPhoto,
+                            'isOneSided': isOneSided,
                           });
 
-                          _showbottomsheet(context);
+                          await deckReference
+                              .document(newDeck.deckID)
+                              .updateData({
+                            'flashcardList':
+                                FieldValue.arrayUnion([flashRef.documentID]),
+                            'isPublic': false,
+                          });
+
+                          setState(() {
+                            isLoading = false;
+                          });
+                          SnackBar snackBar = SnackBar(
+                            duration: Duration(milliseconds: 1100),
+                            content: Text(
+                              'Card added to ${newDeck.deckName}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: MyColorScheme.accent()),
+                            ),
+                            backgroundColor: MyColorScheme.uno(),
+                          );
+                          Scaffold.of(context).hideCurrentSnackBar();
+                          Scaffold.of(context).showSnackBar(snackBar);
                         },
                       )
                     ],
@@ -744,7 +780,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                 Deck(deckName: snapshot.data["deckName"], deckID: deckID);
 
             return Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding: const EdgeInsets.all(8.0),
               child: Card(
                 color: MyColorScheme.accentLight(),
                 child: ListTile(
@@ -764,8 +800,22 @@ class _FlashCardViewState extends State<FlashCardView> {
                       'flashcardList':
                           FieldValue.arrayUnion([flashRef.documentID]),
                     });
+                    SnackBar snackBar = SnackBar(
+                      duration: Duration(milliseconds: 900),
+                      content: Text(
+                        'Card added to ${deck.deckName}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: MyColorScheme.accent()),
+                      ),
+                      backgroundColor: MyColorScheme.uno(),
+                    );
+                    Scaffold.of(context).hideCurrentSnackBar();
+                    Scaffold.of(context).showSnackBar(snackBar);
                   },
-                  title: Text(deck.deckName),
+                  title: Text(
+                    deck.deckName,
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                  ),
                 ),
               ),
             );
@@ -783,14 +833,14 @@ class _FlashCardViewState extends State<FlashCardView> {
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-//                Navigator.pop(context);
+                // print('jaja');
                 createAlertDialog(context);
               },
             )
           ],
         ),
         Container(
-          height: MediaQuery.of(context).size.height * 0.4,
+          height: MediaQuery.of(context).size.height * 0.48,
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -807,6 +857,9 @@ class _FlashCardViewState extends State<FlashCardView> {
 
   void _showbottomsheet(context) {
     showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
+        ),
         context: context,
         builder: (BuildContext buildContext) {
           return StreamBuilder(
@@ -817,7 +870,7 @@ class _FlashCardViewState extends State<FlashCardView> {
             builder: (context, snapshot) {
               if (!snapshot.hasData)
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
