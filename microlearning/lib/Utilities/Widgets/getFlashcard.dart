@@ -10,7 +10,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:flutter/services.dart';
 
-
 class GetFlashCardEdit extends StatefulWidget {
   final List<FlashCard> flashCardData;
   final Deck deck;
@@ -365,7 +364,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                                         counterText: '',
                                         hintText: 'Term',
                                         hintStyle:
-                                            (TextStyle(color: Colors.white24)),
+                                            (TextStyle(color: Colors.white70)),
                                         border: InputBorder.none,
                                         focusedBorder: InputBorder.none,
                                         enabledBorder: InputBorder.none,
@@ -697,7 +696,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
             ),
             child: Scrollbar(
               child: NotificationListener<ScrollStartNotification>(
-                onNotification: (scrollNotification){
+                onNotification: (scrollNotification) {
                   if (scrollNotification.dragDetails == null) {
                     return;
                   }

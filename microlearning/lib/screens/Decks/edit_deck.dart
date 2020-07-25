@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Models/group.dart';
@@ -132,7 +133,7 @@ class _EditDecksState extends State<EditDecks> {
       !widget.isDeckforGroup
           ? await deleteDeck(deck.deckID)
           : await deleteDeckFromGroup(deck.deckID, widget.ifGroupThenGrpID);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) {
         return widget.isDeckforGroup
             ? Group(groupID: widget.ifGroupThenGrpID)
             : MyDecks();
@@ -141,7 +142,7 @@ class _EditDecksState extends State<EditDecks> {
       setState(() {
         _disableTouch = true;
       });
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) {
         return widget.isDeckforGroup
             ? Group(groupID: widget.ifGroupThenGrpID)
             : MyDecks();

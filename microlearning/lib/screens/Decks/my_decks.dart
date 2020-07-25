@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/Widgets/deckReorderList.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
+import 'package:microlearning/Utilities/constants/transitions.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
+import 'package:microlearning/screens/Groups/my_groups.dart';
+import 'package:microlearning/screens/Search/search.dart';
 import 'package:microlearning/screens/authentication/init_info.dart';
 import 'package:microlearning/screens/Decks/edit_deck.dart';
 import 'package:microlearning/services/firebase_notifications.dart';
@@ -173,10 +177,9 @@ class _MyDecksState extends State<MyDecks> {
                         color: MyColorScheme.uno(),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/search',
-                        );
+                        Navigator.of(context).push(CupertinoPageRoute(
+                          builder: (context) => Search(),
+                        ));
                       },
                     ),
                   ],
@@ -187,11 +190,7 @@ class _MyDecksState extends State<MyDecks> {
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return AccountSettings();
-                          },
-                        ),
+                        SlideRightRoute(page: AccountSettings()),
                       );
                     },
                   )),
@@ -324,10 +323,8 @@ class _MyDecksState extends State<MyDecks> {
             borderRadius: BorderRadius.circular(20),
             splashColor: MyColorScheme.accent(),
             onTap: () {
-              Navigator.popAndPushNamed(
-                context,
-                '/groups',
-              );
+              Navigator.of(context)
+                  .pushReplacement(FadeRoute(page: GroupList()));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
