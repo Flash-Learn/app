@@ -34,6 +34,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
   var _tapPosition;
   List<dynamic> userDeckIDs;
   bool _disableTouch = false;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return AbsorbPointer(
@@ -294,7 +295,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
             String grpDescription = snapshot.data["description"];
 
             return Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding: const EdgeInsets.all(10.0),
               child: Card(
                 color: MyColorScheme.accentLight(),
                 child: ListTile(
@@ -314,8 +315,14 @@ class _DeckReorderListState extends State<DeckReorderList> {
                       "decks": FieldValue.arrayUnion([deckId]),
                     });
                   },
-                  title: Text(grpName),
-                  subtitle: Text(grpDescription),
+                  title: Text(
+                    grpName,
+                    style: TextStyle(fontSize: 22, color: Colors.black),
+                  ),
+                  subtitle: Text(
+                    grpDescription,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ),
             );
@@ -328,7 +335,8 @@ class _DeckReorderListState extends State<DeckReorderList> {
     return Column(
       children: <Widget>[
         Container(
-          height: MediaQuery.of(context).size.height * 0.4,
+          padding: EdgeInsets.only(top: 10),
+          height: MediaQuery.of(context).size.height * 0.56,
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -345,6 +353,10 @@ class _DeckReorderListState extends State<DeckReorderList> {
 
   _showBottomSheet(String deckID) {
     showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
+        ),
+        enableDrag: true,
         context: context,
         builder: (BuildContext context) {
           return StreamBuilder(
@@ -371,50 +383,63 @@ class _DeckReorderListState extends State<DeckReorderList> {
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
-            child: Container(
-              height: MediaQuery.of(ctxt).size.height * 0.2,
-              padding: EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Do you want to delete the deck?',
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text('Cancel'),
-                        onPressed: () {
-                          Navigator.pop(ctxt);
-                        },
+            child: isLoading
+                ? Container(
+                    height: MediaQuery.of(ctxt).size.height * 0.15,
+                    child: Center(
+                      child: Text(
+                        'Deleting... \n\nPlease Wait',
                       ),
-                      FlatButton(
-                        child: Text(
-                          'Delete',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            _disableTouch = false;
-                            userDeckIDs.remove(deckid);
-                          });
-                          !widget.belongsToGroup
-                              ? await deleteDeck(deckid)
-                              : await deleteDeckFromGroup(
-                                  deckid, widget.ifGrpThenID);
-                          Navigator.pop(ctxt);
-                        },
-                      )
-                    ],
+                    ),
                   )
-                ],
-              ),
-            ),
+                : Container(
+                    height: MediaQuery.of(ctxt).size.height * 0.2,
+                    padding: EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Do you want to delete this deck?',
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            FlatButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.pop(ctxt);
+                              },
+                            ),
+                            FlatButton(
+                              child: Text(
+                                'Delete',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  _disableTouch = false;
+                                  isLoading = true;
+                                  userDeckIDs.remove(deckid);
+                                });
+                                !widget.belongsToGroup
+                                    ? await deleteDeck(deckid)
+                                    : await deleteDeckFromGroup(
+                                        deckid, widget.ifGrpThenID);
+                                Navigator.pop(ctxt);
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              },
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
           );
         });
   }
