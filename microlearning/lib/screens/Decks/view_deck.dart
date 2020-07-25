@@ -412,10 +412,10 @@ class _ViewDeckState extends State<ViewDeck> {
                       Container(
                         height: 40,
                         child: ToggleButtons(
-                          borderColor: Colors.blue,
-                          fillColor: Colors.blue[500],
+                          borderColor: Colors.blue[400],
+                          fillColor: Colors.blue[400],
                           borderWidth: 1.5,
-                          selectedBorderColor: Colors.blue,
+                          selectedBorderColor: Colors.blue[400],
                           selectedColor: MyColorScheme.accentLight(),
                           borderRadius: BorderRadius.circular(10),
                           children: <Widget>[

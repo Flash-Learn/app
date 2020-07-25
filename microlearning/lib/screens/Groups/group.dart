@@ -78,13 +78,15 @@ class _GroupState extends State<Group> {
                   },
                   label: Text('Add a deck'),
                   icon: Icon(Icons.add),
+                  backgroundColor: MyColorScheme.accent(),
                 ),
                 appBar: AppBar(
+                  backgroundColor: MyColorScheme.accent(),
                   leading: IconButton(
                     icon: Icon(Icons.arrow_back),
                     onPressed: () {
                       Navigator.of(context)
-                          .pushReplacement(SlideRightRoute(page: GroupList()));
+                          .pushReplacement(FadeRoute(page: GroupList()));
                     },
                   ),
                   title: Text(
@@ -114,6 +116,7 @@ class _GroupState extends State<Group> {
                   ],
                 ),
                 body: Container(
+                  color: Colors.blue[50],
                   child: DeckReorderList(
                     userDeckIDs: group.decks,
                     belongsToGroup: true,

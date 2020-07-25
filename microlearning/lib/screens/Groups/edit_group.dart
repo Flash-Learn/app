@@ -140,6 +140,7 @@ class _EditGroupState extends State<EditGroup> {
                       ),
                       Center(
                         child: RaisedButton(
+                          color: MyColorScheme.accentLight(),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           onPressed: () {
@@ -154,7 +155,10 @@ class _EditGroupState extends State<EditGroup> {
                                 // '/groupsearch',
                                 );
                           },
-                          child: Text('Add a User'),
+                          child: Text(
+                            'Add a User',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                       SizedBox(
