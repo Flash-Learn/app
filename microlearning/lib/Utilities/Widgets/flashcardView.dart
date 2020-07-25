@@ -145,11 +145,10 @@ class _FlashCardViewState extends State<FlashCardView> {
           if (!snapshot.hasData) return Center(child: Loading(size: 50));
           term = snapshot.data["term"];
           definition = snapshot.data["definition"];
-          isPic = snapshot.data["isDefinitionPhoto"] ;
-          isDefinitionPhoto = snapshot.data["isDefinitionPhoto"] ;
-          isTermPhoto = snapshot.data["isTermPhoto"] ;
-          isOneSided = snapshot.data["isOneSided"] ;
-
+          isPic = snapshot.data["isDefinitionPhoto"];
+          isDefinitionPhoto = snapshot.data["isDefinitionPhoto"];
+          isTermPhoto = snapshot.data["isTermPhoto"];
+          isOneSided = snapshot.data["isOneSided"];
 
           bool userRemembers = true;
 
@@ -317,7 +316,7 @@ class _FlashCardViewState extends State<FlashCardView> {
 //                                clickNotMemorized: clickNotMemorized(),
 //                                getPopupItems: getPopupItems(context),
 //                              ),
-                        Stack(children: <Widget>[
+                                  Stack(children: <Widget>[
 //                          Container(
 //                            decoration: BoxDecoration(
 //                                color: MyColorScheme.flashcardColor(),
@@ -419,103 +418,101 @@ class _FlashCardViewState extends State<FlashCardView> {
 //                              ),
 //                            ),
 //                          ),
-                          FlashcardSide(
-                            isPic: isDefinitionPhoto,
-                            content: definition,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Padding(
-                                padding:
-                                const EdgeInsets.only(bottom: 8.0),
-                                child: (widget.editAccess &
-                                widget.isTestMode)
-                                    ? Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
+                                FlashcardSide(
+                                  isPic: isDefinitionPhoto,
+                                  content: definition,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
-                                    RawMaterialButton(
-                                      onPressed: () async {
-                                        await clickNotMemorized();
-                                      },
-                                      elevation: 2.0,
-                                      fillColor:
-                                      Colors.redAccent[700],
-                                      child: Icon(
-                                        Icons.close,
-                                        color: Colors.white,
-                                        size: 35.0,
-                                      ),
-                                      padding: EdgeInsets.all(15.0),
-                                      shape: CircleBorder(),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      child: (widget.editAccess &
+                                              widget.isTestMode)
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                RawMaterialButton(
+                                                  onPressed: () async {
+                                                    await clickNotMemorized();
+                                                  },
+                                                  elevation: 2.0,
+                                                  fillColor:
+                                                      Colors.redAccent[700],
+                                                  child: Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                    size: 35.0,
+                                                  ),
+                                                  padding: EdgeInsets.all(15.0),
+                                                  shape: CircleBorder(),
+                                                ),
+                                                RawMaterialButton(
+                                                  onPressed: () async {
+                                                    await clickMemorized();
+                                                  },
+                                                  elevation: 2.0,
+                                                  fillColor:
+                                                      Colors.greenAccent[400],
+                                                  child: Icon(
+                                                    Icons.check,
+                                                    color: Colors.white,
+                                                    size: 35.0,
+                                                  ),
+                                                  padding: EdgeInsets.all(15.0),
+                                                  shape: CircleBorder(),
+                                                )
+                                              ],
+                                            )
+                                          : SizedBox(),
                                     ),
-                                    RawMaterialButton(
-                                      onPressed: () async {
-                                        await clickMemorized();
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTapDown: (details) {
+                                        _tapPosition = details.globalPosition;
                                       },
-                                      elevation: 2.0,
-                                      fillColor:
-                                      Colors.greenAccent[400],
-                                      child: Icon(
-                                        Icons.check,
-                                        color: Colors.white,
-                                        size: 35.0,
+                                      onTap: () async {
+                                        final RenderBox overlay =
+                                            Overlay.of(context)
+                                                .context
+                                                .findRenderObject();
+                                        await showMenu(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5))),
+                                          context: context,
+                                          // found way to show delete button on the location of long press
+                                          // not sure how it works
+                                          position: RelativeRect.fromRect(
+                                              _tapPosition &
+                                                  Size(40,
+                                                      40), // smaller rect, the touch area
+                                              Offset.zero &
+                                                  overlay
+                                                      .size // Bigger rect, the entire screen
+                                              ),
+                                          items: getPopupItems(context),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 10, 20, 0),
+                                        child: Icon(
+                                          Icons.more_horiz,
+                                          color: MyColorScheme.accent(),
+                                        ),
                                       ),
-                                      padding: EdgeInsets.all(15.0),
-                                      shape: CircleBorder(),
                                     )
                                   ],
-                                )
-                                    : SizedBox(),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              GestureDetector(
-                                onTapDown: (details) {
-                                  _tapPosition = details.globalPosition;
-                                },
-                                onTap: () async {
-                                  final RenderBox overlay =
-                                  Overlay.of(context)
-                                      .context
-                                      .findRenderObject();
-                                  await showMenu(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5))),
-                                    context: context,
-                                    // found way to show delete button on the location of long press
-                                    // not sure how it works
-                                    position: RelativeRect.fromRect(
-                                        _tapPosition &
-                                        Size(40,
-                                            40), // smaller rect, the touch area
-                                        Offset.zero &
-                                        overlay
-                                            .size // Bigger rect, the entire screen
-                                    ),
-                                    items: getPopupItems(context),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      0, 10, 20, 0),
-                                  child: Icon(
-                                    Icons.more_horiz,
-                                    color: MyColorScheme.accent(),
-                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                        ]),
-
-
+                              ]),
                             )
                           : getLearnMode(),
                     ),

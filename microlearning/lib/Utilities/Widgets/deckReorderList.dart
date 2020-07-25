@@ -193,7 +193,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
                       PopupMenuItem(
                         value: "add to group",
                         child: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Navigator.pop(context, "add to group");
                             _showBottomSheet(deckId);
                           },
@@ -259,7 +259,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 20, 5, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
                   child: Icon(
                     Icons.more_horiz,
                     color: MyColorScheme.accent(),
@@ -272,10 +272,11 @@ class _DeckReorderListState extends State<DeckReorderList> {
       );
     }).toList();
   }
-  _buildGroupList(String deckId){
+
+  _buildGroupList(String deckId) {
     int i = 0;
     String k;
-    return userGroups.map<Widget>((dynamic data){
+    return userGroups.map<Widget>((dynamic data) {
       i++;
       k = '$i';
       print(k);
@@ -306,7 +307,10 @@ class _DeckReorderListState extends State<DeckReorderList> {
                     //   'definition': definition,
                     //   'isimage': isPic ? 'true' : 'false',
                     // });
-                    await Firestore.instance.collection("groups").document(data).updateData({
+                    await Firestore.instance
+                        .collection("groups")
+                        .document(data)
+                        .updateData({
                       "decks": FieldValue.arrayUnion([deckId]),
                     });
                   },
@@ -318,7 +322,8 @@ class _DeckReorderListState extends State<DeckReorderList> {
           });
     }).toList();
   }
-  bottomData(String deckId){
+
+  bottomData(String deckId) {
     List<Widget> children = _buildGroupList(deckId);
     return Column(
       children: <Widget>[
@@ -338,21 +343,24 @@ class _DeckReorderListState extends State<DeckReorderList> {
     );
   }
 
-  _showBottomSheet(String deckID){
+  _showBottomSheet(String deckID) {
     showModalBottomSheet(
-      context: context, 
-      builder: (BuildContext context){
-        return StreamBuilder(
-          stream: Firestore.instance.collection('user_data').document(widget.uid).snapshots(),
-          builder: (context, snapshot){
-            if(!snapshot.hasData){
-              return Center(child: Loading(size: 20));
-            }
-            userGroups = snapshot.data["groups"];
-            return bottomData(deckID);
-          },
-        );
-      });
+        context: context,
+        builder: (BuildContext context) {
+          return StreamBuilder(
+            stream: Firestore.instance
+                .collection('user_data')
+                .document(widget.uid)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: Loading(size: 20));
+              }
+              userGroups = snapshot.data["groups"];
+              return bottomData(deckID);
+            },
+          );
+        });
   }
 
   createAlertDialog(

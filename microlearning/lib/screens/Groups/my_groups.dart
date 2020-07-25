@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
+import 'package:microlearning/Utilities/constants/transitions.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/Groups/edit_group.dart';
@@ -73,11 +75,7 @@ class _GroupListState extends State<GroupList> {
               ),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AccountSettings();
-                    },
-                  ),
+                  SlideRightRoute(page: AccountSettings()),
                 );
               },
             ),
@@ -137,10 +135,7 @@ class _GroupListState extends State<GroupList> {
             splashColor: MyColorScheme.accent(),
             borderRadius: BorderRadius.circular(20),
             onTap: () {
-              Navigator.of(context)
-                  .pushReplacement(MaterialPageRoute(builder: (context) {
-                return MyDecks();
-              }));
+              Navigator.of(context).pushReplacement(FadeRoute(page: MyDecks()));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
