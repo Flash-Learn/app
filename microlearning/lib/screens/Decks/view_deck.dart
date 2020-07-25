@@ -406,51 +406,63 @@ class _ViewDeckState extends State<ViewDeck> {
                       ])),
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: isTestMode ? 10 : 20,
+                      ),
                       Container(
                         height: 40,
                         child: ToggleButtons(
-                          borderColor: Colors.white,
-                          fillColor: Colors.white,
-                          borderWidth: 1,
-                          selectedBorderColor: Colors.white,
+                          borderColor: Colors.blue,
+                          fillColor: Colors.blue[500],
+                          borderWidth: 1.5,
+                          selectedBorderColor: Colors.blue,
                           selectedColor: MyColorScheme.accentLight(),
                           borderRadius: BorderRadius.circular(10),
                           children: <Widget>[
-                              Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
-                                  'Test Mode',
-                                  style: TextStyle(fontSize: 14),
+                                'Test Mode',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: isSelected[1] == true
+                                        ? Colors.blue[800]
+                                        : Colors.white),
                               ),
-                              ),
-                              Padding(
-                              padding: const EdgeInsets.symmetric(horizontal:8.0),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
-                                  'Learn Mode',
-                                  style: TextStyle(fontSize: 14),
+                                'Learn Mode',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: isSelected[0] == true
+                                        ? Colors.blue[800]
+                                        : Colors.white),
                               ),
-                              ),
+                            ),
                           ],
                           onPressed: (int index) {
-                              setState(() {
+                            setState(() {
                               // for (int i = 0; i < isSelected.length; i++) {
                               //     isSelected[i] = i == index;
                               // }
                               // isTestMode = !isTestMode;
-                              if(isSelected[0]==true && index == 1){
+                              if (isSelected[0] == true && index == 1) {
                                 isSelected[0] = false;
                                 isSelected[1] = true;
                                 isTestMode = !isTestMode;
-                                _showSnackbar('Switched to Learn Mode'); 
+                                _showSnackbar('Switched to Learn Mode');
                               }
-                              if(isSelected[1]==true && index == 0){
+                              if (isSelected[1] == true && index == 0) {
                                 isSelected[1] = false;
                                 isSelected[0] = true;
                                 isTestMode = !isTestMode;
-                                _showSnackbar('Switched to Test Mode'); 
+                                _showSnackbar('Switched to Test Mode');
                               }
-                              });
+                            });
                           },
                           isSelected: isSelected,
                         ),
@@ -488,7 +500,9 @@ class _ViewDeckState extends State<ViewDeck> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                     ],
                   ),
                 ),

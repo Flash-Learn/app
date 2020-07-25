@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/Utilities/Widgets/popUp.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
+import 'package:microlearning/Utilities/constants/transitions.dart';
 import 'package:microlearning/screens/Groups/Search/group_search.dart';
 import 'package:microlearning/screens/Groups/group.dart';
 import 'package:microlearning/screens/Groups/my_groups.dart';
@@ -26,17 +28,12 @@ class _EditGroupState extends State<EditGroup> {
   onPressedBack() async {
     if (widget.creating) {
       await deleteGroup(groupData.groupID);
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) {
-        return GroupList();
-      }));
+      Navigator.of(context).pushReplacement(FadeRoute(page: GroupList()));
     } else {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) {
-        return Group(
-          groupID: groupData.groupID,
-        );
-      }));
+      Navigator.of(context).pushReplacement(SlideRightRoute(
+          page: Group(
+        groupID: groupData.groupID,
+      )));
     }
   }
 
