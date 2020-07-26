@@ -4,6 +4,7 @@ import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/Utilities/constants/transitions.dart';
+import 'package:microlearning/Utilities/functions/saveDeck.dart';
 import 'package:microlearning/screens/Decks/edit_deck.dart';
 import 'package:microlearning/screens/Decks/view_deck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -296,34 +297,40 @@ class _DeckReorderListState extends State<DeckReorderList> {
 
             return Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Card(
-                color: MyColorScheme.accentLight(),
-                child: ListTile(
-                  trailing: Icon(Icons.playlist_add),
-                  contentPadding: EdgeInsets.all(10),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    // dynamic flashRef = await flashcardReference.add({
-                    //   'term': term,
-                    //   'definition': definition,
-                    //   'isimage': isPic ? 'true' : 'false',
-                    // });
-                    await Firestore.instance
-                        .collection("groups")
-                        .document(data)
-                        .updateData({
-                      "decks": FieldValue.arrayUnion([deckId]),
-                    });
-                  },
-                  title: Text(
-                    grpName,
-                    style: TextStyle(fontSize: 22, color: Colors.black),
-                  ),
-                  subtitle: Text(
-                    grpDescription,
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
+              child: StreamBuilder<dynamic>(
+                stream: Firestore.instance.collection("decks").document(deckId).snapshots(),
+                builder: (context, snapshot) {
+                  return Card(
+                    color: MyColorScheme.accentLight(),
+                    child: ListTile(
+                      trailing: Icon(Icons.playlist_add),
+                      contentPadding: EdgeInsets.all(10),
+                      onTap: () async {
+                        // dynamic flashRef = await flashcardReference.add({
+                        //   'term': term,
+                        //   'definition': definition,
+                        //   'isimage': isPic ? 'true' : 'false',
+                        // });
+                        Deck deck = Deck(
+                          deckName: snapshot.data["deckName"],
+                          tagsList: snapshot.data["tagsList"],
+                          isPublic: snapshot.data["isPublic"],
+                          flashCardList: snapshot.data["flashcardList"],
+                        );
+                        saveDecktoGroup(context, deck, deckId, data);
+                        Navigator.of(context).pop();
+                      },
+                      title: Text(
+                        grpName,
+                        style: TextStyle(fontSize: 22, color: Colors.black),
+                      ),
+                      subtitle: Text(
+                        grpDescription,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  );
+                }
               ),
             );
           });
