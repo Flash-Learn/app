@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/group.dart';
+import 'package:microlearning/Utilities/Widgets/popUp.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/Utilities/constants/transitions.dart';
@@ -239,14 +240,18 @@ class _ReorderListState extends State<ReorderList> {
   _ReorderListState(this.userGroupIDs);
   List<dynamic> userGroupIDs;
   var _tapPosition;
+  bool _disableTouch = false;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: ReorderableListView(
-        scrollDirection: Axis.vertical,
-        children: getGroupsAsList(context, userGroupIDs),
-        onReorder: _onReorder,
+    return AbsorbPointer(
+      absorbing: _disableTouch,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: ReorderableListView(
+          scrollDirection: Axis.vertical,
+          children: getGroupsAsList(context, userGroupIDs),
+          onReorder: _onReorder,
+        ),
       ),
     );
   }
@@ -288,6 +293,137 @@ class _ReorderListState extends State<ReorderList> {
                   }));
                 },
                 child: buildGroupInfo(context, groupID),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  GestureDetector(
+                    onTapDown: (details) {
+                      _tapPosition = details.globalPosition;
+                    },
+                    onTap: () async {
+                      final RenderBox overlay =
+                          Overlay.of(context).context.findRenderObject();
+                      await showMenu(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        context: context,
+                        // found way to show delete button on the location of long press
+                        // not sure how it works
+                        position: RelativeRect.fromRect(
+                            _tapPosition &
+                                Size(40, 40), // smaller rect, the touch area
+                            Offset.zero &
+                                overlay.size // Bigger rect, the entire screen
+                            ),
+                        items: [
+                          PopupMenuItem(
+                            value: "edit button",
+                            child: GestureDetector(
+                              onTap: () async {
+                                setState(() {
+                                  _disableTouch = true;
+                                });
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  GroupData group;
+                                  return StreamBuilder(
+                                    stream: Firestore.instance
+                                        .collection("groups")
+                                        .document(groupID)
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData)
+                                        return Scaffold(
+                                          backgroundColor: Colors.blue[200],
+                                        );
+                                      group = GroupData(
+                                        description:
+                                            snapshot.data["description"],
+                                        name: snapshot.data["name"],
+                                        decks: snapshot.data["decks"],
+                                        users: snapshot.data["users"],
+                                      );
+                                      group.groupID = groupID;
+
+                                      return EditGroup(
+                                        groupData: group,
+                                        fromMyGroups: true,
+                                      );
+                                    },
+                                  );
+                                }));
+                                setState(() {
+                                  _disableTouch = false;
+                                });
+                              },
+                              child: Card(
+                                elevation: 0,
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.edit,
+                                      color: MyColorScheme.accent(),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Edit Group",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: "leave group",
+                            child: GestureDetector(
+                              onTap: () async {
+                                Navigator.pop(context, "leave group");
+                                setState(() {
+                                  _disableTouch = true;
+                                });
+                                await createAlertDialogLeaveGroup(
+                                    context, groupID);
+                                setState(() {
+                                  _disableTouch = false;
+                                });
+                              },
+                              child: Card(
+                                elevation: 0,
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.library_books,
+                                      color: MyColorScheme.accent(),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Leave Group",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                        elevation: 8.0,
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                      child: Icon(
+                        Icons.more_horiz,
+                        color: MyColorScheme.accent(),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ],
           ));
