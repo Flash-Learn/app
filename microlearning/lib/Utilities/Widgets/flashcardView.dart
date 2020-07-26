@@ -59,7 +59,7 @@ class _FlashCardViewState extends State<FlashCardView> {
     uid = prefs.getString('uid');
   }
 
-  Future<void> clickNotMemorized() async {
+  Future<void> clickNotMemorized(bool userRemebers) async {
     Firestore.instance
         .collection('flashcards')
         .document(widget.flashCardID)
@@ -86,11 +86,13 @@ class _FlashCardViewState extends State<FlashCardView> {
         },
       ),
     );
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(snackBar);
+    if (userRemebers) {
+      Scaffold.of(context).hideCurrentSnackBar();
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
   }
 
-  Future<void> clickMemorized() async {
+  Future<void> clickMemorized(bool userRemembers) async {
     print(widget.flashCardID);
     widget.onMemorizeCallback(widget.currentIndex);
     await Firestore.instance
@@ -119,8 +121,10 @@ class _FlashCardViewState extends State<FlashCardView> {
         },
       ),
     );
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(snackBar);
+    if (!userRemembers) {
+      Scaffold.of(context).hideCurrentSnackBar();
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
   }
 
   @override
@@ -230,7 +234,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                 children: <Widget>[
                                                   RawMaterialButton(
                                                     onPressed: () async {
-                                                      await clickNotMemorized();
+                                                      await clickNotMemorized(
+                                                          userRemembers);
                                                     },
                                                     elevation: 2.0,
                                                     fillColor:
@@ -246,7 +251,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                   ),
                                                   RawMaterialButton(
                                                     onPressed: () async {
-                                                      await clickMemorized();
+                                                      await clickMemorized(
+                                                          userRemembers);
                                                     },
                                                     elevation: 2.0,
                                                     fillColor:
@@ -266,6 +272,23 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           ],
                                         )
                                       : SizedBox(),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(15, 13, 0, 50),
+                                        child: Text(
+                                          userRemembers
+                                              ? 'Memorized'
+                                              : 'Not Memorized',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: MyColorScheme.accent()),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: <Widget>[
@@ -441,7 +464,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                                               children: <Widget>[
                                                 RawMaterialButton(
                                                   onPressed: () async {
-                                                    await clickNotMemorized();
+                                                    await clickNotMemorized(
+                                                        userRemembers);
                                                   },
                                                   elevation: 2.0,
                                                   fillColor:
@@ -456,7 +480,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                                                 ),
                                                 RawMaterialButton(
                                                   onPressed: () async {
-                                                    await clickMemorized();
+                                                    await clickMemorized(
+                                                        userRemembers);
                                                   },
                                                   elevation: 2.0,
                                                   fillColor:
@@ -473,6 +498,23 @@ class _FlashCardViewState extends State<FlashCardView> {
                                             )
                                           : SizedBox(),
                                     ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(15, 13, 0, 50),
+                                        child: Text(
+                                          userRemembers
+                                              ? 'Memorized'
+                                              : 'Not Memorized',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: MyColorScheme.accent(),
+                                          ),
+                                        ))
                                   ],
                                 ),
                                 Row(
