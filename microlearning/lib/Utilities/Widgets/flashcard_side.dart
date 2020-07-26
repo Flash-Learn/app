@@ -106,23 +106,25 @@ class FlashcardSide extends StatelessWidget {
             //     );
             //   })
                 :
-        Column(
-          mainAxisAlignment:
-          MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              content,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight:
-                  FontWeight.normal),
-            ),
-            isPic ? SizedBox() : Container(
-              height: 50,
-            )
-          ],
+        SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                content,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight:
+                    FontWeight.normal),
+              ),
+              isPic ? SizedBox() : Container(
+                height: 50,
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -206,7 +206,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                       },
                       child: widget.isTestMode
                           ? FlipCard(
-                              direction: FlipDirection.HORIZONTAL,
+                              direction: !isOneSided ? FlipDirection.HORIZONTAL : null,
                               front: Stack(
                                 children: <Widget>[
                                   FlashcardSide(
@@ -573,17 +573,68 @@ class _FlashCardViewState extends State<FlashCardView> {
                             SizedBox(
                               height: 5,
                             ),
-                            Text(
-                              term,
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                color: Colors.black,
-                                fontSize: 20,
-                                letterSpacing: 1,
-                                fontWeight: FontWeight.w900,
+                            Container(
+//               height: MediaQuery.of(context).size.height * 0.4,
+                              child: !isTermPhoto
+                                  ? Text(
+                                term,
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  letterSpacing: 1,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                textAlign: TextAlign.left,
+                              )
+                                  : ClipRect(
+                                child: Container(
+                                  padding: EdgeInsets.only(top: 10),
+                                  height:
+                                  MediaQuery.of(context).size.height *
+                                      0.5,
+                                  child: PhotoView(
+                                    minScale:
+                                    PhotoViewComputedScale.contained,
+                                    imageProvider:
+                                    NetworkImage(term),
+                                    backgroundDecoration: BoxDecoration(
+                                        color: Colors.transparent),
+                                    maxScale:
+                                    PhotoViewComputedScale.covered *
+                                        2.0,
+                                    loadingBuilder: (BuildContext context,
+                                        ImageChunkEvent loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return Container();
+                                      }
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                            value: loadingProgress
+                                                .expectedTotalBytes !=
+                                                null
+                                                ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes
+                                                : null),
+                                      );
+                                    },
+                                  ),
+                                ),
                               ),
-                              textAlign: TextAlign.left,
-                            ),
+                            )
+//                            Text(
+//                              term,
+//                              style: TextStyle(
+//                                fontFamily: 'Roboto',
+//                                color: Colors.black,
+//                                fontSize: 20,
+//                                letterSpacing: 1,
+//                                fontWeight: FontWeight.w900,
+//                              ),
+//                              textAlign: TextAlign.left,
+//                            ),
                           ],
                         ),
                       ),
