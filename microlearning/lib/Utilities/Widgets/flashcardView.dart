@@ -562,7 +562,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "TERM",
+                              isOneSided ? "" : "TERM",
                               style: TextStyle(
                                 color: Color.fromRGBO(27, 116, 210, 1),
                                 fontSize: 10,
@@ -646,7 +646,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "DEFINITION",
+                              isOneSided ? "" :"DEFINITION",
                               style: TextStyle(
                                 color: Color.fromRGBO(27, 116, 210, 1),
                                 fontSize: 10,
