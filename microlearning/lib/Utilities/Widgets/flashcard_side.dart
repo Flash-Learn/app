@@ -12,10 +12,12 @@ import 'package:photo_view/photo_view.dart';
 class FlashcardSide extends StatelessWidget {
   final bool isPic;
   final String content;
+  final bool userRemembers;
 
   dynamic _tapPosition;
 
   FlashcardSide({
+    this.userRemembers,
     this.isPic,
     this.content,
   });
@@ -26,7 +28,7 @@ class FlashcardSide extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       decoration: BoxDecoration(
           color: MyColorScheme.flashcardColor(),
-          border: Border.all(color: MyColorScheme.flashcardColor(), width: 3),
+          border: Border.all(color: userRemembers ? Color.fromRGBO(166, 250, 165, 1) : Color.fromRGBO(250, 165, 165, 1), width: 7),
           borderRadius: BorderRadius.circular(20)),
       child: Center(
         child: isPic

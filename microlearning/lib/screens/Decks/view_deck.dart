@@ -407,7 +407,7 @@ class _ViewDeckState extends State<ViewDeck> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: isTestMode ? 10 : 20,
+                        height: isTestMode ? 10 : 10,
                       ),
                       Container(
                         height: 40,

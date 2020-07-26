@@ -211,6 +211,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                               front: Stack(
                                 children: <Widget>[
                                   FlashcardSide(
+                                    userRemembers: userRemembers,
                                     isPic: isTermPhoto,
                                     content: term,
                                   ),
@@ -423,6 +424,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                 FlashcardSide(
                                   isPic: isDefinitionPhoto,
                                   content: definition,
+                                  userRemembers: userRemembers,
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
