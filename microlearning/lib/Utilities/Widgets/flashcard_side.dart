@@ -30,36 +30,38 @@ class FlashcardSide extends StatelessWidget {
           borderRadius: BorderRadius.circular(20)),
       child: Center(
         child: isPic
-            ? LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
+            ? ClipRect(
+              child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
 //                      print(constraints);
-                return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(color: Colors.transparent, width: 3),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: PhotoView(
-                    minScale: PhotoViewComputedScale.contained,
-                    imageProvider: NetworkImage(content),
-                    backgroundDecoration:
-                        BoxDecoration(color: Colors.transparent),
-                    maxScale: PhotoViewComputedScale.covered * 2.0,
-                    loadingBuilder: (BuildContext context,
-                        ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) {
-                        return Container();
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes
-                                : null),
-                      );
-                    },
-                  ),
-                );
-              })
+                  return Container(
+                    decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(color: Colors.transparent, width: 3),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: PhotoView(
+                      minScale: PhotoViewComputedScale.contained,
+                      imageProvider: NetworkImage(content),
+                      backgroundDecoration:
+                          BoxDecoration(color: Colors.transparent),
+                      maxScale: PhotoViewComputedScale.covered * 2.0,
+                      loadingBuilder: (BuildContext context,
+                          ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) {
+                          return Container();
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes
+                                  : null),
+                        );
+                      },
+                    ),
+                  );
+                }),
+            )
             // ? Image.network(definition,
             //     loadingBuilder:
             //         (BuildContext context,
