@@ -14,9 +14,11 @@ class GetFlashCardEdit extends StatefulWidget {
   final List<FlashCard> flashCardData;
   final Deck deck;
   final GlobalKey<ScaffoldState> scaffoldKey;
+  final ScrollController scrollController;
 
   GetFlashCardEdit(
       {Key key,
+      @required this.scrollController,
       @required this.deck,
       @required this.flashCardData,
       @required this.scaffoldKey})
@@ -111,9 +113,27 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
             },
             background: Container(
               color: Colors.grey[200],
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Delete',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      Text(
+                        'Delete',
+                        style: TextStyle(color: Colors.red),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -703,7 +723,7 @@ class _GetFlashCardEditState extends State<GetFlashCardEdit> {
                   FocusScope.of(context).unfocus();
                 },
                 child: ListView(
-                  controller: _scrollController,
+                  controller: widget.scrollController,
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
                   children: children,
                   key: Key(deck.deckName),
