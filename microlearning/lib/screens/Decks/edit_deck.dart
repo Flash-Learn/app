@@ -5,6 +5,7 @@ import 'package:microlearning/Models/group.dart';
 import 'package:microlearning/Utilities/Widgets/getListTags.dart';
 import 'package:microlearning/Utilities/constants/inputTextDecorations.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
+import 'package:microlearning/Utilities/constants/transitions.dart';
 import 'package:microlearning/screens/Decks/edit_flashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
@@ -133,20 +134,22 @@ class _EditDecksState extends State<EditDecks> {
       !widget.isDeckforGroup
           ? await deleteDeck(deck.deckID)
           : await deleteDeckFromGroup(deck.deckID, widget.ifGroupThenGrpID);
-      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) {
-        return widget.isDeckforGroup
-            ? Group(groupID: widget.ifGroupThenGrpID)
-            : MyDecks();
-      }));
+      Navigator.pushReplacement(
+          context,
+          FadeRoute(
+              page: widget.isDeckforGroup
+                  ? Group(groupID: widget.ifGroupThenGrpID)
+                  : MyDecks()));
     } else {
       setState(() {
         _disableTouch = true;
       });
-      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) {
-        return widget.isDeckforGroup
-            ? Group(groupID: widget.ifGroupThenGrpID)
-            : MyDecks();
-      }));
+      Navigator.pushReplacement(
+          context,
+          FadeRoute(
+              page: widget.isDeckforGroup
+                  ? Group(groupID: widget.ifGroupThenGrpID)
+                  : MyDecks()));
     }
   }
 
