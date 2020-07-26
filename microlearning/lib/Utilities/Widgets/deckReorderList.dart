@@ -35,7 +35,6 @@ class _DeckReorderListState extends State<DeckReorderList> {
   var _tapPosition;
   List<dynamic> userDeckIDs;
   bool _disableTouch = false;
-  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return AbsorbPointer(
@@ -298,40 +297,42 @@ class _DeckReorderListState extends State<DeckReorderList> {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: StreamBuilder<dynamic>(
-                stream: Firestore.instance.collection("decks").document(deckId).snapshots(),
-                builder: (context, snapshot) {
-                  return Card(
-                    color: MyColorScheme.accentLight(),
-                    child: ListTile(
-                      trailing: Icon(Icons.playlist_add),
-                      contentPadding: EdgeInsets.all(10),
-                      onTap: () async {
-                        // dynamic flashRef = await flashcardReference.add({
-                        //   'term': term,
-                        //   'definition': definition,
-                        //   'isimage': isPic ? 'true' : 'false',
-                        // });
-                        Deck deck = Deck(
-                          deckName: snapshot.data["deckName"],
-                          tagsList: snapshot.data["tagsList"],
-                          isPublic: snapshot.data["isPublic"],
-                          flashCardList: snapshot.data["flashcardList"],
-                        );
-                        saveDecktoGroup(context, deck, deckId, data);
-                        Navigator.of(context).pop();
-                      },
-                      title: Text(
-                        grpName,
-                        style: TextStyle(fontSize: 22, color: Colors.black),
+                  stream: Firestore.instance
+                      .collection("decks")
+                      .document(deckId)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    return Card(
+                      color: MyColorScheme.accentLight(),
+                      child: ListTile(
+                        trailing: Icon(Icons.playlist_add),
+                        contentPadding: EdgeInsets.all(10),
+                        onTap: () async {
+                          // dynamic flashRef = await flashcardReference.add({
+                          //   'term': term,
+                          //   'definition': definition,
+                          //   'isimage': isPic ? 'true' : 'false',
+                          // });
+                          Deck deck = Deck(
+                            deckName: snapshot.data["deckName"],
+                            tagsList: snapshot.data["tagsList"],
+                            isPublic: snapshot.data["isPublic"],
+                            flashCardList: snapshot.data["flashcardList"],
+                          );
+                          saveDecktoGroup(context, deck, deckId, data);
+                          Navigator.of(context).pop();
+                        },
+                        title: Text(
+                          grpName,
+                          style: TextStyle(fontSize: 22, color: Colors.black),
+                        ),
+                        subtitle: Text(
+                          grpDescription,
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
-                      subtitle: Text(
-                        grpDescription,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  );
-                }
-              ),
+                    );
+                  }),
             );
           });
     }).toList();
@@ -390,63 +391,50 @@ class _DeckReorderListState extends State<DeckReorderList> {
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
-            child: isLoading
-                ? Container(
-                    height: MediaQuery.of(ctxt).size.height * 0.15,
-                    child: Center(
-                      child: Text(
-                        'Deleting... \n\nPlease Wait',
-                      ),
-                    ),
-                  )
-                : Container(
-                    height: MediaQuery.of(ctxt).size.height * 0.2,
-                    padding: EdgeInsets.all(15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Do you want to delete this deck?',
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text('Cancel'),
-                              onPressed: () {
-                                Navigator.pop(ctxt);
-                              },
-                            ),
-                            FlatButton(
-                              child: Text(
-                                'Delete',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  _disableTouch = false;
-                                  isLoading = true;
-                                });
-                                userDeckIDs.remove(deckid);
-                                !widget.belongsToGroup
-                                    ? await deleteDeck(deckid)
-                                    : await deleteDeckFromGroup(
-                                        deckid, widget.ifGrpThenID);
-                                Navigator.pop(ctxt);
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              },
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+            child: Container(
+              height: MediaQuery.of(ctxt).size.height * 0.2,
+              padding: EdgeInsets.all(15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Do you want to delete this deck?',
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text(_disableTouch ? '' : 'Cancel'),
+                        onPressed: () {
+                          Navigator.pop(ctxt);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text(
+                          _disableTouch ? 'Deleting' : 'Delete',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            _disableTouch = false;
+                          });
+                          userDeckIDs.remove(deckid);
+                          !widget.belongsToGroup
+                              ? await deleteDeck(deckid)
+                              : await deleteDeckFromGroup(
+                                  deckid, widget.ifGrpThenID);
+                          Navigator.pop(ctxt);
+                        },
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
           );
         });
   }

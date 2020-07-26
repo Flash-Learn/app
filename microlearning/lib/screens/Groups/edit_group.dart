@@ -13,7 +13,11 @@ import 'package:microlearning/screens/Groups/my_groups.dart';
 class EditGroup extends StatefulWidget {
   final GroupData groupData;
   final bool creating;
-  EditGroup({@required this.groupData, this.creating: false});
+  final bool fromMyGroups;
+  EditGroup(
+      {@required this.groupData,
+      this.creating: false,
+      this.fromMyGroups: false});
   @override
   _EditGroupState createState() => _EditGroupState(groupData: groupData);
 }
@@ -26,7 +30,9 @@ class _EditGroupState extends State<EditGroup> {
   _EditGroupState({@required this.groupData});
 
   onPressedBack() async {
-    if (widget.creating) {
+    if (widget.fromMyGroups) {
+      Navigator.of(context).pushReplacement(FadeRoute(page: GroupList()));
+    } else if (widget.creating) {
       await deleteGroup(groupData.groupID);
       Navigator.of(context).pushReplacement(FadeRoute(page: GroupList()));
     } else {
