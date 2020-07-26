@@ -284,7 +284,10 @@ class _FlashCardViewState extends State<FlashCardView> {
                                               : 'Not Memorized',
                                           style: TextStyle(
                                               fontSize: 12,
-                                              color: MyColorScheme.accent()),
+                                              color: userRemembers
+                                                  ? Colors.green
+                                                  : Color.fromRGBO(
+                                                      250, 165, 165, 1)),
                                         ),
                                       )
                                     ],
@@ -512,7 +515,10 @@ class _FlashCardViewState extends State<FlashCardView> {
                                               : 'Not Memorized',
                                           style: TextStyle(
                                             fontSize: 12,
-                                            color: MyColorScheme.accent(),
+                                            color: userRemembers
+                                                ? Colors.green
+                                                : Color.fromRGBO(
+                                                    250, 165, 165, 1),
                                           ),
                                         ))
                                   ],

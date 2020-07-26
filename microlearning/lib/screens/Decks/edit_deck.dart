@@ -212,7 +212,7 @@ class _EditDecksState extends State<EditDecks> {
                   });
 
                   Navigator.push((context),
-                      MaterialPageRoute(builder: (context) {
+                      CupertinoPageRoute(builder: (context) {
                     // TODO: save the changes made by the user in the deckInfo
                     // the changes made are stored in variable 'deck' which this page recieved when this page was made, so passing this variable only to the next page of editing the flashcards.
                     return EditFlashCard(
