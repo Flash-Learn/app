@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Models/flashcard.dart';
+import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/Utilities/functions/updateFlashcardList.dart';
 import 'package:microlearning/Utilities/Widgets/getFlashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -128,9 +129,9 @@ class _EditFlashCardState extends State<EditFlashCard> {
     _index++;
     if (_index == 1) {
       spotlight(_keySave);
-    } else if(_index == 2){
+    } else if (_index == 2) {
       spotlight(_keyAddTwo);
-    } else if(_index == 3){
+    } else if (_index == 3) {
       spotlight(_keyAddOne);
     } else {
       setState(() {
@@ -242,23 +243,31 @@ class _EditFlashCardState extends State<EditFlashCard> {
                           ),
                         );
                       },
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.check,
-                            color: MyColorScheme.accent(),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Save',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                      child: _disableTouch
+                          ? Container(
+                              child: Center(
+                              child: Loading(
+                                size: 20,
+                              ),
+                            ))
+                          : Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: 2,
+                                ),
+                                Text(
+                                  'Save',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                     )
                   ],
                 ),
@@ -318,10 +327,13 @@ class _EditFlashCardState extends State<EditFlashCard> {
                                                 isOneSided: false));
                                             //TODO: generate a id for flash card....But I don't think we will need this
                                           });
-                                          SchedulerBinding.instance.addPostFrameCallback((_) {
+                                          SchedulerBinding.instance
+                                              .addPostFrameCallback((_) {
                                             _scrollController.animateTo(
-                                              _scrollController.position.maxScrollExtent,
-                                              duration: const Duration(milliseconds: 300),
+                                              _scrollController
+                                                  .position.maxScrollExtent,
+                                              duration: const Duration(
+                                                  milliseconds: 300),
                                               curve: Curves.easeOut,
                                             );
                                           });
@@ -377,10 +389,13 @@ class _EditFlashCardState extends State<EditFlashCard> {
                                             }
                                             //TODO: generate a id for flash card....But I don't think we will need this
                                           });
-                                          SchedulerBinding.instance.addPostFrameCallback((_) {
+                                          SchedulerBinding.instance
+                                              .addPostFrameCallback((_) {
                                             _scrollController.animateTo(
-                                              _scrollController.position.maxScrollExtent,
-                                              duration: const Duration(milliseconds: 300),
+                                              _scrollController
+                                                  .position.maxScrollExtent,
+                                              duration: const Duration(
+                                                  milliseconds: 300),
                                               curve: Curves.easeOut,
                                             );
                                           });

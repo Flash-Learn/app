@@ -1,20 +1,11 @@
-import 'package:microlearning/Utilities/constants/loading.dart';
-import 'package:microlearning/screens/Decks/edit_flashcard.dart';
-import 'flip_card.dart'; // created local copy of flip_card library
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/constants/color_scheme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:photo_view/photo_view.dart';
 
 class FlashcardSide extends StatelessWidget {
   final bool isPic;
   final String content;
   final bool userRemembers;
-
-  dynamic _tapPosition;
 
   FlashcardSide({
     this.userRemembers,
@@ -25,16 +16,20 @@ class FlashcardSide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
       decoration: BoxDecoration(
           color: MyColorScheme.flashcardColor(),
-          border: Border.all(color: userRemembers ? Color.fromRGBO(166, 250, 165, 1) : Color.fromRGBO(250, 165, 165, 1), width: 7),
+          border: Border.all(
+              color: userRemembers
+                  ? Color.fromRGBO(166, 250, 165, 1)
+                  : Color.fromRGBO(250, 165, 165, 1),
+              width: 4),
           borderRadius: BorderRadius.circular(20)),
       child: Center(
         child: isPic
             ? ClipRect(
-              child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
 //                      print(constraints);
                   return Container(
                     decoration: BoxDecoration(
@@ -63,7 +58,7 @@ class FlashcardSide extends StatelessWidget {
                     ),
                   );
                 }),
-            )
+              )
             // ? Image.network(definition,
             //     loadingBuilder:
             //         (BuildContext context,
