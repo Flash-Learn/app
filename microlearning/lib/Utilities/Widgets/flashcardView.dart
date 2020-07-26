@@ -578,52 +578,53 @@ class _FlashCardViewState extends State<FlashCardView> {
 //               height: MediaQuery.of(context).size.height * 0.4,
                               child: !isTermPhoto
                                   ? Text(
-                                term,
-                                style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  letterSpacing: 1,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                                textAlign: TextAlign.left,
-                              )
+                                      term,
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        letterSpacing: 1,
+                                        fontWeight: isOneSided
+                                            ? FontWeight.w300
+                                            : FontWeight.w900,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    )
                                   : ClipRect(
-                                child: Container(
-                                  padding: EdgeInsets.only(top: 10),
-                                  height:
-                                  MediaQuery.of(context).size.height *
-                                      0.5,
-                                  child: PhotoView(
-                                    minScale:
-                                    PhotoViewComputedScale.contained,
-                                    imageProvider:
-                                    NetworkImage(term),
-                                    backgroundDecoration: BoxDecoration(
-                                        color: Colors.transparent),
-                                    maxScale:
-                                    PhotoViewComputedScale.covered *
-                                        2.0,
-                                    loadingBuilder: (BuildContext context,
-                                        ImageChunkEvent loadingProgress) {
-                                      if (loadingProgress == null) {
-                                        return Container();
-                                      }
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                            value: loadingProgress
-                                                .expectedTotalBytes !=
-                                                null
-                                                ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                                loadingProgress
-                                                    .expectedTotalBytes
-                                                : null),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
+                                      child: Container(
+                                        padding: EdgeInsets.only(top: 10),
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.5,
+                                        child: PhotoView(
+                                          minScale:
+                                              PhotoViewComputedScale.contained,
+                                          imageProvider: NetworkImage(term),
+                                          backgroundDecoration: BoxDecoration(
+                                              color: Colors.transparent),
+                                          maxScale:
+                                              PhotoViewComputedScale.covered *
+                                                  2.0,
+                                          loadingBuilder: (BuildContext context,
+                                              ImageChunkEvent loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return Container();
+                                            }
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes
+                                                      : null),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
                             )
 //                            Text(
 //                              term,
@@ -646,7 +647,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              isOneSided ? "" :"DEFINITION",
+                              isOneSided ? "" : "DEFINITION",
                               style: TextStyle(
                                 color: Color.fromRGBO(27, 116, 210, 1),
                                 fontSize: 10,
@@ -852,17 +853,17 @@ class _FlashCardViewState extends State<FlashCardView> {
                       'flashcardList':
                           FieldValue.arrayUnion([flashRef.documentID]),
                     });
-                    SnackBar snackBar = SnackBar(
-                      duration: Duration(milliseconds: 900),
-                      content: Text(
-                        'Card added to ${deck.deckName}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: MyColorScheme.accent()),
-                      ),
-                      backgroundColor: MyColorScheme.uno(),
-                    );
-                    Scaffold.of(context).hideCurrentSnackBar();
-                    Scaffold.of(context).showSnackBar(snackBar);
+                    // SnackBar snackBar = SnackBar(
+                    //   duration: Duration(milliseconds: 900),
+                    //   content: Text(
+                    //     'Card added to ${deck.deckName}',
+                    //     textAlign: TextAlign.center,
+                    //     style: TextStyle(color: MyColorScheme.accent()),
+                    //   ),
+                    //   backgroundColor: MyColorScheme.uno(),
+                    // );
+                    // Scaffold.of(context).hideCurrentSnackBar();
+                    // Scaffold.of(context).showSnackBar(snackBar);
                   },
                   title: Text(
                     deck.deckName,

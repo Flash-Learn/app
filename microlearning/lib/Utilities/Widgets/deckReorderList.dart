@@ -423,8 +423,8 @@ class _DeckReorderListState extends State<DeckReorderList> {
                                 setState(() {
                                   _disableTouch = false;
                                   isLoading = true;
-                                  userDeckIDs.remove(deckid);
                                 });
+                                userDeckIDs.remove(deckid);
                                 !widget.belongsToGroup
                                     ? await deleteDeck(deckid)
                                     : await deleteDeckFromGroup(

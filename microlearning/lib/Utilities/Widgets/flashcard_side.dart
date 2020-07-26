@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:photo_view/photo_view.dart';
 
 class FlashcardSide extends StatelessWidget {
-
   final bool isPic;
   final String content;
 
@@ -19,71 +18,48 @@ class FlashcardSide extends StatelessWidget {
   FlashcardSide({
     this.isPic,
     this.content,
-});
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       decoration: BoxDecoration(
           color: MyColorScheme.flashcardColor(),
-          border: Border.all(
-              color: MyColorScheme.flashcardColor(),
-              width: 3),
+          border: Border.all(color: MyColorScheme.flashcardColor(), width: 3),
           borderRadius: BorderRadius.circular(20)),
       child: Center(
-        child:             isPic
-                ? LayoutBuilder(
-                    builder: (BuildContext context, BoxConstraints constraints) {
+        child: isPic
+            ? LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
 //                      print(constraints);
-                      return Container(
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(
-                                color: Colors.transparent,
-                                width: 3),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: PhotoView(
-                          minScale:
-                          PhotoViewComputedScale
-                              .contained,
-                          imageProvider:
-                          NetworkImage(
-                              content
-                          ),
-                          backgroundDecoration:
-                          BoxDecoration(
-                              color: Colors
-                                  .transparent),
-                          maxScale:
-                          PhotoViewComputedScale
-                              .covered *
-                              2.0,
-                          loadingBuilder:
-                              (BuildContext
-                          context,
-                              ImageChunkEvent
-                              loadingProgress) {
-                            if (loadingProgress ==
-                                null) {
-                              return Container();
-                            }
-                            return Center(
-                              child: CircularProgressIndicator(
-                                  value: loadingProgress
-                                      .expectedTotalBytes !=
-                                      null
-                                      ? loadingProgress
-                                      .cumulativeBytesLoaded /
-                                      loadingProgress
-                                          .expectedTotalBytes
-                                      : null),
-                            );
-                          },
-                        ),
+                return Container(
+                  decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border.all(color: Colors.transparent, width: 3),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: PhotoView(
+                    minScale: PhotoViewComputedScale.contained,
+                    imageProvider: NetworkImage(content),
+                    backgroundDecoration:
+                        BoxDecoration(color: Colors.transparent),
+                    maxScale: PhotoViewComputedScale.covered * 2.0,
+                    loadingBuilder: (BuildContext context,
+                        ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) {
+                        return Container();
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes
+                                : null),
                       );
-      }
-
-                )
+                    },
+                  ),
+                );
+              })
             // ? Image.network(definition,
             //     loadingBuilder:
             //         (BuildContext context,
@@ -105,27 +81,26 @@ class FlashcardSide extends StatelessWidget {
             //       ),
             //     );
             //   })
-                :
-        SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment:
-            MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                content,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight:
-                    FontWeight.normal),
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      content,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal),
+                    ),
+                    isPic
+                        ? SizedBox()
+                        : Container(
+                            height: 50,
+                          )
+                  ],
+                ),
               ),
-              isPic ? SizedBox() : Container(
-                height: 50,
-              )
-            ],
-          ),
-        ),
       ),
     );
   }
