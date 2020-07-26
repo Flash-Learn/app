@@ -206,7 +206,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                       },
                       child: widget.isTestMode
                           ? FlipCard(
-                              direction: !isOneSided ? FlipDirection.HORIZONTAL : null,
+                              direction: FlipDirection.HORIZONTAL,
+                              flipOnTouch: !isOneSided,
                               front: Stack(
                                 children: <Widget>[
                                   FlashcardSide(
