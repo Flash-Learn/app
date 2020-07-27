@@ -274,26 +274,31 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           ],
                                         )
                                       : SizedBox(),
-                                  widget.editAccess ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(15, 13, 0, 50),
-                                        child: Text(
-                                          userRemembers
-                                              ? 'Memorized'
-                                              : 'Not Memorized',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: userRemembers
-                                                  ? Colors.green
-                                                  : Color.fromRGBO(
-                                                      250, 165, 165, 1)),
+                                  widget.editAccess
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  15, 13, 0, 50),
+                                              child: Text(
+                                                userRemembers
+                                                    ? 'Memorized'
+                                                    : 'Not Memorized',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: userRemembers
+                                                        ? Colors.green
+                                                        : Color.fromRGBO(
+                                                            250, 165, 165, 1)),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      : Container(
+                                          height: 0,
                                         ),
-                                      )
-                                    ],
-                                  ) : Container(height: 0,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: <Widget>[
@@ -507,26 +512,29 @@ class _FlashCardViewState extends State<FlashCardView> {
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(15, 13, 0, 50),
-                                        child: Text(
-                                          userRemembers
-                                              ? 'Memorized'
-                                              : 'Not Memorized',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: userRemembers
-                                                ? Colors.green
-                                                : Color.fromRGBO(
-                                                    250, 165, 165, 1),
-                                          ),
-                                        ))
-                                  ],
-                                ),
+                                widget.editAccess
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  15, 13, 0, 50),
+                                              child: Text(
+                                                userRemembers
+                                                    ? 'Memorized'
+                                                    : 'Not Memorized',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: userRemembers
+                                                      ? Colors.green
+                                                      : Color.fromRGBO(
+                                                          250, 165, 165, 1),
+                                                ),
+                                              ))
+                                        ],
+                                      )
+                                    : Container(),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[

@@ -31,7 +31,7 @@ class _SearchState extends State<Search> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.lightBlue[200],
+          backgroundColor: MyColorScheme.accent(),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             color: Colors.white,
