@@ -218,6 +218,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                                     userRemembers: userRemembers,
                                     isPic: isTermPhoto,
                                     content: term,
+                                    editAccess: widget.editAccess,
+                                    isDeckForGrp: widget.isDeckforGroup,
                                   ),
                                   widget.editAccess & widget.isTestMode
                                       ? Column(
@@ -272,7 +274,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                           ],
                                         )
                                       : SizedBox(),
-                                  Row(
+                                  widget.editAccess ? Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       Padding(
@@ -291,7 +293,7 @@ class _FlashCardViewState extends State<FlashCardView> {
                                         ),
                                       )
                                     ],
-                                  ),
+                                  ) : Container(height: 0,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: <Widget>[
@@ -451,6 +453,8 @@ class _FlashCardViewState extends State<FlashCardView> {
                                   isPic: isDefinitionPhoto,
                                   content: definition,
                                   userRemembers: userRemembers,
+                                  editAccess: widget.editAccess,
+                                  isDeckForGrp: widget.isDeckforGroup,
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.end,

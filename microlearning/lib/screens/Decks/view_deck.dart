@@ -70,7 +70,7 @@ class _ViewDeckState extends State<ViewDeck> {
   List<String> text = [
     'Click here for editing \n and more actions on deck',
     'Tap on the flash card to \n flip and view the other side',
-    'Click here to switch between \n read mode and learn mode'
+    'Switch between read mode \n and learn mode from here'
   ];
   int _index = 0;
 
@@ -412,6 +412,7 @@ class _ViewDeckState extends State<ViewDeck> {
                       Container(
                         height: 40,
                         child: ToggleButtons(
+                          key: _keyMode,
                           borderColor: Colors.blue[400],
                           fillColor: Colors.blue[400],
                           borderWidth: 1.5,
