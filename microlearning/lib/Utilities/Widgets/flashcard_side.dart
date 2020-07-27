@@ -6,8 +6,12 @@ class FlashcardSide extends StatelessWidget {
   final bool isPic;
   final String content;
   final bool userRemembers;
+  final bool editAccess;
+  final bool isDeckForGrp;
 
   FlashcardSide({
+    this.isDeckForGrp,
+    this.editAccess,
     this.userRemembers,
     this.isPic,
     this.content,
@@ -20,7 +24,7 @@ class FlashcardSide extends StatelessWidget {
       decoration: BoxDecoration(
           color: MyColorScheme.flashcardColor(),
           border: Border.all(
-              color: userRemembers
+              color: !editAccess ? MyColorScheme.uno() : userRemembers
                   ? Color.fromRGBO(166, 250, 165, 1)
                   : Color.fromRGBO(250, 165, 165, 1),
               width: 4),

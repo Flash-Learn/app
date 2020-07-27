@@ -265,6 +265,7 @@ class _EditDecksState extends State<EditDecks> {
                     Form(
                       key: _formkey,
                       child: TextFormField(
+                        key: _keyDeckName,
                         onChanged: (val) {
                           deck.deckName = val;
                         },

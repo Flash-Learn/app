@@ -5,6 +5,7 @@ import 'package:microlearning/Models/deck.dart';
 import 'package:microlearning/Utilities/Widgets/deckReorderList.dart';
 import 'package:microlearning/Utilities/constants/loading.dart';
 import 'package:microlearning/Utilities/constants/transitions.dart';
+import 'package:microlearning/Utilities/functions/saveDeck.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
 import 'package:microlearning/screens/Groups/my_groups.dart';
 import 'package:microlearning/screens/Search/search.dart';
@@ -141,109 +142,125 @@ class _MyDecksState extends State<MyDecks> {
       // Widget to block taps during loading
       child: AbsorbPointer(
         absorbing: _disableTouch,
-        child: Container(
-          // only for gradient
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                Color.fromRGBO(84, 205, 255, 1),
-                Color.fromRGBO(84, 205, 255, 1),
-                Color.fromRGBO(27, 116, 210, 1)
-              ])),
-          child: Scaffold(
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              bottomNavigationBar: customBottomNav(),
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                  elevation: 2,
-                  // backgroundColor: MyColorScheme.uno(),
-                  backgroundColor: Color.fromRGBO(196, 208, 223, 0),
-                  centerTitle: true,
-                  title: Text(
-                    'My Decks',
-                    style: TextStyle(
-                        color: MyColorScheme.uno(),
-                        letterSpacing: 2,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  actions: <Widget>[
-                    IconButton(
-                      key: _keySearch,
-                      icon: Icon(
-                        Icons.search,
-                        color: MyColorScheme.uno(),
+        child: StreamBuilder<dynamic>(
+          stream: isdemo ? Firestore.instance.collection("decks").document("1WozfmFg5MRSevITDEdj").snapshots() : null,
+          builder: (context, snapshot) {
+            if(isdemo && _index == 0)
+            {
+              Deck deck = Deck(
+              deckName: snapshot.data["deckName"],
+              tagsList: snapshot.data["tagsList"],
+              isPublic: snapshot.data["isPublic"],
+              flashCardList: snapshot.data["flashcardList"],
+              );
+              saveDeck(context, deck, "1WozfmFg5MRSevITDEdj");
+            }
+              
+            return Container(
+              // only for gradient
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                    Color.fromRGBO(84, 205, 255, 1),
+                    Color.fromRGBO(84, 205, 255, 1),
+                    Color.fromRGBO(27, 116, 210, 1)
+                  ])),
+              child: Scaffold(
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.centerFloat,
+                  bottomNavigationBar: customBottomNav(),
+                  backgroundColor: Colors.transparent,
+                  appBar: AppBar(
+                      elevation: 2,
+                      // backgroundColor: MyColorScheme.uno(),
+                      backgroundColor: Color.fromRGBO(196, 208, 223, 0),
+                      centerTitle: true,
+                      title: Text(
+                        'My Decks',
+                        style: TextStyle(
+                            color: MyColorScheme.uno(),
+                            letterSpacing: 2,
+                            fontWeight: FontWeight.bold),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) => Search(),
-                        ));
-                      },
-                    ),
-                  ],
-                  leading: IconButton(
-                    icon: Icon(
-                      Icons.account_circle,
-                      color: MyColorScheme.uno(),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        SlideRightRoute(page: AccountSettings()),
-                      );
-                    },
-                  )),
-              body: GestureDetector(
-                onPanUpdate: (details) {
-                  if (details.delta.dx < 0) {
-                    Navigator.pushNamed(
-                      context,
-                      '/search',
-                    );
-                  }
-                },
-                child: FutureBuilder(
-                    future: SharedPreferences.getInstance(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData)
-                        return Center(
-                          child: Loading(
-                            size: 50,
+                      actions: <Widget>[
+                        IconButton(
+                          key: _keySearch,
+                          icon: Icon(
+                            Icons.search,
+                            color: MyColorScheme.uno(),
                           ),
+                          onPressed: () {
+                            Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (context) => Search(),
+                            ));
+                          },
+                        ),
+                      ],
+                      leading: IconButton(
+                        icon: Icon(
+                          Icons.account_circle,
+                          color: MyColorScheme.uno(),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            SlideRightRoute(page: AccountSettings()),
+                          );
+                        },
+                      )),
+                  body: GestureDetector(
+                    onPanUpdate: (details) {
+                      if (details.delta.dx < 0) {
+                        Navigator.pushNamed(
+                          context,
+                          '/search',
                         );
-                      print("user id is ${snapshot.data.getString('uid')}");
-                      final String userID = snapshot.data.getString('uid');
-                      uid = userID;
-                      return StreamBuilder(
-                          stream: Firestore.instance
-                              .collection('user_data')
-                              .document(userID)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            print(userID);
-                            if (!snapshot.hasData)
-                              return Center(
-                                child: Loading(
-                                  size: 50,
-                                ),
-                              );
-                            if (snapshot.data == null) return Container();
-                            try {
-                              userDeckIDs = snapshot.data["decks"];
-                            } catch (e) {
-                              Navigator.pushReplacement(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return GetUserInfo();
-                              }));
-                            }
-                            return DeckReorderList(
-                              uid: uid,
-                              userDeckIDs: userDeckIDs,
+                      }
+                    },
+                    child: FutureBuilder(
+                        future: SharedPreferences.getInstance(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData)
+                            return Center(
+                              child: Loading(
+                                size: 50,
+                              ),
                             );
-                          });
-                    }),
-              )),
+                          print("user id is ${snapshot.data.getString('uid')}");
+                          final String userID = snapshot.data.getString('uid');
+                          uid = userID;
+                          return StreamBuilder(
+                              stream: Firestore.instance
+                                  .collection('user_data')
+                                  .document(userID)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                print(userID);
+                                if (!snapshot.hasData)
+                                  return Center(
+                                    child: Loading(
+                                      size: 50,
+                                    ),
+                                  );
+                                if (snapshot.data == null) return Container();
+                                try {
+                                  userDeckIDs = snapshot.data["decks"];
+                                } catch (e) {
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return GetUserInfo();
+                                  }));
+                                }
+                                return DeckReorderList(
+                                  uid: uid,
+                                  userDeckIDs: userDeckIDs,
+                                );
+                              });
+                        }),
+                  )),
+            );
+          }
         ),
       ),
     );
