@@ -30,10 +30,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // Image(
-                //   image: AssetImage("assets/FlashLearn_Logo.png"),
-                //   height: 100.0,
-                // ),
+                Image(
+                  image: AssetImage("assets/FlashLearn_Logo.png"),
+                  height: 100.0,
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
