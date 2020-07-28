@@ -13,9 +13,10 @@ import 'package:microlearning/screens/Groups/my_groups.dart';
 
 class Group extends StatefulWidget {
   final String groupID;
-
+  final String uid;
   Group({
     this.groupID,
+    this.uid,
   });
 
   @override
@@ -121,6 +122,7 @@ class _GroupState extends State<Group> {
                     userDeckIDs: group.decks,
                     belongsToGroup: true,
                     ifGrpThenID: group.groupID,
+                    uid: widget.uid,
                   ),
                 ),
               );

@@ -376,7 +376,10 @@ class _DeckReorderListState extends State<DeckReorderList> {
               if (!snapshot.hasData) {
                 return Center(child: Loading(size: 20));
               }
+              print('hah ${widget.uid}');
               userGroups = snapshot.data["groups"];
+              print('hahah');
+
               return bottomData(deckID);
             },
           );
