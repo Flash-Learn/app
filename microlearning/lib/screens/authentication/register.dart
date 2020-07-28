@@ -186,7 +186,7 @@ class _RegisterUserState extends State<RegisterUser> {
                           ),
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.2,
+                          height: MediaQuery.of(context).size.height * 0.23,
                         ),
 
                         // SizedBox(

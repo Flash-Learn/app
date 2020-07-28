@@ -11,114 +11,112 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromRGBO(84, 205, 255, 1),
-                Color.fromRGBO(84, 205, 255, 1),
-                Color.fromRGBO(27, 116, 210, 1)
-              ]),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image(
-                  image: AssetImage("assets/FlashLearn_Logo.png"),
-                  height: 100.0,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        "Flash Learn",
-                        style: TextStyle(
-                          fontSize: 45,
-                          fontFamily: 'Montserrat',
-                        ),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color.fromRGBO(84, 205, 255, 1),
+              Color.fromRGBO(84, 205, 255, 1),
+              Color.fromRGBO(27, 116, 210, 1)
+            ]),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image(
+                image: AssetImage("assets/FlashLearn_Logo.png"),
+                height: 100.0,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      "Flash Learn",
+                      style: TextStyle(
+                        fontSize: 45,
+                        fontFamily: 'Montserrat',
                       ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Material(
-                  borderRadius: BorderRadius.circular(10),
-                  color: MyColorScheme.cinco(),
-                  child: InkWell(
-                    splashColor: MyColorScheme.accentLight(),
-                    onTap: () async {
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(builder: (context){
-                      //     return LoginUser();
-                      // }));
-                      _showbottomsheet(context, LoginUser());
-                    },
-                    child: Container(
-                      height: 60,
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.transparent,
-                        child: Center(
-                          child: Text('Already a User?\nSign In',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                              )),
-                        ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              Material(
+                borderRadius: BorderRadius.circular(10),
+                color: MyColorScheme.cinco(),
+                child: InkWell(
+                  splashColor: MyColorScheme.accentLight(),
+                  onTap: () async {
+                    // Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(builder: (context){
+                    //     return LoginUser();
+                    // }));
+                    _showbottomsheet(context, LoginUser());
+                  },
+                  child: Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.transparent,
+                      child: Center(
+                        child: Text('Already a User?\nSign In',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                            )),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Material(
-                  borderRadius: BorderRadius.circular(10),
-                  color: MyColorScheme.cinco(),
-                  child: InkWell(
-                    splashColor: MyColorScheme.accentLight(),
-                    onTap: () async {
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(builder: (context){
-                      //     return LoginUser();
-                      // }));
-                      _showbottomsheet(context, RegisterUser());
-                    },
-                    child: Container(
-                      height: 60,
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.transparent,
-                        child: Center(
-                          child: Text('New User?\nSign Up',
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.white)),
-                        ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Material(
+                borderRadius: BorderRadius.circular(10),
+                color: MyColorScheme.cinco(),
+                child: InkWell(
+                  splashColor: MyColorScheme.accentLight(),
+                  onTap: () async {
+                    // Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(builder: (context){
+                    //     return LoginUser();
+                    // }));
+                    _showbottomsheet(context, RegisterUser());
+                  },
+                  child: Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.transparent,
+                      child: Center(
+                        child: Text('New User?\nSign Up',
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.white)),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
 //              Row(
 //                mainAxisAlignment: MainAxisAlignment.center,
 //                children: <Widget>[
@@ -156,8 +154,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 //                  ),
 //                ],
 //              ),
-              ],
-            ),
+            ],
           ),
         ),
       ),
