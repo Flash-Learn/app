@@ -141,103 +141,112 @@ class _GroupSearchState extends State<GroupSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.lightBlue[200],
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return EditGroup(groupData: widget.groupData);
-              }));
-            },
+    return WillPopScope(
+      // ignore: missing_return
+      onWillPop: () {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
+          return EditGroup(groupData: widget.groupData);
+        }));
+      },
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.lightBlue[200],
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: Colors.white,
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return EditGroup(groupData: widget.groupData);
+                }));
+              },
+            ),
+            centerTitle: true,
+            title: Text('Search',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.white)),
           ),
-          centerTitle: true,
-          title: Text('Search',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-        ),
-        body: SingleChildScrollView(
-          child: Column(children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                enableSuggestions: true,
-                onChanged: (val) {
-                  setState(() {
-                    _searchTerm = val;
-                    print(_searchTerm);
-                  });
-                },
-                decoration: InputDecoration(
-                  prefixIcon: IconButton(
-                    color: Colors.black,
-                    icon: Icon(Icons.search),
-                    iconSize: 20,
-                    onPressed: () {},
-                  ),
-                  contentPadding: EdgeInsets.only(left: 25),
-                  hintText: "Search for a user",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: MyColorScheme.accent(), width: 1.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: MyColorScheme.accentLight(), width: 2.0),
+          body: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextField(
+                  enableSuggestions: true,
+                  onChanged: (val) {
+                    setState(() {
+                      _searchTerm = val;
+                      print(_searchTerm);
+                    });
+                  },
+                  decoration: InputDecoration(
+                    prefixIcon: IconButton(
+                      color: Colors.black,
+                      icon: Icon(Icons.search),
+                      iconSize: 20,
+                      onPressed: () {},
+                    ),
+                    contentPadding: EdgeInsets.only(left: 25),
+                    hintText: "Search for a user",
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: MyColorScheme.accent(), width: 1.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: MyColorScheme.accentLight(), width: 2.0),
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            StreamBuilder<List<AlgoliaObjectSnapshot>>(
-              stream: Stream.fromFuture(_operation(_searchTerm)),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return Text(
-                    "",
-                    style: TextStyle(color: Colors.black),
-                  );
-                else {
-                  List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
+              SizedBox(
+                height: 10,
+              ),
+              StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                stream: Stream.fromFuture(_operation(_searchTerm)),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData)
+                    return Text(
+                      "",
+                      style: TextStyle(color: Colors.black),
+                    );
+                  else {
+                    List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
 
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return Container();
-                    default:
-                      if (snapshot.hasError)
-                        return new Text('Error: ${snapshot.error}');
-                      else {
-                        return Container(
-                          child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return _searchTerm.length > 0 &&
-                                      currSearchStuff[index].data["email"] !=
-                                          null
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0, horizontal: 0.0),
-                                      child: buildResultCard(
-                                          context, currSearchStuff[index]),
-                                    )
-                                  : Container();
-                            },
-                            itemCount: currSearchStuff.length ?? 0,
-                          ),
-                        );
-                      }
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return Container();
+                      default:
+                        if (snapshot.hasError)
+                          return new Text('Error: ${snapshot.error}');
+                        else {
+                          return Container(
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return _searchTerm.length > 0 &&
+                                        currSearchStuff[index].data["email"] !=
+                                            null
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10.0, horizontal: 0.0),
+                                        child: buildResultCard(
+                                            context, currSearchStuff[index]),
+                                      )
+                                    : Container();
+                              },
+                              itemCount: currSearchStuff.length ?? 0,
+                            ),
+                          );
+                        }
+                    }
                   }
-                }
-              },
-            ),
-          ]),
-        ));
+                },
+              ),
+            ]),
+          )),
+    );
   }
 }
