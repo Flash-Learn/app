@@ -45,6 +45,7 @@ class _ViewDeckState extends State<ViewDeck> {
   double completedPercentage = 0;
   Deck deck;
   bool isTestMode = true;
+  bool _onTapDownload = false;
   Key whenShuffled = UniqueKey();
   Key whenNotShuffled = UniqueKey();
   List<bool> isSelected;
@@ -211,304 +212,316 @@ class _ViewDeckState extends State<ViewDeck> {
       onWillPop: () async {
         return onPressedBack();
       },
-      child: StreamBuilder(
-        stream:
-            Firestore.instance.collection("decks").document(deckID).snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Scaffold(
-              backgroundColor: Colors.blue[200],
+      child: AbsorbPointer(
+        absorbing: _disableTouch,
+        child: StreamBuilder(
+          stream: Firestore.instance
+              .collection("decks")
+              .document(deckID)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData)
+              return Scaffold(
+                backgroundColor: Colors.blue[200],
+              );
+            deck = Deck(
+              deckName: snapshot.data["deckName"],
+              tagsList: snapshot.data["tagsList"],
+              isPublic: snapshot.data["isPublic"],
             );
-          deck = Deck(
-            deckName: snapshot.data["deckName"],
-            tagsList: snapshot.data["tagsList"],
-            isPublic: snapshot.data["isPublic"],
-          );
-          deck.deckID = deckID;
-          deck.flashCardList = snapshot.data["flashcardList"];
-          return Spotlight(
-              enabled: _enabled,
-              radius: _radius,
-              description: _description,
-              center: _center,
-              onTap: () => _ontap(),
-              animation: true,
-              child: Scaffold(
-                key: _scaffoldKey,
-                appBar: AppBar(
-                  // backgroundColor: MyColorScheme.uno(),
-                  // backgroundColor: Color.fromRGBO(118, 174, 247, 1),
-                  backgroundColor: Colors.lightBlue[200],
-                  leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    color: MyColorScheme.uno(),
-                    onPressed: () {
-                      onPressedBack();
-                    },
-                  ),
-                  actions: <Widget>[
-                    if (widget.editAccess) ...[
-                      if (showAllcards) ...[
-                        // Container(
-                        //     key: _keyMode,
-                        //     child: isTestMode
-                        //         ? Padding(
-                        //             padding: const EdgeInsets.symmetric(
-                        //                 horizontal: 8.0),
-                        //             //     child: IconButton(
-                        //             //   icon: Icon(Icons.chrome_reader_mode),
-                        //             //   onPressed: () {
-                        //             //     setState(() {
-                        //             //       isTestMode = !isTestMode;
-                        //             //       _showSnackbar(
-                        //             //           'Switched to learn mode');
-                        //             //     });
-                        //             //   },
-                        //             // ),
-                        //             child: Switch(
-                        //                 activeColor: MyColorScheme.accent(),
-                        //                 inactiveTrackColor:
-                        //                     MyColorScheme.accentLight(),
-                        //                 value: isTestMode,
-                        //                 onChanged: (value) {
-                        //                   setState(() {
-                        //                     isTestMode = !isTestMode;
-                        //                   });
-                        //                   _showSnackbar(
-                        //                       'Switched to learn mode');
-                        //                 }),
-                        //           )
-                        //         : Padding(
-                        //             padding:
-                        //                 EdgeInsets.symmetric(horizontal: 8),
-                        //             // child: IconButton(
-                        //             //   icon: Icon(Icons.check_box),
-                        //             //   onPressed: () {
-                        //             //     WidgetsBinding.instance
-                        //             //         .addPostFrameCallback((_) {
-                        //             //       setState(() {
-                        //             //         isTestMode = !isTestMode;
-                        //             //         _showSnackbar(
-                        //             //             'Switched to test mode');
-                        //             //       });
-                        //             //     });
-                        //             //   },
-                        //             // ),
-                        //             child: Switch(
-                        //                 activeColor: MyColorScheme.accent(),
-                        //                 inactiveTrackColor:
-                        //                     MyColorScheme.accentLight(),
-                        //                 value: isTestMode,
-                        //                 onChanged: (value) {
-                        //                   WidgetsBinding.instance
-                        //                       .addPostFrameCallback((_) {
-                        //                     setState(() {
-                        //                       isTestMode = !isTestMode;
-                        //                     });
-                        //                     _showSnackbar(
-                        //                         'Switched to test mode');
-                        //                   });
-                        //                 }),
-                        //           )),
-                      ],
-                      Padding(
-                        key: _keyEdit,
-                        padding: const EdgeInsets.only(right: 20),
-                        child: GestureDetector(
-                          onTapDown: (details) {
-                            _tapPosition = details.globalPosition;
-                          },
-                          onTap: () async {
-                            final RenderBox overlay =
-                                Overlay.of(context).context.findRenderObject();
-                            await showMenu(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
-                              context: context,
-                              // found way to show delete button on the location of long press
-                              // not sure how it works
-                              position: RelativeRect.fromRect(
-                                  _tapPosition &
-                                      Size(40,
-                                          40), // smaller rect, the touch area
-                                  Offset.zero &
-                                      overlay
-                                          .size // Bigger rect, the entire screen
-                                  ),
-                              items: getPopUpItems(),
-                              elevation: 8.0,
-                            );
-                          },
-                          child: Icon(
-                            Icons.more_horiz,
-                            color: MyColorScheme.uno(),
+            deck.deckID = deckID;
+            deck.flashCardList = snapshot.data["flashcardList"];
+            return Spotlight(
+                enabled: _enabled,
+                radius: _radius,
+                description: _description,
+                center: _center,
+                onTap: () => _ontap(),
+                animation: true,
+                child: Scaffold(
+                  key: _scaffoldKey,
+                  appBar: AppBar(
+                    // backgroundColor: MyColorScheme.uno(),
+                    // backgroundColor: Color.fromRGBO(118, 174, 247, 1),
+                    backgroundColor: Colors.lightBlue[200],
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      color: MyColorScheme.uno(),
+                      onPressed: () {
+                        onPressedBack();
+                      },
+                    ),
+                    actions: <Widget>[
+                      if (widget.editAccess) ...[
+                        if (showAllcards) ...[
+                          // Container(
+                          //     key: _keyMode,
+                          //     child: isTestMode
+                          //         ? Padding(
+                          //             padding: const EdgeInsets.symmetric(
+                          //                 horizontal: 8.0),
+                          //             //     child: IconButton(
+                          //             //   icon: Icon(Icons.chrome_reader_mode),
+                          //             //   onPressed: () {
+                          //             //     setState(() {
+                          //             //       isTestMode = !isTestMode;
+                          //             //       _showSnackbar(
+                          //             //           'Switched to learn mode');
+                          //             //     });
+                          //             //   },
+                          //             // ),
+                          //             child: Switch(
+                          //                 activeColor: MyColorScheme.accent(),
+                          //                 inactiveTrackColor:
+                          //                     MyColorScheme.accentLight(),
+                          //                 value: isTestMode,
+                          //                 onChanged: (value) {
+                          //                   setState(() {
+                          //                     isTestMode = !isTestMode;
+                          //                   });
+                          //                   _showSnackbar(
+                          //                       'Switched to learn mode');
+                          //                 }),
+                          //           )
+                          //         : Padding(
+                          //             padding:
+                          //                 EdgeInsets.symmetric(horizontal: 8),
+                          //             // child: IconButton(
+                          //             //   icon: Icon(Icons.check_box),
+                          //             //   onPressed: () {
+                          //             //     WidgetsBinding.instance
+                          //             //         .addPostFrameCallback((_) {
+                          //             //       setState(() {
+                          //             //         isTestMode = !isTestMode;
+                          //             //         _showSnackbar(
+                          //             //             'Switched to test mode');
+                          //             //       });
+                          //             //     });
+                          //             //   },
+                          //             // ),
+                          //             child: Switch(
+                          //                 activeColor: MyColorScheme.accent(),
+                          //                 inactiveTrackColor:
+                          //                     MyColorScheme.accentLight(),
+                          //                 value: isTestMode,
+                          //                 onChanged: (value) {
+                          //                   WidgetsBinding.instance
+                          //                       .addPostFrameCallback((_) {
+                          //                     setState(() {
+                          //                       isTestMode = !isTestMode;
+                          //                     });
+                          //                     _showSnackbar(
+                          //                         'Switched to test mode');
+                          //                   });
+                          //                 }),
+                          //           )),
+                        ],
+                        Padding(
+                          key: _keyEdit,
+                          padding: const EdgeInsets.only(right: 20),
+                          child: GestureDetector(
+                            onTapDown: (details) {
+                              _tapPosition = details.globalPosition;
+                            },
+                            onTap: () async {
+                              final RenderBox overlay = Overlay.of(context)
+                                  .context
+                                  .findRenderObject();
+                              await showMenu(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5))),
+                                context: context,
+                                // found way to show delete button on the location of long press
+                                // not sure how it works
+                                position: RelativeRect.fromRect(
+                                    _tapPosition &
+                                        Size(40,
+                                            40), // smaller rect, the touch area
+                                    Offset.zero &
+                                        overlay
+                                            .size // Bigger rect, the entire screen
+                                    ),
+                                items: getPopUpItems(),
+                                elevation: 8.0,
+                              );
+                            },
+                            child: Icon(
+                              Icons.more_horiz,
+                              color: MyColorScheme.uno(),
+                            ),
                           ),
                         ),
+                      ] else ...[
+                        Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: IconButton(
+                            icon: _onTapDownload
+                                ? Icon(Icons.check)
+                                : Icon(Icons.file_download),
+                            color: MyColorScheme.accent(),
+                            onPressed: () {
+                              print('haha $_disableTouch');
+                              setState(() {
+                                _disableTouch = true;
+                              });
+                              print('hahah $_disableTouch');
+                              if (!_onTapDownload) {
+                                SnackBar snackBar = SnackBar(
+                                  duration: Duration(milliseconds: 1200),
+                                  content: Text(
+                                    'Deck added to My Decks',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: MyColorScheme.accent(),
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  backgroundColor: MyColorScheme.uno(),
+                                );
+                                _scaffoldKey.currentState.hideCurrentSnackBar();
+                                _scaffoldKey.currentState
+                                    .showSnackBar(snackBar);
+                                saveDeck(context, deck, deckID);
+                                _onTapDownload = true;
+                              }
+                              setState(() {
+                                _disableTouch = false;
+                              });
+                            },
+                          ),
+                        )
+                      ]
+                    ],
+                    centerTitle: true,
+                    title: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        deck.deckName,
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: MyColorScheme.uno()),
                       ),
-                    ] else ...[
-                      Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: IconButton(
-                          icon: _disableTouch
-                              ? Icon(Icons.check)
-                              : Icon(Icons.file_download),
-                          color: MyColorScheme.accent(),
-                          onPressed: () {
-                            setState(() {
-                              _disableTouch = true;
-                            });
-                            SnackBar snackBar = SnackBar(
-                              duration: Duration(milliseconds: 1200),
-                              content: Text(
-                                'Deck added to My Decks',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: MyColorScheme.accent(),
-                                  fontSize: 16,
-                                ),
-                              ),
-                              backgroundColor: MyColorScheme.uno(),
-                            );
-                            _scaffoldKey.currentState.hideCurrentSnackBar();
-                            _scaffoldKey.currentState.showSnackBar(snackBar);
-                            saveDeck(context, deck, deckID);
-                            setState(() {
-                              _disableTouch = true;
-                            });
-                          },
-                        ),
-                      )
-                    ]
-                  ],
-                  centerTitle: true,
-                  title: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Text(
-                      deck.deckName,
-                      overflow: TextOverflow.fade,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: MyColorScheme.uno()),
                     ),
                   ),
-                ),
-                body: Container(
-                  key: _keyFlashcard,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                        Color.fromRGBO(84, 205, 255, 1),
-                        Color.fromRGBO(84, 205, 255, 1),
-                        Color.fromRGBO(27, 116, 210, 1)
-                      ])),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: isTestMode ? 10 : 10,
-                      ),
-                      Container(
-                        height: 40,
-                        child: ToggleButtons(
-                          key: _keyMode,
-                          borderColor: Colors.blue[400],
-                          fillColor: Colors.blue[400],
-                          borderWidth: 1.5,
-                          selectedBorderColor: Colors.blue[400],
-                          selectedColor: MyColorScheme.accentLight(),
-                          borderRadius: BorderRadius.circular(10),
-                          children: <Widget>[
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(
-                                'Test Mode',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: isSelected[1] == true
-                                        ? Colors.blue[800]
-                                        : Colors.white),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(
-                                'Learn Mode',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: isSelected[0] == true
-                                        ? Colors.blue[800]
-                                        : Colors.white),
-                              ),
-                            ),
-                          ],
-                          onPressed: (int index) {
-                            setState(() {
-                              // for (int i = 0; i < isSelected.length; i++) {
-                              //     isSelected[i] = i == index;
-                              // }
-                              // isTestMode = !isTestMode;
-                              if (isSelected[0] == true && index == 1) {
-                                isSelected[0] = false;
-                                isSelected[1] = true;
-                                isTestMode = !isTestMode;
-                                _showSnackbar('Switched to Learn Mode');
-                              }
-                              if (isSelected[1] == true && index == 0) {
-                                isSelected[1] = false;
-                                isSelected[0] = true;
-                                isTestMode = !isTestMode;
-                                _showSnackbar('Switched to Test Mode');
-                              }
-                            });
-                          },
-                          isSelected: isSelected,
+                  body: Container(
+                    key: _keyFlashcard,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                          Color.fromRGBO(84, 205, 255, 1),
+                          Color.fromRGBO(84, 205, 255, 1),
+                          Color.fromRGBO(27, 116, 210, 1)
+                        ])),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: isTestMode ? 10 : 10,
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: FlashCardSwipeView(
-                            deck: deck,
-                            showAllCards: showAllcards,
-                            editAccess: widget.editAccess,
-                            changePercentage: changePercentage,
-                            isShuffled: isShuffled,
-                            key: isShuffled ? whenShuffled : whenNotShuffled,
-                            ifGroupThenGrpID: widget.ifGroupThenGrpID,
-                            isDeckforGroup: widget.isDeckforGroup,
-                            isTestMode: isTestMode,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Column(
+                        Container(
+                          height: 40,
+                          child: ToggleButtons(
+                            key: _keyMode,
+                            borderColor: Colors.blue[400],
+                            fillColor: Colors.blue[400],
+                            borderWidth: 1.5,
+                            selectedBorderColor: Colors.blue[400],
+                            selectedColor: MyColorScheme.accentLight(),
+                            borderRadius: BorderRadius.circular(10),
                             children: <Widget>[
-                              LinearPercentIndicator(
-                                percent: completedPercentage,
-                                backgroundColor: Colors.blueGrey[400],
-                                width: MediaQuery.of(context).size.width - 60,
-                                // // animation: true,
-                                linearStrokeCap: LinearStrokeCap.roundAll,
-                                progressColor: Colors.white,
-                                lineHeight: 20,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  'Test Mode',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: isSelected[1] == true
+                                          ? Colors.blue[800]
+                                          : Colors.white),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  'Learn Mode',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: isSelected[0] == true
+                                          ? Colors.blue[800]
+                                          : Colors.white),
+                                ),
                               ),
                             ],
+                            onPressed: (int index) {
+                              setState(() {
+                                // for (int i = 0; i < isSelected.length; i++) {
+                                //     isSelected[i] = i == index;
+                                // }
+                                // isTestMode = !isTestMode;
+                                if (isSelected[0] == true && index == 1) {
+                                  isSelected[0] = false;
+                                  isSelected[1] = true;
+                                  isTestMode = !isTestMode;
+                                  _showSnackbar('Switched to Learn Mode');
+                                }
+                                if (isSelected[1] == true && index == 0) {
+                                  isSelected[1] = false;
+                                  isSelected[0] = true;
+                                  isTestMode = !isTestMode;
+                                  _showSnackbar('Switched to Test Mode');
+                                }
+                              });
+                            },
+                            isSelected: isSelected,
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                    ],
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: FlashCardSwipeView(
+                              deck: deck,
+                              showAllCards: showAllcards,
+                              editAccess: widget.editAccess,
+                              changePercentage: changePercentage,
+                              isShuffled: isShuffled,
+                              key: isShuffled ? whenShuffled : whenNotShuffled,
+                              ifGroupThenGrpID: widget.ifGroupThenGrpID,
+                              isDeckforGroup: widget.isDeckforGroup,
+                              isTestMode: isTestMode,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                LinearPercentIndicator(
+                                  percent: completedPercentage,
+                                  backgroundColor: Colors.blueGrey[400],
+                                  width: MediaQuery.of(context).size.width - 60,
+                                  // // animation: true,
+                                  linearStrokeCap: LinearStrokeCap.roundAll,
+                                  progressColor: Colors.white,
+                                  lineHeight: 20,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ));
-        },
+                ));
+          },
+        ),
       ),
     );
   }

@@ -38,7 +38,6 @@ void saveDeck(context, Deck deck, String originalDeckID) async {
       'isTermPhoto': tempCard["isTermPhoto"],
       'isDefinitionPhoto': tempCard["isDefinitionPhoto"],
       'isOneSided': tempCard["isOneSided"],
-
     });
     print(flashRef.documentID);
     toSave.flashCardList.add(flashRef.documentID);
@@ -66,15 +65,10 @@ void saveDeck(context, Deck deck, String originalDeckID) async {
   decksReference.document(originalDeckID).updateData({
     "downloads": FieldValue.increment(1),
   });
-
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => MyDecks()),
-    (Route<dynamic> route) => false,
-  );
 }
 
-void saveDecktoGroup(context, Deck deck, String originalDeckID, String grpId) async {
+void saveDecktoGroup(
+    context, Deck deck, String originalDeckID, String grpId) async {
   print(deck.deckName);
   Deck toSave = Deck(
     deckName: deck.deckName,
@@ -85,7 +79,6 @@ void saveDecktoGroup(context, Deck deck, String originalDeckID, String grpId) as
   toSave.isPublic = false;
   toSave.deckID = null;
   toSave.flashCardList = [];
-
 
   final CollectionReference decksReference =
       Firestore.instance.collection("decks");
@@ -107,7 +100,6 @@ void saveDecktoGroup(context, Deck deck, String originalDeckID, String grpId) as
       'isTermPhoto': tempCard["isTermPhoto"],
       'isDefinitionPhoto': tempCard["isDefinitionPhoto"],
       'isOneSided': tempCard["isOneSided"],
-
     });
     print(flashRef.documentID);
     toSave.flashCardList.add(flashRef.documentID);
