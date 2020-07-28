@@ -114,7 +114,7 @@ class _GroupListState extends State<GroupList> {
                         return GetUserInfo();
                       }));
                     }
-                    return ReorderList(userGroupIDs: userGroupIDs);
+                    return ReorderList(userGroupIDs: userGroupIDs, uid: uid);
                   },
                 );
               },
@@ -230,8 +230,10 @@ class ReorderList extends StatefulWidget {
   const ReorderList({
     Key key,
     @required this.userGroupIDs,
+    @required this.uid,
   }) : super(key: key);
   final List userGroupIDs;
+  final String uid;
   @override
   _ReorderListState createState() => _ReorderListState(userGroupIDs);
 }
@@ -289,7 +291,7 @@ class _ReorderListState extends State<ReorderList> {
                   //TODO: add navigation to group
                   Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context) {
-                    return Group(groupID: groupID);
+                    return Group(groupID: groupID, uid: widget.uid);
                   }));
                 },
                 child: buildGroupInfo(context, groupID),
