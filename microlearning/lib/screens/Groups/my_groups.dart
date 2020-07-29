@@ -169,6 +169,7 @@ class _GroupListState extends State<GroupList> {
                   return EditGroup(
                     groupData: newGroup,
                     creating: true,
+                    userUid: uid,
                   );
                 },
               ));
@@ -326,6 +327,7 @@ class _ReorderListState extends State<ReorderList> {
                                 setState(() {
                                   _disableTouch = true;
                                 });
+
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   GroupData group;
@@ -345,12 +347,14 @@ class _ReorderListState extends State<ReorderList> {
                                         name: snapshot.data["name"],
                                         decks: snapshot.data["decks"],
                                         users: snapshot.data["users"],
+                                        admins: snapshot.data["admins"],
                                       );
                                       group.groupID = groupID;
 
                                       return EditGroup(
                                         groupData: group,
                                         fromMyGroups: true,
+                                        userUid: widget.uid,
                                       );
                                     },
                                   );

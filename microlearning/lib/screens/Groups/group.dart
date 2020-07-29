@@ -55,8 +55,8 @@ class _GroupState extends State<Group> {
                 name: snapshot.data["name"],
                 decks: snapshot.data["decks"],
                 users: snapshot.data["users"],
+                admins: snapshot.data["admins"],
               );
-
               return Scaffold(
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerFloat,
@@ -97,11 +97,24 @@ class _GroupState extends State<Group> {
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(Icons.edit),
-                      onPressed: () {
+                      onPressed: () async {
+                        setState(() {
+                          _disableTouch = true;
+                        });
+                        if (group.admins != null &&
+                            !group.admins.contains([group.users[0]])) {
+                          await Firestore.instance
+                              .collection('groups')
+                              .document(group.groupID)
+                              .updateData({
+                            "admins": FieldValue.arrayUnion([group.users[0]]),
+                          });
+                        }
                         Navigator.pushReplacement(context,
                             CupertinoPageRoute(builder: (context) {
                           return EditGroup(
                             groupData: group,
+                            userUid: widget.uid,
                           );
                         }));
                       },

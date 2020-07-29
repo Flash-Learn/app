@@ -11,7 +11,8 @@ import 'package:microlearning/Utilities/constants/color_scheme.dart';
 
 class GroupSearch extends StatefulWidget {
   final GroupData groupData;
-  GroupSearch({@required this.groupData});
+  final String userUid;
+  GroupSearch({@required this.groupData, this.userUid});
   @override
   _GroupSearchState createState() => _GroupSearchState(groupData: groupData);
 }
@@ -146,7 +147,8 @@ class _GroupSearchState extends State<GroupSearch> {
       onWillPop: () {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) {
-          return EditGroup(groupData: widget.groupData);
+          return EditGroup(
+              groupData: widget.groupData, userUid: widget.userUid);
         }));
       },
       child: Scaffold(
@@ -159,7 +161,10 @@ class _GroupSearchState extends State<GroupSearch> {
               onPressed: () {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
-                  return EditGroup(groupData: widget.groupData);
+                  return EditGroup(
+                    groupData: widget.groupData,
+                    userUid: widget.userUid,
+                  );
                 }));
               },
             ),
