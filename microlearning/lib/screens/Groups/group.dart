@@ -55,7 +55,9 @@ class _GroupState extends State<Group> {
                 name: snapshot.data["name"],
                 decks: snapshot.data["decks"],
                 users: snapshot.data["users"],
-                admins: snapshot.data["admins"],
+                admins: snapshot.data["admins"] == null
+                    ? []
+                    : snapshot.data["admins"],
               );
               return Scaffold(
                 floatingActionButtonLocation:
@@ -95,30 +97,40 @@ class _GroupState extends State<Group> {
                   ),
                   centerTitle: true,
                   actions: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () async {
-                        setState(() {
-                          _disableTouch = true;
-                        });
-                        if (group.admins != null &&
-                            !group.admins.contains([group.users[0]])) {
-                          await Firestore.instance
-                              .collection('groups')
-                              .document(group.groupID)
-                              .updateData({
-                            "admins": FieldValue.arrayUnion([group.users[0]]),
-                          });
-                        }
-                        Navigator.pushReplacement(context,
-                            CupertinoPageRoute(builder: (context) {
-                          return EditGroup(
-                            groupData: group,
-                            userUid: widget.uid,
-                          );
-                        }));
-                      },
-                    ),
+                    _disableTouch
+                        ? Container(
+                            child: Center(
+                              child: Loading(
+                                size: 15,
+                              ),
+                            ),
+                          )
+                        : IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              setState(() {
+                                _disableTouch = true;
+                              });
+
+                              if (group.admins.isEmpty) {
+                                await Firestore.instance
+                                    .collection('groups')
+                                    .document(group.groupID)
+                                    .updateData({
+                                  "admins":
+                                      FieldValue.arrayUnion([group.users[0]]),
+                                });
+                                group.admins.add(group.users[0]);
+                              }
+                              Navigator.pushReplacement(context,
+                                  CupertinoPageRoute(builder: (context) {
+                                return EditGroup(
+                                  groupData: group,
+                                  userUid: widget.uid,
+                                );
+                              }));
+                            },
+                          ),
                     // IconButton(
                     //   // key: _keySearch,
                     //   icon: Icon(
