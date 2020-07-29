@@ -35,6 +35,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
   var _tapPosition;
   List<dynamic> userDeckIDs;
   bool _disableTouch = false;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return AbsorbPointer(
@@ -223,17 +224,13 @@ class _DeckReorderListState extends State<DeckReorderList> {
                         child: GestureDetector(
                           onTap: () async {
                             Navigator.pop(context, "delete button");
-                            setState(() {
-                              _disableTouch = true;
-                            });
-                            createAlertDialog(
+                            await createAlertDialog(
                               context,
                               deckId,
                               userDeckIDs,
+                              widget.belongsToGroup,
+                              widget.ifGrpThenID
                             );
-                            setState(() {
-                              _disableTouch = false;
-                            });
                           },
                           child: Card(
                             elevation: 0,
@@ -385,60 +382,80 @@ class _DeckReorderListState extends State<DeckReorderList> {
           );
         });
   }
-
   createAlertDialog(
-      BuildContext ctxt, String deckid, List<dynamic> userDeckIDs) {
-    return showDialog(
-        context: ctxt,
-        builder: (ctxt) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            child: Container(
-              height: MediaQuery.of(ctxt).size.height * 0.2,
-              padding: EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Do you want to delete this deck?',
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      BuildContext context, String deckid, List<dynamic> userDeckIDs, bool belongsTogrp, String ifGrpthenID) 
+    {
+      isLoading = false;
+      return showGeneralDialog(
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionBuilder: (context, a1, a2, widget) {
+        final curvedValue = Curves.easeInOutBack.transform(a1.value) -   1.0;
+        return AbsorbPointer(
+          absorbing: _disableTouch,
+          child: Transform(
+            transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
+            child: Opacity(
+              opacity: a1.value,
+              child: Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      FlatButton(
-                        child: Text(_disableTouch ? '' : 'Cancel'),
-                        onPressed: () {
-                          Navigator.pop(ctxt);
-                        },
+                      Text(
+                        'Do you want to delete this deck?',
                       ),
-                      FlatButton(
-                        child: Text(
-                          _disableTouch ? 'Deleting' : 'Delete',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            _disableTouch = false;
-                          });
-                          userDeckIDs.remove(deckid);
-                          !widget.belongsToGroup
-                              ? await deleteDeck(deckid)
-                              : await deleteDeckFromGroup(
-                                  deckid, widget.ifGrpThenID);
-                          Navigator.pop(ctxt);
-                        },
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          FlatButton(
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          FlatButton(
+                            child: !isLoading ? Text(
+                              'Delete',
+                              style: TextStyle(color: Colors.red),
+                            ) : Loading(size: 10, color: MyColorScheme.accent(),),
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                                _disableTouch = true;
+                                userDeckIDs.remove(deckid);
+                              });
+                              !belongsTogrp
+                                  ? await deleteDeck(deckid)
+                                  : await deleteDeckFromGroup(
+                                      deckid, ifGrpthenID);
+                              setState(() {
+                                _disableTouch = false;
+                              });
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
                       )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+      transitionDuration: Duration(milliseconds: 200),
+      barrierDismissible: true,
+      barrierLabel: '',
+      context: context,
+      pageBuilder: (context, animation1, animation2) {});
   }
 }
