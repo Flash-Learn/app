@@ -114,13 +114,13 @@ class _MyDecksState extends State<MyDecks> {
       setState(() {
         _enabled = false;
       });
+      notificationService.initialise();
     }
   }
 
   @override
   void initState() {
     super.initState();
-    notificationService.initialise();
   }
 
   @override
@@ -145,17 +145,17 @@ class _MyDecksState extends State<MyDecks> {
         child: StreamBuilder<dynamic>(
           stream: isdemo ? Firestore.instance.collection("decks").document("1WozfmFg5MRSevITDEdj").snapshots() : null,
           builder: (context, snapshot) {
-            if(isdemo && _index == 0)
-            {
-              Deck deck = Deck(
-              deckName: snapshot.data["deckName"],
-              tagsList: snapshot.data["tagsList"],
-              isPublic: snapshot.data["isPublic"],
-              flashCardList: snapshot.data["flashcardList"],
-              );
-              saveDeck(context, deck, "1WozfmFg5MRSevITDEdj");
-            }
-              
+            if(snapshot.hasData){
+              if(isdemo && _index == 0)
+              {
+                Deck deck = Deck(
+                deckName: snapshot.data["deckName"],
+                tagsList: snapshot.data["tagsList"],
+                isPublic: snapshot.data["isPublic"],
+                flashCardList: snapshot.data["flashcardList"],
+                );
+                saveDeck(context, deck, "1WozfmFg5MRSevITDEdj");
+              }}
             return Container(
               // only for gradient
               decoration: BoxDecoration(
