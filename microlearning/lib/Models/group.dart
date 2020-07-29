@@ -8,12 +8,14 @@ class GroupData {
   String name;
   List<dynamic> decks;
   List<dynamic> users;
+  List<dynamic> admins;
   GroupData({
     this.groupID,
     this.description,
     this.name,
     this.decks,
     this.users,
+    this.admins,
   });
 }
 
@@ -23,9 +25,11 @@ Future<GroupData> createNewGroup(String uid) async {
     description: "",
     decks: [],
     users: [],
+    admins: [],
   );
 
   newGroup.users.add(uid);
+  newGroup.admins.add(uid);
 
   CollectionReference groupCollection = Firestore.instance.collection('groups');
 
@@ -34,6 +38,7 @@ Future<GroupData> createNewGroup(String uid) async {
     "description": "",
     "name": "",
     "users": newGroup.users,
+    "admins": newGroup.admins,
   });
   newGroup.groupID = groupRef.documentID;
   await groupCollection.document(newGroup.groupID).updateData({
@@ -57,6 +62,7 @@ Future updateGroupData(GroupData groupData) async {
     "decks": groupData.decks,
     "name": groupData.name,
     "users": groupData.users,
+    "admins": groupData.admins,
     "description": groupData.description,
   });
 }
@@ -67,6 +73,15 @@ Future addGrouptoUser(String grpID, String uidToBeAdded) async {
       .document(uidToBeAdded)
       .updateData({
     "groups": FieldValue.arrayUnion([grpID]),
+  });
+}
+
+Future removeGroupfromUser(String grpID, String uidToBeRemoved) async {
+  await Firestore.instance
+      .collection("user_data")
+      .document(uidToBeRemoved)
+      .updateData({
+    "groups": FieldValue.arrayRemove([grpID]),
   });
 }
 

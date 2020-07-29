@@ -169,6 +169,7 @@ class _GroupListState extends State<GroupList> {
                   return EditGroup(
                     groupData: newGroup,
                     creating: true,
+                    userUid: uid,
                   );
                 },
               ));
@@ -326,35 +327,40 @@ class _ReorderListState extends State<ReorderList> {
                                 setState(() {
                                   _disableTouch = true;
                                 });
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  GroupData group;
-                                  return StreamBuilder(
-                                    stream: Firestore.instance
-                                        .collection("groups")
-                                        .document(groupID)
-                                        .snapshots(),
-                                    builder: (context, snapshot) {
-                                      if (!snapshot.hasData)
-                                        return Scaffold(
-                                          backgroundColor: Colors.blue[200],
-                                        );
-                                      group = GroupData(
-                                        description:
-                                            snapshot.data["description"],
-                                        name: snapshot.data["name"],
-                                        decks: snapshot.data["decks"],
-                                        users: snapshot.data["users"],
-                                      );
-                                      group.groupID = groupID;
+                                final ds = await Firestore.instance
+                                    .collection('groups')
+                                    .document(groupID)
+                                    .get();
 
-                                      return EditGroup(
-                                        groupData: group,
-                                        fromMyGroups: true,
-                                      );
-                                    },
+                                GroupData group = GroupData(
+                                  description: ds.data["description"],
+                                  name: ds.data["name"],
+                                  decks: ds.data["decks"],
+                                  users: ds.data["users"],
+                                  admins: ds.data["admins"] == null
+                                      ? []
+                                      : ds.data["admins"],
+                                );
+                                group.groupID = groupID;
+                                if (group.admins.isEmpty) {
+                                  await Firestore.instance
+                                      .collection('groups')
+                                      .document(group.groupID)
+                                      .updateData({
+                                    "admins":
+                                        FieldValue.arrayUnion([group.users[0]]),
+                                  });
+                                  group.admins.add(group.users[0]);
+                                }
+                                Navigator.pushReplacement(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return EditGroup(
+                                    fromMyGroups: true,
+                                    groupData: group,
+                                    userUid: widget.uid,
                                   );
                                 }));
+
                                 setState(() {
                                   _disableTouch = false;
                                 });

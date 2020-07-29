@@ -14,9 +14,11 @@ class EditGroup extends StatefulWidget {
   final GroupData groupData;
   final bool creating;
   final bool fromMyGroups;
+  final String userUid;
   EditGroup(
       {@required this.groupData,
       this.creating: false,
+      this.userUid,
       this.fromMyGroups: false});
   @override
   _EditGroupState createState() => _EditGroupState(groupData: groupData);
@@ -26,6 +28,7 @@ class _EditGroupState extends State<EditGroup> {
   final _formKeyDetails = GlobalKey<FormState>();
   final _formKeyUsers = GlobalKey<FormState>();
   String userToAdd;
+  var _tapPosition;
   GroupData groupData;
   _EditGroupState({@required this.groupData});
 
@@ -39,6 +42,7 @@ class _EditGroupState extends State<EditGroup> {
       Navigator.of(context).pushReplacement(SlideRightRoute(
           page: Group(
         groupID: groupData.groupID,
+        uid: widget.userUid,
       )));
     }
   }
@@ -151,15 +155,18 @@ class _EditGroupState extends State<EditGroup> {
                               borderRadius: BorderRadius.circular(10)),
                           onPressed: () {
                             // addUserDialog(context);
-                            Navigator.of(context).pushReplacement(
-                                // context.
-                                MaterialPageRoute(
-                              builder: (context) => GroupSearch(
-                                groupData: groupData,
-                              ),
-                            )
-                                // '/groupsearch',
-                                );
+                            if (_formKeyDetails.currentState.validate()) {
+                              Navigator.of(context).pushReplacement(
+                                  // context.
+                                  MaterialPageRoute(
+                                builder: (context) => GroupSearch(
+                                  groupData: groupData,
+                                  userUid: widget.userUid,
+                                ),
+                              )
+                                  // '/groupsearch',
+                                  );
+                            }
                           },
                           child: Text(
                             'Add a User',
@@ -219,6 +226,7 @@ class _EditGroupState extends State<EditGroup> {
             if (snapshot.data == null) return Container();
             dynamic mailID = snapshot.data["email"];
             dynamic name = snapshot.data["name"];
+            dynamic uid = snapshot.data["uid"];
             return Card(
               margin: EdgeInsets.symmetric(vertical: 10),
               shape: RoundedRectangleBorder(
@@ -229,6 +237,139 @@ class _EditGroupState extends State<EditGroup> {
                   style: TextStyle(fontSize: 18),
                 ),
                 subtitle: Text(mailID != null ? mailID : ''),
+                trailing: groupData.admins.contains(widget.userUid) &&
+                        uid != widget.userUid
+                    ? GestureDetector(
+                        onTapDown: (details) {
+                          _tapPosition = details.globalPosition;
+                        },
+                        onTap: () async {
+                          final RenderBox overlay =
+                              Overlay.of(context).context.findRenderObject();
+                          await showMenu(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            context: context,
+                            // found way to show delete button on the location of long press
+                            // not sure how it works
+                            position: RelativeRect.fromRect(
+                                _tapPosition &
+                                    Size(
+                                        40, 40), // smaller rect, the touch area
+                                Offset.zero &
+                                    overlay
+                                        .size // Bigger rect, the entire screen
+                                ),
+                            items: [
+                              if (!groupData.admins.contains(uid)) ...[
+                                PopupMenuItem(
+                                  value: "make admin",
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      Navigator.pop(context, "make admin");
+
+                                      groupData.admins.add(uid);
+                                      await updateGroupData(groupData);
+                                    },
+                                    child: Card(
+                                      elevation: 0,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.person_add,
+                                            color: MyColorScheme.accent(),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "Make group admin",
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ] else ...[
+                                PopupMenuItem(
+                                  value: "Remove from admin",
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      Navigator.pop(
+                                          context, "Remove from admin");
+
+                                      groupData.admins.remove(uid);
+                                      await updateGroupData(groupData);
+                                    },
+                                    child: Card(
+                                      elevation: 0,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.remove,
+                                            color: MyColorScheme.accent(),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "Dismiss as Admin",
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              PopupMenuItem(
+                                value: "remove from group",
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    Navigator.pop(context, "remove from group");
+
+                                    groupData.users.remove(uid);
+                                    groupData.admins.remove(uid);
+
+                                    await updateGroupData(groupData);
+                                    await removeGroupfromUser(
+                                        groupData.groupID, uid);
+                                  },
+                                  child: Card(
+                                    elevation: 0,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.remove_circle_outline,
+                                          color: MyColorScheme.accent(),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          "Remove from group",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                            elevation: 8.0,
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: Icon(
+                            Icons.more_vert,
+                            color: MyColorScheme.accent(),
+                          ),
+                        ),
+                      )
+                    : null,
               ),
             );
           });
