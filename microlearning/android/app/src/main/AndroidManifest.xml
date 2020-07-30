@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:name=".Application"
-        android:label="microlearning"
+        android:label="FlashLearn"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
