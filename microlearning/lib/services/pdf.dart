@@ -120,35 +120,7 @@ generatePDF(String deckID) async {
                 pdfLib.Image(tempCard[index][1]),
               ]);
 
-              if (tempCard[index][2] == "false") {
 
-                return pdfLib.Column(children: <pdfLib.Widget>[
-                  pdfLib.Paragraph(
-                      text: "${index + 1}.  ${tempCard[index][0]}",
-                      style: pdfLib.TextStyle(fontSize: 22)
-                  ),
-                  pdfLib.Paragraph(
-                      margin: pdfLib.EdgeInsets.only(left: 10),
-                      text: "${tempCard[index][1]}",
-                      style: pdfLib.TextStyle(fontSize: 18)),
-                  pdfLib.SizedBox(height: 10)
-                ]);
-              }
-
-//                      final image = pdfImageFromImageProvider(
-//                        pdf: pdf.document,
-//                        image: NetworkImage(
-//                            tempCard[index][1],
-//                        ),
-//                      );
-
-              return pdfLib.Column(children: <pdfLib.Widget>[
-                pdfLib.Paragraph(
-                    text: "${index + 1}. ${tempCard[index][0]}",
-                    style: pdfLib.TextStyle(fontSize: 22)),
-                pdfLib.Image(tempCard[index][1]),
-                pdfLib.SizedBox(height: 20)
-              ]);
             }),
           )
         ];
