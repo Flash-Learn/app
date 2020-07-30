@@ -35,7 +35,6 @@ class _DeckReorderListState extends State<DeckReorderList> {
   var _tapPosition;
   List<dynamic> userDeckIDs;
   bool _disableTouch = false;
-  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return AbsorbPointer(
@@ -385,7 +384,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
   createAlertDialog(
       BuildContext context, String deckid, List<dynamic> userDeckIDs, bool belongsTogrp, String ifGrpthenID) 
     {
-      isLoading = false;
+      bool isLoading = false;
       return showGeneralDialog(
       barrierColor: Colors.black.withOpacity(0.5),
       transitionBuilder: (context, a1, a2, widget) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:microlearning/screens/AccountManagement/account_settings.dart';
+import 'package:microlearning/screens/Decks/homeScreen.dart';
 import 'package:microlearning/screens/Decks/my_decks.dart';
 import 'package:microlearning/screens/Decks/notifications_inapp.dart';
 import 'package:microlearning/screens/Groups/my_groups.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => WelcomeScreen(),
         '/login': (context) => LoginUser(),
         '/home': (context) => MyDecks(),
+        '/homescreen':(context) => HomeScreen(),
         '/groups': (context) => GroupList(),
         '/register': (context) => RegisterUser(),
         '/search': (context) => Search(),

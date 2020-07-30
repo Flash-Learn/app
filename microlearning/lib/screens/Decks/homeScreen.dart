@@ -62,12 +62,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.transparent,
                 elevation: 0,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(2.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        'Groups',
+                        'Deck name',
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       Icon(
@@ -78,14 +78,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            Container(padding: EdgeInsets.symmetric(vertical: 2),child: Divider(color: Colors.black, )),
+            Container(child: Divider(color: Colors.black, )),
             AnimatedOpacity(
               duration: Duration(milliseconds: 300),
               opacity: closeTopContainer ? 0 : 1,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 width: size.width,
-                height: closeTopContainer?0:size.height*0.3,
+                height: closeTopContainer?0:size.height*0.15,
                 child: getGroupsAsCard(),
               ),
             ),
@@ -175,9 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
             child: FittedBox(
               fit: BoxFit.fill,
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.5,
-                margin: EdgeInsets.only(right: 20),
-                height: MediaQuery.of(context).size.width * 0.6,
+                width: MediaQuery.of(context).size.width * 0.3,
+                margin: EdgeInsets.only(right: 5),
+                height: MediaQuery.of(context).size.height * 0.2,
                 decoration: BoxDecoration(color: MyColorScheme.accentLight(),borderRadius: BorderRadius.all(Radius.circular(20.0)), boxShadow: [BoxShadow(color: Colors.black26,)]),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -185,9 +185,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(group["name"],style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),),
+                        Text(group["name"],style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),),
                         SizedBox(height: 20,),
-                        Text(group["description"], style: TextStyle(color: MyColorScheme.uno(), fontSize: 18)),
+                        Text(group["description"], style: TextStyle(color: MyColorScheme.uno(), fontSize: 12)),
                       ],
                     ),
                   ),
