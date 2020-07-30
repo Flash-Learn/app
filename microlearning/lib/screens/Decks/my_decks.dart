@@ -107,7 +107,7 @@ class _MyDecksState extends State<MyDecks> {
     });
   }
 
-  _ontap() {
+  _ontap() async {
     if (_index == 1) {
       spotlight(_keySearch);
     } else {
@@ -115,6 +115,14 @@ class _MyDecksState extends State<MyDecks> {
         _enabled = false;
       });
       notificationService.initialise();
+      dynamic snapshot = await Firestore.instance.collection("decks").document("1WozfmFg5MRSevITDEdj").get();
+      Deck deck = Deck(
+        deckName: snapshot.data["deckName"],
+        tagsList: snapshot.data["tagsList"],
+        isPublic: snapshot.data["isPublic"],
+        flashCardList: snapshot.data["flashcardList"],
+      );
+      saveDeck(context, deck, "1WozfmFg5MRSevITDEdj");
     }
   }
 
@@ -142,21 +150,7 @@ class _MyDecksState extends State<MyDecks> {
       // Widget to block taps during loading
       child: AbsorbPointer(
         absorbing: _disableTouch,
-        child: StreamBuilder<dynamic>(
-          stream: isdemo ? Firestore.instance.collection("decks").document("1WozfmFg5MRSevITDEdj").snapshots() : null,
-          builder: (context, snapshot) {
-            if(snapshot.hasData){
-              if(isdemo && _index == 0)
-              {
-                Deck deck = Deck(
-                deckName: snapshot.data["deckName"],
-                tagsList: snapshot.data["tagsList"],
-                isPublic: snapshot.data["isPublic"],
-                flashCardList: snapshot.data["flashcardList"],
-                );
-                saveDeck(context, deck, "1WozfmFg5MRSevITDEdj");
-              }}
-            return Container(
+        child: Container(
               // only for gradient
               decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -259,9 +253,7 @@ class _MyDecksState extends State<MyDecks> {
                               });
                         }),
                   )),
-            );
-          }
-        ),
+            )
       ),
     );
   }
