@@ -8,6 +8,7 @@ class FlashcardSide extends StatelessWidget {
   final bool userRemembers;
   final bool editAccess;
   final bool isDeckForGrp;
+  final bool isSmallView;
 
   FlashcardSide({
     this.isDeckForGrp,
@@ -15,6 +16,7 @@ class FlashcardSide extends StatelessWidget {
     this.userRemembers,
     this.isPic,
     this.content,
+    this.isSmallView = false,
   });
 
   @override
@@ -93,7 +95,7 @@ class FlashcardSide extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18,
+                          fontSize: isSmallView ? 8 : 18,
                           fontWeight: FontWeight.normal),
                     ),
                     isPic
