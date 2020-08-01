@@ -329,9 +329,10 @@ class _EditGroupState extends State<EditGroup> {
                                 child: GestureDetector(
                                   onTap: () async {
                                     Navigator.pop(context, "remove from group");
-
-                                    groupData.users.remove(uid);
-                                    groupData.admins.remove(uid);
+                                    setState(() {
+                                      groupData.users.remove(uid);
+                                      groupData.admins.remove(uid);
+                                    });
 
                                     await updateGroupData(groupData);
                                     await removeGroupfromUser(

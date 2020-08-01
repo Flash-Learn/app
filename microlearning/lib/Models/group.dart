@@ -88,10 +88,6 @@ Future removeGroupfromUser(String grpID, String uidToBeRemoved) async {
 Future<void> leaveGroup(String groupID) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String uid = prefs.get("uid");
-//  DocumentReference deckDocument =
-//  Firestore.instance.collection("groups").document(groupID);
-
-//  await deckDocument.delete();
 
   await Firestore.instance.collection("user_data").document(uid).updateData({
     "groups": FieldValue.arrayRemove([groupID]),
@@ -99,6 +95,15 @@ Future<void> leaveGroup(String groupID) async {
   await Firestore.instance.collection("groups").document(groupID).updateData({
     "users": FieldValue.arrayRemove([uid]),
   });
+  await Firestore.instance.collection("groups").document(groupID).updateData({
+    "admins": FieldValue.arrayRemove([uid]),
+  });
+  final groupRef =
+      await Firestore.instance.collection("groups").document(groupID).get();
+  List<dynamic> users = groupRef.data["users"];
+  if (users.length == 0) {
+    deleteGroup(groupID);
+  }
 }
 
 Future<void> deleteGroup(String groupID) async {

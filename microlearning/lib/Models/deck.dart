@@ -41,7 +41,15 @@ Future<void> deleteDeck(String deckID) async {
       Firestore.instance.collection("decks").document(deckID);
 
   dynamic deckData = await deckDocument.get();
+  dynamic flashCardList = deckData.data["flashcardList"];
+  print('haa ${flashCardList.length}');
 
+  for (int i = 0; i < flashCardList.length; i++) {
+    Firestore.instance
+        .collection("flashcards")
+        .document(flashCardList[i])
+        .delete();
+  }
   print(deckData.documentID);
 
   await deckDocument.delete();
@@ -84,7 +92,6 @@ Future<Deck> createNewBlankDeck(String userID, {deckName: ""}) async {
 
   return newDeck;
 }
-
 
 Future<bool> deleteDeckOnBackPress(String deckID) async {
   deleteDeck(deckID);

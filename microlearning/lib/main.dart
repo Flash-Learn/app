@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
+      title: 'FlashLearn',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Montserrat'),
       routes: {
         // '/': (context) => email == null ? WelcomeScreen() : MyDecks(),
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => WelcomeScreen(),
         '/login': (context) => LoginUser(),
         '/home': (context) => MyDecks(),
-        '/homescreen':(context) => HomeScreen(),
+        '/homescreen': (context) => HomeScreen(),
         '/groups': (context) => GroupList(),
         '/register': (context) => RegisterUser(),
         '/search': (context) => Search(),
