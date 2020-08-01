@@ -1,6 +1,5 @@
-//import 'dart:html';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:microlearning/Models/deck.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pdfLib;
@@ -51,6 +50,10 @@ generatePDF(String deckID) async {
       tempCard[i][3] = ds.data["definition"];
     }
   }
+  var data1 = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
+  var myFont1 = pdfLib.Font.ttf(data1);
+  // var data2 = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
+  // var myFont2 = pdfLib.Font.ttf(data2);
 
   pdf.addPage(pdfLib.MultiPage(
       pageFormat: PdfPageFormat.a4,
@@ -60,7 +63,7 @@ generatePDF(String deckID) async {
           pdfLib.Header(
               level: 0,
               child: pdfLib.Text(deck.deckName,
-                  style: pdfLib.TextStyle(fontSize: 26))),
+                  style: pdfLib.TextStyle(fontSize: 26, font: myFont1))),
           pdfLib.Column(
             children: List.generate(deck.flashCardList.length, (index) {
               return pdfLib.Column(children: <pdfLib.Widget>[
@@ -68,11 +71,14 @@ generatePDF(String deckID) async {
                   pdfLib.Paragraph(
                       text: "${index + 1}.  ${tempCard[index][1]}",
                       style: pdfLib.TextStyle(
-                          fontSize: 20, fontWeight: pdfLib.FontWeight.bold)),
+                          fontSize: 22,
+                          fontWeight: pdfLib.FontWeight.bold,
+                          font: myFont1)),
+                  pdfLib.SizedBox(height: 5),
                 ] else ...[
                   pdfLib.Paragraph(
                       text: "${index + 1}.",
-                      style: pdfLib.TextStyle(fontSize: 22)),
+                      style: pdfLib.TextStyle(fontSize: 22, font: myFont1)),
                   pdfLib.Image(tempCard[index][1]),
                   pdfLib.SizedBox(height: 20),
                 ],
@@ -80,8 +86,8 @@ generatePDF(String deckID) async {
                   pdfLib.Paragraph(
                       margin: pdfLib.EdgeInsets.only(left: 10),
                       text: "${tempCard[index][3]} ",
-                      style: pdfLib.TextStyle(fontSize: 18)),
-                  pdfLib.SizedBox(height: 10)
+                      style: pdfLib.TextStyle(fontSize: 18, font: myFont1)),
+                  pdfLib.SizedBox(height: 20)
                 ] else ...[
                   pdfLib.Image(tempCard[index][3]),
                   pdfLib.SizedBox(height: 20)
