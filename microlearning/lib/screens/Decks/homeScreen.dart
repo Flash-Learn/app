@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (){
           Navigator.of(context).push(SizeRoute(page: ViewDeck(deckID: deckID,)));
         },
-        child: deckInfoCard(deckID)
+        child: Container(),
       );
     }).toList();
     children.add(Container(height: MediaQuery.of(context).size.height * 0.5,));

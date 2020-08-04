@@ -23,6 +23,8 @@ class ViewDeck extends StatefulWidget {
   final bool backAvailable;
   final bool isDeckforGroup;
   final String ifGroupThenGrpID;
+  final int navigationIndex;
+
   ViewDeck(
       {Key key,
       @required this.deckID,
@@ -30,6 +32,7 @@ class ViewDeck extends StatefulWidget {
       this.backAvailable = true,
       this.isdemo = false,
       this.ifGroupThenGrpID = '',
+      this.navigationIndex = 0,
       this.isDeckforGroup = false})
       : super(key: key);
   @override
@@ -492,6 +495,7 @@ class _ViewDeckState extends State<ViewDeck> {
                               ifGroupThenGrpID: widget.ifGroupThenGrpID,
                               isDeckforGroup: widget.isDeckforGroup,
                               isTestMode: isTestMode,
+                              navigationIndex: widget.navigationIndex,
                             ),
                           ),
                         ),
@@ -806,8 +810,10 @@ class FlashCardSwipeView extends StatefulWidget {
     this.ifGroupThenGrpID = '',
     this.isDeckforGroup = false,
     this.isTestMode = true,
+    this.navigationIndex = 0,
     @required this.key,
   });
+  final int navigationIndex;
   final bool isShuffled;
   final Key key;
   final dynamic changePercentage;
@@ -830,7 +836,7 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
 
   final Deck deck;
   bool isShuffled;
-  PageController _pageCtrl = PageController(viewportFraction: 0.9);
+  PageController _pageCtrl = PageController(viewportFraction: 0.9,);
 
   double numberOfCards = 1;
   double currentPage = 0.0;
@@ -883,7 +889,8 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
           if (currentView == 2) {
             shuffleState = false;
             currentView = 1;
-            _pageCtrl.jumpToPage(0);
+            _pageCtrl.jumpToPage(widget.navigationIndex);
+            //_pageCtrl.jumpToPage(0);
             currentPage = _pageCtrl.page;
             widget.changePercentage(
                 (_pageCtrl.page + 1) / numberOfCards, numberOfCards);
@@ -927,7 +934,6 @@ class _FlashCardSwipeViewState extends State<FlashCardSwipeView> {
         ),
       );
     }
-
     return FutureBuilder(
         future: getNotRememberedCards(),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {

@@ -35,13 +35,15 @@ class _DeckReorderListState extends State<DeckReorderList> {
   var _tapPosition;
   List<dynamic> userDeckIDs;
   bool _disableTouch = false;
+  ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
     return AbsorbPointer(
       absorbing: _disableTouch,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ReorderableListView(
+          scrollController: _controller,
           scrollDirection: Axis.vertical,
           children: getDecksAsList(context, widget.userDeckIDs),
           onReorder: _onReorder,
@@ -51,7 +53,7 @@ class _DeckReorderListState extends State<DeckReorderList> {
   }
 
   Widget buildDeckInfo(BuildContext ctxt, String deckID) {
-    return deckInfoCard(deckID);
+    return deckInfoCard(deckID, widget.ifGrpThenID, widget.belongsToGroup);
   }
 
   void _onReorder(int oldIndex, int newIndex) {
@@ -80,193 +82,198 @@ class _DeckReorderListState extends State<DeckReorderList> {
       i++;
       k = '$i';
       return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        height: 130,
         key: ValueKey(k),
-        child: Stack(children: <Widget>[
-          GestureDetector(
-              onTapDown: (details) {
-                _tapPosition = details.globalPosition;
-              },
-              onTap: () {
-                print(deckId);
-                Navigator.push(
-                    context,
-                    ScaleRoute(
-                      page: ViewDeck(
-                        deckID: deckId,
-                        ifGroupThenGrpID: widget.ifGrpThenID,
-                        isDeckforGroup: widget.belongsToGroup,
-                      ),
-                    ));
-              },
-              child: buildDeckInfo(
-                context,
-                deckId,
-              )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              GestureDetector(
-                onTapDown: (details) {
-                  _tapPosition = details.globalPosition;
-                },
-                onTap: () async {
-                  final RenderBox overlay =
-                      Overlay.of(context).context.findRenderObject();
-                  await showMenu(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                    context: context,
-                    // found way to show delete button on the location of long press
-                    // not sure how it works
-                    position: RelativeRect.fromRect(
-                        _tapPosition &
-                            Size(40, 40), // smaller rect, the touch area
-                        Offset.zero &
-                            overlay.size // Bigger rect, the entire screen
-                        ),
-                    items: [
-                      PopupMenuItem(
-                        value: "edit button",
-                        child: GestureDetector(
-                          onTap: () async {
-                            Navigator.pop(context, "edit button");
-                            setState(() {
-                              _disableTouch = true;
-                            });
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              Deck deck;
-                              return StreamBuilder(
-                                stream: Firestore.instance
-                                    .collection("decks")
-                                    .document(deckId)
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData)
-                                    return Scaffold(
-                                      backgroundColor: Colors.blue[200],
-                                    );
-                                  deck = Deck(
-                                    deckName: snapshot.data["deckName"],
-                                    tagsList: snapshot.data["tagsList"],
-                                    isPublic: snapshot.data["isPublic"],
-                                  );
-                                  deck.deckID = deckId;
-                                  deck.flashCardList =
-                                      snapshot.data["flashcardList"];
-                                  print('${widget.belongsToGroup} lolelmao');
-                                  return EditDecks(
-                                    deck: deck,
-                                    isDeckforGroup: widget.belongsToGroup,
-                                    ifGroupThenGrpID: widget.ifGrpThenID,
-                                  );
-                                },
-                              );
-                            }));
-                            setState(() {
-                              _disableTouch = false;
-                            });
-                          },
-                          child: Card(
-                            elevation: 0,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.edit,
-                                  color: MyColorScheme.accent(),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Edit Deck",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: "add to group",
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context, "add to group");
-                            _showBottomSheet(deckId);
-                          },
-                          child: Card(
-                            elevation: 0,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.library_books,
-                                  color: MyColorScheme.accent(),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Add to Group",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: "delete button",
-                        child: GestureDetector(
-                          onTap: () async {
-                            Navigator.pop(context, "delete button");
-                            await createAlertDialog(
-                              context,
-                              deckId,
-                              userDeckIDs,
-                              widget.belongsToGroup,
-                              widget.ifGrpThenID
-                            );
-                          },
-                          child: Card(
-                            elevation: 0,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.delete,
-                                  color: MyColorScheme.accent(),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Delete",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                    elevation: 8.0,
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
-                  child: Icon(
-                    Icons.more_horiz,
-                    color: MyColorScheme.accent(),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ]),
+        height: MediaQuery.of(context).size.height * 0.23,
+        child: deckInfoCard(deckId, widget.ifGrpThenID, widget.belongsToGroup),
       );
+      // return Container(
+      //   decoration: BoxDecoration(
+      //     borderRadius: BorderRadius.all(Radius.circular(20)),
+      //   ),
+      //   height: 130,
+      //   key: ValueKey(k),
+      //   child: Stack(children: <Widget>[
+      //     GestureDetector(
+      //         onTapDown: (details) {
+      //           _tapPosition = details.globalPosition;
+      //         },
+      //         onTap: () {
+      //           print(deckId);
+                // Navigator.push(
+                //     context,
+                //     ScaleRoute(
+                //       page: ViewDeck(
+                //         deckID: deckId,
+                //         ifGroupThenGrpID: widget.ifGrpThenID,
+                //         isDeckforGroup: widget.belongsToGroup,
+                //       ),
+                //     ));
+      //         },
+      //         child: buildDeckInfo(
+      //           context,
+      //           deckId,
+      //         )),
+      //     Row(
+      //       mainAxisAlignment: MainAxisAlignment.end,
+      //       children: <Widget>[
+      //         GestureDetector(
+      //           onTapDown: (details) {
+      //             _tapPosition = details.globalPosition;
+      //           },
+      //           onTap: () async {
+      //             final RenderBox overlay =
+      //                 Overlay.of(context).context.findRenderObject();
+      //             await showMenu(
+      //               shape: RoundedRectangleBorder(
+      //                   borderRadius: BorderRadius.all(Radius.circular(5))),
+      //               context: context,
+      //               // found way to show delete button on the location of long press
+      //               // not sure how it works
+      //               position: RelativeRect.fromRect(
+      //                   _tapPosition &
+      //                       Size(40, 40), // smaller rect, the touch area
+      //                   Offset.zero &
+      //                       overlay.size // Bigger rect, the entire screen
+      //                   ),
+      //               items: [
+      //                 PopupMenuItem(
+      //                   value: "edit button",
+      //                   child: GestureDetector(
+      //                     onTap: () async {
+      //                       Navigator.pop(context, "edit button");
+      //                       setState(() {
+      //                         _disableTouch = true;
+      //                       });
+      //                       Navigator.push(context,
+      //                           MaterialPageRoute(builder: (context) {
+      //                         Deck deck;
+      //                         return StreamBuilder(
+      //                           stream: Firestore.instance
+      //                               .collection("decks")
+      //                               .document(deckId)
+      //                               .snapshots(),
+      //                           builder: (context, snapshot) {
+      //                             if (!snapshot.hasData)
+      //                               return Scaffold(
+      //                                 backgroundColor: Colors.blue[200],
+      //                               );
+      //                             deck = Deck(
+      //                               deckName: snapshot.data["deckName"],
+      //                               tagsList: snapshot.data["tagsList"],
+      //                               isPublic: snapshot.data["isPublic"],
+      //                             );
+      //                             deck.deckID = deckId;
+      //                             deck.flashCardList =
+      //                                 snapshot.data["flashcardList"];
+      //                             print('${widget.belongsToGroup} lolelmao');
+      //                             return EditDecks(
+      //                               deck: deck,
+      //                               isDeckforGroup: widget.belongsToGroup,
+      //                               ifGroupThenGrpID: widget.ifGrpThenID,
+      //                             );
+      //                           },
+      //                         );
+      //                       }));
+      //                       setState(() {
+      //                         _disableTouch = false;
+      //                       });
+      //                     },
+      //                     child: Card(
+      //                       elevation: 0,
+      //                       child: Row(
+      //                         children: <Widget>[
+      //                           Icon(
+      //                             Icons.edit,
+      //                             color: MyColorScheme.accent(),
+      //                           ),
+      //                           SizedBox(
+      //                             width: 10,
+      //                           ),
+      //                           Text(
+      //                             "Edit Deck",
+      //                             textAlign: TextAlign.center,
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //                 PopupMenuItem(
+      //                   value: "add to group",
+      //                   child: GestureDetector(
+      //                     onTap: () {
+      //                       Navigator.pop(context, "add to group");
+      //                       _showBottomSheet(deckId);
+      //                     },
+      //                     child: Card(
+      //                       elevation: 0,
+      //                       child: Row(
+      //                         children: <Widget>[
+      //                           Icon(
+      //                             Icons.library_books,
+      //                             color: MyColorScheme.accent(),
+      //                           ),
+      //                           SizedBox(
+      //                             width: 10,
+      //                           ),
+      //                           Text(
+      //                             "Add to Group",
+      //                             textAlign: TextAlign.center,
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //                 PopupMenuItem(
+      //                   value: "delete button",
+      //                   child: GestureDetector(
+      //                     onTap: () async {
+      //                       Navigator.pop(context, "delete button");
+      //                       await createAlertDialog(
+      //                         context,
+      //                         deckId,
+      //                         userDeckIDs,
+      //                         widget.belongsToGroup,
+      //                         widget.ifGrpThenID
+      //                       );
+      //                     },
+      //                     child: Card(
+      //                       elevation: 0,
+      //                       child: Row(
+      //                         children: <Widget>[
+      //                           Icon(
+      //                             Icons.delete,
+      //                             color: MyColorScheme.accent(),
+      //                           ),
+      //                           SizedBox(
+      //                             width: 10,
+      //                           ),
+      //                           Text(
+      //                             "Delete",
+      //                             textAlign: TextAlign.center,
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //               ],
+      //               elevation: 8.0,
+      //             );
+      //           },
+      //           child: Padding(
+      //             padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+      //             child: Icon(
+      //               Icons.more_horiz,
+      //               color: MyColorScheme.accent(),
+      //             ),
+      //           ),
+      //         )
+      //       ],
+      //     ),
+      //   ]),
+      // );
     }).toList();
   }
 
@@ -374,7 +381,6 @@ class _DeckReorderListState extends State<DeckReorderList> {
               }
               print('hah ${widget.uid}');
               userGroups = snapshot.data["groups"];
-              print('hahah');
 
               return bottomData(deckID);
             },
